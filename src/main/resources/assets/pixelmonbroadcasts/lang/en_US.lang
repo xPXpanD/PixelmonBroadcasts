@@ -2,10 +2,10 @@
 universal.marginals.header=&5-----------------------------------------------------
 universal.marginals.footer=&5-----------------------------------------------------
 
-# /pbroadcasts toggle
+# /pixelmonbroadcasts toggle
 toggle.message.enable=&aYou will now be shown this message again.
-toggle.message.disable=&cYou will no longer be shown this message.
-toggle.message.info=&eClick any of the options below to toggle their messages.
+toggle.message.disable=&eYou will no longer be shown this message.
+toggle.message.info=&6Click any of the options below to toggle their messages.
 toggle.text.catch_toggles=&bCatch message toggles&f:
 toggle.text.defeat_toggles=&bDefeat message toggles&f:
 toggle.text.spawning_toggles=&bSpawning message toggles&f:

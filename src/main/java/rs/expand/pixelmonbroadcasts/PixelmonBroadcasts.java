@@ -31,14 +31,11 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
       NOTE: Stuff that's here will not necessarily get made.
 \*                                                              */
 
-// New things:
-// TODO: Title display option?
+// TODO: Title-style display option?
 // TODO: Add versioning logic when it becomes necessary.
 // TODO: Check if a HA spawn check is possible.
-
-// Improvements to existing things:
 // FIXME: Make the console message code less ugly. Works fine, but not the cleanest way of doing it.
-// TODO: Add log toggles.
+// TODO: Actually implement logging settings.
 // TODO: Test:-- legendary spawn/catch/defeat, shiny catch/defeat, boss defeat
 // TODO: PVP victories? Blackouts in PVP and PVE?
 
@@ -67,7 +64,19 @@ public class PixelmonBroadcasts
     public static Integer configVersion;
     public static String commandAlias;
 
-    // Set up message toggles.
+    // Set up logging settings.
+    public static Boolean logLegendarySpawns;
+    public static Boolean logLegendaryCatches;
+    public static Boolean logLegendaryDefeats;
+    public static Boolean logShinySpawns;
+    public static Boolean logShinyCatches;
+    public static Boolean logShinyDefeats;
+    public static Boolean logBossSpawns;
+    public static Boolean logBossDefeats;
+    public static Boolean logHatches;
+    public static Boolean logTrades;
+
+    // Set up broadcast settings.
     public static Boolean showLegendarySpawnMessage;
     public static Boolean showLegendaryCatchMessage;
     public static Boolean showLegendaryDefeatMessage;

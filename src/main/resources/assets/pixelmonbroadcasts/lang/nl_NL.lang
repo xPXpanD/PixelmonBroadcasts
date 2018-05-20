@@ -2,14 +2,14 @@
 universal.marginals.header=&5-----------------------------------------------------
 universal.marginals.footer=&5-----------------------------------------------------
 
-# /pbroadcasts toggle
+# /pixelmonbroadcasts toggle
 toggle.message.enable=&aDit bericht wordt nu weer getoond.
 toggle.message.disable=&eDit bericht zal niet langer getoond worden.
 toggle.message.info=&eKlik op een optie om dit bericht in- of uit te schakelen.
 toggle.text.catch_toggles=&bOpties voor vang-berichten&f:
 toggle.text.defeat_toggles=&bOpties voor win-berichten&f:
 toggle.text.spawning_toggles=&bOpties voor spawn-berichten&f:
-toggle.text.misc_toggles=&bAndere opties&f:
+toggle.text.misc_toggles=&bOpties voor andere berichten&f:
 toggle.text.shiny_on=&a&nshiny
 toggle.text.shiny_off=&c&nshiny
 toggle.text.legendary_on=&a&nlegendarisch

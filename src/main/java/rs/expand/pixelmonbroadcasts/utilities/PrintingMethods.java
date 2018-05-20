@@ -41,12 +41,12 @@ public class PrintingMethods
     }
 
     // If we can't read a main config toggle, format and throw this error.
-    static void printToggleNodeError(final List<String> nodes)
+    static void printBooleanNodeError(final List<String> nodes)
     {
         for (final String node : nodes)
-        { printBasicMessage("§cCould not read toggle node \"§4" + node + "§c\"."); }
+        { printBasicMessage("§cCould not read config node \"§4" + node + "§c\"."); }
 
-        printBasicMessage("§cThe main config contains invalid toggles. Disabling these.");
+        printBasicMessage("§cThe main config contains invalid booleans. Disabling these.");
         printBasicMessage("§cCheck the config, and when fixed use §4/pbreload§c.");
     }
 

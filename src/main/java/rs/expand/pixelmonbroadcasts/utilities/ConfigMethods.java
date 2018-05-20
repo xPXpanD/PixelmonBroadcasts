@@ -115,7 +115,29 @@ public class ConfigMethods
         PixelmonBroadcasts.commandAlias =
                 commandConfig.getNode("commandAlias").getString();
 
-        // Load up message toggles.
+        // Load up logging settings.
+        PixelmonBroadcasts.logLegendarySpawns =
+                toBooleanObject(commandConfig.getNode("logLegendarySpawns").getString());
+        PixelmonBroadcasts.logLegendaryCatches =
+                toBooleanObject(commandConfig.getNode("logLegendaryCatches").getString());
+        PixelmonBroadcasts.logLegendaryDefeats =
+                toBooleanObject(commandConfig.getNode("logLegendaryDefeats").getString());
+        PixelmonBroadcasts.logShinySpawns =
+                toBooleanObject(commandConfig.getNode("logShinySpawns").getString());
+        PixelmonBroadcasts.logShinyCatches =
+                toBooleanObject(commandConfig.getNode("logShinyCatches").getString());
+        PixelmonBroadcasts.logShinyDefeats =
+                toBooleanObject(commandConfig.getNode("logShinyDefeats").getString());
+        PixelmonBroadcasts.logBossSpawns =
+                toBooleanObject(commandConfig.getNode("logBossSpawns").getString());
+        PixelmonBroadcasts.logBossDefeats =
+                toBooleanObject(commandConfig.getNode("logBossDefeats").getString());
+        PixelmonBroadcasts.logHatches =
+                toBooleanObject(commandConfig.getNode("logHatches").getString());
+        PixelmonBroadcasts.logTrades =
+                toBooleanObject(commandConfig.getNode("logTrades").getString());
+
+        // Load up broadcast settings.
         PixelmonBroadcasts.showLegendarySpawnMessage =
                 toBooleanObject(commandConfig.getNode("showLegendarySpawnMessage").getString());
         PixelmonBroadcasts.showLegendaryCatchMessage =
@@ -167,28 +189,50 @@ public class ConfigMethods
         PixelmonBroadcasts.legendaryShinyDefeatMessage =
                 parseRemoteString(commandConfig.getNode("legendaryShinyDefeatMessage").getString());
 
-        // Start validating the data we get from the main config. Let's do message toggles first.
-        final ArrayList<String> toggleErrorArray = new ArrayList<>();
+        // Start validating the data we get from the main config. Let's do logging bools first.
+        final ArrayList<String> booleanErrorArray = new ArrayList<>();
+        if (logLegendarySpawns == null)
+            booleanErrorArray.add("logLegendarySpawns");
+        if (logLegendaryCatches == null)
+            booleanErrorArray.add("logLegendaryCatches");
+        if (logLegendaryDefeats == null)
+            booleanErrorArray.add("logLegendaryDefeats");
+        if (logShinySpawns == null)
+            booleanErrorArray.add("logShinySpawns");
+        if (logShinyCatches == null)
+            booleanErrorArray.add("logShinyCatches");
+        if (logShinyDefeats == null)
+            booleanErrorArray.add("logShinyDefeats");
+        if (logBossSpawns == null)
+            booleanErrorArray.add("logBossSpawns");
+        if (logBossDefeats == null)
+            booleanErrorArray.add("logBossDefeats");
+        if (logHatches == null)
+            booleanErrorArray.add("logHatches");
+        if (logTrades == null)
+            booleanErrorArray.add("logTrades");
+
+        // Move onto message bools.
         if (showLegendarySpawnMessage == null)
-            toggleErrorArray.add("showLegendarySpawnMessage");
+            booleanErrorArray.add("showLegendarySpawnMessage");
         if (showLegendaryCatchMessage == null)
-            toggleErrorArray.add("showLegendaryCatchMessage");
+            booleanErrorArray.add("showLegendaryCatchMessage");
         if (showLegendaryDefeatMessage == null)
-            toggleErrorArray.add("showLegendaryDefeatMessage");
+            booleanErrorArray.add("showLegendaryDefeatMessage");
         if (showShinySpawnMessage == null)
-            toggleErrorArray.add("showShinySpawnMessage");
+            booleanErrorArray.add("showShinySpawnMessage");
         if (showShinyCatchMessage == null)
-            toggleErrorArray.add("showShinyCatchMessage");
+            booleanErrorArray.add("showShinyCatchMessage");
         if (showShinyDefeatMessage == null)
-            toggleErrorArray.add("showShinyDefeatMessage");
-        if (bossSpawnMessage == null)
-            toggleErrorArray.add("bossSpawnMessage");
-        if (bossDefeatMessage == null)
-            toggleErrorArray.add("bossDefeatMessage");
+            booleanErrorArray.add("showShinyDefeatMessage");
+        if (showBossSpawnMessage == null)
+            booleanErrorArray.add("showBossSpawnMessage");
+        if (showBossDefeatMessage == null)
+            booleanErrorArray.add("showBossDefeatMessage");
         if (showHatchMessage == null)
-            toggleErrorArray.add("showHatchMessage");
+            booleanErrorArray.add("showHatchMessage");
         if (showTradeMessage == null)
-            toggleErrorArray.add("showTradeMessage");
+            booleanErrorArray.add("showTradeMessage");
 
         // Now, validate main messages.
         final ArrayList<String> messageErrorArray = new ArrayList<>();
@@ -204,10 +248,10 @@ public class ConfigMethods
             messageErrorArray.add("shinyCatchMessage");
         if (shinyDefeatMessage == null)
             messageErrorArray.add("shinyDefeatMessage");
-        if (showBossSpawnMessage == null)
-            messageErrorArray.add("showBossSpawnMessage");
-        if (showBossDefeatMessage == null)
-            messageErrorArray.add("showBossDefeatMessage");
+        if (bossSpawnMessage == null)
+            messageErrorArray.add("bossSpawnMessage");
+        if (bossDefeatMessage == null)
+            messageErrorArray.add("bossDefeatMessage");
         if (hatchMessage == null)
             messageErrorArray.add("hatchMessage");
         if (tradeMessage == null)
@@ -222,8 +266,8 @@ public class ConfigMethods
             messageErrorArray.add("legendaryShinyDefeatMessage");
 
         // Print errors if something broke.
-        if (!toggleErrorArray.isEmpty())
-            printToggleNodeError(toggleErrorArray);
+        if (!booleanErrorArray.isEmpty())
+            printBooleanNodeError(booleanErrorArray);
         if (!messageErrorArray.isEmpty())
             printMessageNodeError(messageErrorArray);
     }

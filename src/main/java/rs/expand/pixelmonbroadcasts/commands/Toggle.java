@@ -19,7 +19,7 @@ import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
 // Note: All the main class stuff and printing stuff is added through static imports.
-// TODO: Fix the blank line that shows up for players with only the command perm, but no notifier perms.
+// FIXME: Fix the blank line that shows up for players with only the command perm, but no notifier perms.
 public class Toggle implements CommandExecutor
 {
     // The command executor.
