@@ -11,8 +11,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 // Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
 
-// Note: All the main class stuff and printing stuff is added through static imports.
+// TODO: Add shiny status support. Something that works with multiple languages, preferably. Placeholder?
 public class TradeListener
 {
     @SubscribeEvent
@@ -23,10 +24,10 @@ public class TradeListener
             // Print a trade message to console.
             printBasicMessage
             (
-                    "§5PBR §f// §7Player §8" + event.player1.getName() +
-                    "§7 has traded a §8" + event.pokemon1.getString(NbtKeys.NAME) +
-                    "§7 for §8" + event.player2.getName() +
-                    "§7's §8" + event.pokemon2.getString(NbtKeys.NAME)
+                    "§5PBR §f// §8Player §7" + event.player1.getName() +
+                    "§8 has traded a §7" + event.pokemon1.getString(NbtKeys.NAME) +
+                    "§8 for §7" + event.player2.getName() +
+                    "§8's §7" + event.pokemon2.getString(NbtKeys.NAME)
             );
         }
 
@@ -35,21 +36,19 @@ public class TradeListener
             // Parse placeholders and print!
             if (tradeMessage != null)
             {
-                // Create an entity to pass on from player 1's Pokémon.
-                final EntityPixelmon sentPokemonEntity =
+                // Create entities to pass on from both players' Pokémon.
+                final EntityPixelmon pokemon1Entity =
                         (EntityPixelmon) PixelmonEntityList.createEntityFromNBT(event.pokemon1, event.player1.getEntityWorld());
-
-                // Do the same for player 2.
-                final EntityPixelmon receivedPokemonEntity =
+                final EntityPixelmon pokemon2Entity =
                         (EntityPixelmon) PixelmonEntityList.createEntityFromNBT(event.pokemon2, event.player2.getEntityWorld());
 
                 // Build up an output message String, and then pass it through both sides of the placeholder parser.
-                // This ensures that we have working placeholders for everything on the player AND target sides.
+                // This ensures that we have working placeholders for everything that the config can provide.
                 String finalMessage;
                 finalMessage = replacePlaceholders(
-                        tradeMessage, event.player1.getName(), sentPokemonEntity, event.player1.getPosition());
+                        tradeMessage, event.player1.getName(), pokemon1Entity, event.player1.getPosition());
                 finalMessage = replaceAltPlayerPlaceholders(
-                        finalMessage, event.player2.getName(), receivedPokemonEntity, event.player2.getPosition());
+                        finalMessage, event.player2.getName(), pokemon2Entity, event.player2.getPosition());
 
                 // Send off the message, the needed notifier permission and the flag to check.
                 iterateAndSendEventMessage(finalMessage, "trade", "showTrade");

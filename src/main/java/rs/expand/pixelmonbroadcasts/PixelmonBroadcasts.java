@@ -16,10 +16,10 @@ import org.spongepowered.api.event.game.state.*;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.text.Text;
 import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 
 // Local imports.
-import org.spongepowered.api.text.Text;
 import rs.expand.pixelmonbroadcasts.commands.*;
 import rs.expand.pixelmonbroadcasts.listeners.*;
 import rs.expand.pixelmonbroadcasts.utilities.ConfigMethods;
@@ -34,8 +34,11 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 // TODO: Title-style display option?
 // TODO: Add versioning logic when it becomes necessary.
 // TODO: Check if a HA spawn check is possible.
-// TODO: Test:-- legendary spawn/catch/defeat, shiny catch/defeat, boss defeat, shiny+legendary spawn/catch/defeat
+// TODO: Test (shiny) legendary spawn messages.
 // TODO: PVP victories? Blackouts in PVP and PVE?
+
+// TODO: Implement separator.
+// TODO: Implement failsafe for separator.
 
 @Plugin
 (
@@ -46,13 +49,12 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
         description = "Adds fully custom legendary-like messages for tons of events.",
         authors = "XpanD"
 
-        /*                                                                                                   *\
-            Loosely inspired by PixelAnnouncer, which I totally forgot existed up until I wanted to release.
-            This whole thing started as a separate project just for legendary spawn/catch/defeat messages.
+        /*                                                                                                         *\
+            Loosely inspired by PixelAnnouncer, which I totally forgot existed up until I first wanted to release.
             After people reminded me that PA was a thing, I ended up making a full-on replacement for it.
 
-            Thanks for the go-ahead on that, Proxying! Let's make this count.
-        \*                                                                                                   */
+            Thanks for the go-ahead on that, Proxying! Let's make this count.                             -- XpanD
+        \*                                                                                                         */
 )
 
 // Note: printBasicMessage is a static import for a method from PrintingMethods, for convenience. So are the listeners.
@@ -172,15 +174,18 @@ public class PixelmonBroadcasts
             }
 
             // Register commands.
-            printBasicMessage("--> §aRegistering §2/pixelmonbroadcasts§a command and subcommands...");
+            printBasicMessage("--> §aRegistering main command and subcommands...");
 
             // The method used returns "false" if it fails, and prints some failure-specific errors.
             if (ConfigMethods.registerCommands())
             {
                 if (commandAlias == null)
                     printBasicMessage("    §cCould not read config node \"§4commandAlias§c\". Alias support disabled.");
-                else if (!commandAlias.equals("pixelmonbroadcasts"))
-                    printBasicMessage("    §2Created alias: §a/" + commandAlias);
+
+                if (commandAlias != null && !commandAlias.equals("pixelmonbroadcasts"))
+                    printBasicMessage("    §aRegistered main command as §2/pixelmonbroadcasts§a, alias: §2/" + commandAlias);
+                else
+                    printBasicMessage("    §aRegistered main command as §2/pixelmonbroadcasts§a, no alias.");
 
                 printBasicMessage("--> §aPre-init completed. All systems nominal.");
             }

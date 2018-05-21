@@ -109,11 +109,14 @@ public class ConfigMethods
     // Read the main config file, and then commit settings to memory. Rough but functional is the theme here, folks.
     private static void loadConfig(final CommentedConfigurationNode commandConfig)
     {
+        // TODO: Validation group for main settings, or comment.
         // Start committing config stuff to memory.
         PixelmonBroadcasts.configVersion =
                 interpretInteger(commandConfig.getNode("configVersion").getString());
         PixelmonBroadcasts.commandAlias =
                 commandConfig.getNode("commandAlias").getString();
+        PixelmonBroadcasts.statSeparator =
+                commandConfig.getNode("statSeparator").getString();
 
         // Load up logging settings.
         PixelmonBroadcasts.logLegendarySpawns =

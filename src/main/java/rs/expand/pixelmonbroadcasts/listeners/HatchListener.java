@@ -13,8 +13,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 // Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
 
-// Note: All the main class stuff and printing stuff is added through static imports.
 public class HatchListener
 {
     @SubscribeEvent
@@ -28,19 +28,19 @@ public class HatchListener
         if (logHatches)
         {
             // Add "shiny" to our console message if we have a shiny legendary.
-            String shinyAddition = "§8";
+            String shinyAddition = "§7";
             if (pokemon.getIsShiny())
-                shinyAddition = "shiny §8";
+                shinyAddition = "§7shiny ";
 
             // Print a hatch message to console.
             printBasicMessage
             (
-                    "§5PBR §f// §7Player §8" + playerName +
-                    "§7's " + shinyAddition + event.nbt.getString(NbtKeys.NAME) +
-                    "§7 egg hatched in world \"§8" + world.getWorldInfo().getWorldName() +
-                    "§7\" at X:§8" + location.getX() +
-                    "§7 Y:§8" + location.getY() +
-                    "§7 Z:§8" + location.getZ()
+                    "§5PBR §f// §8Player §7" + playerName +
+                    "§8's " + shinyAddition + event.nbt.getString(NbtKeys.NAME) +
+                    "§8 egg hatched in world \"§7" + world.getWorldInfo().getWorldName() +
+                    "§8\" at X:§7" + location.getX() +
+                    "§8 Y:§7" + location.getY() +
+                    "§8 Z:§7" + location.getZ()
             );
         }
 

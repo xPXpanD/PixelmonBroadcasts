@@ -13,8 +13,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 // Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
 
-// Note: All the main class stuff and printing stuff is added through static imports.
 public class SpawnListener
 {
     @SubscribeEvent
@@ -30,9 +30,9 @@ public class SpawnListener
             final EntityPixelmon pokemon = (EntityPixelmon) spawnedEntity;
 
             // Make sure this Pokémon has no owner -- it has to be wild.
+            // I put bosses under this check, as well. Who knows what servers cook up for player parties?
             if (!pokemon.hasOwner())
             {
-                // TODO: Does getLocalizedName get a language-specific name? Test this to be sure.
                 final String pokemonName = pokemon.getLocalizedName();
                 final World world = pokemon.getEntityWorld();
                 final BlockPos location = event.action.spawnLocation.location.pos;
@@ -44,11 +44,11 @@ public class SpawnListener
                         // Print a spawn message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §2" + pokemonName +
-                                "§a (boss) has spawned in world \"§2" + world.getWorldInfo().getWorldName() +
-                                "§a\", at X:§2" + location.getX() +
-                                "§a Y:§2" + location.getY() +
-                                "§a Z:§2" + location.getZ()
+                                "§5PBR §f// §2A §aboss " + pokemonName +
+                                "§2 has spawned in world \"§a" + world.getWorldInfo().getWorldName() +
+                                "§2\", at X:§a" + location.getX() +
+                                "§2 Y:§a" + location.getY() +
+                                "§2 Z:§a" + location.getZ()
                         );
                     }
 
@@ -72,18 +72,18 @@ public class SpawnListener
                     if (logLegendarySpawns)
                     {
                         // Add "shiny" to our console message if we have a shiny legendary.
-                        String shinyAddition = "§2";
+                        String shinyAddition = "§a";
                         if (pokemon.getIsShiny())
-                            shinyAddition = "§aA §2shiny ";
+                            shinyAddition = "§2A §ashiny ";
 
                         // Print a spawn message to console.
                         printBasicMessage
                         (
                                 "§5PBR §f// " + shinyAddition + pokemonName +
-                                "§a has spawned in world \"§2" + world.getWorldInfo().getWorldName() +
-                                "§a\", at X:§2" + location.getX() +
-                                "§a Y:§2" + location.getY() +
-                                "§a Z:§2" + location.getZ()
+                                "§2 has spawned in world \"§a" + world.getWorldInfo().getWorldName() +
+                                "§2\", at X:§a" + location.getX() +
+                                "§2 Y:§a" + location.getY() +
+                                "§2 Z:§a" + location.getZ()
                         );
                     }
 
@@ -127,11 +127,11 @@ public class SpawnListener
                         // Print a spawn message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §aA §2shiny " + pokemonName +
-                                "§a has spawned in world \"§2" + world.getWorldInfo().getWorldName() +
-                                "§a\", at X:§2" + location.getX() +
-                                "§a Y:§2" + location.getY() +
-                                "§a Z:§2" + location.getZ()
+                                "§5PBR §f// §2A §ashiny " + pokemonName +
+                                "§2 has spawned in world \"§a" + world.getWorldInfo().getWorldName() +
+                                "§2\", at X:§a" + location.getX() +
+                                "§2 Y:§a" + location.getY() +
+                                "§2 Z:§a" + location.getZ()
                         );
                     }
 

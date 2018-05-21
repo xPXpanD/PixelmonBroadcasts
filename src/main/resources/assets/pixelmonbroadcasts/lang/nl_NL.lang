@@ -1,22 +1,33 @@
-# universal stuff
+# # # universal stuff # # #
 universal.marginals.header=&5-----------------------------------------------------
 universal.marginals.footer=&5-----------------------------------------------------
 
-# /pixelmonbroadcasts toggle
-toggle.message.enable=&aDit bericht wordt nu weer getoond.
-toggle.message.disable=&eDit bericht zal niet langer getoond worden.
-toggle.message.info=&6Klik op een optie om dit bericht in- of uit te schakelen.
-toggle.text.catch_toggles=&bOpties voor vang-berichten&f:
-toggle.text.defeat_toggles=&bOpties voor win-berichten&f:
-toggle.text.spawning_toggles=&bOpties voor spawn-berichten&f:
-toggle.text.misc_toggles=&bOpties voor andere berichten&f:
-toggle.text.shiny_on=&a&nshiny
-toggle.text.shiny_off=&c&nshiny
-toggle.text.legendary_on=&a&nlegendary
-toggle.text.legendary_off=&c&nlegendary
-toggle.text.boss_on=&a&nboss
-toggle.text.boss_off=&c&nboss
-toggle.text.hatching_on=&a&ngeboortes
-toggle.text.hatching_off=&c&ngeboortes
-toggle.text.trades_on=&a&nruil
-toggle.text.trades_off=&c&nruil
+# # # /pixelmonbroadcasts base (info hub) # # #
+# %s = the command's alias if present, or otherwise the command itself. Note: Clickable.
+hub.messages.toggle_syntax=/&6%s toggle
+hub.messages.reload_syntax=/&6%s reload
+# End of string replacements.
+hub.messages.toggle_info=➡ &eOpent een lijst met klikbare opties voor evenementsberichten.
+hub.messages.reload_info=➡ &eHerlaad direct de configuratie van Pixelmon Broadcasts.
+hub.errors.no_permissions=&cU heeft geen toestemming om Pixelmon Broadcasts te gebruiken.
+# T: Niet de beste vertaling, maar "personeel" leek mij veeeel te zakelijk.
+hub.errors.contact_staff=&cNeem contact op met een beheerder als u denkt dat dit niet klopt.
+
+# # # /pixelmonbroadcasts toggle # # #
+toggle.messages.enable=&aDit bericht wordt nu weer getoond.
+toggle.messages.disable=&eDit bericht zal niet langer getoond worden.
+toggle.messages.info=&6Klik op een optie om dit bericht in- of uit te schakelen.
+toggle.messages.catch_toggles=&bOpties voor vang-berichten&f:
+toggle.messages.defeat_toggles=&bOpties voor win-berichten&f:
+toggle.messages.spawning_toggles=&bOpties voor spawn-berichten&f:
+toggle.messages.other_toggles=&bOpties voor andere berichten&f:
+toggle.text.shiny.on=&a&nshiny
+toggle.text.shiny.off=&c&nshiny
+toggle.text.legendary.on=&a&nlegendary
+toggle.text.legendary.off=&c&nlegendary
+toggle.text.boss.on=&a&nboss
+toggle.text.boss.off=&c&nboss
+toggle.text.hatching.on=&a&ngeboortes
+toggle.text.hatching.off=&c&ngeboortes
+toggle.text.trades.on=&a&nruil
+toggle.text.trades.off=&c&nruil

@@ -2,14 +2,20 @@ package rs.expand.pixelmonbroadcasts.utilities;
 
 // Remote imports.
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
+import com.pixelmonmod.pixelmon.storage.NbtKeys;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.source.ConsoleSource;
+import org.spongepowered.api.text.LiteralText;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.action.TextActions;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -74,21 +80,6 @@ public class PrintingMethods
         return true;
     }
 
-    public static void iterateAndSendEventMessage(final String message, final String permission, final String flag)
-    {
-        // Sift through the online players.
-        Sponge.getGame().getServer().getOnlinePlayers().forEach((recipient) ->
-        {
-            // Does the iterated player have the needed notifier permission?
-            if (recipient.hasPermission("pixelmonbroadcasts.notify." + permission))
-            {
-                // Does the iterated player have the message enabled? Send it if we get "true" returned.
-                if (checkToggleStatus((EntityPlayerMP) recipient, flag))
-                    recipient.sendMessage(Text.of(message));
-            }
-        });
-    }
-
     // Gets a key from the language file, formats it using our own custom parseRemoteString, and then sends it.
     public static void sendFormattedTranslation(CommandSource recipient, String key, Object... params)
     {
@@ -101,7 +92,7 @@ public class PrintingMethods
     }
 
     // Gets a key from the language file, formats it using our own custom parseRemoteString, and then returns it.
-    public static String getFormattedTranslation(String key, Object... params)
+    public static String getFormattedTranslation(final String key, final Object... params)
     {
         // Format the key grabbed from our language file, replacing ampersands with section symbols.
         return parseRemoteString(new TextComponentTranslation(key, params).getUnformattedComponentText());
@@ -148,117 +139,5 @@ public class PrintingMethods
 
         // If we could not read from the config, this is hit.
         return null;
-    }
-
-    // Takes a config String, and replaces any known placeholders with the proper replacements as many times as needed.
-    public static String replacePlaceholders(
-            String message, final String playerName, final EntityPixelmon pokemon, final BlockPos location)
-    {
-        // If our message has any placeholders inside, replace them with the provided replacement String.
-        // Case-insensitive. If a player cannot be provided, we receive a null object and handle it here.
-        if (message.toLowerCase().contains("%pokemon%"))
-            message = message.replaceAll("(?i)" + "%pokemon%", pokemon.getLocalizedName());
-        if (message.toLowerCase().contains("%world%"))
-            message = message.replaceAll("(?i)" + "%world%", pokemon.getEntityWorld().getWorldInfo().getWorldName());
-        if (message.toLowerCase().contains("%xpos%"))
-            message = message.replaceAll("(?i)" + "%xpos%", String.valueOf(location.getX()));
-        if (message.toLowerCase().contains("%ypos%"))
-            message = message.replaceAll("(?i)" + "%ypos%", String.valueOf(location.getY()));
-        if (message.toLowerCase().contains("%zpos%"))
-            message = message.replaceAll("(?i)" + "%zpos%", String.valueOf(location.getZ()));
-
-        // Run some special logic for biome names. This is a bit more involved, so we put the logic here.
-        if (message.toLowerCase().contains("%biome%"))
-        {
-            // Grab the name. This compiles fine if the access transformer is loaded correctly, despite any errors.
-            final String biome = pokemon.getEntityWorld().getBiomeForCoordsBody(location).biomeName;
-            //final String biome = net.minecraft.util.text.translation.I18n.translateToLocalFormatted(basicBiome);
-
-            // Apply.
-            message = message.replaceAll("(?i)" + "%biome%", biome);
-        }
-
-        // Also run some special logic for IV percentages. Same idea as with the above.
-        if (message.toLowerCase().contains("%ivpct%"))
-        {
-            // Grab the Pokémon's stats.
-            final int HPIV = pokemon.stats.ivs.HP;
-            final int attackIV = pokemon.stats.ivs.Attack;
-            final int defenseIV = pokemon.stats.ivs.Defence;
-            final int spAttIV = pokemon.stats.ivs.SpAtt;
-            final int spDefIV = pokemon.stats.ivs.SpDef;
-            final int speedIV = pokemon.stats.ivs.Speed;
-
-            // Process them.
-            final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
-            final BigDecimal percentIVs = totalIVs.multiply(
-                    new BigDecimal("100")).divide(new BigDecimal("186"), 2, BigDecimal.ROUND_HALF_UP);
-
-            // Apply.
-            message = message.replaceAll("(?i)" + "%ivpct%", percentIVs.toString());
-        }
-
-        // We pass null for events that can't use a player variable, so let's check for that here.
-        if (playerName != null && message.toLowerCase().contains("%player%"))
-            message = message.replaceAll("(?i)" + "%player%", playerName);
-
-        // Send back the final formatted message.
-        return message;
-    }
-
-    // A clone of the above, used for events that have another player.
-    public static String replaceAltPlayerPlaceholders(
-            String message, final String playerName, final EntityPixelmon pokemon, final BlockPos location)
-    {
-        // If our message has any placeholders inside, replace them with the provided replacement String.
-        // Case-insensitive. If a player cannot be provided, we receive a null object and handle it here.
-        if (message.toLowerCase().contains("%pokemon2%"))
-            message = message.replaceAll("(?i)" + "%pokemon2%", pokemon.getLocalizedName());
-        if (message.toLowerCase().contains("%world2%"))
-            message = message.replaceAll("(?i)" + "%world2%", pokemon.getEntityWorld().getWorldInfo().getWorldName());
-        if (message.toLowerCase().contains("%xpos2%"))
-            message = message.replaceAll("(?i)" + "%xpos2%", String.valueOf(location.getX()));
-        if (message.toLowerCase().contains("%ypos2%"))
-            message = message.replaceAll("(?i)" + "%ypos2%", String.valueOf(location.getY()));
-        if (message.toLowerCase().contains("%zpos2%"))
-            message = message.replaceAll("(?i)" + "%zpos2%", String.valueOf(location.getZ()));
-
-        // Run some special logic for biome names. This is a bit more involved, so we put the logic here.
-        if (message.toLowerCase().contains("%biome%"))
-        {
-            // Grab the name. This compiles fine if the access transformer is loaded correctly, despite any errors.
-            final String biome = pokemon.getEntityWorld().getBiomeForCoordsBody(location).biomeName;
-            //final String biome = net.minecraft.util.text.translation.I18n.translateToLocalFormatted(basicBiome);
-
-            // Apply.
-            message = message.replaceAll("(?i)" + "%biome%", biome);
-        }
-
-        // Also run some special logic for IV percentages. Same idea as with the above.
-        if (message.toLowerCase().contains("%ivpct2%"))
-        {
-            // Grab the Pokémon's stats.
-            final int HPIV = pokemon.stats.ivs.HP;
-            final int attackIV = pokemon.stats.ivs.Attack;
-            final int defenseIV = pokemon.stats.ivs.Defence;
-            final int spAttIV = pokemon.stats.ivs.SpAtt;
-            final int spDefIV = pokemon.stats.ivs.SpDef;
-            final int speedIV = pokemon.stats.ivs.Speed;
-
-            // Process them.
-            final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
-            final BigDecimal percentIVs = totalIVs.multiply(
-                    new BigDecimal("100")).divide(new BigDecimal("186"), 2, BigDecimal.ROUND_HALF_UP);
-
-            // Apply.
-            message = message.replaceAll("(?i)" + "%ivpct2%", percentIVs.toString());
-        }
-
-        // We pass null for events that can't use a player variable, so let's check for that here.
-        if (playerName != null && message.toLowerCase().contains("%player2%"))
-            message = message.replaceAll("(?i)" + "%player2%", playerName);
-
-        // Send back the final formatted message.
-        return message;
     }
 }

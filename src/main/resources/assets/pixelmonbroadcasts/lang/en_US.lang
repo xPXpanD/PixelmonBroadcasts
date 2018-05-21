@@ -1,22 +1,57 @@
-# universal stuff
+# # # universal stuff # # #
 universal.marginals.header=&5-----------------------------------------------------
 universal.marginals.footer=&5-----------------------------------------------------
 
-# /pixelmonbroadcasts toggle
-toggle.message.enable=&aYou will now be shown this message again.
-toggle.message.disable=&eYou will no longer be shown this message.
-toggle.message.info=&6Click any of the options below to toggle their messages.
-toggle.text.catch_toggles=&bCatch message toggles&f:
-toggle.text.defeat_toggles=&bDefeat message toggles&f:
-toggle.text.spawning_toggles=&bSpawning message toggles&f:
-toggle.text.misc_toggles=&bMiscellaneous message toggles&f:
-toggle.text.shiny_on=&a&nshiny
-toggle.text.shiny_off=&c&nshiny
-toggle.text.legendary_on=&a&nlegendary
-toggle.text.legendary_off=&c&nlegendary
-toggle.text.boss_on=&a&nboss
-toggle.text.boss_off=&c&nboss
-toggle.text.hatching_on=&a&nhatching
-toggle.text.hatching_off=&c&nhatching
-toggle.text.trades_on=&a&ntrades
-toggle.text.trades_off=&c&ntrades
+# # # hoverable info # # #
+# %d = The IV/EV stat we're showing/using.
+hovers.stats.below_max=%d&2
+hovers.stats.maxed_out=%d&2&o
+# End of integer replacements.
+hovers.messages.sizes.microscopic=➡ §aThis Pokémon is §2&omicroscopic§a.
+hovers.messages.sizes.pygmy=➡ §aThis Pokémon is §2a pygmy§a.
+hovers.messages.sizes.runt=➡ §aThis Pokémon is §2a runt§a.
+hovers.messages.sizes.small=➡ §aThis Pokémon is §2small§a.
+hovers.messages.sizes.ordinary=➡ §aThis Pokémon is §2ordinary§a.
+hovers.messages.sizes.huge=➡ §aThis Pokémon is §2huge§a.
+hovers.messages.sizes.giant=➡ §aThis Pokémon is §2giant§a.
+hovers.messages.sizes.enormous=➡ §aThis Pokémon is §2enormous§a.
+hovers.messages.sizes.ginormous=➡ §aThis Pokémon is §2&nginormous§a.
+hovers.messages.genders.male=➡ §aIt is §2male§a.
+hovers.messages.genders.female=➡ §aIt is §2female§a.
+hovers.messages.genders.none=➡ §aIt has §2no gender§a.
+# %s = The nature we're showing/using, then the boosted stat, then the cut one.
+hovers.messages.balanced_natures=➡ §aIt is §2%s§a, with well-balanced stats.
+hovers.messages.other_natures=➡ §aIt is §2%s§a, boosting §2%s §aand cutting §2%s§a.
+# End of string replacements.
+hovers.messages.current_ivs=§bCurrent IVs§f:
+hovers.messages.extra_info=§bExtra info§f:
+TODO: Natures.
+
+# # # /pixelmonbroadcasts base (info hub) # # #
+# %s = The command's alias if present, or otherwise the command itself. Note: Clickable.
+hub.messages.toggle_syntax=/&6%s toggle
+hub.messages.reload_syntax=/&6%s reload
+# End of string replacements.
+hub.messages.toggle_info=➡ &eAllows you to toggle event messages by clicking them.
+hub.messages.reload_info=➡ &eReloads the Pixelmon Broadcasts config on the fly.
+hub.errors.no_permissions=&cYou have no permissions for any Pixelmon Broadcasts commands.
+hub.errors.contact_staff=&cPlease contact staff if you believe this to be in error.
+
+# # # /pixelmonbroadcasts toggle # # #
+toggle.messages.enable=&aYou will now be shown this message again.
+toggle.messages.disable=&eYou will no longer be shown this message.
+toggle.messages.info=&6Click any of the options below to toggle their messages.
+toggle.messages.catch_toggles=&bCatch message toggles&f:
+toggle.messages.defeat_toggles=&bDefeat message toggles&f:
+toggle.messages.spawning_toggles=&bSpawning message toggles&f:
+toggle.messages.other_toggles=&bMiscellaneous message toggles&f:
+toggle.text.shiny.on=&a&nshiny
+toggle.text.shiny.off=&c&nshiny
+toggle.text.legendary.on=&a&nlegendary
+toggle.text.legendary.off=&c&nlegendary
+toggle.text.boss.on=&a&nboss
+toggle.text.boss.off=&c&nboss
+toggle.text.hatching.on=&a&nhatching
+toggle.text.hatching.off=&c&nhatching
+toggle.text.trades.on=&a&ntrades
+toggle.text.trades.off=&c&ntrades

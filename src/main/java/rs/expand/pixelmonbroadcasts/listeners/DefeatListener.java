@@ -12,9 +12,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 // Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
 
 // TODO: Log/announce boss types? Mega vs normal.
-// Note: All the main class stuff and printing stuff is added through static imports.
 public class DefeatListener
 {
     @SubscribeEvent
@@ -33,12 +33,12 @@ public class DefeatListener
                 // Print a defeat message to console.
                 printBasicMessage
                 (
-                        "§5PBR §f// §ePlayer §6" + playerName +
-                        "§e beat a §6" + pokemonName +
-                        "§e boss in world \"§6" + world.getWorldInfo().getWorldName() +
-                        "§e\", at X:§6" + location.getX() +
-                        "§e Y:§6" + location.getY() +
-                        "§e Z:§6" + location.getZ()
+                        "§5PBR §f// §6Player §e" + playerName +
+                        "§6 beat a §e" + pokemonName +
+                        "§6 boss in world \"§e" + world.getWorldInfo().getWorldName() +
+                        "§6\", at X:§e" + location.getX() +
+                        "§6 Y:§e" + location.getY() +
+                        "§6 Z:§e" + location.getZ()
                 );
             }
 
@@ -62,19 +62,19 @@ public class DefeatListener
             if (logLegendaryDefeats)
             {
                 // Add "shiny" to our console message if we have a shiny legendary.
-                String shinyAddition = "§6";
+                String shinyAddition = "§e";
                 if (pokemon.getIsShiny())
-                    shinyAddition = "shiny §6";
+                    shinyAddition = "§eshiny ";
 
                 // Print a defeat message to console, with the above shiny String mixed in.
                 printBasicMessage
                 (
-                        "§5PBR §f// §ePlayer §6" + playerName +
-                        "§e defeated a " + shinyAddition + pokemonName +
-                        "§e in world \"§6" + world.getWorldInfo().getWorldName() +
-                        "§e\", at X:§6" + location.getX() +
-                        "§e Y:§6" + location.getY() +
-                        "§e Z:§6" + location.getZ()
+                        "§5PBR §f// §6Player §e" + playerName +
+                        "§6 defeated a " + shinyAddition + pokemonName +
+                        "§6 in world \"§e" + world.getWorldInfo().getWorldName() +
+                        "§6\", at X:§e" + location.getX() +
+                        "§6 Y:§e" + location.getY() +
+                        "§6 Z:§e" + location.getZ()
                 );
             }
 
@@ -119,12 +119,12 @@ public class DefeatListener
                 // Print a defeat message to console.
                 printBasicMessage
                 (
-                        "§5PBR §f// §ePlayer §6" + playerName +
-                        "§e beat a shiny §6" + pokemonName +
-                        "§e in world \"§6" + world.getWorldInfo().getWorldName() +
-                        "§e\", at X:§6" + location.getX() +
-                        "§e Y:§6" + location.getY() +
-                        "§e Z:§6" + location.getZ()
+                        "§5PBR §f// §6Player §e" + playerName +
+                        "§6 beat a §eshiny " + pokemonName +
+                        "§6 in world \"§e" + world.getWorldInfo().getWorldName() +
+                        "§6\", at X:§e" + location.getX() +
+                        "§6 Y:§e" + location.getY() +
+                        "§6 Z:§e" + location.getZ()
                 );
             }
 

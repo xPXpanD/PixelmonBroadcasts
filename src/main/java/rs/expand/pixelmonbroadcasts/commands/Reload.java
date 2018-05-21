@@ -20,7 +20,10 @@ public class Reload implements CommandExecutor
     public CommandResult execute(final CommandSource src, final CommandContext args)
     {
         if (src instanceof Player)
-            printBasicMessage("§bPlayer \"§3" + src.getName() + "§b\" reloaded the Pixelmon Broadcasts config!");
+        {
+            printBasicMessage(
+                    "§4PBR §f// §dInfo: §3Player §b" + src.getName() + "§3 reloaded the Pixelmon Broadcasts config!");
+        }
 
         // Load/create config, and then unload and reload command mappings.
         ConfigMethods.tryCreateAndLoadConfig();
