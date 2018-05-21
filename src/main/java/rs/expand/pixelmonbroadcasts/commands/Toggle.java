@@ -29,6 +29,12 @@ public class Toggle implements CommandExecutor
         // Were we called by a player? Let's not try toggling flags on things that can't have flags.
         if (src instanceof Player)
         {
+            if (commandAlias == null)
+            {
+                printBasicError("Could not read config node \"§4commandAlias§c\" while executing toggle command.");
+                printBasicError("We'll continue with the command, but aliases will break. Please fix this.");
+            }
+
             // Add a header from our language file.
             sendFormattedTranslation(src, "universal.marginals.header");
 
@@ -43,7 +49,7 @@ public class Toggle implements CommandExecutor
                 {
                     case "showLegendarySpawn": case "showLegendaryCatch": case "showLegendaryDefeat":
                     case "showShinySpawn": case "showShinyCatch": case "showShinyDefeat": case "showBossSpawn":
-                    case "showBossDefeat": case "showHatchMessage": case "showTradeMessage":
+                    case "showBossDefeat": case "showHatch": case "showTrade":
                     {
                         // Got a valid flag. Toggle it.
                         toggleFlag(src, input);
@@ -216,20 +222,20 @@ public class Toggle implements CommandExecutor
             // Check perms. Add toggle status if perms look good.
             if (showHatchMessage && src.hasPermission("pixelmonbroadcasts.notify.hatch"))
             {
-                flags.add("showHatchMessage");
+                flags.add("showHatch");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (checkToggleStatus(player, "showHatchMessage"))
+                if (checkToggleStatus(player, "showHatch"))
                     messages.add(getFormattedTranslation("toggle.text.hatching_on") + "§r, ");
                 else
                     messages.add(getFormattedTranslation("toggle.text.hatching_off") + "§r, ");
             }
             if (showTradeMessage && src.hasPermission("pixelmonbroadcasts.notify.trade"))
             {
-                flags.add("showTradeMessage");
+                flags.add("showTrade");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (checkToggleStatus(player, "showTradeMessage"))
+                if (checkToggleStatus(player, "showTrade"))
                     messages.add(getFormattedTranslation("toggle.text.trades_on") + "§r, ");
                 else
                     messages.add(getFormattedTranslation("toggle.text.trades_off") + "§r, ");
@@ -300,8 +306,6 @@ public class Toggle implements CommandExecutor
                 src.sendMessage(Text.of("➡ ", actionPair, actionPair2, actionPair3));
                 break;
             }
-            default:
-                src.sendMessage(Text.of("WE'VE GOT TROUBLE, SIZE IS " + messages.size())); // TODO: Remove, debug.
         }
     }
 

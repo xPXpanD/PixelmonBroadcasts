@@ -74,6 +74,21 @@ public class PrintingMethods
         return true;
     }
 
+    public static void iterateAndSendEventMessage(final String message, final String permission, final String flag)
+    {
+        // Sift through the online players.
+        Sponge.getGame().getServer().getOnlinePlayers().forEach((recipient) ->
+        {
+            // Does the iterated player have the needed notifier permission?
+            if (recipient.hasPermission("pixelmonbroadcasts.notify." + permission))
+            {
+                // Does the iterated player have the message enabled? Send it if we get "true" returned.
+                if (checkToggleStatus((EntityPlayerMP) recipient, flag))
+                    recipient.sendMessage(Text.of(message));
+            }
+        });
+    }
+
     // Gets a key from the language file, formats it using our own custom parseRemoteString, and then sends it.
     public static void sendFormattedTranslation(CommandSource recipient, String key, Object... params)
     {

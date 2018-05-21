@@ -1,4 +1,4 @@
-// Listens for Pokémon hatching from owned eggs.
+// Listens for Pokémon hatching from eggs.
 package rs.expand.pixelmonbroadcasts.listeners;
 
 // Remote imports.
@@ -6,12 +6,9 @@ import com.pixelmonmod.pixelmon.api.events.EggHatchEvent;
 import com.pixelmonmod.pixelmon.config.PixelmonEntityList;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.storage.NbtKeys;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.text.Text;
 
 // Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
@@ -23,44 +20,63 @@ public class HatchListener
     @SubscribeEvent
     public void onHatchEvent(final EggHatchEvent event)
     {
-        if (showHatchMessage)
+        final String playerName = event.player.getName();
+        final World world = event.player.getEntityWorld();
+        final BlockPos location = event.player.getPosition();
+        final EntityPixelmon pokemon = (EntityPixelmon) PixelmonEntityList.createEntityFromNBT(event.nbt, world);
+
+        if (logHatches)
         {
-            final String playerName = event.player.getName();
-            final World world = event.player.getEntityWorld();
-            final BlockPos location = event.player.getPosition();
-            final EntityPixelmon pokemon = (EntityPixelmon) PixelmonEntityList.createEntityFromNBT(event.nbt, world);
+            // Add "shiny" to our console message if we have a shiny legendary.
+            String shinyAddition = "§8";
+            if (pokemon.getIsShiny())
+                shinyAddition = "shiny §8";
 
             // Print a hatch message to console.
             printBasicMessage
             (
                     "§5PBR §f// §7Player §8" + playerName +
-                    "§7's §8" + event.nbt.getString(NbtKeys.NAME) +
+                    "§7's " + shinyAddition + event.nbt.getString(NbtKeys.NAME) +
                     "§7 egg hatched in world \"§8" + world.getWorldInfo().getWorldName() +
                     "§7\" at X:§8" + location.getX() +
                     "§7 Y:§8" + location.getY() +
                     "§7 Z:§8" + location.getZ()
             );
+        }
 
-            // Parse placeholders and print!
-            if (hatchMessage != null)
+        if (showHatchMessage)
+        {
+            if (pokemon.getIsShiny())
             {
-                // Set up our message. This is the same for all eligible players, so call it once and store it.
-                final Text finalMessage = Text.of(replacePlaceholders(hatchMessage, playerName, pokemon, location));
-
-                // Sift through the online players.
-                Sponge.getGame().getServer().getOnlinePlayers().forEach((recipient) ->
+                // Parse placeholders and print!
+                if (shinyHatchMessage != null)
                 {
-                    // Does the iterated player have the needed notifier permission?
-                    if (recipient.hasPermission("pixelmonbroadcasts.notify.hatch"))
-                    {
-                        // Does the iterated player have the message enabled? Send it if we get "true" returned.
-                        if (checkToggleStatus((EntityPlayerMP) recipient, "showHatchMessage"))
-                            recipient.sendMessage(finalMessage);
-                    }
-                });
+                    // Set up our message. This is the same for all eligible players, so call it once and store it.
+                    // We use the normal hatch permission for shiny hatches, as per the config's explanation.
+                    final String finalMessage = replacePlaceholders(shinyHatchMessage, playerName, pokemon, location);
+
+                    // Send off the message, the needed notifier permission and the flag to check.
+                    iterateAndSendEventMessage(finalMessage, "hatch", "showHatch");
+                }
+                else
+                    printBasicError("The shiny egg hatching message is broken, broadcast failed.");
             }
             else
-                printBasicError("The hatch message is broken, broadcast failed.");
+            {
+                // Parse placeholders and print!
+                if (hatchMessage != null)
+                {
+                    // Set up our message. This is the same for all eligible players, so call it once and store it.
+                    final String finalMessage = replacePlaceholders(hatchMessage, playerName, pokemon, location);
+
+                    // Send off the message, the needed notifier permission and the flag to check.
+                    // We use the basic hatch permission for shiny hatches, as per the config's explanation.
+                    iterateAndSendEventMessage(finalMessage, "hatch", "showHatch");
+                }
+                else
+                    printBasicError("The egg hatching message is broken, broadcast failed.");
+            }
         }
     }
 }
+

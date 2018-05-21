@@ -28,22 +28,20 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 /*                                                              *\
        THE WHO-KNOWS-WHEN LIST OF POTENTIALLY AWESOME IDEAS
     TODO: Add new TODOs here. Cross off TODOs if they're done.
-      NOTE: Stuff that's here will not necessarily get made.
+      NOTE: Stuff that's here will not necessarily get done.
 \*                                                              */
 
 // TODO: Title-style display option?
 // TODO: Add versioning logic when it becomes necessary.
 // TODO: Check if a HA spawn check is possible.
-// FIXME: Make the console message code less ugly. Works fine, but not the cleanest way of doing it.
-// TODO: Actually implement logging settings.
-// TODO: Test:-- legendary spawn/catch/defeat, shiny catch/defeat, boss defeat
+// TODO: Test:-- legendary spawn/catch/defeat, shiny catch/defeat, boss defeat, shiny+legendary spawn/catch/defeat
 // TODO: PVP victories? Blackouts in PVP and PVE?
 
 @Plugin
 (
         id = "pixelmonbroadcasts",
         name = "PixelmonBroadcasts",
-        version = "0.1",
+        version = "1.0 beta",
         dependencies = @Dependency(id = "pixelmon"),
         description = "Adds fully custom legendary-like messages for tons of events.",
         authors = "XpanD"
@@ -53,7 +51,7 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
             This whole thing started as a separate project just for legendary spawn/catch/defeat messages.
             After people reminded me that PA was a thing, I ended up making a full-on replacement for it.
 
-            Thanks for the go-ahead on that whole thing, Proxying!
+            Thanks for the go-ahead on that, Proxying! Let's make this count.
         \*                                                                                                   */
 )
 
@@ -100,10 +98,11 @@ public class PixelmonBroadcasts
     public static String hatchMessage;
     public static String tradeMessage;
 
-    // Set up special legendary + shiny message Strings.
-    public static String legendaryShinySpawnMessage;
-    public static String legendaryShinyCatchMessage;
-    public static String legendaryShinyDefeatMessage;
+    // Set up special combo and legendary+shiny Strings.
+    public static String shinyLegendarySpawnMessage;
+    public static String shinyLegendaryCatchMessage;
+    public static String shinyLegendaryDefeatMessage;
+    public static String shinyHatchMessage;
 
     // Create and set up a config path, and grab an OS-specific file path separator. This will usually be a forward slash.
     public static String primaryPath = "config" + FileSystems.getDefault().getSeparator();

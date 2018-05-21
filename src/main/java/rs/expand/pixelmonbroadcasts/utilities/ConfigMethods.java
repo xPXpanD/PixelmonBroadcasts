@@ -181,13 +181,15 @@ public class ConfigMethods
         PixelmonBroadcasts.tradeMessage =
                 parseRemoteString(commandConfig.getNode("tradeMessage").getString());
 
-        // Special legendary + shiny messages.
-        PixelmonBroadcasts.legendaryShinySpawnMessage =
-                parseRemoteString(commandConfig.getNode("legendaryShinySpawnMessage").getString());
-        PixelmonBroadcasts.legendaryShinyCatchMessage =
-                parseRemoteString(commandConfig.getNode("legendaryShinyCatchMessage").getString());
-        PixelmonBroadcasts.legendaryShinyDefeatMessage =
-                parseRemoteString(commandConfig.getNode("legendaryShinyDefeatMessage").getString());
+        // Special combo and legendary+shiny messages.
+        PixelmonBroadcasts.shinyLegendarySpawnMessage =
+                parseRemoteString(commandConfig.getNode("shinyLegendarySpawnMessage").getString());
+        PixelmonBroadcasts.shinyLegendaryCatchMessage =
+                parseRemoteString(commandConfig.getNode("shinyLegendaryCatchMessage").getString());
+        PixelmonBroadcasts.shinyLegendaryDefeatMessage =
+                parseRemoteString(commandConfig.getNode("shinyLegendaryDefeatMessage").getString());
+        PixelmonBroadcasts.shinyHatchMessage =
+                parseRemoteString(commandConfig.getNode("shinyHatchMessage").getString());
 
         // Start validating the data we get from the main config. Let's do logging bools first.
         final ArrayList<String> booleanErrorArray = new ArrayList<>();
@@ -257,13 +259,15 @@ public class ConfigMethods
         if (tradeMessage == null)
             messageErrorArray.add("tradeMessage");
 
-        // Validate special legendary-plus-shiny messages. Falls under the same message array.
-        if (legendaryShinySpawnMessage == null)
-            messageErrorArray.add("legendaryShinySpawnMessage");
-        if (legendaryShinyCatchMessage == null)
-            messageErrorArray.add("legendaryShinyCatchMessage");
-        if (legendaryShinyDefeatMessage == null)
-            messageErrorArray.add("legendaryShinyDefeatMessage");
+        // Validate special combos and legendary-plus-shiny messages. Falls under the same message array.
+        if (shinyLegendarySpawnMessage == null)
+            messageErrorArray.add("shinyLegendarySpawnMessage");
+        if (shinyLegendaryCatchMessage == null)
+            messageErrorArray.add("shinyLegendaryCatchMessage");
+        if (shinyLegendaryDefeatMessage == null)
+            messageErrorArray.add("shinyLegendaryDefeatMessage");
+        if (shinyHatchMessage == null)
+            messageErrorArray.add("shinyHatchMessage");
 
         // Print errors if something broke.
         if (!booleanErrorArray.isEmpty())

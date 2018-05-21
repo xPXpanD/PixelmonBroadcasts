@@ -6,12 +6,9 @@ import com.pixelmonmod.pixelmon.api.events.spawning.SpawnEvent;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumPokemon;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.text.Text;
 
 // Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
@@ -29,160 +26,129 @@ public class SpawnListener
         // Check if the entity is a Pokémon, not a trainer or the like.
         if (spawnedEntity instanceof EntityPixelmon)
         {
-            // Make an assumption. This should be safe, now.
+            // Make an assumption. This is safe, now.
             final EntityPixelmon pokemon = (EntityPixelmon) spawnedEntity;
 
             // Make sure this Pokémon has no owner -- it has to be wild.
             if (!pokemon.hasOwner())
             {
-                // TODO: Does getLocalizedName get a language-specific name? Test.
+                // TODO: Does getLocalizedName get a language-specific name? Test this to be sure.
                 final String pokemonName = pokemon.getLocalizedName();
                 final World world = pokemon.getEntityWorld();
                 final BlockPos location = event.action.spawnLocation.location.pos;
 
-                // Fill this in when we have a message to send to all eligible players.
-                final Text finalMessage;
-
-                // Is the spawn a boss, and are we supposed to broadcast this?
-                if (showBossSpawnMessage && pokemon.isBossPokemon())
+                if (pokemon.isBossPokemon())
                 {
-                    // Print a spawn message to console.
-                    printBasicMessage
-                    (
-                            "§5PBR §f// §2" + pokemonName +
-                            "§a (boss) has spawned in world \"§2" + world.getWorldInfo().getWorldName() +
-                            "§a\", at X:§2" + location.getX() +
-                            "§a Y:§2" + location.getY() +
-                            "§a Z:§2" + location.getZ()
-                    );
-
-                    // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
-                    if (bossSpawnMessage != null)
-                    {
-                        // Set up our message. This is the same for all eligible players, so call it once and store it.
-                        finalMessage = Text.of(replacePlaceholders(bossSpawnMessage, null, pokemon, location));
-
-                        // Sift through the online players.
-                        Sponge.getGame().getServer().getOnlinePlayers().forEach((recipient) ->
-                        {
-                            // Does the iterated player have the needed notifier permission?
-                            if (recipient.hasPermission("pixelmonbroadcasts.notify.bossspawn"))
-                            {
-                                // Does the iterated player have the message enabled? Send it if we get "true" returned.
-                                if (checkToggleStatus((EntityPlayerMP) recipient, "showBossSpawn"))
-                                    recipient.sendMessage(finalMessage);
-                            }
-                        });
-                    }
-                    else
-                        printBasicError("The boss spawn message is broken, broadcast failed.");
-                }
-                // Is the spawn shiny?
-                else if (showShinySpawnMessage && pokemon.getIsShiny())
-                {
-                    // ...whoa. We've got a shiny that's also a legendary!
-                    // Only shown to people who also have the legendary permission, and who have legendary messages turned on.
-                    if (showLegendarySpawnMessage && EnumPokemon.legendaries.contains(pokemonName))
-                    {
-                        // Print a spawn message to console.
-                        printBasicMessage
-                        (
-                                "§5PBR §f// §2§l" + pokemonName +
-                                "§a (shiny legendary!) has spawned in world \"§2" + world.getWorldInfo().getWorldName() +
-                                "§a\", at X:§2" + location.getX() +
-                                "§a Y:§2" + location.getY() +
-                                "§a Z:§2" + location.getZ()
-                        );
-
-                        // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
-                        if (legendaryShinySpawnMessage != null)
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            finalMessage = Text.of(replacePlaceholders(legendaryShinySpawnMessage, null, pokemon, location));
-
-                            // Sift through the online players.
-                            Sponge.getGame().getServer().getOnlinePlayers().forEach((recipient) ->
-                            {
-                                // Does the iterated player have the needed notifier permission?
-                                if (recipient.hasPermission("pixelmonbroadcasts.notify.legendaryspawn"))
-                                {
-                                    // Does the iterated player have the message enabled? Send it if we get "true" returned.
-                                    if (checkToggleStatus((EntityPlayerMP) recipient, "showLegendarySpawn"))
-                                        recipient.sendMessage(finalMessage);
-                                }
-                            });
-                        }
-                        else
-                            printBasicError("The legendary shiny spawn message is broken, broadcast failed.");
-                    }
-                    // Still not terrible, I suppose.
-                    else
+                    if (logBossSpawns)
                     {
                         // Print a spawn message to console.
                         printBasicMessage
                         (
                                 "§5PBR §f// §2" + pokemonName +
-                                "§a (shiny) has spawned in world \"§2" + world.getWorldInfo().getWorldName() +
+                                "§a (boss) has spawned in world \"§2" + world.getWorldInfo().getWorldName() +
                                 "§a\", at X:§2" + location.getX() +
                                 "§a Y:§2" + location.getY() +
                                 "§a Z:§2" + location.getZ()
                         );
+                    }
 
+                    if (showBossSpawnMessage)
+                    {
+                        // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
+                        if (bossSpawnMessage != null)
+                        {
+                            // Set up our message. This is the same for all eligible players, so call it once and store it.
+                            final String finalMessage = replacePlaceholders(bossSpawnMessage, null, pokemon, location);
+
+                            // Send off the message, the needed notifier permission and the flag to check.
+                            iterateAndSendEventMessage(finalMessage, "bossspawn", "showBossSpawn");
+                        }
+                        else
+                            printBasicError("The boss spawn message is broken, broadcast failed.");
+                    }
+                }
+                else if (EnumPokemon.legendaries.contains(pokemonName))
+                {
+                    if (logLegendarySpawns)
+                    {
+                        // Add "shiny" to our console message if we have a shiny legendary.
+                        String shinyAddition = "§2";
+                        if (pokemon.getIsShiny())
+                            shinyAddition = "§aA §2shiny ";
+
+                        // Print a spawn message to console.
+                        printBasicMessage
+                        (
+                                "§5PBR §f// " + shinyAddition + pokemonName +
+                                "§a has spawned in world \"§2" + world.getWorldInfo().getWorldName() +
+                                "§a\", at X:§2" + location.getX() +
+                                "§a Y:§2" + location.getY() +
+                                "§a Z:§2" + location.getZ()
+                        );
+                    }
+
+                    if (showLegendarySpawnMessage)
+                    {
+                        if (pokemon.getIsShiny())
+                        {
+                            // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
+                            if (shinyLegendarySpawnMessage != null)
+                            {
+                                // Set up our message. This is the same for all eligible players, so call it once and store it.
+                                // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
+                                final String finalMessage = replacePlaceholders(shinyLegendarySpawnMessage, null, pokemon, location);
+
+                                // Send off the message, the needed notifier permission and the flag to check.
+                                iterateAndSendEventMessage(finalMessage, "legendaryspawn", "showLegendarySpawn");
+                            }
+                            else
+                                printBasicError("The shiny legendary spawn message is broken, broadcast failed.");
+                        }
+                        else
+                        {
+                            // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
+                            if (legendarySpawnMessage != null)
+                            {
+                                // Set up our message. This is the same for all eligible players, so call it once and store it.
+                                final String finalMessage = replacePlaceholders(legendarySpawnMessage, null, pokemon, location);
+
+                                // Send off the message, the needed notifier permission and the flag to check.
+                                iterateAndSendEventMessage(finalMessage, "legendaryspawn", "showLegendarySpawn");
+                            }
+                            else
+                                printBasicError("The legendary spawn message is broken, broadcast failed.");
+                        }
+                    }
+                }
+                else if (pokemon.getIsShiny())
+                {
+                    if (logShinySpawns)
+                    {
+                        // Print a spawn message to console.
+                        printBasicMessage
+                        (
+                                "§5PBR §f// §aA §2shiny " + pokemonName +
+                                "§a has spawned in world \"§2" + world.getWorldInfo().getWorldName() +
+                                "§a\", at X:§2" + location.getX() +
+                                "§a Y:§2" + location.getY() +
+                                "§a Z:§2" + location.getZ()
+                        );
+                    }
+
+                    if (showShinySpawnMessage)
+                    {
                         // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
                         if (shinySpawnMessage != null)
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            finalMessage = Text.of(replacePlaceholders(shinySpawnMessage, null, pokemon, location));
+                            final String finalMessage = replacePlaceholders(shinySpawnMessage, null, pokemon, location);
 
-                            // Sift through the online players.
-                            Sponge.getGame().getServer().getOnlinePlayers().forEach((recipient) ->
-                            {
-                                // Does the iterated player have the needed notifier permission?
-                                if (recipient.hasPermission("pixelmonbroadcasts.notify.shinyspawn"))
-                                {
-                                    // Does the iterated player have the message enabled? Send it if we get "true" returned.
-                                    if (checkToggleStatus((EntityPlayerMP) recipient, "showShinySpawn"))
-                                        recipient.sendMessage(finalMessage);
-                                }
-                            });
+                            // Send off the message, the needed notifier permission and the flag to check.
+                            iterateAndSendEventMessage(finalMessage, "shinyspawn", "showShinySpawn");
                         }
                         else
                             printBasicError("The shiny spawn message is broken, broadcast failed.");
                     }
-                }
-                // Is the spawn legendary?
-                else if (showLegendarySpawnMessage && EnumPokemon.legendaries.contains(pokemonName))
-                {
-                    // Print a spawn message to console.
-                    printBasicMessage
-                    (
-                            "§5PBR §f// §2" + pokemonName +
-                            "§a has spawned in world \"§2" + world.getWorldInfo().getWorldName() +
-                            "§a\", at X:§2" + location.getX() +
-                            "§a Y:§2" + location.getY() +
-                            "§a Z:§2" + location.getZ()
-                    );
-
-                    // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
-                    if (legendarySpawnMessage != null)
-                    {
-                        // Set up our message. This is the same for all eligible players, so call it once and store it.
-                        finalMessage = Text.of(replacePlaceholders(legendarySpawnMessage, null, pokemon, location));
-
-                        // Sift through the online players.
-                        Sponge.getGame().getServer().getOnlinePlayers().forEach((recipient) ->
-                        {
-                            // Does the iterated player have the needed notifier permission?
-                            if (recipient.hasPermission("pixelmonbroadcasts.notify.legendaryspawn"))
-                            {
-                                // Does the iterated player have the message enabled? Send it if we get "true" returned.
-                                if (checkToggleStatus((EntityPlayerMP) recipient, "showLegendarySpawn"))
-                                    recipient.sendMessage(finalMessage);
-                            }
-                        });
-                    }
-                    else
-                        printBasicError("The legendary spawn message is broken, broadcast failed.");
                 }
             }
         }
