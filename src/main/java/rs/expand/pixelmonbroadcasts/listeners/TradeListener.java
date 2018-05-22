@@ -51,7 +51,7 @@ public class TradeListener
                         finalMessage, event.player2.getName(), pokemon2Entity, event.player2.getPosition());
 
                 // Send off the message, the needed notifier permission and the flag to check.
-                iterateAndSendEventMessage(finalMessage, "trade", "showTrade");
+                iterateAndSendEventMessage(finalMessage, "trade", "showTrade", event.pokemon1, event.pokemon2);
             }
             else
                 printBasicError("The trade message is broken, broadcast failed.");

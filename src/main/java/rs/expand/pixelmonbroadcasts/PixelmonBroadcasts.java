@@ -63,6 +63,8 @@ public class PixelmonBroadcasts
     // Start setting up some basic variables that we'll fill in remotely when we read the config.
     public static Integer configVersion;
     public static String commandAlias;
+    public static String statSeparator;
+    public static String legendarySpawnOptions;
 
     // Set up logging settings.
     public static Boolean logLegendarySpawns;
@@ -145,6 +147,14 @@ public class PixelmonBroadcasts
         // Returns true if the load was a success.
         if (ConfigMethods.tryCreateAndLoadConfig())
         {
+            if (commandAlias == null)
+                printBasicMessage("    §cCould not read config node \"§4commandAlias§c\". Alias support disabled.");
+            if (statSeparator == null)
+            {
+                printBasicMessage("    §cCould not read config node \"§4statSeparator§c\". Falling back to defaults.");
+                statSeparator = "§r, ";
+            }
+
             // Register listeners with Pixelmon.
             printBasicMessage("--> §aRegistering listeners with Pixelmon...");
             Pixelmon.EVENT_BUS.register(new SpawnListener());
@@ -179,16 +189,15 @@ public class PixelmonBroadcasts
             // The method used returns "false" if it fails, and prints some failure-specific errors.
             if (ConfigMethods.registerCommands())
             {
-                if (commandAlias == null)
-                    printBasicMessage("    §cCould not read config node \"§4commandAlias§c\". Alias support disabled.");
-
                 if (commandAlias != null && !commandAlias.equals("pixelmonbroadcasts"))
-                    printBasicMessage("    §aRegistered main command as §2/pixelmonbroadcasts§a, alias: §2/" + commandAlias);
+                    printBasicMessage("    §aRegistered main command as §2/pixelmonbroadcasts§a, alias §2/" + commandAlias);
                 else
                     printBasicMessage("    §aRegistered main command as §2/pixelmonbroadcasts§a, no alias.");
 
                 printBasicMessage("--> §aPre-init completed. All systems nominal.");
             }
+
+            printBasicMessage("Options String: " + legendarySpawnOptions);
         }
         else
             printBasicMessage("    §cEncountered a critical error, aborting... If this is a bug, please report.");

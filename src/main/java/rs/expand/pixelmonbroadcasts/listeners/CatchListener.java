@@ -5,6 +5,7 @@ package rs.expand.pixelmonbroadcasts.listeners;
 import com.pixelmonmod.pixelmon.api.events.CaptureEvent;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumPokemon;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -24,6 +25,7 @@ public class CatchListener
         final String playerName = event.player.getName();
         final World world = pokemon.getEntityWorld();
         final BlockPos location = event.pokeball.getPosition();
+        final NBTTagCompound nbt = pokemon.serializeNBT();
 
         if (EnumPokemon.legendaries.contains(pokemonName))
         {
@@ -58,7 +60,7 @@ public class CatchListener
 
                         // Send off the message, the needed notifier permission and the flag to check.
                         // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
-                        iterateAndSendEventMessage(finalMessage, "legendarycatch", "showLegendaryCatch");
+                        iterateAndSendEventMessage(finalMessage, "legendarycatch", "showLegendaryCatch", nbt);
                     }
                     else
                         printBasicError("The shiny legendary catch message is broken, broadcast failed.");
@@ -72,7 +74,7 @@ public class CatchListener
                         final String finalMessage = replacePlaceholders(legendaryCatchMessage, playerName, pokemon, location);
 
                         // Send off the message, the needed notifier permission and the flag to check.
-                        iterateAndSendEventMessage(finalMessage, "legendarycatch", "showLegendaryCatch");
+                        iterateAndSendEventMessage(finalMessage, "legendarycatch", "showLegendaryCatch", nbt);
                     }
                     else
                         printBasicError("The legendary catch message is broken, broadcast failed.");
@@ -104,7 +106,7 @@ public class CatchListener
                     final String finalMessage = replacePlaceholders(shinyCatchMessage, playerName, pokemon, location);
 
                     // Send off the message, the needed notifier permission and the flag to check.
-                    iterateAndSendEventMessage(finalMessage, "shinycatch", "showShinyCatch");
+                    iterateAndSendEventMessage(finalMessage, "shinycatch", "showShinyCatch", nbt);
                 }
                 else
                     printBasicError("The shiny catch message is broken, broadcast failed.");

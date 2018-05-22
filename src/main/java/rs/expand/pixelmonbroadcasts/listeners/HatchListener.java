@@ -56,7 +56,7 @@ public class HatchListener
                     final String finalMessage = replacePlaceholders(shinyHatchMessage, playerName, pokemon, location);
 
                     // Send off the message, the needed notifier permission and the flag to check.
-                    iterateAndSendEventMessage(finalMessage, "hatch", "showHatch");
+                    iterateAndSendEventMessage(finalMessage, "hatch", "showHatch", event.nbt);
                 }
                 else
                     printBasicError("The shiny egg hatching message is broken, broadcast failed.");
@@ -71,7 +71,7 @@ public class HatchListener
 
                     // Send off the message, the needed notifier permission and the flag to check.
                     // We use the basic hatch permission for shiny hatches, as per the config's explanation.
-                    iterateAndSendEventMessage(finalMessage, "hatch", "showHatch");
+                    iterateAndSendEventMessage(finalMessage, "hatch", "showHatch", event.nbt);
                 }
                 else
                     printBasicError("The egg hatching message is broken, broadcast failed.");

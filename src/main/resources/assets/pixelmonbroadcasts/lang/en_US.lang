@@ -2,36 +2,77 @@
 universal.marginals.header=&5-----------------------------------------------------
 universal.marginals.footer=&5-----------------------------------------------------
 
-# # # hoverable info # # #
-# %d = The IV/EV stat we're showing/using.
-hovers.stats.below_max=%d&2
-hovers.stats.maxed_out=%d&2&o
-# End of integer replacements.
-hovers.messages.sizes.microscopic=➡ §aThis Pokémon is §2&omicroscopic§a.
-hovers.messages.sizes.pygmy=➡ §aThis Pokémon is §2a pygmy§a.
-hovers.messages.sizes.runt=➡ §aThis Pokémon is §2a runt§a.
-hovers.messages.sizes.small=➡ §aThis Pokémon is §2small§a.
-hovers.messages.sizes.ordinary=➡ §aThis Pokémon is §2ordinary§a.
-hovers.messages.sizes.huge=➡ §aThis Pokémon is §2huge§a.
-hovers.messages.sizes.giant=➡ §aThis Pokémon is §2giant§a.
-hovers.messages.sizes.enormous=➡ §aThis Pokémon is §2enormous§a.
-hovers.messages.sizes.ginormous=➡ §aThis Pokémon is §2&nginormous§a.
-hovers.messages.genders.male=➡ §aIt is §2male§a.
-hovers.messages.genders.female=➡ §aIt is §2female§a.
-hovers.messages.genders.none=➡ §aIt has §2no gender§a.
+# # # hoverable info for %ivhover% # # #
+hovers.messages.sizes.microscopic=➡ &aThis Pokémon is &2&omicroscopic&a.
+hovers.messages.sizes.pygmy=➡ &aThis Pokémon is &2a pygmy&a.
+hovers.messages.sizes.runt=➡ &aThis Pokémon is &2a runt&a.
+hovers.messages.sizes.small=➡ &aThis Pokémon is &2small&a.
+hovers.messages.sizes.ordinary=➡ &aThis Pokémon is &2ordinary&a.
+hovers.messages.sizes.huge=➡ &aThis Pokémon is &2huge&a.
+hovers.messages.sizes.giant=➡ &aThis Pokémon is &2giant&a.
+hovers.messages.sizes.enormous=➡ &aThis Pokémon is &2enormous&a.
+hovers.messages.sizes.ginormous=➡ &aThis Pokémon is &2&nginormous&a.
+hovers.messages.sizes.unknown=➡ &aThis Pokémon's size is &2unknown&a...
+hovers.messages.genders.male=➡ &aIt is &2male&a.
+hovers.messages.genders.female=➡ &aIt is &2female&a.
+hovers.messages.genders.none=➡ &aIt has &2no gender&a.
 # %s = The nature we're showing/using, then the boosted stat, then the cut one.
-hovers.messages.balanced_natures=➡ §aIt is §2%s§a, with well-balanced stats.
-hovers.messages.other_natures=➡ §aIt is §2%s§a, boosting §2%s §aand cutting §2%s§a.
-# End of string replacements.
-hovers.messages.current_ivs=§bCurrent IVs§f:
-hovers.messages.extra_info=§bExtra info§f:
-TODO: Natures.
+hovers.messages.natures.balanced=➡ &aIt is &2%s&a, with well-balanced stats.
+hovers.messages.natures.special=➡ &aIt is &2%s&a, boosting &2%s &aand cutting &2%s&a.
+hovers.messages.natures.unknown=➡ &aIt has an &2unknown &anature...
+## End of replacements. ^
+hovers.messages.current_ivs=&bIVs&f:
+# %d = The total number of IVs for our checked Pokémon, then the percentage of the max.
+# Use a double percent sign ("%%") if you want a single one, it needs escaping to work.
+hovers.messages.total_ivs=➡ &a%d&f/&a186&f (&a%d%%&f)
+## End of replacements. ^
+hovers.messages.extra_info=&bExtra info&f:
+hovers.text.natures.hardy=hardy
+hovers.text.natures.serious=serious
+hovers.text.natures.docile=docile
+hovers.text.natures.bashful=bashful
+hovers.text.natures.quirky=quirky
+hovers.text.natures.lonely=lonely
+hovers.text.natures.brave=brave
+hovers.text.natures.adamant=adamant
+hovers.text.natures.naughty=naughty
+hovers.text.natures.bold=bold
+hovers.text.natures.relaxed=relaxed
+hovers.text.natures.impish=impish
+hovers.text.natures.lax=lax
+hovers.text.natures.timid=timid
+hovers.text.natures.hasty=hasty
+hovers.text.natures.jolly=jolly
+hovers.text.natures.naive=naive
+hovers.text.natures.modest=modest
+hovers.text.natures.mild=mild
+hovers.text.natures.quiet=quiet
+hovers.text.natures.rash=rash
+hovers.text.natures.calm=calm
+hovers.text.natures.gentle=gentle
+hovers.text.natures.sassy=sassy
+hovers.text.natures.careful=careful
+hovers.text.natures.unknown=unknown
+hovers.text.stats.hp=HP
+hovers.text.stats.attack=Atk
+hovers.text.stats.defense=Def
+hovers.text.stats.special_attack=SAtk
+hovers.text.stats.special_defense=SDef
+hovers.text.stats.speed=Spd
+# Automatically gets a space added at the end, since the lang format does not support it.
+hovers.text.stats.line_start=➡
+## End of automatic additions. ^
+# %d = The actual value of the stat (usually an IV) we're showing.
+# %s = The name of the stat we're showing, then the statSeparator from the main config.
+hovers.text.stats.below_max=&a%d &2%s%s
+hovers.text.stats.maxed_out=&a&o%d &r&2%s%s
+## End of replacements. ^
 
 # # # /pixelmonbroadcasts base (info hub) # # #
 # %s = The command's alias if present, or otherwise the command itself. Note: Clickable.
 hub.messages.toggle_syntax=/&6%s toggle
 hub.messages.reload_syntax=/&6%s reload
-# End of string replacements.
+## End of replacements. ^
 hub.messages.toggle_info=➡ &eAllows you to toggle event messages by clicking them.
 hub.messages.reload_info=➡ &eReloads the Pixelmon Broadcasts config on the fly.
 hub.errors.no_permissions=&cYou have no permissions for any Pixelmon Broadcasts commands.
@@ -55,3 +96,7 @@ toggle.text.hatching.on=&a&nhatching
 toggle.text.hatching.off=&c&nhatching
 toggle.text.trades.on=&a&ntrades
 toggle.text.trades.off=&c&ntrades
+
+# # # /pixelmonbroadcasts reload # # #
+reload.messages.reload_complete=&bReloaded the Pixelmon Broadcasts main config!
+reload.messages.check_console=&bPlease check the console for any errors.

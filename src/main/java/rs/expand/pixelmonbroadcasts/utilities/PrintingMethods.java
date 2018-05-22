@@ -1,21 +1,12 @@
 package rs.expand.pixelmonbroadcasts.utilities;
 
 // Remote imports.
-import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
-import com.pixelmonmod.pixelmon.storage.NbtKeys;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.source.ConsoleSource;
-import org.spongepowered.api.text.LiteralText;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.action.TextActions;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;

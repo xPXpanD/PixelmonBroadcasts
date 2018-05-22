@@ -6,6 +6,7 @@ import com.pixelmonmod.pixelmon.api.events.spawning.SpawnEvent;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumPokemon;
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -36,6 +37,7 @@ public class SpawnListener
                 final String pokemonName = pokemon.getLocalizedName();
                 final World world = pokemon.getEntityWorld();
                 final BlockPos location = event.action.spawnLocation.location.pos;
+                final NBTTagCompound nbt = pokemon.serializeNBT();
 
                 if (pokemon.isBossPokemon())
                 {
@@ -61,7 +63,7 @@ public class SpawnListener
                             final String finalMessage = replacePlaceholders(bossSpawnMessage, null, pokemon, location);
 
                             // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, "bossspawn", "showBossSpawn");
+                            iterateAndSendEventMessage(finalMessage, "bossspawn", "showBossSpawn", nbt);
                         }
                         else
                             printBasicError("The boss spawn message is broken, broadcast failed.");
@@ -99,7 +101,7 @@ public class SpawnListener
                                 final String finalMessage = replacePlaceholders(shinyLegendarySpawnMessage, null, pokemon, location);
 
                                 // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(finalMessage, "legendaryspawn", "showLegendarySpawn");
+                                iterateAndSendEventMessage(finalMessage, "legendaryspawn", "showLegendarySpawn", nbt);
                             }
                             else
                                 printBasicError("The shiny legendary spawn message is broken, broadcast failed.");
@@ -113,7 +115,7 @@ public class SpawnListener
                                 final String finalMessage = replacePlaceholders(legendarySpawnMessage, null, pokemon, location);
 
                                 // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(finalMessage, "legendaryspawn", "showLegendarySpawn");
+                                iterateAndSendEventMessage(finalMessage, "legendaryspawn", "showLegendarySpawn", nbt);
                             }
                             else
                                 printBasicError("The legendary spawn message is broken, broadcast failed.");
@@ -144,7 +146,7 @@ public class SpawnListener
                             final String finalMessage = replacePlaceholders(shinySpawnMessage, null, pokemon, location);
 
                             // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, "shinyspawn", "showShinySpawn");
+                            iterateAndSendEventMessage(finalMessage, "shinyspawn", "showShinySpawn", nbt);
                         }
                         else
                             printBasicError("The shiny spawn message is broken, broadcast failed.");
