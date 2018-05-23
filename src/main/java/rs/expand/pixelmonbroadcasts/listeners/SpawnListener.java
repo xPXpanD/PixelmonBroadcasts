@@ -54,7 +54,7 @@ public class SpawnListener
                         );
                     }
 
-                    if (showBossSpawnMessage)
+                    if (showBossSpawns)
                     {
                         // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
                         if (bossSpawnMessage != null)
@@ -63,7 +63,8 @@ public class SpawnListener
                             final String finalMessage = replacePlaceholders(bossSpawnMessage, null, pokemon, location);
 
                             // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, "bossspawn", "showBossSpawn", nbt);
+                            iterateAndSendEventMessage(finalMessage, nbt, hoverBossSpawns, true,
+                                    "bossspawn", "showBossSpawn");
                         }
                         else
                             printBasicError("The boss spawn message is broken, broadcast failed.");
@@ -89,37 +90,36 @@ public class SpawnListener
                         );
                     }
 
-                    if (showLegendarySpawnMessage)
+                    if (showShinyLegendarySpawns && pokemon.getIsShiny())
                     {
-                        if (pokemon.getIsShiny())
+                        // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
+                        if (shinyLegendarySpawnMessage != null)
                         {
-                            // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
-                            if (shinyLegendarySpawnMessage != null)
-                            {
-                                // Set up our message. This is the same for all eligible players, so call it once and store it.
-                                // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
-                                final String finalMessage = replacePlaceholders(shinyLegendarySpawnMessage, null, pokemon, location);
+                            // Set up our message. This is the same for all eligible players, so call it once and store it.
+                            // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
+                            final String finalMessage = replacePlaceholders(shinyLegendarySpawnMessage, null, pokemon, location);
 
-                                // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(finalMessage, "legendaryspawn", "showLegendarySpawn", nbt);
-                            }
-                            else
-                                printBasicError("The shiny legendary spawn message is broken, broadcast failed.");
+                            // Send off the message, the needed notifier permission and the flag to check.
+                            iterateAndSendEventMessage(finalMessage, nbt, hoverShinyLegendarySpawns, true,
+                                    "shinylegendaryspawn", "showShinyLegendarySpawn");
                         }
                         else
+                            printBasicError("The shiny legendary spawn message is broken, broadcast failed.");
+                    }
+                    else if (showLegendarySpawns)
+                    {
+                        // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
+                        if (legendarySpawnMessage != null)
                         {
-                            // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
-                            if (legendarySpawnMessage != null)
-                            {
-                                // Set up our message. This is the same for all eligible players, so call it once and store it.
-                                final String finalMessage = replacePlaceholders(legendarySpawnMessage, null, pokemon, location);
+                            // Set up our message. This is the same for all eligible players, so call it once and store it.
+                            final String finalMessage = replacePlaceholders(legendarySpawnMessage, null, pokemon, location);
 
-                                // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(finalMessage, "legendaryspawn", "showLegendarySpawn", nbt);
-                            }
-                            else
-                                printBasicError("The legendary spawn message is broken, broadcast failed.");
+                            // Send off the message, the needed notifier permission and the flag to check.
+                            iterateAndSendEventMessage(finalMessage, nbt, hoverLegendarySpawns, true,
+                                    "legendaryspawn", "showLegendarySpawn");
                         }
+                        else
+                            printBasicError("The legendary spawn message is broken, broadcast failed.");
                     }
                 }
                 else if (pokemon.getIsShiny())
@@ -137,7 +137,7 @@ public class SpawnListener
                         );
                     }
 
-                    if (showShinySpawnMessage)
+                    if (showShinySpawns)
                     {
                         // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
                         if (shinySpawnMessage != null)
@@ -146,7 +146,8 @@ public class SpawnListener
                             final String finalMessage = replacePlaceholders(shinySpawnMessage, null, pokemon, location);
 
                             // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, "shinyspawn", "showShinySpawn", nbt);
+                            iterateAndSendEventMessage(finalMessage, nbt, hoverShinySpawns, true,
+                                    "shinyspawn", "showShinySpawn");
                         }
                         else
                             printBasicError("The shiny spawn message is broken, broadcast failed.");

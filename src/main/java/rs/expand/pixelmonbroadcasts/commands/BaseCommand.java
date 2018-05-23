@@ -13,10 +13,9 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 
 // Local imports.
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.commandAlias;
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
-// Note: All the main class stuff and printing stuff is added through static imports.
 public class BaseCommand implements CommandExecutor
 {
     @SuppressWarnings("NullableProblems")
@@ -26,7 +25,7 @@ public class BaseCommand implements CommandExecutor
         if (!(src instanceof CommandBlock))
         {
             // Add a header from our language file.
-            sendFormattedTranslation(src, "universal.marginals.header");
+            sendTranslation(src, "universal.marginals.header");
 
             // Show an error if the alias isn't set right. Continue after.
             if (commandAlias == null)
@@ -46,7 +45,7 @@ public class BaseCommand implements CommandExecutor
             {
                 hasPermissions = true;
 
-                final String finalMessage = getFormattedTranslation("hub.messages.toggle_syntax", commandAlias);
+                final String finalMessage = getTranslation("hub.messages.toggle_syntax", commandAlias);
 
                 LiteralText clickableLine = Text.builder(finalMessage)
                         .onClick(TextActions.runCommand("/pixelmonbroadcasts toggle"))
@@ -55,32 +54,32 @@ public class BaseCommand implements CommandExecutor
                 src.sendMessage(clickableLine);
 
                 if (src instanceof Player)
-                    sendFormattedTranslation(src, "hub.messages.toggle_info");
+                    src.sendMessage(Text.of(statLineStart + getTranslation("hub.messages.toggle_info")));
                 else
                 {
                     // Message locked in, as it's not visible in-game. Keeps the lang workload down, with minimal loss.
                     src.sendMessage(Text.of(
-                            "§f --> §eAllows in-game players to toggle event messages by clicking them."));
+                            "➡ §eAllows in-game players to toggle event messages by clicking them."));
                 }
             }
             if (src.hasPermission("pixelmonbroadcasts.command.staff.reload"))
             {
                 hasPermissions = true;
 
-                final String finalMessage = getFormattedTranslation("hub.messages.reload_syntax", commandAlias);
+                final String finalMessage = getTranslation("hub.messages.reload_syntax", commandAlias);
 
                 LiteralText clickableLine = Text.builder(finalMessage)
                         .onClick(TextActions.runCommand("/pixelmonbroadcasts reload"))
                         .build();
 
                 src.sendMessage(clickableLine);
-                sendFormattedTranslation(src, "hub.messages.reload_info");
+                    src.sendMessage(Text.of(statLineStart + getTranslation("hub.messages.reload_info")));
             }
 
             if (!hasPermissions)
             {
-                sendFormattedTranslation(src, "hub.errors.no_permissions");
-                sendFormattedTranslation(src, "hub.errors.contact_staff");
+                sendTranslation(src, "hub.errors.no_permissions");
+                sendTranslation(src, "hub.errors.contact_staff");
             }
             else if (calledRemotely)
             {
@@ -90,7 +89,7 @@ public class BaseCommand implements CommandExecutor
             }
 
             // Cap things off with a nice lang file footer.
-            sendFormattedTranslation(src, "universal.marginals.footer");
+            sendTranslation(src, "universal.marginals.footer");
         }
         else
             src.sendMessage(Text.of("§cThis command cannot run from command blocks."));

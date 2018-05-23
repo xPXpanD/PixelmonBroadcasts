@@ -31,7 +31,7 @@ public class TradeListener
             );
         }
 
-        if (showTradeMessage)
+        if (showTrades)
         {
             // Parse placeholders and print!
             if (tradeMessage != null)
@@ -51,7 +51,8 @@ public class TradeListener
                         finalMessage, event.player2.getName(), pokemon2Entity, event.player2.getPosition());
 
                 // Send off the message, the needed notifier permission and the flag to check.
-                iterateAndSendEventMessage(finalMessage, "trade", "showTrade", event.pokemon1, event.pokemon2);
+                iterateAndSendEventMessage(
+                        finalMessage, null, false, false, "trade", "showTrade");
             }
             else
                 printBasicError("The trade message is broken, broadcast failed.");

@@ -1,17 +1,24 @@
-Here's how to use the files that are in here:
+If you want to use another existing translation...
+1. Shut down the server.
+2. Move en_US.lang somewhere safe.
+3. Find a language file for the language you want to use.
+4. Rename the file to en_US.lang.
+5. Move the file back to the location of the original en_US.lang, if need be.
+6. Boot the server.
 
-1. Shut down the server, or do this stuff in a local copy.
-2. Find a language file for the language you want to use.
-3. Copy en_US.lang somewhere safe.
-4. If you pick another language, rename the file to en_US.lang.
+If you want to create your own translation, or edit the active one...
+1. Shut down the server.
+2. Copy en_US.lang somewhere safe.
+3. Move the copy that you want to edit somewhere where it's easy to access.
+4. Open this copy with a text editor of choice.
 5. Make any changes you want to make to this file.
-6. Copy the file back to where the original en_US file was at.
-7. Boot the server.
+6. Make sure the file is named "en_US.lang", without the quotes.
+7. Move the changed file back to the original lang file location.
+8. Boot the server.
 
 I'm pretty new to the whole lang file thing, but new translations are welcome!
 If you want to contribute or just have a question, shoot me a message.
-Keep in mind that stuff may still change, this guide included.
 
 You can reach me here on Discord: XpanD#1337
 
-Thanks for reading.
+Keep in mind that stuff will probably still change. Thanks for reading.

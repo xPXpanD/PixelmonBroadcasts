@@ -37,14 +37,11 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 // TODO: Test (shiny) legendary spawn messages.
 // TODO: PVP victories? Blackouts in PVP and PVE?
 
-// TODO: Implement separator.
-// TODO: Implement failsafe for separator.
-
 @Plugin
 (
         id = "pixelmonbroadcasts",
         name = "PixelmonBroadcasts",
-        version = "1.0 beta",
+        version = "1.0.0 beta",
         dependencies = @Dependency(id = "pixelmon"),
         description = "Adds fully custom legendary-like messages for tons of events.",
         authors = "XpanD"
@@ -61,52 +58,75 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 public class PixelmonBroadcasts
 {
     // Start setting up some basic variables that we'll fill in remotely when we read the config.
-    public static Integer configVersion;
+    //public static Integer configVersion;
     public static String commandAlias;
     public static String statSeparator;
-    public static String legendarySpawnOptions;
+    public static String statLineStart;
 
     // Set up logging settings.
-    public static Boolean logLegendarySpawns;
-    public static Boolean logLegendaryCatches;
-    public static Boolean logLegendaryDefeats;
-    public static Boolean logShinySpawns;
-    public static Boolean logShinyCatches;
-    public static Boolean logShinyDefeats;
-    public static Boolean logBossSpawns;
-    public static Boolean logBossDefeats;
-    public static Boolean logHatches;
-    public static Boolean logTrades;
+    public static boolean logLegendarySpawns;
+    public static boolean logLegendaryCatches;
+    public static boolean logLegendaryDefeats;
+    public static boolean logShinyLegendarySpawns;
+    public static boolean logShinyLegendaryCatches;
+    public static boolean logShinyLegendaryDefeats;
+    public static boolean logShinySpawns;
+    public static boolean logShinyCatches;
+    public static boolean logShinyDefeats;
+    public static boolean logBossSpawns;
+    public static boolean logBossDefeats;
+    public static boolean logHatches;
+    public static boolean logShinyHatches;
+    public static boolean logTrades;
 
     // Set up broadcast settings.
-    public static Boolean showLegendarySpawnMessage;
-    public static Boolean showLegendaryCatchMessage;
-    public static Boolean showLegendaryDefeatMessage;
-    public static Boolean showShinySpawnMessage;
-    public static Boolean showShinyCatchMessage;
-    public static Boolean showShinyDefeatMessage;
-    public static Boolean showBossSpawnMessage;
-    public static Boolean showBossDefeatMessage;
-    public static Boolean showHatchMessage;
-    public static Boolean showTradeMessage;
+    public static boolean showLegendarySpawns;
+    public static boolean showLegendaryCatches;
+    public static boolean showLegendaryDefeats;
+    public static boolean showShinyLegendarySpawns;
+    public static boolean showShinyLegendaryCatches;
+    public static boolean showShinyLegendaryDefeats;
+    public static boolean showShinySpawns;
+    public static boolean showShinyCatches;
+    public static boolean showShinyDefeats;
+    public static boolean showBossSpawns;
+    public static boolean showBossDefeats;
+    public static boolean showHatches;
+    public static boolean showShinyHatches;
+    public static boolean showTrades;
+
+    // Set up hover settings.
+    public static boolean hoverLegendarySpawns;
+    public static boolean hoverLegendaryCatches;
+    public static boolean hoverLegendaryDefeats;
+    public static boolean hoverShinyLegendarySpawns;
+    public static boolean hoverShinyLegendaryCatches;
+    public static boolean hoverShinyLegendaryDefeats;
+    public static boolean hoverShinySpawns;
+    public static boolean hoverShinyCatches;
+    public static boolean hoverShinyDefeats;
+    public static boolean hoverBossSpawns;
+    public static boolean hoverBossDefeats;
+    public static boolean hoverHatches;
+    public static boolean hoverShinyHatches;
 
     // Set up normal message Strings.
     public static String legendarySpawnMessage;
     public static String legendaryCatchMessage;
     public static String legendaryDefeatMessage;
+    public static String shinyLegendarySpawnMessage;
+    public static String shinyLegendaryCatchMessage;
+    public static String shinyLegendaryDefeatMessage;
     public static String shinySpawnMessage;
     public static String shinyCatchMessage;
     public static String shinyDefeatMessage;
     public static String bossSpawnMessage;
     public static String bossDefeatMessage;
     public static String hatchMessage;
+    public static String shinyHatchMessage;
     public static String tradeMessage;
 
     // Set up special combo and legendary+shiny Strings.
-    public static String shinyLegendarySpawnMessage;
-    public static String shinyLegendaryCatchMessage;
-    public static String shinyLegendaryDefeatMessage;
-    public static String shinyHatchMessage;
 
     // Create and set up a config path, and grab an OS-specific file path separator. This will usually be a forward slash.
     public static String primaryPath = "config" + FileSystems.getDefault().getSeparator();
@@ -144,17 +164,9 @@ public class PixelmonBroadcasts
         printBasicMessage("================== P I X E L M O N   B R O A D C A S T S ==================");
         printBasicMessage("--> §aLoading and validating Pixelmon Broadcasts config...");
 
-        // Returns true if the load was a success.
+        // Sets up a config if needed, and then loads in settings. Returns true if the load was a success.
         if (ConfigMethods.tryCreateAndLoadConfig())
         {
-            if (commandAlias == null)
-                printBasicMessage("    §cCould not read config node \"§4commandAlias§c\". Alias support disabled.");
-            if (statSeparator == null)
-            {
-                printBasicMessage("    §cCould not read config node \"§4statSeparator§c\". Falling back to defaults.");
-                statSeparator = "§r, ";
-            }
-
             // Register listeners with Pixelmon.
             printBasicMessage("--> §aRegistering listeners with Pixelmon...");
             Pixelmon.EVENT_BUS.register(new SpawnListener());
@@ -174,12 +186,12 @@ public class PixelmonBroadcasts
                 // Is the setting turned on? Complaining, commence!
                 if (configStatus)
                 {
-                    PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").setValue(false);
-                    PixelmonConfig.saveConfig();
-
                     printBasicMessage("    §ePixelmon's \"§6displayLegendaryGlobalMessage§e\" setting is enabled.");
                     printBasicMessage("    §eThis setting will now be disabled, as it conflicts with this sidemod.");
-                    printBasicMessage("    §eIf you remove this mod, make sure you check Pixelmon's config!");
+                    printBasicMessage("    §eIf you remove this mod, revert this in Pixelmon's config!");
+
+                    PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").setValue(false);
+                    PixelmonConfig.saveConfig();
                 }
             }
 
@@ -196,8 +208,6 @@ public class PixelmonBroadcasts
 
                 printBasicMessage("--> §aPre-init completed. All systems nominal.");
             }
-
-            printBasicMessage("Options String: " + legendarySpawnOptions);
         }
         else
             printBasicMessage("    §cEncountered a critical error, aborting... If this is a bug, please report.");

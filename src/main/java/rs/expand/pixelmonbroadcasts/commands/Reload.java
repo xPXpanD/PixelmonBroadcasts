@@ -11,7 +11,6 @@ import org.spongepowered.api.text.Text;
 
 // Local imports.
 import rs.expand.pixelmonbroadcasts.utilities.ConfigMethods;
-
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
@@ -23,20 +22,11 @@ public class Reload implements CommandExecutor
         if (src instanceof Player)
         {
             printBasicMessage(
-                    "§4PBR §f// §dInfo: §3Player §b" + src.getName() + "§3 reloaded the Pixelmon Broadcasts config!");
+                    "§4PBR §f// §dPlayer §5" + src.getName() + "§d reloaded the Pixelmon Broadcasts config!");
         }
 
         // Load/create config.
         ConfigMethods.tryCreateAndLoadConfig();
-
-        // Show errors if any of the main variables are broken.
-        if (commandAlias == null)
-            printBasicMessage("    §cCould not read config node \"§4commandAlias§c\". Alias support disabled.");
-        if (statSeparator == null)
-        {
-            printBasicMessage("    §cCould not read config node \"§4statSeparator§c\". Falling back to defaults.");
-            statSeparator = ", ";
-        }
 
         // Re-register alias, if applicable.
         if (commandAlias != null)
@@ -45,10 +35,10 @@ public class Reload implements CommandExecutor
         if (src instanceof Player)
         {
             // Not entirely sure why I made this use the lang, but hey. Two lines, no harm.
-            sendFormattedTranslation(src, "universal.marginals.header");
-            sendFormattedTranslation(src, "reload.messages.reload_complete");
-            sendFormattedTranslation(src, "reload.messages.check_console");
-            sendFormattedTranslation(src, "universal.marginals.footer");
+            sendTranslation(src, "universal.marginals.header");
+            sendTranslation(src, "reload.messages.reload_complete");
+            sendTranslation(src, "reload.messages.check_console");
+            sendTranslation(src, "universal.marginals.footer");
         }
         else
         {

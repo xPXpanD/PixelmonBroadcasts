@@ -48,37 +48,36 @@ public class CatchListener
                 );
             }
 
-            if (showLegendaryCatchMessage)
+            if (showShinyLegendaryCatches && pokemon.getIsShiny())
             {
-                if (pokemon.getIsShiny())
+                // Parse placeholders and print!
+                if (shinyLegendaryCatchMessage != null)
                 {
-                    // Parse placeholders and print!
-                    if (shinyLegendaryCatchMessage != null)
-                    {
-                        // Set up our message. This is the same for all eligible players, so call it once and store it.
-                        final String finalMessage = replacePlaceholders(shinyLegendaryCatchMessage, playerName, pokemon, location);
+                    // Set up our message. This is the same for all eligible players, so call it once and store it.
+                    final String finalMessage = replacePlaceholders(shinyLegendaryCatchMessage, playerName, pokemon, location);
 
-                        // Send off the message, the needed notifier permission and the flag to check.
-                        // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
-                        iterateAndSendEventMessage(finalMessage, "legendarycatch", "showLegendaryCatch", nbt);
-                    }
-                    else
-                        printBasicError("The shiny legendary catch message is broken, broadcast failed.");
+                    // Send off the message, the needed notifier permission and the flag to check.
+                    // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
+                    iterateAndSendEventMessage(finalMessage, nbt, hoverShinyLegendaryCatches, true,
+                            "shinylegendarycatch", "showShinyLegendaryCatch");
                 }
                 else
+                    printBasicError("The shiny legendary catch message is broken, broadcast failed.");
+            }
+            else if (showLegendaryCatches)
+            {
+                // Parse placeholders and print!
+                if (legendaryCatchMessage != null)
                 {
-                    // Parse placeholders and print!
-                    if (legendaryCatchMessage != null)
-                    {
-                        // Set up our message. This is the same for all eligible players, so call it once and store it.
-                        final String finalMessage = replacePlaceholders(legendaryCatchMessage, playerName, pokemon, location);
+                    // Set up our message. This is the same for all eligible players, so call it once and store it.
+                    final String finalMessage = replacePlaceholders(legendaryCatchMessage, playerName, pokemon, location);
 
-                        // Send off the message, the needed notifier permission and the flag to check.
-                        iterateAndSendEventMessage(finalMessage, "legendarycatch", "showLegendaryCatch", nbt);
-                    }
-                    else
-                        printBasicError("The legendary catch message is broken, broadcast failed.");
+                    // Send off the message, the needed notifier permission and the flag to check.
+                    iterateAndSendEventMessage(finalMessage, nbt, hoverLegendaryCatches, true,
+                            "legendarycatch", "showLegendaryCatch");
                 }
+                else
+                    printBasicError("The legendary catch message is broken, broadcast failed.");
             }
         }
         else if (pokemon.getIsShiny())
@@ -97,7 +96,7 @@ public class CatchListener
                 );
             }
 
-            if (showShinyCatchMessage)
+            if (showShinyCatches)
             {
                 // Parse placeholders and print!
                 if (shinyCatchMessage != null)
@@ -106,7 +105,8 @@ public class CatchListener
                     final String finalMessage = replacePlaceholders(shinyCatchMessage, playerName, pokemon, location);
 
                     // Send off the message, the needed notifier permission and the flag to check.
-                    iterateAndSendEventMessage(finalMessage, "shinycatch", "showShinyCatch", nbt);
+                    iterateAndSendEventMessage(finalMessage, nbt, hoverShinyCatches, true,
+                            "shinycatch", "showShinyCatch");
                 }
                 else
                     printBasicError("The shiny catch message is broken, broadcast failed.");

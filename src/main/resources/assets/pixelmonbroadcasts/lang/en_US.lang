@@ -2,31 +2,57 @@
 universal.marginals.header=&5-----------------------------------------------------
 universal.marginals.footer=&5-----------------------------------------------------
 
-# # # hoverable info for %ivhover% # # #
-hovers.messages.sizes.microscopic=➡ &aThis Pokémon is &2&omicroscopic&a.
-hovers.messages.sizes.pygmy=➡ &aThis Pokémon is &2a pygmy&a.
-hovers.messages.sizes.runt=➡ &aThis Pokémon is &2a runt&a.
-hovers.messages.sizes.small=➡ &aThis Pokémon is &2small&a.
-hovers.messages.sizes.ordinary=➡ &aThis Pokémon is &2ordinary&a.
-hovers.messages.sizes.huge=➡ &aThis Pokémon is &2huge&a.
-hovers.messages.sizes.giant=➡ &aThis Pokémon is &2giant&a.
-hovers.messages.sizes.enormous=➡ &aThis Pokémon is &2enormous&a.
-hovers.messages.sizes.ginormous=➡ &aThis Pokémon is &2&nginormous&a.
-hovers.messages.sizes.unknown=➡ &aThis Pokémon's size is &2unknown&a...
-hovers.messages.genders.male=➡ &aIt is &2male&a.
-hovers.messages.genders.female=➡ &aIt is &2female&a.
-hovers.messages.genders.none=➡ &aIt has &2no gender&a.
+
+# # # hover-enabled message info # # #
+# Present tense messages (spawns, catches, hatches)
+hovers.messages.present_tense.sizes.microscopic=&aThis Pokémon is &2&omicroscopic&a!
+hovers.messages.present_tense.sizes.pygmy=&aThis Pokémon is &2a pygmy&a!
+hovers.messages.present_tense.sizes.runt=&aThis Pokémon is &2a runt&a.
+hovers.messages.present_tense.sizes.small=&aThis Pokémon is &2small&a.
+hovers.messages.present_tense.sizes.ordinary=&aThis Pokémon is &2ordinary&a.
+hovers.messages.present_tense.sizes.huge=&aThis Pokémon is &2huge&a.
+hovers.messages.present_tense.sizes.giant=&aThis Pokémon is &2giant&a.
+hovers.messages.present_tense.sizes.enormous=&aThis Pokémon is &2enormous&a!
+hovers.messages.present_tense.sizes.ginormous=&aThis Pokémon is &2&nginormous&a!
+hovers.messages.present_tense.sizes.unknown=&aThis Pokémon's size is &2unknown&a...
+hovers.messages.present_tense.genders.male=&aIt is &2male&a.
+hovers.messages.present_tense.genders.female=&aIt is &2female&a.
+hovers.messages.present_tense.genders.none=&aIt has &2no gender&a.
 # %s = The nature we're showing/using, then the boosted stat, then the cut one.
-hovers.messages.natures.balanced=➡ &aIt is &2%s&a, with well-balanced stats.
-hovers.messages.natures.special=➡ &aIt is &2%s&a, boosting &2%s &aand cutting &2%s&a.
-hovers.messages.natures.unknown=➡ &aIt has an &2unknown &anature...
+hovers.messages.present_tense.natures.balanced=&aIt is &2%s&a, with well-balanced stats.
+hovers.messages.present_tense.natures.special=&aIt is &2%s&a, boosting &2%s &aand cutting &2%s&a.
+hovers.messages.present_tense.natures.unknown=&aIt has an &2unknown &anature...
 ## End of replacements. ^
+
+# Past tense messages (defeats)
+hovers.messages.past_tense.sizes.microscopic=&aThis Pokémon was &2&omicroscopic&a...
+hovers.messages.past_tense.sizes.pygmy=&aThis Pokémon was &2a pygmy&a...
+hovers.messages.past_tense.sizes.runt=&aThis Pokémon was &2a runt&a.
+hovers.messages.past_tense.sizes.small=&aThis Pokémon was &2small&a.
+hovers.messages.past_tense.sizes.ordinary=&aThis Pokémon was &2ordinary&a.
+hovers.messages.past_tense.sizes.huge=&aThis Pokémon was &2huge&a.
+hovers.messages.past_tense.sizes.giant=&aThis Pokémon was &2giant&a.
+hovers.messages.past_tense.sizes.enormous=&aThis Pokémon was &2enormous&a...
+hovers.messages.past_tense.sizes.ginormous=&aThis Pokémon was &2&nginormous&a...
+hovers.messages.past_tense.sizes.unknown=&aThis Pokémon's size was &2unknown&a...
+hovers.messages.past_tense.genders.male=&aIt was &2male&a.
+hovers.messages.past_tense.genders.female=&aIt was &2female&a.
+hovers.messages.past_tense.genders.none=&aIt had &2no gender&a.
+# %s = The nature we're showing/using, then the boosted stat, then the cut one.
+hovers.messages.past_tense.natures.balanced=&aIt was &2%s&a, with well-balanced stats.
+hovers.messages.past_tense.natures.special=&aIt was &2%s&a, boosting &2%s &aand cutting &2%s&a.
+hovers.messages.past_tense.natures.unknown=&aIt had an &2unknown &anature...
+## End of replacements. ^
+
+# Other messages
 hovers.messages.current_ivs=&bIVs&f:
 # %d = The total number of IVs for our checked Pokémon, then the percentage of the max.
 # Use a double percent sign ("%%") if you want a single one, it needs escaping to work.
-hovers.messages.total_ivs=➡ &a%d&f/&a186&f (&a%d%%&f)
+hovers.messages.total_ivs=&a%d&f/&a186&f (&a%d%%&f)
 ## End of replacements. ^
 hovers.messages.extra_info=&bExtra info&f:
+
+# Texts
 hovers.text.natures.hardy=hardy
 hovers.text.natures.serious=serious
 hovers.text.natures.docile=docile
@@ -59,26 +85,26 @@ hovers.text.stats.defense=Def
 hovers.text.stats.special_attack=SAtk
 hovers.text.stats.special_defense=SDef
 hovers.text.stats.speed=Spd
-# Automatically gets a space added at the end, since the lang format does not support it.
-hovers.text.stats.line_start=➡
-## End of automatic additions. ^
 # %d = The actual value of the stat (usually an IV) we're showing.
-# %s = The name of the stat we're showing, then the statSeparator from the main config.
-hovers.text.stats.below_max=&a%d &2%s%s
-hovers.text.stats.maxed_out=&a&o%d &r&2%s%s
+# %s = The name of the stat to show. The config's statSeparator gets auto-added after.
+hovers.text.stats.below_max=&a%d &2%s
+hovers.text.stats.maxed_out=&a&o%d &r&2%s
 ## End of replacements. ^
+
 
 # # # /pixelmonbroadcasts base (info hub) # # #
 # %s = The command's alias if present, or otherwise the command itself. Note: Clickable.
-hub.messages.toggle_syntax=/&6%s toggle
-hub.messages.reload_syntax=/&6%s reload
+hub.messages.toggle_syntax=&6/%s toggle
+hub.messages.reload_syntax=&6/%s reload
 ## End of replacements. ^
-hub.messages.toggle_info=➡ &eAllows you to toggle event messages by clicking them.
-hub.messages.reload_info=➡ &eReloads the Pixelmon Broadcasts config on the fly.
+hub.messages.toggle_info=&eAllows you to toggle event messages by clicking them.
+hub.messages.reload_info=&eReloads the Pixelmon Broadcasts config on the fly.
 hub.errors.no_permissions=&cYou have no permissions for any Pixelmon Broadcasts commands.
 hub.errors.contact_staff=&cPlease contact staff if you believe this to be in error.
 
+
 # # # /pixelmonbroadcasts toggle # # #
+# Messages
 toggle.messages.enable=&aYou will now be shown this message again.
 toggle.messages.disable=&eYou will no longer be shown this message.
 toggle.messages.info=&6Click any of the options below to toggle their messages.
@@ -86,16 +112,23 @@ toggle.messages.catch_toggles=&bCatch message toggles&f:
 toggle.messages.defeat_toggles=&bDefeat message toggles&f:
 toggle.messages.spawning_toggles=&bSpawning message toggles&f:
 toggle.messages.other_toggles=&bMiscellaneous message toggles&f:
+
+# Texts
 toggle.text.shiny.on=&a&nshiny
 toggle.text.shiny.off=&c&nshiny
 toggle.text.legendary.on=&a&nlegendary
 toggle.text.legendary.off=&c&nlegendary
+toggle.text.shiny_legendary.on=&a&nshiny legendary
+toggle.text.shiny_legendary.off=&c&nshiny legendary
 toggle.text.boss.on=&a&nboss
 toggle.text.boss.off=&c&nboss
-toggle.text.hatching.on=&a&nhatching
-toggle.text.hatching.off=&c&nhatching
-toggle.text.trades.on=&a&ntrades
-toggle.text.trades.off=&c&ntrades
+toggle.text.hatch.on=&a&nhatch
+toggle.text.hatch.off=&c&nhatch
+toggle.text.shiny_hatch.on=&a&nshiny hatch
+toggle.text.shiny_hatch.off=&c&nshiny hatch
+toggle.text.trade.on=&a&ntrade
+toggle.text.trade.off=&c&ntrade
+
 
 # # # /pixelmonbroadcasts reload # # #
 reload.messages.reload_complete=&bReloaded the Pixelmon Broadcasts main config!

@@ -16,36 +16,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Remote imports.
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.statLineStart;
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.statSeparator;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
 public class PlaceholderMethods
 {
     // Iterates through the online player list, and sends a message to those with the right perms and toggle status.
-    // This method also adds a hoverable IV spread if an %ivhover%/%ivhover2% placeholder is present.
-    // The logic for this is huge and the location is a bit awkward, but it can only be done here and is optional.
+    // This method also adds a hoverable IV spread if the "hover" option is set for this message.
     public static void iterateAndSendEventMessage(
-            String message, final String permission, final String flag, final NBTTagCompound nbt, final NBTTagCompound... nbt2)
+            final String message, final NBTTagCompound nbt, final boolean hasHover, final boolean presentTense,
+            final String permission, final String... flags)
     {
-        // Set up some regularly-accessed bools.
-        final boolean player1PlaceholderPresent = message.toLowerCase().contains("%ivhover%");
-        final boolean player2PlaceholderPresent = message.toLowerCase().contains("%ivhover2%");
+        // Make a Text out of our message, which we can either send directly or add a hover to, depending on options.
+        Text finalMessage;
 
-        // Set up a Text that we can store our first placeholder message in, if applicable.
-        Text player1Message;
-
-        // Pass the incoming message through yet another placeholder-swapping stage if a valid one is found.
-        if (player1PlaceholderPresent || player2PlaceholderPresent)
-        {
-            // Gets back the whole message with placeholders nuked, a hot word and
-            player1Message = getIVHover(message, nbt);
-
-            /*// We have another Pokémon.
-            if (nbt.size() > 1)
-                temp2 = getIVHover(editableMessage, nbt.get(1));*/
-        }
+        // If the "hover" option is set, add the hover to our Text.
+        if (hasHover)
+            finalMessage = getHoverableLine(message, nbt, presentTense);
         else
-            player1Message = null;
+            finalMessage = Text.of(message);
 
         // Sift through the online players.
         Sponge.getGame().getServer().getOnlinePlayers().forEach((recipient) ->
@@ -53,22 +43,15 @@ public class PlaceholderMethods
             // Does the iterated player have the needed notifier permission?
             if (recipient.hasPermission("pixelmonbroadcasts.notify." + permission))
             {
-                // Does the iterated player have the message enabled? Send it if we get "true" returned.
-                if (checkToggleStatus((EntityPlayerMP) recipient, flag))
-                {
-                    if (!player1PlaceholderPresent && !player2PlaceholderPresent)
-                        recipient.sendMessage(Text.of(message));
-                    else if (player1Message != null)
-                        recipient.sendMessage(player1Message);
-                    else
-                        recipient.sendMessage(Text.of("ERROR: GOT NULL"));
-                }
+                // Does the iterated player want our message? Send it if we get "true" returned.
+                if (checkToggleStatus((EntityPlayerMP) recipient, flags))
+                    recipient.sendMessage(finalMessage);
             }
         });
     }
 
     // Sets up a message from the given info, with IV hovers thrown in in place of any placeholders.
-    private static Text getIVHover(final String message, final NBTTagCompound nbt)
+    private static Text getHoverableLine(final String message, final NBTTagCompound nbt, final boolean presentTense)
     {
         if (nbt != null)
         {
@@ -88,25 +71,25 @@ public class PlaceholderMethods
             switch (nbt.getInteger(NbtKeys.GROWTH))
             {
                 case 0:
-                    sizeString = getFormattedTranslation("hovers.messages.sizes.pygmy"); break;
+                    sizeString = statLineStart + getTensedTranslation(presentTense, "hovers.messages.sizes.pygmy"); break;
                 case 1:
-                    sizeString = getFormattedTranslation("hovers.messages.sizes.runt"); break;
+                    sizeString = statLineStart + getTensedTranslation(presentTense, "hovers.messages.sizes.runt"); break;
                 case 2:
-                    sizeString = getFormattedTranslation("hovers.messages.sizes.small"); break;
+                    sizeString = statLineStart + getTensedTranslation(presentTense, "hovers.messages.sizes.small"); break;
                 case 3:
-                    sizeString = getFormattedTranslation("hovers.messages.sizes.ordinary"); break;
+                    sizeString = statLineStart + getTensedTranslation(presentTense, "hovers.messages.sizes.ordinary"); break;
                 case 4:
-                    sizeString = getFormattedTranslation("hovers.messages.sizes.huge"); break;
+                    sizeString = statLineStart + getTensedTranslation(presentTense, "hovers.messages.sizes.huge"); break;
                 case 5:
-                    sizeString = getFormattedTranslation("hovers.messages.sizes.giant"); break;
+                    sizeString = statLineStart + getTensedTranslation(presentTense, "hovers.messages.sizes.giant"); break;
                 case 6:
-                    sizeString = getFormattedTranslation("hovers.messages.sizes.enormous"); break;
-                case 7:
-                    sizeString = getFormattedTranslation("hovers.messages.sizes.ginormous"); break; // NOW with fancy underlining!
-                case 8:
-                    sizeString = getFormattedTranslation("hovers.messages.sizes.microscopic"); break; // NOW with fancy italicization!
+                    sizeString = statLineStart + getTensedTranslation(presentTense, "hovers.messages.sizes.enormous"); break;
+                case 7: // NOW with fancy underlining!
+                    sizeString = statLineStart + getTensedTranslation(presentTense, "hovers.messages.sizes.ginormous"); break;
+                case 8: // NOW with fancy italicization!
+                    sizeString = statLineStart + getTensedTranslation(presentTense, "hovers.messages.sizes.microscopic"); break;
                 default:
-                    sizeString = getFormattedTranslation("hovers.messages.sizes.unknown");
+                    sizeString = statLineStart + getTensedTranslation(presentTense, "hovers.messages.sizes.unknown");
             }
 
             // Get an IV composite StringBuilder.
@@ -119,56 +102,50 @@ public class PlaceholderMethods
                 {
                     case 0:
                     {
-                        statString = getFormattedTranslation("hovers.text.stats.hp");
+                        statString = getTranslation("hovers.text.stats.hp");
                         statValue = HPIV;
                         break;
                     }
                     case 1:
                     {
-                        statString = getFormattedTranslation("hovers.text.stats.attack");
+                        statString = getTranslation("hovers.text.stats.attack");
                         statValue = attackIV;
                         break;
                     }
                     case 2:
                     {
-                        statString = getFormattedTranslation("hovers.text.stats.defense");
+                        statString = getTranslation("hovers.text.stats.defense");
                         statValue = defenseIV;
                         break;
                     }
                     case 3:
                     {
-                        statString = getFormattedTranslation("hovers.text.stats.special_attack");
+                        statString = getTranslation("hovers.text.stats.special_attack");
                         statValue = spAttIV;
                         break;
                     }
                     case 4:
                     {
-                        statString = getFormattedTranslation("hovers.text.stats.special_defense");
+                        statString = getTranslation("hovers.text.stats.special_defense");
                         statValue = spDefIV;
                         break;
                     }
                     case 5:
                     {
-                        statString = getFormattedTranslation("hovers.text.stats.speed");
+                        statString = getTranslation("hovers.text.stats.speed");
                         statValue = speedIV;
                         break;
                     }
                 }
 
-                if (i < 5)
-                {
-                    if (statValue < 31)
-                        ivsLine.append(getFormattedTranslation("hovers.text.stats.below_max", statValue, statString, statSeparator));
-                    else
-                        ivsLine.append(getFormattedTranslation("hovers.text.stats.maxed_out", statValue, statString, statSeparator));
-                }
+
+                if (statValue < 31)
+                    ivsLine.append(getTranslation("hovers.text.stats.below_max", statValue, statString));
                 else
-                {
-                    if (statValue < 31)
-                        ivsLine.append(getFormattedTranslation("hovers.text.stats.below_max", statValue, statString, ""));
-                    else
-                        ivsLine.append(getFormattedTranslation("hovers.text.stats.maxed_out", statValue, statString, ""));
-                }
+                    ivsLine.append(getTranslation("hovers.text.stats.maxed_out", statValue, statString));
+
+                if (i < 5)
+                    ivsLine.append(statSeparator);
             }
 
             // Grab a gender string.
@@ -176,11 +153,11 @@ public class PlaceholderMethods
             switch (nbt.getInteger(NbtKeys.GENDER))
             {
                 case 0:
-                    genderString = getFormattedTranslation("hovers.messages.genders.male"); break;
+                    genderString = statLineStart + getTensedTranslation(presentTense, "hovers.messages.genders.male"); break;
                 case 1:
-                    genderString = getFormattedTranslation("hovers.messages.genders.female"); break;
+                    genderString = statLineStart + getTensedTranslation(presentTense, "hovers.messages.genders.female"); break;
                 default:
-                    genderString = getFormattedTranslation("hovers.messages.genders.none"); break;
+                    genderString = statLineStart + getTensedTranslation(presentTense, "hovers.messages.genders.none"); break;
             }
 
             // Set up the nature and see which stats we got.
@@ -193,89 +170,89 @@ public class PlaceholderMethods
             switch (natureNumber)
             {
                 case 0:
-                    natureString = getFormattedTranslation("hovers.text.natures.hardy"); break;
+                    natureString = getTranslation("hovers.text.natures.hardy"); break;
                 case 1:
-                    natureString = getFormattedTranslation("hovers.text.natures.serious"); break;
+                    natureString = getTranslation("hovers.text.natures.serious"); break;
                 case 2:
-                    natureString = getFormattedTranslation("hovers.text.natures.docile"); break;
+                    natureString = getTranslation("hovers.text.natures.docile"); break;
                 case 3:
-                    natureString = getFormattedTranslation("hovers.text.natures.bashful"); break;
+                    natureString = getTranslation("hovers.text.natures.bashful"); break;
                 case 4:
-                    natureString = getFormattedTranslation("hovers.text.natures.quirky"); break;
+                    natureString = getTranslation("hovers.text.natures.quirky"); break;
                 case 5:
-                    natureString = getFormattedTranslation("hovers.text.natures.lonely"); break;
+                    natureString = getTranslation("hovers.text.natures.lonely"); break;
                 case 6:
-                    natureString = getFormattedTranslation("hovers.text.natures.brave"); break;
+                    natureString = getTranslation("hovers.text.natures.brave"); break;
                 case 7:
-                    natureString = getFormattedTranslation("hovers.text.natures.adamant"); break;
+                    natureString = getTranslation("hovers.text.natures.adamant"); break;
                 case 8:
-                    natureString = getFormattedTranslation("hovers.text.natures.naughty"); break;
+                    natureString = getTranslation("hovers.text.natures.naughty"); break;
                 case 9:
-                    natureString = getFormattedTranslation("hovers.text.natures.bold"); break;
+                    natureString = getTranslation("hovers.text.natures.bold"); break;
                 case 10:
-                    natureString = getFormattedTranslation("hovers.text.natures.relaxed"); break;
+                    natureString = getTranslation("hovers.text.natures.relaxed"); break;
                 case 11:
-                    natureString = getFormattedTranslation("hovers.text.natures.impish"); break;
+                    natureString = getTranslation("hovers.text.natures.impish"); break;
                 case 12:
-                    natureString = getFormattedTranslation("hovers.text.natures.lax"); break;
+                    natureString = getTranslation("hovers.text.natures.lax"); break;
                 case 13:
-                    natureString = getFormattedTranslation("hovers.text.natures.timid"); break;
+                    natureString = getTranslation("hovers.text.natures.timid"); break;
                 case 14:
-                    natureString = getFormattedTranslation("hovers.text.natures.hasty"); break;
+                    natureString = getTranslation("hovers.text.natures.hasty"); break;
                 case 15:
-                    natureString = getFormattedTranslation("hovers.text.natures.jolly"); break;
+                    natureString = getTranslation("hovers.text.natures.jolly"); break;
                 case 16:
-                    natureString = getFormattedTranslation("hovers.text.natures.naive"); break;
+                    natureString = getTranslation("hovers.text.natures.naive"); break;
                 case 17:
-                    natureString = getFormattedTranslation("hovers.text.natures.modest"); break;
+                    natureString = getTranslation("hovers.text.natures.modest"); break;
                 case 18:
-                    natureString = getFormattedTranslation("hovers.text.natures.mild"); break;
+                    natureString = getTranslation("hovers.text.natures.mild"); break;
                 case 19:
-                    natureString = getFormattedTranslation("hovers.text.natures.quiet"); break;
+                    natureString = getTranslation("hovers.text.natures.quiet"); break;
                 case 20:
-                    natureString = getFormattedTranslation("hovers.text.natures.rash"); break;
+                    natureString = getTranslation("hovers.text.natures.rash"); break;
                 case 21:
-                    natureString = getFormattedTranslation("hovers.text.natures.calm"); break;
+                    natureString = getTranslation("hovers.text.natures.calm"); break;
                 case 22:
-                    natureString = getFormattedTranslation("hovers.text.natures.gentle"); break;
+                    natureString = getTranslation("hovers.text.natures.gentle"); break;
                 case 23:
-                    natureString = getFormattedTranslation("hovers.text.natures.sassy"); break;
+                    natureString = getTranslation("hovers.text.natures.sassy"); break;
                 case 24:
-                    natureString = getFormattedTranslation("hovers.text.natures.careful"); break;
+                    natureString = getTranslation("hovers.text.natures.careful"); break;
                 default:
-                    natureString = getFormattedTranslation("hovers.text.natures.unknown"); break;
+                    natureString = getTranslation("hovers.text.natures.unknown"); break;
             }
 
             // Do the setup for our nature String separately, as it's a bit more involved.
             final String natureCompositeString;
             if (nbt.getInteger(NbtKeys.NATURE) >= 0 && nbt.getInteger(NbtKeys.NATURE) <= 4)
             {
-                natureCompositeString =
-                        getFormattedTranslation("hovers.messages.natures.balanced", natureString, boostedStat, cutStat);
+                natureCompositeString = statLineStart +
+                        getTensedTranslation(presentTense, "hovers.messages.natures.balanced", natureString, boostedStat, cutStat);
             }
             else if (nbt.getInteger(NbtKeys.NATURE) >= 5 && nbt.getInteger(NbtKeys.NATURE) <= 24)
             {
-                natureCompositeString =
-                        getFormattedTranslation("hovers.messages.natures.special", natureString, boostedStat, cutStat);
+                natureCompositeString = statLineStart +
+                        getTensedTranslation(presentTense, "hovers.messages.natures.special", natureString, boostedStat, cutStat);
             }
             else
             {
-                natureCompositeString =
-                        getFormattedTranslation("hovers.messages.natures.unknown", natureString, boostedStat, cutStat);
+                natureCompositeString = statLineStart +
+                        getTensedTranslation(presentTense, "hovers.messages.natures.unknown", natureString, boostedStat, cutStat);
             }
 
             // Populate a List. Every entry will be its own line. May be a bit hacky, but it'll do.
             final List<String> hovers = new ArrayList<>();
-            hovers.add(getFormattedTranslation("hovers.messages.current_ivs"));
-            hovers.add(getFormattedTranslation("hovers.messages.total_ivs", totalIVs, percentIVs));
-            hovers.add(getFormattedTranslation("hovers.text.stats.line_start") + " " + ivsLine.toString());
-            hovers.add(getFormattedTranslation("hovers.messages.extra_info"));
+            hovers.add(getTranslation("hovers.messages.current_ivs"));
+            hovers.add(statLineStart + getTranslation("hovers.messages.total_ivs", totalIVs, percentIVs));
+            hovers.add(statLineStart + ivsLine.toString());
+            hovers.add(getTranslation("hovers.messages.extra_info"));
             hovers.add(sizeString);
             hovers.add(genderString);
             hovers.add(natureCompositeString);
 
             // Make a finalized message that we can show, and add a hover. Return the whole thing.
-            return Text.builder(message.replaceAll("(?i)%ivhover%", percentIVs.toString()))
+            return Text.builder(message)
                     .onHover(TextActions.showText(Text.of(String.join("\n§r", hovers))))
                     .build();
 
@@ -298,21 +275,37 @@ public class PlaceholderMethods
         else return null;
     }
 
+    // Inserts the correct tense into lang keys that might have multiple tenses. Returns the translation.
+    private static String getTensedTranslation(final boolean presentTense, final String key, final Object... params)
+    {
+        // Set up a String to translate and then return.
+        final String tensedKey;
+
+        // Splits our input key, adds the correct tense at a constant known location, and then pieces it back together.
+        if (presentTense)
+            tensedKey = key.substring(0, 16) + "present_tense." + key.substring(16);
+        else
+            tensedKey = key.substring(0, 16) + "past_tense." + key.substring(16);
+
+        // Send back the translation of our new freshly-tensed key.
+        return getTranslation(tensedKey, params);
+    }
+
     // Get translated names for a given nature's positive and negative stats from the lang.
     private static String getTranslatedNatureStat(StatsType stat)
     {
         switch(stat)
         {
             case Attack:
-                return getFormattedTranslation("hovers.text.stats.attack");
+                return getTranslation("hovers.text.stats.attack");
             case Defence:
-                return getFormattedTranslation("hovers.text.stats.defense");
+                return getTranslation("hovers.text.stats.defense");
             case SpecialAttack:
-                return getFormattedTranslation("hovers.text.stats.special_attack");
+                return getTranslation("hovers.text.stats.special_attack");
             case SpecialDefence:
-                return getFormattedTranslation("hovers.text.stats.special_defense");
+                return getTranslation("hovers.text.stats.special_defense");
             case Speed:
-                return getFormattedTranslation("hovers.text.stats.speed");
+                return getTranslation("hovers.text.stats.speed");
             default: // Should not be reachable.
                 return "ERROR";
         }
@@ -363,7 +356,7 @@ public class PlaceholderMethods
                     new BigDecimal("100")).divide(new BigDecimal("186"), 2, BigDecimal.ROUND_HALF_UP);
 
             // Apply.
-            message = message.replaceAll("(?i)%ivpercent%", percentIVs.toString());
+            message = message.replaceAll("(?i)%ivpercent%", percentIVs.toString() + '%');
         }
 
         // We pass null for events that can't use a player variable, so let's check for that here.
@@ -419,7 +412,7 @@ public class PlaceholderMethods
                     new BigDecimal("100")).divide(new BigDecimal("186"), 2, BigDecimal.ROUND_HALF_UP);
 
             // Apply.
-            message = message.replaceAll("(?i)%ivpercent2%", percentIVs.toString());
+            message = message.replaceAll("(?i)%ivpercent2%", percentIVs.toString() + '%');
         }
 
         // We pass null for events that can't use a player variable, so let's check for that here.

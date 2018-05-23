@@ -7,9 +7,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.text.Text;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 // A collection of methods that are commonly used. One changed word or color here, and half the mod changes. Sweet.
 public class PrintingMethods
@@ -37,14 +35,14 @@ public class PrintingMethods
                 console.sendMessage(Text.of("§4PBR §f// §4Error: §c" + inputString)));
     }
 
-    // If we can't read a main config toggle, format and throw this error.
-    static void printBooleanNodeError(final List<String> nodes)
+    // If we can't read a main config options bundle (really just a String), format and throw this error.
+    static void printOptionsNodeError(final List<String> nodes)
     {
         for (final String node : nodes)
-        { printBasicMessage("§cCould not read config node \"§4" + node + "§c\"."); }
+        { printBasicMessage("§cCould not read options node \"§4" + node + "§c\"."); }
 
-        printBasicMessage("§cThe main config contains invalid booleans. Disabling these.");
-        printBasicMessage("§cCheck the config, and when fixed use §4/pbreload§c.");
+        printBasicMessage("§cThe main config contains invalid options. Disabling these.");
+        printBasicMessage("§cCheck the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
     }
 
     // If we can't read a main config message, format and throw this error.
@@ -54,25 +52,68 @@ public class PrintingMethods
         { printBasicMessage("§cCould not read message node \"§4" + node + "§c\"."); }
 
         printBasicMessage("§cThe main config contains invalid messages. Hiding these.");
-        printBasicMessage("§cCheck the config, and when fixed use §4/pbreload§c.");
+        printBasicMessage("§cCheck the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
     }
 
-    // Check if the given player has the given flag set, and if so, return what the flag is set to.
-    public static boolean checkToggleStatus(final EntityPlayerMP recipient, final String flag)
+    // Check if the given player has the given flag (or flags) set, and if so, return a clean status that we can use.
+    public static boolean checkToggleStatus(final EntityPlayerMP recipient, final String... flags)
     {
-        // Does the player have a flag set for this notification?
-        if (recipient.getEntityData().getCompoundTag("pbToggles").hasKey(flag))
+        // Did we get provided just one flag? This will generally be the most common situation.
+        if (flags.length == 1)
         {
-            // Return the flag's status.
-            return recipient.getEntityData().getCompoundTag("pbToggles").getBoolean(flag);
-        }
+            // Does the player have a flag set for this notification?
+            if (recipient.getEntityData().getCompoundTag("pbToggles").hasKey(flags[0]))
+            {
+                // Return the flag's status.
+                return recipient.getEntityData().getCompoundTag("pbToggles").getBoolean(flags[0]);
+            }
 
-        // Player does not have the flag, so return the default state ("true").
-        return true;
+            // Player does not have the flag, so return the default state ("true").
+            return true;
+        }
+        /*                                                                                                    *\
+           vvv Currently unused. Was used for a little bit, but then disabled in favor of specific flags. vvv
+
+        // We do not, look through all the flags and see if any are disabled.
+        else if (flags.length > 1)
+        {
+            // Set up a Set of the state of all provided flags.
+            Set<Boolean> flagSet = new HashSet<>();
+
+            // Loop through all provided flags, and add them to the Set.
+            for (String flag : flags)
+            {
+                // Does the player have a flag set for this notification?
+                if (recipient.getEntityData().getCompoundTag("pbToggles").hasKey(flag))
+                {
+                    // Return the flag's status.
+                    flagSet.add(recipient.getEntityData().getCompoundTag("pbToggles").getBoolean(flag));
+                }
+                else
+                    flagSet.add(true);
+            }
+
+            // Return "true" if all flags are either true or unset (default state is true). Return "false" otherwise.
+            return !flagSet.contains(false);
+        }
+        \*                                                                                                    */
+        else
+        {
+            printBasicError("Could not find any player toggles to check. Swallowing message.");
+            printBasicError("This is a bug, please report this. Include the specific event.");
+            return false;
+        }
+    }
+
+    // Gets a key from the language file, formats it using our own custom parseRemoteString, and then returns it.
+    public static String getTranslation(final String key, final Object... params)
+    {
+        // Format the key grabbed from our language file, replacing ampersands with section symbols.
+        return parseRemoteString(new TextComponentTranslation(key, params).getUnformattedComponentText());
     }
 
     // Gets a key from the language file, formats it using our own custom parseRemoteString, and then sends it.
-    public static void sendFormattedTranslation(CommandSource recipient, String key, Object... params)
+    public static void sendTranslation(CommandSource recipient, String key, Object... params)
     {
         // Format the key grabbed from our language file, replacing ampersands with section symbols.
         final String formattedInput =
@@ -80,13 +121,6 @@ public class PrintingMethods
 
         // Send the now-formatted input directly to the player.
         recipient.sendMessage(Text.of(formattedInput));
-    }
-
-    // Gets a key from the language file, formats it using our own custom parseRemoteString, and then returns it.
-    public static String getFormattedTranslation(final String key, final Object... params)
-    {
-        // Format the key grabbed from our language file, replacing ampersands with section symbols.
-        return parseRemoteString(new TextComponentTranslation(key, params).getUnformattedComponentText());
     }
 
     // Takes a config String and changes any ampersands to section symbols, which we can use internally.
