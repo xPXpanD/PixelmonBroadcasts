@@ -50,7 +50,7 @@ hovers.messages.current_ivs=&bIVs&f:
 # Use a double percent sign ("%%") if you want a single one, it needs escaping to work.
 hovers.messages.total_ivs=&a%d&f/&a186&f (&a%d%%&f)
 ## End of replacements. ^
-hovers.messages.extra_info=&bExtra info&f:
+hovers.messages.info=&bInfo&f:
 
 # Texts
 hovers.text.natures.hardy=hardy

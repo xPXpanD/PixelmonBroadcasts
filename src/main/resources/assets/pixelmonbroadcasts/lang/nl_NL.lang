@@ -19,8 +19,8 @@ hovers.messages.present_tense.genders.male=&aDeze Pokémon is een &2mannetje&a.
 hovers.messages.present_tense.genders.female=&aDeze Pokémon is een &2vrouwtje&a.
 hovers.messages.present_tense.genders.none=&aDeze Pokémon heeft &2geen geslacht&a.
 # %s = The nature we're showing/using, then the boosted stat, then the cut one.
-hovers.messages.present_tense.natures.balanced=&aDeze Pokémon is &2"%s"&a, met gebalanceerde statistieken.
-hovers.messages.present_tense.natures.special=&aDeze Pokémon is &2"%s"&a, met hogere &2%s &aen lagere &2%s&a.
+hovers.messages.present_tense.natures.balanced=&aDeze Pokémon is "&2%s&a", met gebalanceerde statistieken.
+hovers.messages.present_tense.natures.special=&aDeze Pokémon is "&2%s&a", met hogere &2%s &aen lagere &2%s&a.
 hovers.messages.present_tense.natures.unknown=&aDeze Pokémon heeft een &2onbekend &akarakter...
 ## End of replacements. ^
 
@@ -39,8 +39,8 @@ hovers.messages.past_tense.genders.male=&aDeze Pokémon was een &2mannetje&a.
 hovers.messages.past_tense.genders.female=&aDeze Pokémon was een &2vrouwtje&a.
 hovers.messages.past_tense.genders.none=&aDeze Pokémon had &2geen geslacht&a.
 # %s = The nature we're showing/using, then the boosted stat, then the cut one.
-hovers.messages.past_tense.natures.balanced=&aDeze Pokémon was &2"%s"&a, met gebalanceerde statistieken.
-hovers.messages.past_tense.natures.special=&aDeze Pokémon was &2"%s"&a, met hogere &2%s &aen lagere &2%s&a.
+hovers.messages.past_tense.natures.balanced=&aDeze Pokémon was "&2%s&a", met gebalanceerde statistieken.
+hovers.messages.past_tense.natures.special=&aDeze Pokémon was "&2%s&a", met hogere &2%s &aen lagere &2%s&a.
 hovers.messages.past_tense.natures.unknown=&aDeze Pokémon had een &2onbekend &akarakter...
 ## End of replacements. ^
 
@@ -50,7 +50,7 @@ hovers.messages.current_ivs=&bIVs&f:
 # Use a double percent sign ("%%") if you want a single one, it needs escaping to work.
 hovers.messages.total_ivs=&a%d&f/&a186&f (&a%d%%&f)
 ## End of replacements. ^
-hovers.messages.extra_info=&bExtra info&f:
+hovers.messages.info=&bInfo&f:
 
 # Texts (TODO: Vertalingen?)
 hovers.text.natures.hardy=hardy

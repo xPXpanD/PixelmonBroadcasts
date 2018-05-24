@@ -39,7 +39,7 @@ public class PrintingMethods
     static void printOptionsNodeError(final List<String> nodes)
     {
         for (final String node : nodes)
-        { printBasicMessage("§cCould not read options node \"§4" + node + "§c\"."); }
+            printBasicMessage("§cCould not read options node \"§4" + node + "§c\".");
 
         printBasicMessage("§cThe main config contains invalid options. Disabling these.");
         printBasicMessage("§cCheck the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
@@ -49,7 +49,7 @@ public class PrintingMethods
     static void printMessageNodeError(final List<String> nodes)
     {
         for (final String node : nodes)
-        { printBasicMessage("§cCould not read message node \"§4" + node + "§c\"."); }
+            printBasicMessage("§cCould not read message node \"§4" + node + "§c\".");
 
         printBasicMessage("§cThe main config contains invalid messages. Hiding these.");
         printBasicMessage("§cCheck the config, and when fixed use §4/pixelmonbroadcasts reload§c.");

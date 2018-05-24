@@ -5,7 +5,6 @@ package rs.expand.pixelmonbroadcasts.listeners;
 import com.pixelmonmod.pixelmon.api.events.BeatWildPixelmonEvent;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumPokemon;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -26,7 +25,6 @@ public class DefeatListener
         final String playerName = event.player.getName();
         final World world = pokemon.getEntityWorld();
         final BlockPos location = pokemon.getPosition();
-        final NBTTagCompound nbt = pokemon.serializeNBT();
 
         if (pokemon.isBossPokemon())
         {
@@ -52,12 +50,13 @@ public class DefeatListener
                 if (bossDefeatMessage != null)
                 {
                     // Set up our message. This is the same for all eligible players, so call it once and store it.
-                    final String finalMessage = replacePlaceholders(bossDefeatMessage, playerName, pokemon, location);
+                    final String finalMessage = replacePlaceholders(
+                            bossDefeatMessage, playerName, true, false, pokemon, location);
 
                     // Send off the message, the needed notifier permission and the flag to check.
                     iterateAndSendEventMessage(
-                            finalMessage, nbt, hoverBossDefeats, false,
-                            "bossdefeat", "showBossDefeat");
+                            finalMessage, pokemon, hoverBossDefeats, false,
+                            true, "bossdefeat", "showBossDefeat");
                 }
                 else
                     printBasicError("The boss defeat message is broken, broadcast failed.");
@@ -91,12 +90,13 @@ public class DefeatListener
                 if (shinyLegendaryDefeatMessage != null)
                 {
                     // Set up our message. This is the same for all eligible players, so call it once and store it.
-                    final String finalMessage = replacePlaceholders(shinyLegendaryDefeatMessage, playerName, pokemon, location);
+                    final String finalMessage = replacePlaceholders(
+                            shinyLegendaryDefeatMessage, playerName, true, false, pokemon, location);
 
                     // Send off the message, the needed notifier permission and the flag to check.
                     // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
-                    iterateAndSendEventMessage(finalMessage, nbt, hoverShinyLegendaryDefeats, false,
-                            "shinylegendarydefeat", "showShinyLegendaryDefeat");
+                    iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyLegendaryDefeats, false,
+                            true, "shinylegendarydefeat", "showShinyLegendaryDefeat");
                 }
                 else
                     printBasicError("The shiny legendary defeat message is broken, broadcast failed.");
@@ -107,11 +107,12 @@ public class DefeatListener
                 if (legendaryDefeatMessage != null)
                 {
                     // Set up our message. This is the same for all eligible players, so call it once and store it.
-                    final String finalMessage = replacePlaceholders(legendaryDefeatMessage, playerName, pokemon, location);
+                    final String finalMessage = replacePlaceholders(
+                            legendaryDefeatMessage, playerName, true, false, pokemon, location);
 
                     // Send off the message, the needed notifier permission and the flag to check.
-                    iterateAndSendEventMessage(finalMessage, nbt, hoverLegendaryDefeats, false,
-                            "legendarydefeat", "showLegendaryDefeat");
+                    iterateAndSendEventMessage(finalMessage, pokemon, hoverLegendaryDefeats, false,
+                            true, "legendarydefeat", "showLegendaryDefeat");
                 }
                 else
                     printBasicError("The legendary defeat message is broken, broadcast failed.");
@@ -139,12 +140,13 @@ public class DefeatListener
                 if (shinyDefeatMessage != null)
                 {
                     // Set up our message. This is the same for all eligible players, so call it once and store it.
-                    final String finalMessage = replacePlaceholders(shinyDefeatMessage, playerName, pokemon, location);
+                    final String finalMessage = replacePlaceholders(
+                            shinyDefeatMessage, playerName, true, false, pokemon, location);
 
                     // Send off the message, the needed notifier permission and the flag to check.
                     iterateAndSendEventMessage(
-                            finalMessage, nbt, hoverShinyDefeats, false,
-                            "shinydefeat", "showShinyDefeat");
+                            finalMessage, pokemon, hoverShinyDefeats, false,
+                            true, "shinydefeat", "showShinyDefeat");
                 }
                 else
                     printBasicError("The shiny defeat message is broken, broadcast failed.");

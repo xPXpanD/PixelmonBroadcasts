@@ -36,6 +36,8 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 // TODO: Check if a HA spawn check is possible.
 // TODO: Test (shiny) legendary spawn messages.
 // TODO: PVP victories? Blackouts in PVP and PVE?
+// TODO: Split biome names with multiple capital letters.
+// TODO: Match console colors with default messages, roughly.
 
 @Plugin
 (

@@ -51,10 +51,11 @@ public class HatchListener
             {
                 // Set up our message. This is the same for all eligible players, so call it once and store it.
                 // We use the normal hatch permission for shiny hatches, as per the config's explanation.
-                final String finalMessage = replacePlaceholders(shinyHatchMessage, playerName, pokemon, location);
+                final String finalMessage = replacePlaceholders(
+                        shinyHatchMessage, playerName, true, false, pokemon, location);
 
                 // Send off the message, the needed notifier permission and the flag to check.
-                iterateAndSendEventMessage(finalMessage, event.nbt, hoverShinyHatches, true,
+                iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyHatches, true,true,
                         "shinyhatch", "showShinyHatch");
             }
             else
@@ -66,11 +67,12 @@ public class HatchListener
             if (hatchMessage != null)
             {
                 // Set up our message. This is the same for all eligible players, so call it once and store it.
-                final String finalMessage = replacePlaceholders(hatchMessage, playerName, pokemon, location);
+                final String finalMessage = replacePlaceholders(
+                        hatchMessage, playerName, true, false, pokemon, location);
 
                 // Send off the message, the needed notifier permission and the flag to check.
                 // We use the basic hatch permission for shiny hatches, as per the config's explanation.
-                iterateAndSendEventMessage(finalMessage, event.nbt, hoverHatches, true,
+                iterateAndSendEventMessage(finalMessage, pokemon, hoverHatches, true, true,
                         "hatch", "showHatch");
             }
             else
