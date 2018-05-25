@@ -1,3 +1,4 @@
+#Pixelmon Broadcasts
 A sidemod for Pixelmon Reforged that adds configurable messages for tons of events.
 
 For more details, check:
