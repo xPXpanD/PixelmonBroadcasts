@@ -33,16 +33,14 @@ public class DefeatListener
                 // Print a defeat message to console.
                 printBasicMessage
                 (
-                        "§5PBR §f// §6Player §e" + playerName +
-                        "§6 beat a §e" + pokemonName +
-                        "§6 boss in world \"§e" + world.getWorldInfo().getWorldName() +
-                        "§6\", at X:§e" + location.getX() +
-                        "§6 Y:§e" + location.getY() +
-                        "§6 Z:§e" + location.getZ()
+                        "§5PBR §f// §ePlayer §6" + playerName +
+                        "§e defeated a boss §6" + pokemonName +
+                        "§e boss in world \"§6" + world.getWorldInfo().getWorldName() +
+                        "§e\", at X:§6" + location.getX() +
+                        "§e Y:§6" + location.getY() +
+                        "§e Z:§6" + location.getZ()
                 );
             }
-
-            pokemon.getBossMode();
 
             if (showBossDefeats)
             {
@@ -62,29 +60,24 @@ public class DefeatListener
                     printBasicError("The boss defeat message is broken, broadcast failed.");
             }
         }
-        else if (EnumPokemon.legendaries.contains(pokemonName))
+        else if (EnumPokemon.legendaries.contains(pokemonName) && pokemon.getIsShiny())
         {
-            if (logLegendaryDefeats)
+            if (logShinyLegendaryDefeats)
             {
-                // Add "shiny" to our console message if we have a shiny legendary.
-                String shinyAddition = "§e";
-                if (pokemon.getIsShiny())
-                    shinyAddition = "§eshiny ";
-
                 // Print a defeat message to console, with the above shiny String mixed in.
                 printBasicMessage
                 (
-                        "§5PBR §f// §6Player §e" + playerName +
-                        "§6 defeated a " + shinyAddition + pokemonName +
-                        "§6 in world \"§e" + world.getWorldInfo().getWorldName() +
-                        "§6\", at X:§e" + location.getX() +
-                        "§6 Y:§e" + location.getY() +
-                        "§6 Z:§e" + location.getZ()
+                        "§5PBR §f// §cPlayer §4" + playerName +
+                        "§c defeated a shiny legendary §4" + pokemonName +
+                        "§c in world \"§4" + world.getWorldInfo().getWorldName() +
+                        "§c\", at X:§4" + location.getX() +
+                        "§c Y:§4" + location.getY() +
+                        "§c Z:§4" + location.getZ()
                 );
             }
 
             // Shiny legendary message logic, go!
-            if (showShinyLegendaryDefeats && pokemon.getIsShiny())
+            if (showShinyLegendaryDefeats)
             {
                 // Parse placeholders and print!
                 if (shinyLegendaryDefeatMessage != null)
@@ -101,7 +94,24 @@ public class DefeatListener
                 else
                     printBasicError("The shiny legendary defeat message is broken, broadcast failed.");
             }
-            else if (showLegendaryDefeats)
+        }
+        else if (EnumPokemon.legendaries.contains(pokemonName))
+        {
+            if (logLegendaryDefeats)
+            {
+                // Print a defeat message to console, with the above shiny String mixed in.
+                printBasicMessage
+                (
+                        "§5PBR §f// §cPlayer §4" + playerName +
+                        "§c defeated a legendary §4" + pokemonName +
+                        "§c in world \"§4" + world.getWorldInfo().getWorldName() +
+                        "§c\", at X:§4" + location.getX() +
+                        "§c Y:§4" + location.getY() +
+                        "§c Z:§4" + location.getZ()
+                );
+            }
+
+            if (showLegendaryDefeats)
             {
                 // Parse placeholders and print!
                 if (legendaryDefeatMessage != null)
@@ -125,12 +135,12 @@ public class DefeatListener
                 // Print a defeat message to console.
                 printBasicMessage
                 (
-                        "§5PBR §f// §6Player §e" + playerName +
-                        "§6 beat a §eshiny " + pokemonName +
-                        "§6 in world \"§e" + world.getWorldInfo().getWorldName() +
-                        "§6\", at X:§e" + location.getX() +
-                        "§6 Y:§e" + location.getY() +
-                        "§6 Z:§e" + location.getZ()
+                        "§5PBR §f// §cPlayer §4" + playerName +
+                        "§c defeated a shiny §4" + pokemonName +
+                        "§c in world \"§4" + world.getWorldInfo().getWorldName() +
+                        "§c\", at X:§4" + location.getX() +
+                        "§c Y:§4" + location.getY() +
+                        "§c Z:§4" + location.getZ()
                 );
             }
 

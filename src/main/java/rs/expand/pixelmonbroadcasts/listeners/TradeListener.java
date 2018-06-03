@@ -25,10 +25,10 @@ public class TradeListener
             // Print a trade message to console.
             printBasicMessage
             (
-                    "§5PBR §f// §8Player §7" + event.player1.getName() +
-                    "§8 has traded a §7" + event.pokemon1.getString(NbtKeys.NAME) +
-                    "§8 for §7" + event.player2.getName() +
-                    "§8's §7" + event.pokemon2.getString(NbtKeys.NAME)
+                    "§5PBR §f// Player §7" + event.player1.getName() +
+                    "§f has traded a §7" + event.pokemon1.getString(NbtKeys.NAME) +
+                    "§f for §7" + event.player2.getName() +
+                    "§f's §7" + event.pokemon2.getString(NbtKeys.NAME)
             );
         }
 

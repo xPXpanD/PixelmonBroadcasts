@@ -6,7 +6,6 @@ import com.pixelmonmod.pixelmon.api.events.CaptureEvent;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumPokemon;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 // Local imports.
@@ -22,31 +21,25 @@ public class CatchListener
         final EntityPixelmon pokemon = event.getPokemon();
         final String pokemonName = pokemon.getLocalizedName();
         final String playerName = event.player.getName();
-        final World world = pokemon.getEntityWorld();
         final BlockPos location = event.pokeball.getPosition();
 
-        if (EnumPokemon.legendaries.contains(pokemonName))
+        if (EnumPokemon.legendaries.contains(pokemonName) && pokemon.getIsShiny())
         {
-            if (logLegendaryCatches)
+            if (logShinyLegendaryCatches)
             {
-                // Add "shiny" to our console message if we have a shiny legendary.
-                String shinyAddition = "§b";
-                if (pokemon.getIsShiny())
-                    shinyAddition = "§bshiny ";
-
                 // Print a catch message to console, with the above shiny String mixed in.
                 printBasicMessage
                 (
-                        "§5PBR §f// §3Player §b" + playerName +
-                        "§3 caught a " + shinyAddition + pokemonName +
-                        "§3 in world \"§b" + world.getWorldInfo().getWorldName() +
-                        "§3\", at X:§b" + location.getX() +
-                        "§3 Y:§b" + location.getY() +
-                        "§3 Z:§b" + location.getZ()
+                        "§5PBR §f// §aPlayer §2" + playerName +
+                        "§a caught a shiny legendary §2" + pokemonName +
+                        "§a in world \"§2" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                        "§a\", at X:§2" + location.getX() +
+                        "§a Y:§2" + location.getY() +
+                        "§a Z:§2" + location.getZ()
                 );
             }
 
-            if (showShinyLegendaryCatches && pokemon.getIsShiny())
+            if (showShinyLegendaryCatches)
             {
                 // Parse placeholders and print!
                 if (shinyLegendaryCatchMessage != null)
@@ -63,7 +56,24 @@ public class CatchListener
                 else
                     printBasicError("The shiny legendary catch message is broken, broadcast failed.");
             }
-            else if (showLegendaryCatches)
+        }
+        else if (EnumPokemon.legendaries.contains(pokemonName))
+        {
+            if (logLegendaryCatches)
+            {
+                // Print a catch message to console, with the above shiny String mixed in.
+                printBasicMessage
+                (
+                        "§5PBR §f// §aPlayer §2" + playerName +
+                        "§a caught a legendary §2" + pokemonName +
+                        "§a in world \"§2" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                        "§a\", at X:§2" + location.getX() +
+                        "§a Y:§2" + location.getY() +
+                        "§a Z:§2" + location.getZ()
+                );
+            }
+
+            if (showLegendaryCatches)
             {
                 // Parse placeholders and print!
                 if (legendaryCatchMessage != null)
@@ -87,12 +97,12 @@ public class CatchListener
                 // Print a catch message to console.
                 printBasicMessage
                 (
-                        "§5PBR §f// §3Player §b" + playerName +
-                        "§3 caught a §bshiny " + pokemonName +
-                        "§3 in world \"§b" + world.getWorldInfo().getWorldName() +
-                        "§3\", at X:§b" + location.getX() +
-                        "§3 Y:§b" + location.getY() +
-                        "§3 Z:§b" + location.getZ()
+                        "§5PBR §f// §bPlayer §3" + playerName +
+                        "§b caught a shiny §3" + pokemonName +
+                        "§b in world \"§3" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                        "§b\", at X:§3" + location.getX() +
+                        "§b Y:§3" + location.getY() +
+                        "§b Z:§3" + location.getZ()
                 );
             }
 

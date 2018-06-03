@@ -44,11 +44,11 @@ public class SpawnListener
                         // Print a spawn message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §2A §aboss " + pokemonName +
-                                "§2 has spawned in world \"§a" + world.getWorldInfo().getWorldName() +
-                                "§2\", at X:§a" + location.getX() +
-                                "§2 Y:§a" + location.getY() +
-                                "§2 Z:§a" + location.getZ()
+                                "§5PBR §f// §eA boss §6" + pokemonName +
+                                "§e has spawned in world \"§6" + world.getWorldInfo().getWorldName() +
+                                "§e\", at X:§6" + location.getX() +
+                                "§e Y:§6" + location.getY() +
+                                "§e Z:§6" + location.getZ()
                         );
                     }
 
@@ -69,27 +69,22 @@ public class SpawnListener
                             printBasicError("The boss spawn message is broken, broadcast failed.");
                     }
                 }
-                else if (EnumPokemon.legendaries.contains(pokemonName))
+                else if (EnumPokemon.legendaries.contains(pokemonName) && pokemon.getIsShiny())
                 {
-                    if (logLegendarySpawns)
+                    if (logShinyLegendarySpawns)
                     {
-                        // Add "shiny" to our console message if we have a shiny legendary.
-                        String shinyAddition = "§a";
-                        if (pokemon.getIsShiny())
-                            shinyAddition = "§2A §ashiny ";
-
                         // Print a spawn message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// " + shinyAddition + pokemonName +
-                                "§2 has spawned in world \"§a" + world.getWorldInfo().getWorldName() +
-                                "§2\", at X:§a" + location.getX() +
-                                "§2 Y:§a" + location.getY() +
-                                "§2 Z:§a" + location.getZ()
+                                "§5PBR §f// §aA shiny legendary §2" + pokemonName +
+                                "§a has spawned in world \"§2" + world.getWorldInfo().getWorldName() +
+                                "§a\", at X:§2" + location.getX() +
+                                "§a Y:§2" + location.getY() +
+                                "§a Z:§2" + location.getZ()
                         );
                     }
 
-                    if (showShinyLegendarySpawns && pokemon.getIsShiny())
+                    if (showShinyLegendarySpawns)
                     {
                         // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
                         if (shinyLegendarySpawnMessage != null)
@@ -106,7 +101,23 @@ public class SpawnListener
                         else
                             printBasicError("The shiny legendary spawn message is broken, broadcast failed.");
                     }
-                    else if (showLegendarySpawns)
+                }
+                else if (EnumPokemon.legendaries.contains(pokemonName))
+                {
+                    if (logLegendarySpawns)
+                    {
+                        // Print a spawn message to console.
+                        printBasicMessage
+                        (
+                                "§5PBR §f// §aA legendary §2" + pokemonName +
+                                "§a has spawned in world \"§2" + world.getWorldInfo().getWorldName() +
+                                "§a\", at X:§2" + location.getX() +
+                                "§a Y:§2" + location.getY() +
+                                "§a Z:§2" + location.getZ()
+                        );
+                    }
+
+                    if (showLegendarySpawns)
                     {
                         // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
                         if (legendarySpawnMessage != null)
@@ -130,11 +141,11 @@ public class SpawnListener
                         // Print a spawn message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §2A §ashiny " + pokemonName +
-                                "§2 has spawned in world \"§a" + world.getWorldInfo().getWorldName() +
-                                "§2\", at X:§a" + location.getX() +
-                                "§2 Y:§a" + location.getY() +
-                                "§2 Z:§a" + location.getZ()
+                                "§5PBR §f// §bA shiny §3" + pokemonName +
+                                "§b has spawned in world \"§3" + world.getWorldInfo().getWorldName() +
+                                "§b\", at X:§3" + location.getX() +
+                                "§b Y:§3" + location.getY() +
+                                "§b Z:§3" + location.getZ()
                         );
                     }
 

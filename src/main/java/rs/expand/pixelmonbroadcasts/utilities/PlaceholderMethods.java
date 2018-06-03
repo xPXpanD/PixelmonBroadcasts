@@ -258,8 +258,36 @@ public class PlaceholderMethods
         if (message.toLowerCase().contains("%biome" + insert + "%"))
         {
             // Grab the name. This compiles fine if the access transformer is loaded correctly, despite any errors.
-            final String biome = pokemon.getEntityWorld().getBiomeForCoordsBody(location).biomeName;
-            //final String biome = net.minecraft.util.text.translation.I18n.translateToLocalFormatted(basicBiome);
+            String biome = pokemon.getEntityWorld().getBiomeForCoordsBody(location).biomeName;
+
+            // Add a space in front of every capital letter after the first.
+            int capitalCount = 0, iterator = 0;
+            while (iterator < biome.length())
+            {
+                // Is there an upper case character at the checked location?
+                if (Character.isUpperCase(biome.charAt(iterator)))
+                {
+                    // Add to the pile.
+                    capitalCount++;
+
+                    // Did we get more than one capital letter on the pile?
+                    if (capitalCount > 1)
+                    {
+                        // Look back: Was the previous character a space? If not, proceed with adding one.
+                        if (biome.charAt(iterator - 1) != ' ')
+                        {
+                            // Add a space at the desired location.
+                            biome = biome.substring(0, iterator) + ' ' + biome.substring(iterator, biome.length());
+
+                            // Up the main iterator so we do not repeat the check on the character we're at now.
+                            iterator++;
+                        }
+                    }
+                }
+
+                // Up the iterator for another go, if we're below length().
+                iterator++;
+            }
 
             // Apply.
             message = message.replaceAll("(?i)%biome" + insert + "%", biome);
