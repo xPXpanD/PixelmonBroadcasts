@@ -38,6 +38,11 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 // TODO: PVP victories? Blackouts in PVP and PVE?
 // TODO: Split biome names with multiple capital letters.
 // TODO: Match console colors with default messages, roughly.
+// TODO: Implement logging to a custom log file with the right option passed.
+
+// TODO: Move messages to a proper config-esque file.
+// TODO: Check what happens when no options are provided for a given event type.
+// TODO: Add the new toggles to the toggle command.
 
 @Plugin
 (
@@ -67,68 +72,109 @@ public class PixelmonBroadcasts
 
     // Set up logging settings.
     public static boolean logLegendarySpawns;
+    public static boolean logLegendaryChallenges;
     public static boolean logLegendaryCatches;
     public static boolean logLegendaryDefeats;
     public static boolean logShinyLegendarySpawns;
+    public static boolean logShinyLegendaryChallenges;
     public static boolean logShinyLegendaryCatches;
     public static boolean logShinyLegendaryDefeats;
     public static boolean logShinySpawns;
+    public static boolean logShinyChallenges;
     public static boolean logShinyCatches;
     public static boolean logShinyDefeats;
     public static boolean logBossSpawns;
+    public static boolean logBossChallenges;
     public static boolean logBossDefeats;
+    public static boolean logLeaderChallenges;
+    public static boolean logLeaderDefeats;
+    public static boolean logLeaderLosses;
+    public static boolean logTrainerChallenges;
+    public static boolean logTrainerDefeats;
+    public static boolean logTrainerLosses;
+    public static boolean logPVPStarts;
+    public static boolean logPVPDefeats;
+    public static boolean logPVPDraws;
     public static boolean logHatches;
     public static boolean logShinyHatches;
     public static boolean logTrades;
 
     // Set up broadcast settings.
     public static boolean showLegendarySpawns;
+    public static boolean showLegendaryChallenges;
     public static boolean showLegendaryCatches;
     public static boolean showLegendaryDefeats;
     public static boolean showShinyLegendarySpawns;
+    public static boolean showShinyLegendaryChallenges;
     public static boolean showShinyLegendaryCatches;
     public static boolean showShinyLegendaryDefeats;
     public static boolean showShinySpawns;
+    public static boolean showShinyChallenges;
     public static boolean showShinyCatches;
     public static boolean showShinyDefeats;
     public static boolean showBossSpawns;
+    public static boolean showBossChallenges;
     public static boolean showBossDefeats;
+    public static boolean showLeaderChallenges;
+    public static boolean showLeaderDefeats;
+    public static boolean showLeaderLosses;
+    public static boolean showTrainerChallenges;
+    public static boolean showTrainerDefeats;
+    public static boolean showTrainerLosses;
+    public static boolean showPVPStarts;
+    public static boolean showPVPDefeats;
+    public static boolean showPVPDraws;
     public static boolean showHatches;
     public static boolean showShinyHatches;
     public static boolean showTrades;
 
     // Set up hover settings.
     public static boolean hoverLegendarySpawns;
+    public static boolean hoverLegendaryChallenges;
     public static boolean hoverLegendaryCatches;
     public static boolean hoverLegendaryDefeats;
     public static boolean hoverShinyLegendarySpawns;
+    public static boolean hoverShinyLegendaryChallenges;
     public static boolean hoverShinyLegendaryCatches;
     public static boolean hoverShinyLegendaryDefeats;
     public static boolean hoverShinySpawns;
+    public static boolean hoverShinyChallenges;
     public static boolean hoverShinyCatches;
     public static boolean hoverShinyDefeats;
     public static boolean hoverBossSpawns;
+    public static boolean hoverBossChallenges;
     public static boolean hoverBossDefeats;
     public static boolean hoverHatches;
     public static boolean hoverShinyHatches;
 
     // Set up normal message Strings.
     public static String legendarySpawnMessage;
+    public static String legendaryChallengeMessage;
     public static String legendaryCatchMessage;
     public static String legendaryDefeatMessage;
     public static String shinyLegendarySpawnMessage;
+    public static String shinyLegendaryChallengeMessage;
     public static String shinyLegendaryCatchMessage;
     public static String shinyLegendaryDefeatMessage;
     public static String shinySpawnMessage;
+    public static String shinyChallengeMessage;
     public static String shinyCatchMessage;
     public static String shinyDefeatMessage;
     public static String bossSpawnMessage;
+    public static String bossChallengeMessage;
     public static String bossDefeatMessage;
+    public static String leaderChallengeMessage;
+    public static String leaderDefeatMessage;
+    public static String leaderLostToMessage;
+    public static String trainerChallengeMessage;
+    public static String trainerDefeatMessage;
+    public static String trainerLostToMessage;
+    public static String pvpStartMessage;
+    public static String pvpDefeatMessage;
+    public static String pvpDrawMessage;
     public static String hatchMessage;
     public static String shinyHatchMessage;
     public static String tradeMessage;
-
-    // Set up special combo and legendary+shiny Strings.
 
     // Create and set up a config path, and grab an OS-specific file path separator. This will usually be a forward slash.
     public static String primaryPath = "config" + FileSystems.getDefault().getSeparator();
@@ -171,11 +217,13 @@ public class PixelmonBroadcasts
         {
             // Register listeners with Pixelmon.
             printBasicMessage("--> §aRegistering listeners with Pixelmon...");
-            Pixelmon.EVENT_BUS.register(new SpawnListener());
+            Pixelmon.EVENT_BUS.register(new BattleEndListener());
+            Pixelmon.EVENT_BUS.register(new BattleStartListener());
             Pixelmon.EVENT_BUS.register(new CatchListener());
-            Pixelmon.EVENT_BUS.register(new DefeatListener());
             Pixelmon.EVENT_BUS.register(new HatchListener());
+            Pixelmon.EVENT_BUS.register(new SpawnListener());
             Pixelmon.EVENT_BUS.register(new TradeListener());
+            Pixelmon.EVENT_BUS.register(new WildDefeatListener());
 
             // Check Pixelmon's config and get whether the legendary spawning message is in. Complain if it is.
             printBasicMessage("--> §aChecking Pixelmon config for legendary message settings...");

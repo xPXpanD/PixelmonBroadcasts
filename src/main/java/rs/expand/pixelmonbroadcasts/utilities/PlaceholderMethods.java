@@ -242,11 +242,7 @@ public class PlaceholderMethods
             insert = "2";
 
         // If our message has any placeholders inside, replace them with the provided replacement String.
-        // Case-insensitive. If a player cannot be provided, we receive a null object and handle it here.
-        if (message.toLowerCase().contains("%pokemon" + insert + "%"))
-            message = message.replaceAll("(?i)%pokemon" + insert + "%", pokemon.getLocalizedName());
-        if (message.toLowerCase().contains("%world" + insert + "%"))
-            message = message.replaceAll("(?i)%world" + insert + "%", pokemon.getEntityWorld().getWorldInfo().getWorldName());
+        // Case-insensitive, and null objects are automatically ignored.
         if (message.toLowerCase().contains("%xpos" + insert + "%"))
             message = message.replaceAll("(?i)%xpos" + insert + "%", String.valueOf(location.getX()));
         if (message.toLowerCase().contains("%ypos" + insert + "%"))
@@ -254,66 +250,79 @@ public class PlaceholderMethods
         if (message.toLowerCase().contains("%zpos" + insert + "%"))
             message = message.replaceAll("(?i)%zpos" + insert + "%", String.valueOf(location.getZ()));
 
-        // Run some special logic for biome names. This is a bit more involved, so we put the logic here.
-        if (message.toLowerCase().contains("%biome" + insert + "%"))
+        // Do we have a Pokémon entity?
+        if (pokemon != null)
         {
-            // Grab the name. This compiles fine if the access transformer is loaded correctly, despite any errors.
-            String biome = pokemon.getEntityWorld().getBiomeForCoordsBody(location).biomeName;
-
-            // Add a space in front of every capital letter after the first.
-            int capitalCount = 0, iterator = 0;
-            while (iterator < biome.length())
+            // Replace more placeholders.
+            if (message.toLowerCase().contains("%pokemon" + insert + "%"))
+                message = message.replaceAll("(?i)%pokemon" + insert + "%", pokemon.getLocalizedName());
+            if (message.toLowerCase().contains("%world" + insert + "%"))
             {
-                // Is there an upper case character at the checked location?
-                if (Character.isUpperCase(biome.charAt(iterator)))
-                {
-                    // Add to the pile.
-                    capitalCount++;
-
-                    // Did we get more than one capital letter on the pile?
-                    if (capitalCount > 1)
-                    {
-                        // Look back: Was the previous character a space? If not, proceed with adding one.
-                        if (biome.charAt(iterator - 1) != ' ')
-                        {
-                            // Add a space at the desired location.
-                            biome = biome.substring(0, iterator) + ' ' + biome.substring(iterator, biome.length());
-
-                            // Up the main iterator so we do not repeat the check on the character we're at now.
-                            iterator++;
-                        }
-                    }
-                }
-
-                // Up the iterator for another go, if we're below length().
-                iterator++;
+                message = message.replaceAll(
+                        "(?i)%world" + insert + "%", pokemon.getEntityWorld().getWorldInfo().getWorldName());
             }
 
-            // Apply.
-            message = message.replaceAll("(?i)%biome" + insert + "%", biome);
+            // Run some special logic for biome names. This is a bit more involved, so we put the logic here.
+            if (message.toLowerCase().contains("%biome" + insert + "%"))
+            {
+                // Grab the name. This compiles fine if the access transformer is loaded correctly, despite any errors.
+                String biome = pokemon.getEntityWorld().getBiomeForCoordsBody(location).biomeName;
+
+                // Add a space in front of every capital letter after the first.
+                int capitalCount = 0, iterator = 0;
+                while (iterator < biome.length())
+                {
+                    // Is there an upper case character at the checked location?
+                    if (Character.isUpperCase(biome.charAt(iterator)))
+                    {
+                        // Add to the pile.
+                        capitalCount++;
+
+                        // Did we get more than one capital letter on the pile?
+                        if (capitalCount > 1)
+                        {
+                            // Look back: Was the previous character a space? If not, proceed with adding one.
+                            if (biome.charAt(iterator - 1) != ' ')
+                            {
+                                // Add a space at the desired location.
+                                biome = biome.substring(0, iterator) + ' ' + biome.substring(iterator, biome.length());
+
+                                // Up the main iterator so we do not repeat the check on the character we're at now.
+                                iterator++;
+                            }
+                        }
+                    }
+
+                    // Up the iterator for another go, if we're below length().
+                    iterator++;
+                }
+
+                // Apply.
+                message = message.replaceAll("(?i)%biome" + insert + "%", biome);
+            }
+
+            // Also run some special logic for IV percentages. Same idea as with the above.
+            if (showIVs && message.toLowerCase().contains("%ivpercent" + insert + "%"))
+            {
+                // Grab the Pokémon's stats.
+                final int HPIV = pokemon.stats.ivs.HP;
+                final int attackIV = pokemon.stats.ivs.Attack;
+                final int defenseIV = pokemon.stats.ivs.Defence;
+                final int spAttIV = pokemon.stats.ivs.SpAtt;
+                final int spDefIV = pokemon.stats.ivs.SpDef;
+                final int speedIV = pokemon.stats.ivs.Speed;
+
+                // Process them.
+                final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
+                final BigDecimal percentIVs = totalIVs.multiply(
+                        new BigDecimal("100")).divide(new BigDecimal("186"), 2, BigDecimal.ROUND_HALF_UP);
+
+                // Apply.
+                message = message.replaceAll("(?i)%ivpercent" + insert + "%", percentIVs.toString() + '%');
+            }
         }
 
-        // Also run some special logic for IV percentages. Same idea as with the above.
-        if (showIVs && message.toLowerCase().contains("%ivpercent" + insert + "%"))
-        {
-            // Grab the Pokémon's stats.
-            final int HPIV = pokemon.stats.ivs.HP;
-            final int attackIV = pokemon.stats.ivs.Attack;
-            final int defenseIV = pokemon.stats.ivs.Defence;
-            final int spAttIV = pokemon.stats.ivs.SpAtt;
-            final int spDefIV = pokemon.stats.ivs.SpDef;
-            final int speedIV = pokemon.stats.ivs.Speed;
-
-            // Process them.
-            final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
-            final BigDecimal percentIVs = totalIVs.multiply(
-                    new BigDecimal("100")).divide(new BigDecimal("186"), 2, BigDecimal.ROUND_HALF_UP);
-
-            // Apply.
-            message = message.replaceAll("(?i)%ivpercent" + insert + "%", percentIVs.toString() + '%');
-        }
-
-        // We pass null for events that can't use a player variable, so let's check for that here.
+        // Were we given a valid player name?
         if (playerName != null && message.toLowerCase().contains("%player" + insert + "%"))
             message = message.replaceAll("(?i)%player" + insert + "%", playerName);
 

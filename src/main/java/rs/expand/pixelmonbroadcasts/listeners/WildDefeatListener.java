@@ -15,7 +15,7 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
 
 // TODO: Log/announce boss types? Mega vs normal.
-public class DefeatListener
+public class WildDefeatListener
 {
     @SubscribeEvent
     public void onBeatWildLegendaryEvent(final BeatWildPixelmonEvent event)
