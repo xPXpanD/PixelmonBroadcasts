@@ -42,12 +42,12 @@ public class BattleStartListener
                     // Print a PvP starting message to console.
                     printBasicMessage
                     (
-                            "§5PBR §f// §9Player §1" + participant1.getDisplayName() +
-                            "§9 started battling player §1" + participant2.getDisplayName() +
-                            "§9 in world \"§1" + participant1.getWorld().getWorldInfo().getWorldName() +
-                            "§9\", at X:§1" + location.getX() +
-                            "§9 Y:§1" + location.getY() +
-                            "§9 Z:§1" + location.getZ()
+                            "§5PBR §f// §7Player §f" + participant1.getDisplayName() +
+                            "§7 started battling player §f" + participant2.getDisplayName() +
+                            "§7 in world \"§f" + participant1.getWorld().getWorldInfo().getWorldName() +
+                            "§7\", at X:§f" + location.getX() +
+                            "§7 Y:§f" + location.getY() +
+                            "§7 Z:§f" + location.getZ()
                     );
                 }
 
@@ -100,37 +100,37 @@ public class BattleStartListener
                 final String worldName = player.getWorld().getWorldInfo().getWorldName();
                 final BlockPos location = player.getEntity().getPosition();
 
-                if (npc.trainer.isGymLeader)
+                if (npc.trainer.getBossMode().isBossPokemon())
                 {
-                    if (logLeaderChallenges)
+                    if (logBossTrainerChallenges)
                     {
                         // Print a challenge message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §9Player §1" + playerName +
-                                "§9 challenged a §1gym leader §9in world \"§1" + worldName +
-                                "§9\", at X:§1" + location.getX() +
-                                "§9 Y:§1" + location.getY() +
-                                "§9 Z:§1" + location.getZ()
+                                "§5PBR §f// §7Player §f" + playerName +
+                                "§7 challenged a §fboss trainer §7in world \"§f" + worldName +
+                                "§7\", at X:§f" + location.getX() +
+                                "§7 Y:§f" + location.getY() +
+                                "§7 Z:§f" + location.getZ()
                         );
                     }
 
-                    if (showLeaderChallenges)
+                    if (showBossTrainerChallenges)
                     {
                         // Parse placeholders and print!
-                        if (leaderChallengeMessage != null)
+                        if (bossTrainerChallengeMessage != null)
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            final String finalMessage = replacePlaceholders(leaderChallengeMessage,
+                            final String finalMessage = replacePlaceholders(bossTrainerChallengeMessage,
                                     playerName, false, false, null, location);
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(
                                     finalMessage, null, false, false,
-                                    false, "leaderchallenge", "showLeaderChallenge");
+                                    false, "bosstrainerchallenge", "showBossTrainerChallenge");
                         }
                         else
-                            printBasicError("The gym trainer challenge message is broken, broadcast failed.");
+                            printBasicError("The boss trainer challenge message is broken, broadcast failed.");
                     }
                 }
                 else
@@ -140,11 +140,11 @@ public class BattleStartListener
                         // Print a challenge message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §9Player §1" + playerName +
-                                "§9 challenged a §1trainer §9in world \"§1" + worldName +
-                                "§9\", at X:§1" + location.getX() +
-                                "§9 Y:§1" + location.getY() +
-                                "§9 Z:§1" + location.getZ()
+                                "§5PBR §f// §7Player §f" + playerName +
+                                "§7 challenged a §ftrainer §7in world \"§f" + worldName +
+                                "§7\", at X:§f" + location.getX() +
+                                "§7 Y:§f" + location.getY() +
+                                "§7 Z:§f" + location.getZ()
                         );
                     }
 

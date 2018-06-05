@@ -191,6 +191,36 @@ public class ConfigMethods
                 PixelmonBroadcasts.hoverLegendaryDefeats = true;
         }
 
+        String legendaryLoseToOptions = commandConfig.getNode("legendaryLoseToOptions").getString();
+        if (legendaryLoseToOptions == null)
+            optionsErrorArray.add("legendaryLoseToOptions");
+        else
+        {
+            legendaryLoseToOptions = legendaryLoseToOptions.toLowerCase();
+
+            if (legendaryLoseToOptions.contains("log"))
+                PixelmonBroadcasts.logLegendaryLosses = true;
+            if (legendaryLoseToOptions.contains("show"))
+                PixelmonBroadcasts.showLegendaryLosses = true;
+            if (legendaryLoseToOptions.contains("hover"))
+                PixelmonBroadcasts.hoverLegendaryLosses = true;
+        }
+
+        String legendaryForfeitOptions = commandConfig.getNode("legendaryForfeitOptions").getString();
+        if (legendaryForfeitOptions == null)
+            optionsErrorArray.add("legendaryForfeitOptions");
+        else
+        {
+            legendaryForfeitOptions = legendaryForfeitOptions.toLowerCase();
+
+            if (legendaryForfeitOptions.contains("log"))
+                PixelmonBroadcasts.logLegendaryForfeits = true;
+            if (legendaryForfeitOptions.contains("show"))
+                PixelmonBroadcasts.showLegendaryForfeits = true;
+            if (legendaryForfeitOptions.contains("hover"))
+                PixelmonBroadcasts.hoverLegendaryForfeits = true;
+        }
+
         /*                          *\
            shiny legendary settings
         \*                          */
@@ -254,6 +284,36 @@ public class ConfigMethods
                 PixelmonBroadcasts.showShinyLegendaryDefeats = true;
             if (shinyLegendaryDefeatOptions.contains("hover"))
                 PixelmonBroadcasts.hoverShinyLegendaryDefeats = true;
+        }
+
+        String shinyLegendaryLoseToOptions = commandConfig.getNode("shinyLegendaryLoseToOptions").getString();
+        if (shinyLegendaryLoseToOptions == null)
+            optionsErrorArray.add("shinyLegendaryLoseToOptions");
+        else
+        {
+            shinyLegendaryLoseToOptions = shinyLegendaryLoseToOptions.toLowerCase();
+
+            if (shinyLegendaryLoseToOptions.contains("log"))
+                PixelmonBroadcasts.logShinyLegendaryLosses = true;
+            if (shinyLegendaryLoseToOptions.contains("show"))
+                PixelmonBroadcasts.showShinyLegendaryLosses = true;
+            if (shinyLegendaryLoseToOptions.contains("hover"))
+                PixelmonBroadcasts.hoverShinyLegendaryLosses = true;
+        }
+
+        String shinyLegendaryForfeitOptions = commandConfig.getNode("shinyLegendaryForfeitOptions").getString();
+        if (shinyLegendaryForfeitOptions == null)
+            optionsErrorArray.add("shinyLegendaryForfeitOptions");
+        else
+        {
+            shinyLegendaryForfeitOptions = shinyLegendaryForfeitOptions.toLowerCase();
+
+            if (shinyLegendaryForfeitOptions.contains("log"))
+                PixelmonBroadcasts.logShinyLegendaryForfeits = true;
+            if (shinyLegendaryForfeitOptions.contains("show"))
+                PixelmonBroadcasts.showShinyLegendaryForfeits = true;
+            if (shinyLegendaryForfeitOptions.contains("hover"))
+                PixelmonBroadcasts.hoverShinyLegendaryForfeits = true;
         }
 
         /*                *\
@@ -321,6 +381,36 @@ public class ConfigMethods
                 PixelmonBroadcasts.hoverShinyDefeats = true;
         }
 
+        String shinyLoseToOptions = commandConfig.getNode("shinyLoseToOptions").getString();
+        if (shinyLoseToOptions == null)
+            optionsErrorArray.add("shinyLoseToOptions");
+        else
+        {
+            shinyLoseToOptions = shinyLoseToOptions.toLowerCase();
+
+            if (shinyLoseToOptions.contains("log"))
+                PixelmonBroadcasts.logShinyLosses = true;
+            if (shinyLoseToOptions.contains("show"))
+                PixelmonBroadcasts.showShinyLosses = true;
+            if (shinyLoseToOptions.contains("hover"))
+                PixelmonBroadcasts.hoverShinyLosses = true;
+        }
+
+        String shinyForfeitOptions = commandConfig.getNode("shinyForfeitOptions").getString();
+        if (shinyForfeitOptions == null)
+            optionsErrorArray.add("shinyForfeitOptions");
+        else
+        {
+            shinyForfeitOptions = shinyForfeitOptions.toLowerCase();
+
+            if (shinyForfeitOptions.contains("log"))
+                PixelmonBroadcasts.logShinyForfeits = true;
+            if (shinyForfeitOptions.contains("show"))
+                PixelmonBroadcasts.showShinyForfeits = true;
+            if (shinyForfeitOptions.contains("hover"))
+                PixelmonBroadcasts.hoverShinyForfeits = true;
+        }
+
         /*               *\
            boss settings
         \*               */
@@ -371,48 +461,91 @@ public class ConfigMethods
                 PixelmonBroadcasts.hoverBossDefeats = true;
         }
 
+        String bossLoseToOptions = commandConfig.getNode("bossLoseToOptions").getString();
+        if (bossLoseToOptions == null)
+            optionsErrorArray.add("bossLoseToOptions");
+        else
+        {
+            bossLoseToOptions = bossLoseToOptions.toLowerCase();
+
+            if (bossLoseToOptions.contains("log"))
+                PixelmonBroadcasts.logBossLosses = true;
+            if (bossLoseToOptions.contains("show"))
+                PixelmonBroadcasts.showBossLosses = true;
+            if (bossLoseToOptions.contains("hover"))
+                PixelmonBroadcasts.hoverBossLosses = true;
+        }
+
+        String bossForfeitOptions = commandConfig.getNode("bossForfeitOptions").getString();
+        if (bossForfeitOptions == null)
+            optionsErrorArray.add("bossForfeitOptions");
+        else
+        {
+            bossForfeitOptions = bossForfeitOptions.toLowerCase();
+
+            if (bossForfeitOptions.contains("log"))
+                PixelmonBroadcasts.logBossForfeits = true;
+            if (bossForfeitOptions.contains("show"))
+                PixelmonBroadcasts.showBossForfeits = true;
+            if (bossForfeitOptions.contains("hover"))
+                PixelmonBroadcasts.hoverBossForfeits = true;
+        }
+
         /*                 *\
            trainer settings
         \*                 */
 
         // Get options. Extract and set them, if we managed to grab them successfully.
-        String leaderChallengeOptions = commandConfig.getNode("leaderChallengeOptions").getString();
-        if (leaderChallengeOptions == null)
-            optionsErrorArray.add("leaderChallengeOptions");
+        String bossTrainerChallengeOptions = commandConfig.getNode("bossTrainerChallengeOptions").getString();
+        if (bossTrainerChallengeOptions == null)
+            optionsErrorArray.add("bossTrainerChallengeOptions");
         else
         {
-            leaderChallengeOptions = leaderChallengeOptions.toLowerCase();
+            bossTrainerChallengeOptions = bossTrainerChallengeOptions.toLowerCase();
 
-            if (leaderChallengeOptions.contains("log"))
-                PixelmonBroadcasts.logLeaderChallenges = true;
-            if (leaderChallengeOptions.contains("show"))
-                PixelmonBroadcasts.showLeaderChallenges = true;
+            if (bossTrainerChallengeOptions.contains("log"))
+                PixelmonBroadcasts.logBossTrainerChallenges = true;
+            if (bossTrainerChallengeOptions.contains("show"))
+                PixelmonBroadcasts.showBossTrainerChallenges = true;
         }
 
-        String leaderDefeatOptions = commandConfig.getNode("leaderDefeatOptions").getString();
-        if (leaderDefeatOptions == null)
-            optionsErrorArray.add("leaderDefeatOptions");
+        String bossTrainerDefeatOptions = commandConfig.getNode("bossTrainerDefeatOptions").getString();
+        if (bossTrainerDefeatOptions == null)
+            optionsErrorArray.add("bossTrainerDefeatOptions");
         else
         {
-            leaderDefeatOptions = leaderDefeatOptions.toLowerCase();
+            bossTrainerDefeatOptions = bossTrainerDefeatOptions.toLowerCase();
 
-            if (leaderDefeatOptions.contains("log"))
-                PixelmonBroadcasts.logLeaderDefeats = true;
-            if (leaderDefeatOptions.contains("show"))
-                PixelmonBroadcasts.showLeaderDefeats = true;
+            if (bossTrainerDefeatOptions.contains("log"))
+                PixelmonBroadcasts.logBossTrainerDefeats = true;
+            if (bossTrainerDefeatOptions.contains("show"))
+                PixelmonBroadcasts.showBossTrainerDefeats = true;
         }
 
-        String leaderLostToOptions = commandConfig.getNode("leaderLostToOptions").getString();
-        if (leaderLostToOptions == null)
-            optionsErrorArray.add("leaderLostToOptions");
+        String bossTrainerLoseToOptions = commandConfig.getNode("bossTrainerLoseToOptions").getString();
+        if (bossTrainerLoseToOptions == null)
+            optionsErrorArray.add("bossTrainerLoseToOptions");
         else
         {
-            leaderLostToOptions = leaderLostToOptions.toLowerCase();
+            bossTrainerLoseToOptions = bossTrainerLoseToOptions.toLowerCase();
 
-            if (leaderLostToOptions.contains("log"))
-                PixelmonBroadcasts.logLeaderLosses = true;
-            if (leaderLostToOptions.contains("show"))
-                PixelmonBroadcasts.showLeaderLosses = true;
+            if (bossTrainerLoseToOptions.contains("log"))
+                PixelmonBroadcasts.logBossTrainerLosses = true;
+            if (bossTrainerLoseToOptions.contains("show"))
+                PixelmonBroadcasts.showBossTrainerLosses = true;
+        }
+
+        String bossTrainerForfeitOptions = commandConfig.getNode("bossTrainerForfeitOptions").getString();
+        if (bossTrainerForfeitOptions == null)
+            optionsErrorArray.add("bossTrainerForfeitOptions");
+        else
+        {
+            bossTrainerForfeitOptions = bossTrainerForfeitOptions.toLowerCase();
+
+            if (bossTrainerForfeitOptions.contains("log"))
+                PixelmonBroadcasts.logBossTrainerForfeits = true;
+            if (bossTrainerForfeitOptions.contains("show"))
+                PixelmonBroadcasts.showBossTrainerForfeits = true;
         }
 
         /*                  *\
@@ -446,17 +579,30 @@ public class ConfigMethods
                 PixelmonBroadcasts.showTrainerDefeats = true;
         }
 
-        String trainerLostToOptions = commandConfig.getNode("trainerLostToOptions").getString();
-        if (trainerLostToOptions == null)
-            optionsErrorArray.add("trainerLostToOptions");
+        String trainerLoseToOptions = commandConfig.getNode("trainerLoseToOptions").getString();
+        if (trainerLoseToOptions == null)
+            optionsErrorArray.add("trainerLoseToOptions");
         else
         {
-            trainerLostToOptions = trainerLostToOptions.toLowerCase();
+            trainerLoseToOptions = trainerLoseToOptions.toLowerCase();
 
-            if (trainerLostToOptions.contains("log"))
+            if (trainerLoseToOptions.contains("log"))
                 PixelmonBroadcasts.logTrainerLosses = true;
-            if (trainerLostToOptions.contains("show"))
+            if (trainerLoseToOptions.contains("show"))
                 PixelmonBroadcasts.showTrainerLosses = true;
+        }
+
+        String trainerForfeitOptions = commandConfig.getNode("trainerForfeitOptions").getString();
+        if (trainerForfeitOptions == null)
+            optionsErrorArray.add("trainerForfeitOptions");
+        else
+        {
+            trainerForfeitOptions = trainerForfeitOptions.toLowerCase();
+
+            if (trainerForfeitOptions.contains("log"))
+                PixelmonBroadcasts.logTrainerForfeits = true;
+            if (trainerForfeitOptions.contains("show"))
+                PixelmonBroadcasts.showTrainerForfeits = true;
         }
 
         /*              *\
@@ -570,6 +716,10 @@ public class ConfigMethods
                 parseRemoteString(commandConfig.getNode("legendaryCatchMessage").getString());
         PixelmonBroadcasts.legendaryDefeatMessage =
                 parseRemoteString(commandConfig.getNode("legendaryDefeatMessage").getString());
+        PixelmonBroadcasts.legendaryLoseToMessage =
+                parseRemoteString(commandConfig.getNode("legendaryLoseToMessage").getString());
+        PixelmonBroadcasts.legendaryForfeitMessage =
+                parseRemoteString(commandConfig.getNode("legendaryForfeitMessage").getString());
         PixelmonBroadcasts.shinyLegendarySpawnMessage =
                 parseRemoteString(commandConfig.getNode("shinyLegendarySpawnMessage").getString());
         PixelmonBroadcasts.shinyLegendaryChallengeMessage =
@@ -578,6 +728,10 @@ public class ConfigMethods
                 parseRemoteString(commandConfig.getNode("shinyLegendaryCatchMessage").getString());
         PixelmonBroadcasts.shinyLegendaryDefeatMessage =
                 parseRemoteString(commandConfig.getNode("shinyLegendaryDefeatMessage").getString());
+        PixelmonBroadcasts.shinyLegendaryLoseToMessage =
+                parseRemoteString(commandConfig.getNode("shinyLegendaryLoseToMessage").getString());
+        PixelmonBroadcasts.shinyLegendaryForfeitMessage =
+                parseRemoteString(commandConfig.getNode("shinyLegendaryForfeitMessage").getString());
         PixelmonBroadcasts.shinySpawnMessage =
                 parseRemoteString(commandConfig.getNode("shinySpawnMessage").getString());
         PixelmonBroadcasts.shinyChallengeMessage =
@@ -586,24 +740,36 @@ public class ConfigMethods
                 parseRemoteString(commandConfig.getNode("shinyCatchMessage").getString());
         PixelmonBroadcasts.shinyDefeatMessage =
                 parseRemoteString(commandConfig.getNode("shinyDefeatMessage").getString());
+        PixelmonBroadcasts.shinyLoseToMessage =
+                parseRemoteString(commandConfig.getNode("shinyLoseToMessage").getString());
+        PixelmonBroadcasts.shinyForfeitMessage =
+                parseRemoteString(commandConfig.getNode("shinyForfeitMessage").getString());
         PixelmonBroadcasts.bossSpawnMessage =
                 parseRemoteString(commandConfig.getNode("bossSpawnMessage").getString());
         PixelmonBroadcasts.bossChallengeMessage =
                 parseRemoteString(commandConfig.getNode("bossChallengeMessage").getString());
         PixelmonBroadcasts.bossDefeatMessage =
                 parseRemoteString(commandConfig.getNode("bossDefeatMessage").getString());
-        PixelmonBroadcasts.leaderChallengeMessage =
-                parseRemoteString(commandConfig.getNode("leaderChallengeMessage").getString());
-        PixelmonBroadcasts.leaderDefeatMessage =
-                parseRemoteString(commandConfig.getNode("leaderDefeatMessage").getString());
-        PixelmonBroadcasts.leaderLostToMessage =
-                parseRemoteString(commandConfig.getNode("leaderLostToMessage").getString());
+        PixelmonBroadcasts.bossLoseToMessage =
+                parseRemoteString(commandConfig.getNode("bossLoseToMessage").getString());
+        PixelmonBroadcasts.bossForfeitMessage =
+                parseRemoteString(commandConfig.getNode("bossForfeitMessage").getString());
+        PixelmonBroadcasts.bossTrainerChallengeMessage =
+                parseRemoteString(commandConfig.getNode("bossTrainerChallengeMessage").getString());
+        PixelmonBroadcasts.bossTrainerDefeatMessage =
+                parseRemoteString(commandConfig.getNode("bossTrainerDefeatMessage").getString());
+        PixelmonBroadcasts.bossTrainerLoseToMessage =
+                parseRemoteString(commandConfig.getNode("bossTrainerLoseToMessage").getString());
+        PixelmonBroadcasts.bossTrainerForfeitMessage =
+                parseRemoteString(commandConfig.getNode("bossTrainerForfeitMessage").getString());
         PixelmonBroadcasts.trainerChallengeMessage =
                 parseRemoteString(commandConfig.getNode("trainerChallengeMessage").getString());
         PixelmonBroadcasts.trainerDefeatMessage =
                 parseRemoteString(commandConfig.getNode("trainerDefeatMessage").getString());
-        PixelmonBroadcasts.trainerLostToMessage =
-                parseRemoteString(commandConfig.getNode("trainerLostToMessage").getString());
+        PixelmonBroadcasts.trainerLoseToMessage =
+                parseRemoteString(commandConfig.getNode("trainerLoseToMessage").getString());
+        PixelmonBroadcasts.trainerForfeitMessage =
+                parseRemoteString(commandConfig.getNode("trainerForfeitMessage").getString());
         PixelmonBroadcasts.pvpStartMessage =
                 parseRemoteString(commandConfig.getNode("pvpStartMessage").getString());
         PixelmonBroadcasts.pvpDefeatMessage =
@@ -626,6 +792,10 @@ public class ConfigMethods
             messageErrorArray.add("legendaryCatchMessage");
         if (legendaryDefeatMessage == null)
             messageErrorArray.add("legendaryDefeatMessage");
+        if (legendaryLoseToMessage == null)
+            messageErrorArray.add("legendaryLoseToMessage");
+        if (legendaryForfeitMessage == null)
+            messageErrorArray.add("legendaryForfeitMessage");
         if (shinyLegendarySpawnMessage == null)
             messageErrorArray.add("shinyLegendarySpawnMessage");
         if (shinyLegendaryChallengeMessage == null)
@@ -634,6 +804,10 @@ public class ConfigMethods
             messageErrorArray.add("shinyLegendaryCatchMessage");
         if (shinyLegendaryDefeatMessage == null)
             messageErrorArray.add("shinyLegendaryDefeatMessage");
+        if (shinyLegendaryLoseToMessage == null)
+            messageErrorArray.add("shinyLegendaryLoseToMessage");
+        if (shinyLegendaryForfeitMessage == null)
+            messageErrorArray.add("shinyLegendaryForfeitMessage");
         if (shinySpawnMessage == null)
             messageErrorArray.add("shinySpawnMessage");
         if (shinyChallengeMessage == null)
@@ -642,24 +816,36 @@ public class ConfigMethods
             messageErrorArray.add("shinyCatchMessage");
         if (shinyDefeatMessage == null)
             messageErrorArray.add("shinyDefeatMessage");
+        if (shinyLoseToMessage == null)
+            messageErrorArray.add("shinyLoseToMessage");
+        if (shinyForfeitMessage == null)
+            messageErrorArray.add("shinyForfeitMessage");
         if (bossSpawnMessage == null)
             messageErrorArray.add("bossSpawnMessage");
         if (bossChallengeMessage == null)
             messageErrorArray.add("bossChallengeMessage");
         if (bossDefeatMessage == null)
             messageErrorArray.add("bossDefeatMessage");
-        if (leaderChallengeMessage == null)
-            messageErrorArray.add("leaderChallengeMessage");
-        if (leaderDefeatMessage == null)
-            messageErrorArray.add("leaderDefeatMessage");
-        if (leaderLostToMessage == null)
-            messageErrorArray.add("leaderLostToMessage");
+        if (bossLoseToMessage == null)
+            messageErrorArray.add("bossLoseToMessage");
+        if (bossForfeitMessage == null)
+            messageErrorArray.add("bossForfeitMessage");
+        if (bossTrainerChallengeMessage == null)
+            messageErrorArray.add("bossTrainerChallengeMessage");
+        if (bossTrainerDefeatMessage == null)
+            messageErrorArray.add("bossTrainerDefeatMessage");
+        if (bossTrainerLoseToMessage == null)
+            messageErrorArray.add("bossTrainerLoseToMessage");
+        if (bossTrainerForfeitMessage == null)
+            messageErrorArray.add("bossTrainerForfeitMessage");
         if (trainerChallengeMessage == null)
             messageErrorArray.add("trainerChallengeMessage");
         if (trainerDefeatMessage == null)
             messageErrorArray.add("trainerDefeatMessage");
-        if (trainerLostToMessage == null)
-            messageErrorArray.add("trainerLostToMessage");
+        if (trainerLoseToMessage == null)
+            messageErrorArray.add("trainerLoseToMessage");
+        if (trainerForfeitMessage == null)
+            messageErrorArray.add("trainerForfeitMessage");
         if (pvpStartMessage == null)
             messageErrorArray.add("pvpStartMessage");
         if (pvpDefeatMessage == null)

@@ -6,6 +6,9 @@ import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.TrainerParticipant;
+import com.pixelmonmod.pixelmon.battles.controller.participants.WildPixelmonParticipant;
+import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
+import com.pixelmonmod.pixelmon.enums.EnumPokemon;
 import com.pixelmonmod.pixelmon.enums.battle.BattleResults;
 import com.pixelmonmod.pixelmon.enums.battle.EnumBattleEndCause;
 import net.minecraft.util.math.BlockPos;
@@ -19,14 +22,18 @@ import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replaceP
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicError;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicMessage;
 
-// TODO: Implement ties with pvpDrawMessage.
+// TODO: Add flee messages.
+// TODO: Check for abnormal ends.
 public class BattleEndListener
 {
     @SubscribeEvent
     public void onBattleEndEvent(final BattleEndEvent event)
     {
-        // See who won, and who lost. We populate a list, but generally only use the first result. Seems reliable...
+        // TODO: %pokedollars% placeholder.
         // TODO: Double battle support, whenever.
+        // TODO: See if tracking gym leaders is possible. Maybe look into marking placed leaders with trainer.isGymLeader.
+        // FIXME: Keep name ordering (from battle start message) persistent regardless of outcome. Pre-sort alphabetically?
+        // See who won, and who lost. We populate a list, but generally only use the first result. Seems reliable...
         final List<BattleParticipant> winners = new ArrayList<>(), losers = new ArrayList<>(), neutrals = new ArrayList<>();
         for (Map.Entry<BattleParticipant, BattleResults> entry : event.results.entrySet())
         {
@@ -34,38 +41,85 @@ public class BattleEndListener
             {
                 case VICTORY:
                     winners.add(entry.getKey()); break;
-                case DEFEAT:
+                case DEFEAT: // Forfeiting trainer battles also registers as a defeat on the player's side. Be careful.
                     losers.add(entry.getKey()); break;
-                case DRAW:
+                case DRAW: case FLEE: // Only added to in a draw, or when fleeing from a wild Pokémon.
                     neutrals.add(entry.getKey()); break;
             }
         }
 
-        // Did our battle end as a draw?
-        if (neutrals.size() > 1 && getResult(event.results).equals(BattleResults.DRAW))
-        {
-            // Create some common variables.
-            final BattleParticipant player1 = neutrals.get(0);
-            final BattleParticipant player2 = neutrals.get(1);
+        printBasicError("winners: " + winners);
+        printBasicError("losers: " + losers);
+        printBasicError("neutrals: " + neutrals);
+        printBasicError("result: " + event.results);
+        printBasicError("cause: " + event.cause);
 
-            // Was our battle between two valid players?
-            if (player1 instanceof PlayerParticipant && player2 instanceof PlayerParticipant)
+        // Get our battle results, and whether we have the right amount of participants.
+        final boolean endedInDraw = neutrals.size() > 1 && getResult(event.results) == BattleResults.DRAW;
+        final boolean endedInFlee = neutrals.size() > 1 && getResult(event.results) == BattleResults.FLEE;
+        final boolean hasWinnerAndLoser = !winners.isEmpty() && !losers.isEmpty();
+        final boolean battleForfeited = event.cause == EnumBattleEndCause.FORFEIT;
+
+        // Set up two participants.
+        final BattleParticipant participant1, participant2;
+
+        // Check if our battle result was a draw. Both participants should have been set to "DRAW", in this case.
+        if (endedInDraw)
+        {
+            participant1 = neutrals.get(0);
+            participant2 = neutrals.get(1);
+        }
+        // Check if somebody fled. We should have one participant set to "VICTORY" (and added to winners), and one "FLEE".
+        else if (endedInFlee)
+        {
+            // Hardwire participant1 to be the Pokémon participant.
+            if (neutrals.get(0) instanceof WildPixelmonParticipant)
+            {
+                participant1 = neutrals.get(0);
+                participant2 = neutrals.get(1);
+            }
+            else
+            {
+                participant1 = neutrals.get(1);
+                participant2 = neutrals.get(0);
+            }
+        }
+        // Check if we have a winner AND a loser amongst the participants. Usually trainer/PvP stuff.
+        else if (hasWinnerAndLoser)
+        {
+            // Should be safe -- haven't managed to get two defeats without it deciding on a draw instead.
+            participant1 = winners.get(0);
+            participant2 = losers.get(0);
+        }
+        // We didn't hit anything that was valid, stop execution.
+        else return;
+
+        // If we're still going, set up some more commonly-used variables.
+        final String worldName = participant1.getWorld().getWorldInfo().getWorldName();
+        final BlockPos location = participant1.getEntity().getPosition();
+        final String participant1Name = participant1.getDisplayName();
+        final String participant2Name = participant2.getDisplayName();
+
+        // Was our battle between two valid players?
+        if (participant1 instanceof PlayerParticipant && participant2 instanceof PlayerParticipant)
+        {
+            // Create some internal convenience variables.
+            final BlockPos player1Pos = ((PlayerParticipant) participant1).player.getPosition();
+            final BlockPos player2Pos = ((PlayerParticipant) participant2).player.getPosition();
+
+            if (endedInDraw || battleForfeited)
             {
                 if (logPVPDraws)
                 {
-                    // Set up some more variables. Only used here.
-                    final String worldName = player1.getWorld().getWorldInfo().getWorldName();
-                    final BlockPos location = player1.getEntity().getPosition();
-
                     // Print a PvP draw message to console.
                     printBasicMessage
                     (
-                            "§5PBR §f// §6Players §c" + player1.getDisplayName() +
-                            "§6 §c" + player2.getDisplayName() +
-                            "§6 ended their battle in a draw, in world \"§c" + worldName +
-                            "§6\", at X:§c" + location.getX() +
-                            "§6 Y:§c" + location.getY() +
-                            "§6 Z:§c" + location.getZ()
+                            "§5PBR §f// §7Players §f" + participant1.getDisplayName() +
+                            "§7 and §f" + participant2.getDisplayName() +
+                            "§7 ended their battle in a draw, in world \"§f" + worldName +
+                            "§7\", at X:§f" + location.getX() +
+                            "§7 Y:§f" + location.getY() +
+                            "§7 Z:§f" + location.getZ()
                     );
                 }
 
@@ -74,15 +128,11 @@ public class BattleEndListener
                     // Parse placeholders and print!
                     if (pvpDrawMessage != null)
                     {
-                        // Create short variables for convenience.
-                        final BlockPos player1Pos = ((PlayerParticipant) player1).player.getPosition();
-                        final BlockPos player2Pos = ((PlayerParticipant) player2).player.getPosition();
-
                         // Set up our message. This is the same for all eligible players, so call it once and store it.
                         String finalMessage;
-                        finalMessage = replacePlaceholders(pvpDrawMessage, player1.getDisplayName(),
+                        finalMessage = replacePlaceholders(pvpDrawMessage, participant1Name,
                                 false, false, null, player1Pos);
-                        finalMessage = replacePlaceholders(finalMessage, player2.getDisplayName(),
+                        finalMessage = replacePlaceholders(finalMessage, participant2Name,
                                 false, true, null, player2Pos);
 
                         // Send off the message, the needed notifier permission and the flag to check.
@@ -90,214 +140,187 @@ public class BattleEndListener
                                 false, false, false, "pvpdraw", "showPVPDraws");
                     }
                     else
-                        printBasicError("The PvP battle end message is broken, broadcast failed.");
+                        printBasicError("The PvP battle draw message is broken, broadcast failed.");
                 }
-
             }
-        }
-        // Do we have at least one winner and at least one loser?
-        else if (!winners.isEmpty() && !losers.isEmpty())
-        {
-            // Create some common variables.
-            final BattleParticipant winner = winners.get(0);
-            final BattleParticipant loser = losers.get(0);
-            final String worldName = winner.getWorld().getWorldInfo().getWorldName();
-
-            // Do we have an actual player as a winner?
-            if (winner instanceof PlayerParticipant)
+            else
             {
-                // Did our player win from another player?
-                if (loser instanceof PlayerParticipant)
+                if (logPVPDefeats)
                 {
-                    // Create some variables for the names of our players.
-                    final String winnerName = winner.getDisplayName();
-                    final String loserName = loser.getDisplayName();
-
-                    if (logPVPDefeats)
-                    {
-                        final BlockPos location = winners.get(0).getEntity().getPosition();
-
-                        // Print a PvP defeat message to console.
-                        printBasicMessage
-                        (
-                                "§5PBR §f// §6Player §c" + winnerName +
-                                "§6 defeated player §c" + loserName +
-                                "§6 in world \"§c" + worldName +
-                                "§6\", at X:§c" + location.getX() +
-                                "§6 Y:§c" + location.getY() +
-                                "§6 Z:§c" + location.getZ()
-                        );
-                    }
-
-                    if (showPVPDefeats)
-                    {
-                        // Parse placeholders and print!
-                        if (pvpDefeatMessage != null)
-                        {
-                            // Create short variables for convenience.
-                            final BlockPos winPos = ((PlayerParticipant) winner).player.getPosition();
-                            final BlockPos losePos = ((PlayerParticipant) loser).player.getPosition();
-
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            String finalMessage;
-                            finalMessage = replacePlaceholders(pvpDefeatMessage, winnerName,
-                                    false, false, null, winPos);
-                            finalMessage = replacePlaceholders(finalMessage, loserName,
-                                    false, true, null, losePos);
-
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, null,
-                                    false, false, false, "pvpdefeat", "showPVPDefeats");
-                        }
-                        else
-                            printBasicError("The PvP battle end message is broken, broadcast failed.");
-                    }
+                    // Print a PvP defeat message to console.
+                    printBasicMessage
+                    (
+                            "§5PBR §f// §7Player §f" + participant1Name +
+                            "§7 defeated player §f" + participant2Name +
+                            "§7 in world \"§f" + worldName +
+                            "§7\", at X:§f" + location.getX() +
+                            "§7 Y:§f" + location.getY() +
+                            "§7 Z:§f" + location.getZ()
+                    );
                 }
-                // Did our player beat a trainer?
-                else if (losers.get(0) instanceof TrainerParticipant)
+
+                if (showPVPDefeats)
                 {
-                    // Create some common variables.
-                    final TrainerParticipant losingTrainer = (TrainerParticipant) losers.get(0);
-                    final BlockPos location = winner.getEntity().getPosition();
-                    final String winnerName = winner.getDisplayName();
-
-                    if (losingTrainer.trainer.isGymLeader)
+                    // Parse placeholders and print!
+                    if (pvpDefeatMessage != null)
                     {
-                        if (logLeaderDefeats)
-                        {
-                            // Print a defeat message to console.
-                            printBasicMessage
-                            (
-                                    "§5PBR §f// §9Player §1" + winnerName +
-                                    "§9 defeated a §1gym leader §9in world \"§1" + worldName +
-                                    "§9\", at X:§1" + location.getX() +
-                                    "§9 Y:§1" + location.getY() +
-                                    "§9 Z:§1" + location.getZ()
-                            );
-                        }
+                        // Set up our message. This is the same for all eligible players, so call it once and store it.
+                        String finalMessage;
+                        finalMessage = replacePlaceholders(pvpDefeatMessage, participant1Name,
+                                false, false, null, player1Pos);
+                        finalMessage = replacePlaceholders(finalMessage, participant2Name,
+                                false, true, null, player2Pos);
 
-                        if (showLeaderDefeats)
-                        {
-                            // Parse placeholders and print!
-                            if (leaderDefeatMessage != null)
-                            {
-                                // Set up our message. This is the same for all eligible players, so call it once and store it.
-                                final String finalMessage = replacePlaceholders(leaderDefeatMessage,
-                                        winnerName, false, false, null, location);
-
-                                // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(
-                                        finalMessage, null, false, false,
-                                        false, "leaderdefeat", "showLeaderDefeat");
-                            }
-                            else
-                                printBasicError("The gym trainer defeat message is broken, broadcast failed.");
-                        }
+                        // Send off the message, the needed notifier permission and the flag to check.
+                        iterateAndSendEventMessage(finalMessage, null,
+                                false, false, false, "pvpdefeat", "showPVPDefeats");
                     }
                     else
+                        printBasicError("The PvP battle end message is broken, broadcast failed.");
+                }
+            }
+        }
+        // Do we have a trainer who won from a player?
+        else if (participant1 instanceof TrainerParticipant && participant2 instanceof PlayerParticipant)
+        {
+            // We know now that we have a trainer, so make a variable for it here so we don't have to keep casting.
+            final TrainerParticipant trainer1 = (TrainerParticipant) participant1;
+
+            // Was the battle forfeited? I thiiink only the player can do this, right now.
+            if (battleForfeited)
+            {
+                // Is our trainer a boss trainer?
+                if (trainer1.trainer.getBossMode().isBossPokemon())
+                {
+                    if (logBossTrainerForfeits)
                     {
-                        if (logTrainerDefeats)
+                        // Print a forfeit message to console.
+                        printBasicMessage
+                        (
+                                "§5PBR §f// §6Player §e" + participant2Name +
+                                "§6 fled from a §eboss trainer §6in world \"§e" + worldName +
+                                "§6\", at X:§e" + location.getX() +
+                                "§6 Y:§e" + location.getY() +
+                                "§6 Z:§e" + location.getZ()
+                        );
+                    }
+    
+                    if (showBossTrainerForfeits)
+                    {
+                        // Parse placeholders and print!
+                        if (bossTrainerForfeitMessage != null)
                         {
-                            // Print a defeat message to console.
-                            printBasicMessage
-                            (
-                                    "§5PBR §f// §9Player §1" + winnerName +
-                                    "§9 defeated a §1trainer §9in world \"§1" + worldName +
-                                    "§9\", at X:§1" + location.getX() +
-                                    "§9 Y:§1" + location.getY() +
-                                    "§9 Z:§1" + location.getZ()
-                            );
+                            // Set up our message. This is the same for all eligible players, so call it once and store it.
+                            final String finalMessage = replacePlaceholders(bossTrainerForfeitMessage,
+                                    participant2Name, false, false, null, location);
+    
+                            // Send off the message, the needed notifier permission and the flag to check.
+                            iterateAndSendEventMessage(
+                                    finalMessage, null, false, false,
+                                    false, "bosstrainerforfeit", "showBossTrainerForfeit");
                         }
-
-                        if (showTrainerDefeats)
+                        else
+                            printBasicError("The boss trainer forfeiting message is broken, broadcast failed.");
+                    }
+                }
+                else
+                {
+                    if (logTrainerForfeits)
+                    {
+                        // Print a forfeit message to console.
+                        printBasicMessage
+                        (
+                                "§5PBR §f// §6Player §e" + participant2Name +
+                                "§6 fled from a §etrainer §6in world \"§e" + worldName +
+                                "§6\", at X:§e" + location.getX() +
+                                "§6 Y:§e" + location.getY() +
+                                "§6 Z:§e" + location.getZ()
+                        );
+                    }
+    
+                    if (showTrainerForfeits)
+                    {
+                        // Parse placeholders and print!
+                        if (trainerForfeitMessage != null)
                         {
-                            // Parse placeholders and print!
-                            if (trainerDefeatMessage != null)
-                            {
-                                // Set up our message. This is the same for all eligible players, so call it once and store it.
-                                final String finalMessage = replacePlaceholders(trainerDefeatMessage,
-                                        winnerName, false, false, null, location);
-
-                                // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(
-                                        finalMessage, null, false, false,
-                                        false, "trainerdefeat", "showTrainerDefeat");
-                            }
-                            else
-                                printBasicError("The trainer defeat message is broken, broadcast failed.");
+                            // Set up our message. This is the same for all eligible players, so call it once and store it.
+                            final String finalMessage = replacePlaceholders(trainerForfeitMessage,
+                                    participant2Name, false, false, null, location);
+    
+                            // Send off the message, the needed notifier permission and the flag to check.
+                            iterateAndSendEventMessage(
+                                    finalMessage, null, false, false,
+                                    false, "trainerforfeit", "showTrainerForfeit");
                         }
+                        else
+                            printBasicError("The trainer forfeiting message is broken, broadcast failed.");
                     }
                 }
             }
-            // Did a trainer win from a player?
-            else if (winners.get(0) instanceof TrainerParticipant && losers.get(0) instanceof PlayerParticipant)
+            else
             {
-                // Create some common variables.
-                final String loserName = loser.getDisplayName();
-                final BlockPos location = loser.getEntity().getPosition();
-
-                // Is our trainer a gym leader? We've already confirmed that the winner was a trainer.
-                if (((TrainerParticipant) winners.get(0)).trainer.isGymLeader)
+                // Is our trainer a boss trainer?
+                if (trainer1.trainer.getBossMode().isBossPokemon())
                 {
-                    if (logLeaderLosses)
+                    if (logBossTrainerLosses)
                     {
-                        // Print a defeat message to console.
+                        // Print a loss message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §6Player §c" + loserName +
-                                "§6 was defeated by a §cgym leader §6in world \"§c" + worldName +
-                                "§6\", at X:§c" + location.getX() +
-                                "§6 Y:§c" + location.getY() +
-                                "§6 Z:§c" + location.getZ()
+                                "§5PBR §f// §6Player §e" + participant2Name +
+                                "§6 was defeated by a §eboss trainer §6in world \"§e" + worldName +
+                                "§6\", at X:§e" + location.getX() +
+                                "§6 Y:§e" + location.getY() +
+                                "§6 Z:§e" + location.getZ()
                         );
                     }
 
-                    if (showLeaderLosses)
+                    if (showBossTrainerLosses)
                     {
                         // Parse placeholders and print!
-                        if (leaderLostToMessage != null)
+                        if (bossTrainerLoseToMessage != null)
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            final String finalMessage = replacePlaceholders(leaderLostToMessage,
-                                    loserName, false, false, null, location);
+                            final String finalMessage = replacePlaceholders(bossTrainerLoseToMessage,
+                                    participant2Name, false, false, null, location);
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(
                                     finalMessage, null, false, false,
-                                    false, "leaderloss", "showLeaderLostTo");
+                                    false, "bosstrainerloss", "showBossTrainerLoseTo");
                         }
                         else
-                            printBasicError("The gym leader loss message is broken, broadcast failed.");
+                            printBasicError("The boss trainer loss message is broken, broadcast failed.");
                     }
                 }
                 else if (showTrainerLosses)
                 {
                     if (logTrainerLosses)
                     {
-                        // Print a defeat message to console.
+                        // Print a loss message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §6Player §c" + loserName +
-                                "§6 was defeated by a §ctrainer §6in world \"§c" + worldName +
-                                "§6\", at X:§c" + location.getX() +
-                                "§6 Y:§c" + location.getY() +
-                                "§6 Z:§c" + location.getZ()
+                                "§5PBR §f// §6Player §e" + participant2Name +
+                                "§6 was defeated by a §etrainer §6in world \"§e" + worldName +
+                                "§6\", at X:§e" + location.getX() +
+                                "§6 Y:§e" + location.getY() +
+                                "§6 Z:§e" + location.getZ()
                         );
                     }
 
                     if (showTrainerLosses)
                     {
                         // Parse placeholders and print!
-                        if (trainerLostToMessage != null)
+                        if (trainerLoseToMessage != null)
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            final String finalMessage = replacePlaceholders(trainerLostToMessage,
-                                    loserName, false, false, null, location);
+                            final String finalMessage = replacePlaceholders(trainerLoseToMessage,
+                                    participant2Name, false, false, null, location);
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(
                                     finalMessage, null, false, false,
-                                    false, "trainerloss", "showTrainerLostTo");
+                                    false, "trainerloss", "showTrainerLoseTo");
                         }
                         else
                             printBasicError("The trainer loss message is broken, broadcast failed.");
@@ -305,16 +328,367 @@ public class BattleEndListener
                 }
             }
         }
+        // Did a player defeat a trainer?
+        else if (participant1 instanceof PlayerParticipant && participant2 instanceof TrainerParticipant)
+        {
+            // We know now that we have a trainer, so make a variable for it here so we don't have to keep casting.
+            final TrainerParticipant trainer2 = (TrainerParticipant) participant2;
+
+            // Is our trainer a boss trainer?
+            if ((trainer2.trainer.getBossMode().isBossPokemon()))
+            {
+                if (logBossTrainerDefeats)
+                {
+                    // Print a defeat message to console.
+                    printBasicMessage
+                    (
+                            "§5PBR §f// §7Player §1" + participant1Name +
+                            "§7 defeated a §fboss trainer §7in world \"§f" + worldName +
+                            "§7\", at X:§f" + location.getX() +
+                            "§7 Y:§f" + location.getY() +
+                            "§7 Z:§f" + location.getZ()
+                    );
+                }
+
+                if (showBossTrainerDefeats)
+                {
+                    // Parse placeholders and print!
+                    if (bossTrainerDefeatMessage != null)
+                    {
+                        // Set up our message. This is the same for all eligible players, so call it once and store it.
+                        final String finalMessage = replacePlaceholders(bossTrainerDefeatMessage,
+                                participant1Name, false, false, null, location);
+
+                        // Send off the message, the needed notifier permission and the flag to check.
+                        iterateAndSendEventMessage(
+                                finalMessage, null, false, false,
+                                false, "bosstrainerdefeat", "showBossTrainerDefeat");
+                    }
+                    else
+                        printBasicError("The boss trainer defeat message is broken, broadcast failed.");
+                }
+            }
+            else
+            {
+                if (logTrainerDefeats)
+                {
+                    // Print a defeat message to console.
+                    printBasicMessage
+                    (
+                            "§5PBR §f// §7Player §f" + participant1Name +
+                            "§7 defeated a §ftrainer §7in world \"§f" + worldName +
+                            "§7\", at X:§f" + location.getX() +
+                            "§7 Y:§f" + location.getY() +
+                            "§7 Z:§f" + location.getZ()
+                    );
+                }
+
+                if (showTrainerDefeats)
+                {
+                    // Parse placeholders and print!
+                    if (trainerDefeatMessage != null)
+                    {
+                        // Set up our message. This is the same for all eligible players, so call it once and store it.
+                        final String finalMessage = replacePlaceholders(trainerDefeatMessage,
+                                participant1Name, false, false, null, location);
+
+                        // Send off the message, the needed notifier permission and the flag to check.
+                        iterateAndSendEventMessage(
+                                finalMessage, null, false, false,
+                                false, "trainerdefeat", "showTrainerDefeat");
+                    }
+                    else
+                        printBasicError("The trainer defeat message is broken, broadcast failed.");
+                }
+            }
+        }
+        // Did a player lose to a wild Pokémon?
+        else if (participant1 instanceof WildPixelmonParticipant && participant2 instanceof PlayerParticipant)
+        {
+            final EntityPixelmon pokemon = (EntityPixelmon) participant1.getEntity();
+            final String pokemonName = participant1.getDisplayName();
+
+            // Is the Pokémon a boss?
+            if (pokemon.isBossPokemon())
+            {
+                if (logBossLosses)
+                {
+                    // Print a loss message to console.
+                    printBasicMessage
+                    (
+                            "§5PBR §f// §ePlayer §6" + participant2Name +
+                            "§e lost to a boss §6" + pokemonName +
+                            "§e in world \"§6" + worldName +
+                            "§e\", at X:§6" + location.getX() +
+                            "§e Y:§6" + location.getY() +
+                            "§e Z:§6" + location.getZ()
+                    );
+                }
+
+                if (showBossLosses)
+                {
+                    // Parse placeholders and print!
+                    if (bossLoseToMessage != null)
+                    {
+                        // Set up our message. This is the same for all eligible players, so call it once and store it.
+                        final String finalMessage = replacePlaceholders(bossLoseToMessage,
+                                participant2Name, true, false, pokemon, location);
+
+                        // Send off the message, the needed notifier permission and the flag to check.
+                        iterateAndSendEventMessage(finalMessage, pokemon, hoverBossLosses, true,
+                                true, "bossloss", "showBossLoseTo");
+                    }
+                    else
+                        printBasicError("The boss loss message is broken, broadcast failed.");
+                }
+            }
+            else if (EnumPokemon.legendaries.contains(pokemonName) && pokemon.getIsShiny())
+            {
+                if (logShinyLegendaryLosses)
+                {
+                    // Print a loss message to console.
+                    printBasicMessage
+                    (
+                            "§5PBR §f// §cPlayer §4" + participant2Name +
+                            "§c lost to a shiny legendary §4" + pokemonName +
+                            "§c in world \"§4" + worldName +
+                            "§c\", at X:§4" + location.getX() +
+                            "§c Y:§4" + location.getY() +
+                            "§c Z:§4" + location.getZ()
+                    );
+                }
+
+                if (showShinyLegendaryLosses)
+                {
+                    // Parse placeholders and print!
+                    if (shinyLegendaryLoseToMessage != null)
+                    {
+                        // Set up our message. This is the same for all eligible players, so call it once and store it.
+                        // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
+                        final String finalMessage = replacePlaceholders(shinyLegendaryLoseToMessage,
+                                participant2Name, true, false, pokemon, location);
+
+                        // Send off the message, the needed notifier permission and the flag to check.
+                        iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyLegendaryLosses, true,
+                                true, "shinylegendaryloss", "showShinyLegendaryLoseTo");
+                    }
+                    else
+                        printBasicError("The shiny legendary loss message is broken, broadcast failed.");
+                }
+            }
+            else if (EnumPokemon.legendaries.contains(pokemonName))
+            {
+                if (logLegendaryLosses)
+                {
+                    // Print a loss message to console.
+                    printBasicMessage
+                    (
+                            "§5PBR §f// §cPlayer §4" + participant2Name +
+                            "§c lost to a legendary §4" + pokemonName +
+                            "§c in world \"§4" + worldName +
+                            "§c\", at X:§4" + location.getX() +
+                            "§c Y:§4" + location.getY() +
+                            "§c Z:§4" + location.getZ()
+                    );
+                }
+
+                if (showLegendaryLosses)
+                {
+                    // Parse placeholders and print!
+                    if (legendaryLoseToMessage != null)
+                    {
+                        // Set up our message. This is the same for all eligible players, so call it once and store it.
+                        final String finalMessage = replacePlaceholders(legendaryLoseToMessage,
+                                participant2Name, true, false, pokemon, location);
+
+                        // Send off the message, the needed notifier permission and the flag to check.
+                        iterateAndSendEventMessage(finalMessage, pokemon, hoverLegendaryLosses, true,
+                                true, "legendaryloss", "showLegendaryLoseTo");
+                    }
+                    else
+                        printBasicError("The legendary loss message is broken, broadcast failed.");
+                }
+            }
+            else if (pokemon.getIsShiny())
+            {
+                if (logShinyLosses)
+                {
+                    // Print a loss message to console.
+                    printBasicMessage
+                    (
+                            "§5PBR §f// §cPlayer §4" + participant2Name +
+                            "§c lost to a shiny §4" + pokemonName +
+                            "§c in world \"§4" + worldName +
+                            "§c\", at X:§4" + location.getX() +
+                            "§c Y:§4" + location.getY() +
+                            "§c Z:§4" + location.getZ()
+                    );
+                }
+
+                if (showShinyLosses)
+                {
+                    // Parse placeholders and print!
+                    if (shinyLoseToMessage != null)
+                    {
+                        // Set up our message. This is the same for all eligible players, so call it once and store it.
+                        final String finalMessage = replacePlaceholders(shinyLoseToMessage,
+                                participant2Name, true, false, pokemon, location);
+
+                        // Send off the message, the needed notifier permission and the flag to check.
+                        iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyLosses, true,
+                                true, "shinyloss", "showShinyLoseTo");
+                    }
+                    else
+                        printBasicError("The shiny loss message is broken, broadcast failed.");
+                }
+            }
+        }
+        else if (endedInFlee)
+        {
+            final EntityPixelmon pokemon = (EntityPixelmon) participant1.getEntity();
+            final String pokemonName = participant1.getDisplayName();
+
+            // Is the Pokémon a boss?
+            if (pokemon.isBossPokemon())
+            {
+                if (logBossForfeits)
+                {
+                    // Print a forfeit message to console.
+                    printBasicMessage
+                    (
+                            "§5PBR §f// §ePlayer §6" + participant2Name +
+                            "§e fled from a boss §6" + pokemonName +
+                            "§e in world \"§6" + worldName +
+                            "§e\", at X:§6" + location.getX() +
+                            "§e Y:§6" + location.getY() +
+                            "§e Z:§6" + location.getZ()
+                    );
+                }
+
+                if (showBossForfeits)
+                {
+                    // Parse placeholders and print!
+                    if (bossForfeitMessage != null)
+                    {
+                        // Set up our message. This is the same for all eligible players, so call it once and store it.
+                        final String finalMessage = replacePlaceholders(bossForfeitMessage,
+                                participant2Name, true, false, pokemon, location);
+
+                        // Send off the message, the needed notifier permission and the flag to check.
+                        iterateAndSendEventMessage(finalMessage, pokemon, hoverBossForfeits, true,
+                                true, "bossforfeit", "showBossForfeit");
+                    }
+                    else
+                        printBasicError("The boss forfeit message is broken, broadcast failed.");
+                }
+            }
+            else if (EnumPokemon.legendaries.contains(pokemonName) && pokemon.getIsShiny())
+            {
+                if (logShinyLegendaryForfeits)
+                {
+                    // Print a forfeit message to console.
+                    printBasicMessage
+                    (
+                            "§5PBR §f// §cPlayer §4" + participant2Name +
+                            "§c fled from a shiny legendary §4" + pokemonName +
+                            "§c in world \"§4" + worldName +
+                            "§c\", at X:§4" + location.getX() +
+                            "§c Y:§4" + location.getY() +
+                            "§c Z:§4" + location.getZ()
+                    );
+                }
+
+                if (showShinyLegendaryForfeits)
+                {
+                    // Parse placeholders and print!
+                    if (shinyLegendaryForfeitMessage != null)
+                    {
+                        // Set up our message. This is the same for all eligible players, so call it once and store it.
+                        // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
+                        final String finalMessage = replacePlaceholders(shinyLegendaryForfeitMessage,
+                                participant2Name, true, false, pokemon, location);
+
+                        // Send off the message, the needed notifier permission and the flag to check.
+                        iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyLegendaryForfeits, true,
+                                true, "shinylegendaryforfeit", "showShinyLegendaryForfeit");
+                    }
+                    else
+                        printBasicError("The shiny legendary forfeit message is broken, broadcast failed.");
+                }
+            }
+            else if (EnumPokemon.legendaries.contains(pokemonName))
+            {
+                if (logLegendaryForfeits)
+                {
+                    // Print a forfeit message to console.
+                    printBasicMessage
+                    (
+                            "§5PBR §f// §cPlayer §4" + participant2Name +
+                            "§c fled from a legendary §4" + pokemonName +
+                            "§c in world \"§4" + worldName +
+                            "§c\", at X:§4" + location.getX() +
+                            "§c Y:§4" + location.getY() +
+                            "§c Z:§4" + location.getZ()
+                    );
+                }
+
+                if (showLegendaryForfeits)
+                {
+                    // Parse placeholders and print!
+                    if (legendaryForfeitMessage != null)
+                    {
+                        // Set up our message. This is the same for all eligible players, so call it once and store it.
+                        final String finalMessage = replacePlaceholders(legendaryForfeitMessage,
+                                participant2Name, true, false, pokemon, location);
+
+                        // Send off the message, the needed notifier permission and the flag to check.
+                        iterateAndSendEventMessage(finalMessage, pokemon, hoverLegendaryForfeits, true,
+                                true, "legendaryforfeit", "showLegendaryForfeit");
+                    }
+                    else
+                        printBasicError("The legendary forfeit message is broken, broadcast failed.");
+                }
+            }
+            else if (pokemon.getIsShiny())
+            {
+                if (logShinyForfeits)
+                {
+                    // Print a forfeit message to console.
+                    printBasicMessage
+                    (
+                            "§5PBR §f// §cPlayer §4" + participant2Name +
+                            "§c fled from a shiny §4" + pokemonName +
+                            "§c in world \"§4" + worldName +
+                            "§c\", at X:§4" + location.getX() +
+                            "§c Y:§4" + location.getY() +
+                            "§c Z:§4" + location.getZ()
+                    );
+                }
+
+                if (showShinyForfeits)
+                {
+                    // Parse placeholders and print!
+                    if (shinyForfeitMessage != null)
+                    {
+                        // Set up our message. This is the same for all eligible players, so call it once and store it.
+                        final String finalMessage = replacePlaceholders(shinyForfeitMessage,
+                                participant2Name, true, false, pokemon, location);
+
+                        // Send off the message, the needed notifier permission and the flag to check.
+                        iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyForfeits, true,
+                                true, "shinyforfeit", "showShinyForfeit");
+                    }
+                    else
+                        printBasicError("The shiny forfeit message is broken, broadcast failed.");
+                }
+            }
+        }
     }
 
-    // Returns the first result from the provided Map.
+    // Returns the first battle result from the provided Map.
     private BattleResults getResult(Map<BattleParticipant, BattleResults> map)
     {
-        printBasicMessage("map: " + map);
         Map.Entry<BattleParticipant, BattleResults> entry = map.entrySet().iterator().next();
-        printBasicMessage("entry: " + entry);
-        BattleResults result = entry.getValue();
-        printBasicMessage("result: " + result);
-        return result;
+        return entry.getValue();
     }
 }
