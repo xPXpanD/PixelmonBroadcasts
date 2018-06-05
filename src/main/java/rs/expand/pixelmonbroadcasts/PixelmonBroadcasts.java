@@ -1,3 +1,4 @@
+// Written for Pixelmon Reforged. Running this on Gens is unsupported and ill-advised, just like Gens itself.
 package rs.expand.pixelmonbroadcasts;
 
 // Remote imports.
@@ -32,23 +33,19 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 \*                                                              */
 
 // TODO: Title-style display option?
-// TODO: Add versioning logic when it becomes necessary.
 // TODO: Check if a HA spawn check is possible.
-// TODO: Test (shiny) legendary spawn messages.
-// TODO: PVP victories? Blackouts in PVP and PVE?
-// TODO: Split biome names with multiple capital letters.
-// TODO: Match console colors with default messages, roughly.
 // TODO: Implement logging to a custom log file with the right option passed.
 
 // TODO: Move messages to a proper config-esque file.
-// TODO: Check what happens when no options are provided for a given event type.
-// TODO: Add the new toggles to the toggle command.
+// TODO: Make %biome% and %world% work on trainer messages.
+// FIXME: Remove showing IVs from forfeit/blackout messages? Might be good.
+// FIXME: Boss and trainer messages still show when toggled off. Probably because their toggles aren't in yet. Fix it.
 
 @Plugin
 (
         id = "pixelmonbroadcasts",
         name = "PixelmonBroadcasts",
-        version = "1.0.0 beta",
+        version = "0.1.0",
         dependencies = @Dependency(id = "pixelmon"),
         description = "Adds fully custom legendary-like messages for tons of events.",
         authors = "XpanD"
@@ -75,32 +72,32 @@ public class PixelmonBroadcasts
     public static boolean logLegendaryChallenges;
     public static boolean logLegendaryCatches;
     public static boolean logLegendaryDefeats;
-    public static boolean logLegendaryLosses;
+    public static boolean logLegendaryBlackouts;
     public static boolean logLegendaryForfeits;
     public static boolean logShinyLegendarySpawns;
     public static boolean logShinyLegendaryChallenges;
     public static boolean logShinyLegendaryCatches;
     public static boolean logShinyLegendaryDefeats;
-    public static boolean logShinyLegendaryLosses;
+    public static boolean logShinyLegendaryBlackouts;
     public static boolean logShinyLegendaryForfeits;
     public static boolean logShinySpawns;
     public static boolean logShinyChallenges;
     public static boolean logShinyCatches;
     public static boolean logShinyDefeats;
-    public static boolean logShinyLosses;
+    public static boolean logShinyBlackouts;
     public static boolean logShinyForfeits;
     public static boolean logBossSpawns;
     public static boolean logBossChallenges;
     public static boolean logBossDefeats;
-    public static boolean logBossLosses;
+    public static boolean logBossBlackouts;
     public static boolean logBossForfeits;
     public static boolean logBossTrainerChallenges;
     public static boolean logBossTrainerDefeats;
-    public static boolean logBossTrainerLosses;
+    public static boolean logBossTrainerBlackouts;
     public static boolean logBossTrainerForfeits;
     public static boolean logTrainerChallenges;
     public static boolean logTrainerDefeats;
-    public static boolean logTrainerLosses;
+    public static boolean logTrainerBlackouts;
     public static boolean logTrainerForfeits;
     public static boolean logPVPStarts;
     public static boolean logPVPDefeats;
@@ -114,32 +111,32 @@ public class PixelmonBroadcasts
     public static boolean showLegendaryChallenges;
     public static boolean showLegendaryCatches;
     public static boolean showLegendaryDefeats;
-    public static boolean showLegendaryLosses;
+    public static boolean showLegendaryBlackouts;
     public static boolean showLegendaryForfeits;
     public static boolean showShinyLegendarySpawns;
     public static boolean showShinyLegendaryChallenges;
     public static boolean showShinyLegendaryCatches;
     public static boolean showShinyLegendaryDefeats;
-    public static boolean showShinyLegendaryLosses;
+    public static boolean showShinyLegendaryBlackouts;
     public static boolean showShinyLegendaryForfeits;
     public static boolean showShinySpawns;
     public static boolean showShinyChallenges;
     public static boolean showShinyCatches;
     public static boolean showShinyDefeats;
-    public static boolean showShinyLosses;
+    public static boolean showShinyBlackouts;
     public static boolean showShinyForfeits;
     public static boolean showBossSpawns;
     public static boolean showBossChallenges;
     public static boolean showBossDefeats;
-    public static boolean showBossLosses;
+    public static boolean showBossBlackouts;
     public static boolean showBossForfeits;
     public static boolean showBossTrainerChallenges;
     public static boolean showBossTrainerDefeats;
-    public static boolean showBossTrainerLosses;
+    public static boolean showBossTrainerBlackouts;
     public static boolean showBossTrainerForfeits;
     public static boolean showTrainerChallenges;
     public static boolean showTrainerDefeats;
-    public static boolean showTrainerLosses;
+    public static boolean showTrainerBlackouts;
     public static boolean showTrainerForfeits;
     public static boolean showPVPStarts;
     public static boolean showPVPDefeats;
@@ -153,24 +150,24 @@ public class PixelmonBroadcasts
     public static boolean hoverLegendaryChallenges;
     public static boolean hoverLegendaryCatches;
     public static boolean hoverLegendaryDefeats;
-    public static boolean hoverLegendaryLosses;
+    public static boolean hoverLegendaryBlackouts;
     public static boolean hoverLegendaryForfeits;
     public static boolean hoverShinyLegendarySpawns;
     public static boolean hoverShinyLegendaryChallenges;
     public static boolean hoverShinyLegendaryCatches;
     public static boolean hoverShinyLegendaryDefeats;
-    public static boolean hoverShinyLegendaryLosses;
+    public static boolean hoverShinyLegendaryBlackouts;
     public static boolean hoverShinyLegendaryForfeits;
     public static boolean hoverShinySpawns;
     public static boolean hoverShinyChallenges;
     public static boolean hoverShinyCatches;
     public static boolean hoverShinyDefeats;
-    public static boolean hoverShinyLosses;
+    public static boolean hoverShinyBlackouts;
     public static boolean hoverShinyForfeits;
     public static boolean hoverBossSpawns;
     public static boolean hoverBossChallenges;
     public static boolean hoverBossDefeats;
-    public static boolean hoverBossLosses;
+    public static boolean hoverBossBlackouts;
     public static boolean hoverBossForfeits;
     public static boolean hoverHatches;
     public static boolean hoverShinyHatches;
@@ -180,32 +177,32 @@ public class PixelmonBroadcasts
     public static String legendaryChallengeMessage;
     public static String legendaryCatchMessage;
     public static String legendaryDefeatMessage;
-    public static String legendaryLoseToMessage;
+    public static String legendaryBlackoutMessage;
     public static String legendaryForfeitMessage;
     public static String shinyLegendarySpawnMessage;
     public static String shinyLegendaryChallengeMessage;
     public static String shinyLegendaryCatchMessage;
     public static String shinyLegendaryDefeatMessage;
-    public static String shinyLegendaryLoseToMessage;
+    public static String shinyLegendaryBlackoutMessage;
     public static String shinyLegendaryForfeitMessage;
     public static String shinySpawnMessage;
     public static String shinyChallengeMessage;
     public static String shinyCatchMessage;
     public static String shinyDefeatMessage;
-    public static String shinyLoseToMessage;
+    public static String shinyBlackoutMessage;
     public static String shinyForfeitMessage;
     public static String bossSpawnMessage;
     public static String bossChallengeMessage;
     public static String bossDefeatMessage;
-    public static String bossLoseToMessage;
+    public static String bossBlackoutMessage;
     public static String bossForfeitMessage;
     public static String bossTrainerChallengeMessage;
     public static String bossTrainerDefeatMessage;
-    public static String bossTrainerLoseToMessage;
+    public static String bossTrainerBlackoutMessage;
     public static String bossTrainerForfeitMessage;
     public static String trainerChallengeMessage;
     public static String trainerDefeatMessage;
-    public static String trainerLoseToMessage;
+    public static String trainerBlackoutMessage;
     public static String trainerForfeitMessage;
     public static String pvpStartMessage;
     public static String pvpDefeatMessage;

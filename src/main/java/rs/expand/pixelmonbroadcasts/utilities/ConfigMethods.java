@@ -191,19 +191,19 @@ public class ConfigMethods
                 PixelmonBroadcasts.hoverLegendaryDefeats = true;
         }
 
-        String legendaryLoseToOptions = commandConfig.getNode("legendaryLoseToOptions").getString();
-        if (legendaryLoseToOptions == null)
-            optionsErrorArray.add("legendaryLoseToOptions");
+        String legendaryBlackoutOptions = commandConfig.getNode("legendaryBlackoutOptions").getString();
+        if (legendaryBlackoutOptions == null)
+            optionsErrorArray.add("legendaryBlackoutOptions");
         else
         {
-            legendaryLoseToOptions = legendaryLoseToOptions.toLowerCase();
+            legendaryBlackoutOptions = legendaryBlackoutOptions.toLowerCase();
 
-            if (legendaryLoseToOptions.contains("log"))
-                PixelmonBroadcasts.logLegendaryLosses = true;
-            if (legendaryLoseToOptions.contains("show"))
-                PixelmonBroadcasts.showLegendaryLosses = true;
-            if (legendaryLoseToOptions.contains("hover"))
-                PixelmonBroadcasts.hoverLegendaryLosses = true;
+            if (legendaryBlackoutOptions.contains("log"))
+                PixelmonBroadcasts.logLegendaryBlackouts = true;
+            if (legendaryBlackoutOptions.contains("show"))
+                PixelmonBroadcasts.showLegendaryBlackouts = true;
+            if (legendaryBlackoutOptions.contains("hover"))
+                PixelmonBroadcasts.hoverLegendaryBlackouts = true;
         }
 
         String legendaryForfeitOptions = commandConfig.getNode("legendaryForfeitOptions").getString();
@@ -286,19 +286,19 @@ public class ConfigMethods
                 PixelmonBroadcasts.hoverShinyLegendaryDefeats = true;
         }
 
-        String shinyLegendaryLoseToOptions = commandConfig.getNode("shinyLegendaryLoseToOptions").getString();
-        if (shinyLegendaryLoseToOptions == null)
-            optionsErrorArray.add("shinyLegendaryLoseToOptions");
+        String shinyLegendaryBlackoutOptions = commandConfig.getNode("shinyLegendaryBlackoutOptions").getString();
+        if (shinyLegendaryBlackoutOptions == null)
+            optionsErrorArray.add("shinyLegendaryBlackoutOptions");
         else
         {
-            shinyLegendaryLoseToOptions = shinyLegendaryLoseToOptions.toLowerCase();
+            shinyLegendaryBlackoutOptions = shinyLegendaryBlackoutOptions.toLowerCase();
 
-            if (shinyLegendaryLoseToOptions.contains("log"))
-                PixelmonBroadcasts.logShinyLegendaryLosses = true;
-            if (shinyLegendaryLoseToOptions.contains("show"))
-                PixelmonBroadcasts.showShinyLegendaryLosses = true;
-            if (shinyLegendaryLoseToOptions.contains("hover"))
-                PixelmonBroadcasts.hoverShinyLegendaryLosses = true;
+            if (shinyLegendaryBlackoutOptions.contains("log"))
+                PixelmonBroadcasts.logShinyLegendaryBlackouts = true;
+            if (shinyLegendaryBlackoutOptions.contains("show"))
+                PixelmonBroadcasts.showShinyLegendaryBlackouts = true;
+            if (shinyLegendaryBlackoutOptions.contains("hover"))
+                PixelmonBroadcasts.hoverShinyLegendaryBlackouts = true;
         }
 
         String shinyLegendaryForfeitOptions = commandConfig.getNode("shinyLegendaryForfeitOptions").getString();
@@ -381,19 +381,19 @@ public class ConfigMethods
                 PixelmonBroadcasts.hoverShinyDefeats = true;
         }
 
-        String shinyLoseToOptions = commandConfig.getNode("shinyLoseToOptions").getString();
-        if (shinyLoseToOptions == null)
-            optionsErrorArray.add("shinyLoseToOptions");
+        String shinyBlackoutOptions = commandConfig.getNode("shinyBlackoutOptions").getString();
+        if (shinyBlackoutOptions == null)
+            optionsErrorArray.add("shinyBlackoutOptions");
         else
         {
-            shinyLoseToOptions = shinyLoseToOptions.toLowerCase();
+            shinyBlackoutOptions = shinyBlackoutOptions.toLowerCase();
 
-            if (shinyLoseToOptions.contains("log"))
-                PixelmonBroadcasts.logShinyLosses = true;
-            if (shinyLoseToOptions.contains("show"))
-                PixelmonBroadcasts.showShinyLosses = true;
-            if (shinyLoseToOptions.contains("hover"))
-                PixelmonBroadcasts.hoverShinyLosses = true;
+            if (shinyBlackoutOptions.contains("log"))
+                PixelmonBroadcasts.logShinyBlackouts = true;
+            if (shinyBlackoutOptions.contains("show"))
+                PixelmonBroadcasts.showShinyBlackouts = true;
+            if (shinyBlackoutOptions.contains("hover"))
+                PixelmonBroadcasts.hoverShinyBlackouts = true;
         }
 
         String shinyForfeitOptions = commandConfig.getNode("shinyForfeitOptions").getString();
@@ -461,19 +461,19 @@ public class ConfigMethods
                 PixelmonBroadcasts.hoverBossDefeats = true;
         }
 
-        String bossLoseToOptions = commandConfig.getNode("bossLoseToOptions").getString();
-        if (bossLoseToOptions == null)
-            optionsErrorArray.add("bossLoseToOptions");
+        String bossBlackoutOptions = commandConfig.getNode("bossBlackoutOptions").getString();
+        if (bossBlackoutOptions == null)
+            optionsErrorArray.add("bossBlackoutOptions");
         else
         {
-            bossLoseToOptions = bossLoseToOptions.toLowerCase();
+            bossBlackoutOptions = bossBlackoutOptions.toLowerCase();
 
-            if (bossLoseToOptions.contains("log"))
-                PixelmonBroadcasts.logBossLosses = true;
-            if (bossLoseToOptions.contains("show"))
-                PixelmonBroadcasts.showBossLosses = true;
-            if (bossLoseToOptions.contains("hover"))
-                PixelmonBroadcasts.hoverBossLosses = true;
+            if (bossBlackoutOptions.contains("log"))
+                PixelmonBroadcasts.logBossBlackouts = true;
+            if (bossBlackoutOptions.contains("show"))
+                PixelmonBroadcasts.showBossBlackouts = true;
+            if (bossBlackoutOptions.contains("hover"))
+                PixelmonBroadcasts.hoverBossBlackouts = true;
         }
 
         String bossForfeitOptions = commandConfig.getNode("bossForfeitOptions").getString();
@@ -522,17 +522,17 @@ public class ConfigMethods
                 PixelmonBroadcasts.showBossTrainerDefeats = true;
         }
 
-        String bossTrainerLoseToOptions = commandConfig.getNode("bossTrainerLoseToOptions").getString();
-        if (bossTrainerLoseToOptions == null)
-            optionsErrorArray.add("bossTrainerLoseToOptions");
+        String bossTrainerBlackoutOptions = commandConfig.getNode("bossTrainerBlackoutOptions").getString();
+        if (bossTrainerBlackoutOptions == null)
+            optionsErrorArray.add("bossTrainerBlackoutOptions");
         else
         {
-            bossTrainerLoseToOptions = bossTrainerLoseToOptions.toLowerCase();
+            bossTrainerBlackoutOptions = bossTrainerBlackoutOptions.toLowerCase();
 
-            if (bossTrainerLoseToOptions.contains("log"))
-                PixelmonBroadcasts.logBossTrainerLosses = true;
-            if (bossTrainerLoseToOptions.contains("show"))
-                PixelmonBroadcasts.showBossTrainerLosses = true;
+            if (bossTrainerBlackoutOptions.contains("log"))
+                PixelmonBroadcasts.logBossTrainerBlackouts = true;
+            if (bossTrainerBlackoutOptions.contains("show"))
+                PixelmonBroadcasts.showBossTrainerBlackouts = true;
         }
 
         String bossTrainerForfeitOptions = commandConfig.getNode("bossTrainerForfeitOptions").getString();
@@ -579,17 +579,17 @@ public class ConfigMethods
                 PixelmonBroadcasts.showTrainerDefeats = true;
         }
 
-        String trainerLoseToOptions = commandConfig.getNode("trainerLoseToOptions").getString();
-        if (trainerLoseToOptions == null)
-            optionsErrorArray.add("trainerLoseToOptions");
+        String trainerBlackoutOptions = commandConfig.getNode("trainerBlackoutOptions").getString();
+        if (trainerBlackoutOptions == null)
+            optionsErrorArray.add("trainerBlackoutOptions");
         else
         {
-            trainerLoseToOptions = trainerLoseToOptions.toLowerCase();
+            trainerBlackoutOptions = trainerBlackoutOptions.toLowerCase();
 
-            if (trainerLoseToOptions.contains("log"))
-                PixelmonBroadcasts.logTrainerLosses = true;
-            if (trainerLoseToOptions.contains("show"))
-                PixelmonBroadcasts.showTrainerLosses = true;
+            if (trainerBlackoutOptions.contains("log"))
+                PixelmonBroadcasts.logTrainerBlackouts = true;
+            if (trainerBlackoutOptions.contains("show"))
+                PixelmonBroadcasts.showTrainerBlackouts = true;
         }
 
         String trainerForfeitOptions = commandConfig.getNode("trainerForfeitOptions").getString();
@@ -716,8 +716,8 @@ public class ConfigMethods
                 parseRemoteString(commandConfig.getNode("legendaryCatchMessage").getString());
         PixelmonBroadcasts.legendaryDefeatMessage =
                 parseRemoteString(commandConfig.getNode("legendaryDefeatMessage").getString());
-        PixelmonBroadcasts.legendaryLoseToMessage =
-                parseRemoteString(commandConfig.getNode("legendaryLoseToMessage").getString());
+        PixelmonBroadcasts.legendaryBlackoutMessage =
+                parseRemoteString(commandConfig.getNode("legendaryBlackoutMessage").getString());
         PixelmonBroadcasts.legendaryForfeitMessage =
                 parseRemoteString(commandConfig.getNode("legendaryForfeitMessage").getString());
         PixelmonBroadcasts.shinyLegendarySpawnMessage =
@@ -728,8 +728,8 @@ public class ConfigMethods
                 parseRemoteString(commandConfig.getNode("shinyLegendaryCatchMessage").getString());
         PixelmonBroadcasts.shinyLegendaryDefeatMessage =
                 parseRemoteString(commandConfig.getNode("shinyLegendaryDefeatMessage").getString());
-        PixelmonBroadcasts.shinyLegendaryLoseToMessage =
-                parseRemoteString(commandConfig.getNode("shinyLegendaryLoseToMessage").getString());
+        PixelmonBroadcasts.shinyLegendaryBlackoutMessage =
+                parseRemoteString(commandConfig.getNode("shinyLegendaryBlackoutMessage").getString());
         PixelmonBroadcasts.shinyLegendaryForfeitMessage =
                 parseRemoteString(commandConfig.getNode("shinyLegendaryForfeitMessage").getString());
         PixelmonBroadcasts.shinySpawnMessage =
@@ -740,8 +740,8 @@ public class ConfigMethods
                 parseRemoteString(commandConfig.getNode("shinyCatchMessage").getString());
         PixelmonBroadcasts.shinyDefeatMessage =
                 parseRemoteString(commandConfig.getNode("shinyDefeatMessage").getString());
-        PixelmonBroadcasts.shinyLoseToMessage =
-                parseRemoteString(commandConfig.getNode("shinyLoseToMessage").getString());
+        PixelmonBroadcasts.shinyBlackoutMessage =
+                parseRemoteString(commandConfig.getNode("shinyBlackoutMessage").getString());
         PixelmonBroadcasts.shinyForfeitMessage =
                 parseRemoteString(commandConfig.getNode("shinyForfeitMessage").getString());
         PixelmonBroadcasts.bossSpawnMessage =
@@ -750,24 +750,24 @@ public class ConfigMethods
                 parseRemoteString(commandConfig.getNode("bossChallengeMessage").getString());
         PixelmonBroadcasts.bossDefeatMessage =
                 parseRemoteString(commandConfig.getNode("bossDefeatMessage").getString());
-        PixelmonBroadcasts.bossLoseToMessage =
-                parseRemoteString(commandConfig.getNode("bossLoseToMessage").getString());
+        PixelmonBroadcasts.bossBlackoutMessage =
+                parseRemoteString(commandConfig.getNode("bossBlackoutMessage").getString());
         PixelmonBroadcasts.bossForfeitMessage =
                 parseRemoteString(commandConfig.getNode("bossForfeitMessage").getString());
         PixelmonBroadcasts.bossTrainerChallengeMessage =
                 parseRemoteString(commandConfig.getNode("bossTrainerChallengeMessage").getString());
         PixelmonBroadcasts.bossTrainerDefeatMessage =
                 parseRemoteString(commandConfig.getNode("bossTrainerDefeatMessage").getString());
-        PixelmonBroadcasts.bossTrainerLoseToMessage =
-                parseRemoteString(commandConfig.getNode("bossTrainerLoseToMessage").getString());
+        PixelmonBroadcasts.bossTrainerBlackoutMessage =
+                parseRemoteString(commandConfig.getNode("bossTrainerBlackoutMessage").getString());
         PixelmonBroadcasts.bossTrainerForfeitMessage =
                 parseRemoteString(commandConfig.getNode("bossTrainerForfeitMessage").getString());
         PixelmonBroadcasts.trainerChallengeMessage =
                 parseRemoteString(commandConfig.getNode("trainerChallengeMessage").getString());
         PixelmonBroadcasts.trainerDefeatMessage =
                 parseRemoteString(commandConfig.getNode("trainerDefeatMessage").getString());
-        PixelmonBroadcasts.trainerLoseToMessage =
-                parseRemoteString(commandConfig.getNode("trainerLoseToMessage").getString());
+        PixelmonBroadcasts.trainerBlackoutMessage =
+                parseRemoteString(commandConfig.getNode("trainerBlackoutMessage").getString());
         PixelmonBroadcasts.trainerForfeitMessage =
                 parseRemoteString(commandConfig.getNode("trainerForfeitMessage").getString());
         PixelmonBroadcasts.pvpStartMessage =
@@ -792,8 +792,8 @@ public class ConfigMethods
             messageErrorArray.add("legendaryCatchMessage");
         if (legendaryDefeatMessage == null)
             messageErrorArray.add("legendaryDefeatMessage");
-        if (legendaryLoseToMessage == null)
-            messageErrorArray.add("legendaryLoseToMessage");
+        if (legendaryBlackoutMessage == null)
+            messageErrorArray.add("legendaryBlackoutMessage");
         if (legendaryForfeitMessage == null)
             messageErrorArray.add("legendaryForfeitMessage");
         if (shinyLegendarySpawnMessage == null)
@@ -804,8 +804,8 @@ public class ConfigMethods
             messageErrorArray.add("shinyLegendaryCatchMessage");
         if (shinyLegendaryDefeatMessage == null)
             messageErrorArray.add("shinyLegendaryDefeatMessage");
-        if (shinyLegendaryLoseToMessage == null)
-            messageErrorArray.add("shinyLegendaryLoseToMessage");
+        if (shinyLegendaryBlackoutMessage == null)
+            messageErrorArray.add("shinyLegendaryBlackoutMessage");
         if (shinyLegendaryForfeitMessage == null)
             messageErrorArray.add("shinyLegendaryForfeitMessage");
         if (shinySpawnMessage == null)
@@ -816,8 +816,8 @@ public class ConfigMethods
             messageErrorArray.add("shinyCatchMessage");
         if (shinyDefeatMessage == null)
             messageErrorArray.add("shinyDefeatMessage");
-        if (shinyLoseToMessage == null)
-            messageErrorArray.add("shinyLoseToMessage");
+        if (shinyBlackoutMessage == null)
+            messageErrorArray.add("shinyBlackoutMessage");
         if (shinyForfeitMessage == null)
             messageErrorArray.add("shinyForfeitMessage");
         if (bossSpawnMessage == null)
@@ -826,24 +826,24 @@ public class ConfigMethods
             messageErrorArray.add("bossChallengeMessage");
         if (bossDefeatMessage == null)
             messageErrorArray.add("bossDefeatMessage");
-        if (bossLoseToMessage == null)
-            messageErrorArray.add("bossLoseToMessage");
+        if (bossBlackoutMessage == null)
+            messageErrorArray.add("bossBlackoutMessage");
         if (bossForfeitMessage == null)
             messageErrorArray.add("bossForfeitMessage");
         if (bossTrainerChallengeMessage == null)
             messageErrorArray.add("bossTrainerChallengeMessage");
         if (bossTrainerDefeatMessage == null)
             messageErrorArray.add("bossTrainerDefeatMessage");
-        if (bossTrainerLoseToMessage == null)
-            messageErrorArray.add("bossTrainerLoseToMessage");
+        if (bossTrainerBlackoutMessage == null)
+            messageErrorArray.add("bossTrainerBlackoutMessage");
         if (bossTrainerForfeitMessage == null)
             messageErrorArray.add("bossTrainerForfeitMessage");
         if (trainerChallengeMessage == null)
             messageErrorArray.add("trainerChallengeMessage");
         if (trainerDefeatMessage == null)
             messageErrorArray.add("trainerDefeatMessage");
-        if (trainerLoseToMessage == null)
-            messageErrorArray.add("trainerLoseToMessage");
+        if (trainerBlackoutMessage == null)
+            messageErrorArray.add("trainerBlackoutMessage");
         if (trainerForfeitMessage == null)
             messageErrorArray.add("trainerForfeitMessage");
         if (pvpStartMessage == null)

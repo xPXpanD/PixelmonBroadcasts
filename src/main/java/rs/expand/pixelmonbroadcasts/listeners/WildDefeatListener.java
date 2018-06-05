@@ -15,6 +15,7 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
 
 // TODO: Log/announce boss types? Mega vs normal.
+// FIXME: Self-sacrifice moves like Explosion do not seem to fire this.
 public class WildDefeatListener
 {
     @SubscribeEvent

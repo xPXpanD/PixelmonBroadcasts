@@ -20,6 +20,7 @@ import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replaceP
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicError;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicMessage;
 
+// FIXME: Pokémon using moves like Teleport to warp away from you show up as YOU having fled.
 public class BattleStartListener
 {
     @SubscribeEvent
@@ -70,7 +71,7 @@ public class BattleStartListener
                         // Send off the message, the needed notifier permission and the flag to check.
                         // Pass null for the Pokémon, as we don't have one. Automatically disables some placeholders.
                         iterateAndSendEventMessage(finalMessage, null,
-                                false, true, false, "pvpstart", "showPVPStarts");
+                                false, true, false, "pvpstart", "showPVPStart");
                     }
                     else
                         printBasicError("The PvP battle start message is broken, broadcast failed.");
@@ -221,11 +222,11 @@ public class BattleStartListener
                             {
                                 // Set up our message. This is the same for all eligible players, so call it once and store it.
                                 final String finalMessage = replacePlaceholders(bossChallengeMessage,
-                                        playerName, true, false, pokemonEntity, location);
+                                        playerName, false, false, pokemonEntity, location);
 
                                 // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(finalMessage, pokemonEntity, hoverBossChallenges, true,
-                                        true, "bosschallenge", "showBossChallenge");
+                                iterateAndSendEventMessage(finalMessage, pokemonEntity, showBossChallenges, true,
+                                        false, "bosschallenge", "showBossChallenge");
                             }
                             else
                                 printBasicError("The boss challenge message is broken, broadcast failed.");
@@ -255,11 +256,11 @@ public class BattleStartListener
                                 // Set up our message. This is the same for all eligible players, so call it once and store it.
                                 // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
                                 final String finalMessage = replacePlaceholders(shinyLegendaryChallengeMessage,
-                                        playerName, true, false, pokemonEntity, location);
+                                        playerName, false, false, pokemonEntity, location);
 
                                 // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(finalMessage, pokemonEntity, hoverShinyLegendaryChallenges, true,
-                                        true, "shinylegendarychallenge", "showShinyLegendaryChallenge");
+                                iterateAndSendEventMessage(finalMessage, pokemonEntity, showShinyLegendaryChallenges, true,
+                                        false, "shinylegendarychallenge", "showShinyLegendaryChallenge");
                             }
                             else
                                 printBasicError("The shiny legendary challenge message is broken, broadcast failed.");
@@ -288,11 +289,11 @@ public class BattleStartListener
                             {
                                 // Set up our message. This is the same for all eligible players, so call it once and store it.
                                 final String finalMessage = replacePlaceholders(legendaryChallengeMessage,
-                                        playerName, true, false, pokemonEntity, location);
+                                        playerName, false, false, pokemonEntity, location);
 
                                 // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(finalMessage, pokemonEntity, hoverLegendaryChallenges, true,
-                                        true, "legendarychallenge", "showLegendaryChallenge");
+                                iterateAndSendEventMessage(finalMessage, pokemonEntity, showLegendaryChallenges, true,
+                                        false, "legendarychallenge", "showLegendaryChallenge");
                             }
                             else
                                 printBasicError("The legendary challenge message is broken, broadcast failed.");
@@ -321,11 +322,11 @@ public class BattleStartListener
                             {
                                 // Set up our message. This is the same for all eligible players, so call it once and store it.
                                 final String finalMessage = replacePlaceholders(shinyChallengeMessage,
-                                        playerName, true, false, pokemonEntity, location);
+                                        playerName, false, false, pokemonEntity, location);
 
                                 // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(finalMessage, pokemonEntity, hoverShinyChallenges, true,
-                                        true, "shinychallenge", "showShinyChallenge");
+                                iterateAndSendEventMessage(finalMessage, pokemonEntity, showShinyChallenges, true,
+                                        false, "shinychallenge", "showShinyChallenge");
                             }
                             else
                                 printBasicError("The shiny challenge message is broken, broadcast failed.");

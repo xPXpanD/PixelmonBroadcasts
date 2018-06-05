@@ -108,9 +108,12 @@ hub.errors.contact_staff=&cPlease contact staff if you believe this to be in err
 toggle.messages.enable=&aYou will now be shown this message again.
 toggle.messages.disable=&eYou will no longer be shown this message.
 toggle.messages.info=&6Click any of the options below to toggle their messages.
-toggle.messages.catch_toggles=&bCatch message toggles&f:
-toggle.messages.defeat_toggles=&bDefeat message toggles&f:
+toggle.messages.challenge_toggles=&bChallenge message toggles&f:
 toggle.messages.spawning_toggles=&bSpawning message toggles&f:
+toggle.messages.blackout_toggles=&bBlackout message toggles&f:
+toggle.messages.forfeit_toggles=&bForfeit message toggles&f:
+toggle.messages.defeat_toggles=&bDefeat message toggles&f:
+toggle.messages.catch_toggles=&bCatch message toggles&f:
 toggle.messages.other_toggles=&bMiscellaneous message toggles&f:
 
 # Texts

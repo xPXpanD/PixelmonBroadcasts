@@ -109,10 +109,12 @@ hub.errors.contact_staff=&cNeem contact op met personeel als u denkt dat dit nie
 toggle.messages.enable=&aDit bericht wordt nu weer getoond.
 toggle.messages.disable=&eDit bericht zal niet langer getoond worden.
 toggle.messages.info=&6Klik op een optie om dit bericht in- of uit te schakelen.
-toggle.messages.catch_toggles=&bOpties voor vang-berichten&f:
-toggle.messages.defeat_toggles=&bOpties voor win-berichten&f:
+toggle.messages.challenge_toggles=&bOpties voor uitdagingsberichten&f:
 toggle.messages.spawning_toggles=&bOpties voor spawn-berichten&f:
-toggle.messages.other_toggles=&bOpties voor andere berichten&f:
+toggle.messages.blackout_toggles=&bOpties voor blackout-berichten&f:
+toggle.messages.forfeit_toggles=&bOpties voor opgeef-berichten&f:
+toggle.messages.defeat_toggles=&bOpties voor win-berichten&f:
+toggle.messages.catch_toggles=&bOpties voor vang-berichten&f:
 
 # Texts
 toggle.text.shiny.on=&a&nshiny
