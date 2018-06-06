@@ -15,6 +15,7 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
 
 // TODO: Add shiny status support. Something that works with multiple languages, preferably. Placeholder?
+// FIXME: Eggs need better support. Hiding IVs and names for the time being.
 public class TradeListener
 {
     @SubscribeEvent
@@ -57,7 +58,7 @@ public class TradeListener
 
                 // Send off the message, the needed notifier permission and the flag to check.
                 iterateAndSendEventMessage(finalMessage, pokemon1Entity,
-                        false, false, false, "trade", "showTrade");
+                        false, false, false, "normal.trade", "showTrade");
             }
             else
                 printBasicError("The trade message is broken, broadcast failed.");

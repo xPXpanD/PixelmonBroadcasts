@@ -1,6 +1,12 @@
 # # # universal stuff # # #
+# Marginals (common headers/footers)
 universal.marginals.header=&5-----------------------------------------------------
 universal.marginals.footer=&5-----------------------------------------------------
+
+# Placeholders (for special situations)
+universal.placeholders.pokemon.is_egg=mysterious egg
+# Use a double percent character ("%%") if you want to add one, it needs escaping to work.
+universal.placeholders.ivpercent.is_egg=?%%
 
 
 # # # hover-enabled message info # # #
@@ -105,33 +111,47 @@ hub.errors.contact_staff=&cNeem contact op met personeel als u denkt dat dit nie
 
 
 # # # /pixelmonbroadcasts toggle # # #
-# Messages
-toggle.messages.enable=&aDit bericht wordt nu weer getoond.
-toggle.messages.disable=&eDit bericht zal niet langer getoond worden.
-toggle.messages.info=&6Klik op een optie om dit bericht in- of uit te schakelen.
-toggle.messages.challenge_toggles=&bOpties voor uitdagingsberichten&f:
-toggle.messages.spawning_toggles=&bOpties voor spawn-berichten&f:
-toggle.messages.blackout_toggles=&bOpties voor blackout-berichten&f:
-toggle.messages.forfeit_toggles=&bOpties voor opgeef-berichten&f:
-toggle.messages.defeat_toggles=&bOpties voor win-berichten&f:
-toggle.messages.catch_toggles=&bOpties voor vang-berichten&f:
+# Marginals (just a header, we use the universal footer)
+toggle.marginals.header=&5------------- &dOpties (klik om te veranderen) &5-------------
 
-# Texts
+# Messages
+toggle.messages.challenge_toggles=&bUitdagingsberichten&f:
+toggle.messages.spawning_toggles=&bSpawn-berichten&f:
+toggle.messages.blackout_toggles=&bBlackout-berichten&f:
+toggle.messages.forfeit_toggles=&bOpgeef-berichten&f:
+toggle.messages.defeat_toggles=&bWin-berichten&f:
+toggle.messages.catch_toggles=&bVang-berichten&f:
+toggle.messages.pvp_toggles=&bPvP-berichten&f:
+toggle.messages.other_toggles=&bAndere berichten&f:
+
+# Texts - components
+# T: Onvertaald, vertalingen werken hier niet echt lekker en dit zijn redelijk bekende concepten.
 toggle.text.shiny.on=&a&nshiny
 toggle.text.shiny.off=&c&nshiny
-toggle.text.legendary.on=&a&nlegendary
-toggle.text.legendary.off=&c&nlegendary
-toggle.text.shiny_legendary.on=&a&nshiny legendary
-toggle.text.shiny_legendary.off=&c&nshiny legendary
+toggle.text.legendary.on=&a&nlegend
+toggle.text.legendary.off=&c&nlegend
+toggle.text.shiny_legendary.on=&a&nshiny legend
+toggle.text.shiny_legendary.off=&c&nshiny legend
 toggle.text.boss.on=&a&nboss
 toggle.text.boss.off=&c&nboss
-# T: Dit werkt niet echt, maar ik kan op het moment niks beters bedenken. TODO.
-toggle.text.hatch.on=&a&ngeboorte
-toggle.text.hatch.off=&c&ngeboorte
-toggle.text.shiny_hatch.on=&a&nshiny geboorte
-toggle.text.shiny_hatch.off=&c&nshiny geboorte
-toggle.text.trade.on=&a&nruil
-toggle.text.trade.off=&c&nruil
+toggle.text.trainer.on=&a&ntrainer
+toggle.text.trainer.off=&c&ntrainer
+toggle.text.boss_trainer.on=&a&nboss trainer
+toggle.text.boss_trainer.off=&c&nboss trainer
+
+# Texts - specific options
+toggle.text.pvp_start.on=&a&nstart
+toggle.text.pvp_start.off=&c&nstart
+toggle.text.pvp_draw.on=&a&ndraw
+toggle.text.pvp_draw.off=&c&ndraw
+toggle.text.pvp_defeat.on=&a&ndefeat
+toggle.text.pvp_defeat.off=&c&ndefeat
+toggle.text.hatch.on=&a&nhatch
+toggle.text.hatch.off=&c&nhatch
+toggle.text.shiny_hatch.on=&a&nshiny hatch
+toggle.text.shiny_hatch.off=&c&nshiny hatch
+toggle.text.trade.on=&a&ntrade
+toggle.text.trade.off=&c&ntrade
 
 
 # # # /pixelmonbroadcasts reload # # #

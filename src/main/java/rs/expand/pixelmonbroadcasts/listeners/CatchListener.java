@@ -51,7 +51,7 @@ public class CatchListener
                     // Send off the message, the needed notifier permission and the flag to check.
                     // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
                     iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyLegendaryCatches, true,
-                            true, "shinylegendarycatch", "showShinyLegendaryCatch");
+                            true, "shinylegendary.catch", "showShinyLegendaryCatch");
                 }
                 else
                     printBasicError("The shiny legendary catch message is broken, broadcast failed.");
@@ -84,7 +84,7 @@ public class CatchListener
 
                     // Send off the message, the needed notifier permission and the flag to check.
                     iterateAndSendEventMessage(finalMessage, pokemon, hoverLegendaryCatches, true,
-                            true, "legendarycatch", "showLegendaryCatch");
+                            true, "legendary.catch", "showLegendaryCatch");
                 }
                 else
                     printBasicError("The legendary catch message is broken, broadcast failed.");
@@ -117,7 +117,7 @@ public class CatchListener
 
                     // Send off the message, the needed notifier permission and the flag to check.
                     iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyCatches, true,
-                            true, "shinycatch", "showShinyCatch");
+                            true, "shiny.catch", "showShinyCatch");
                 }
                 else
                     printBasicError("The shiny catch message is broken, broadcast failed.");

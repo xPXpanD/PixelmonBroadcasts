@@ -71,7 +71,7 @@ public class BattleStartListener
                         // Send off the message, the needed notifier permission and the flag to check.
                         // Pass null for the Pokémon, as we don't have one. Automatically disables some placeholders.
                         iterateAndSendEventMessage(finalMessage, null,
-                                false, true, false, "pvpstart", "showPVPStart");
+                                false, true, false, "pvp.start", "showPVPStart");
                     }
                     else
                         printBasicError("The PvP battle start message is broken, broadcast failed.");
@@ -128,7 +128,7 @@ public class BattleStartListener
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(
                                     finalMessage, null, false, false,
-                                    false, "bosstrainerchallenge", "showBossTrainerChallenge");
+                                    false, "bosstrainer.challenge", "showBossTrainerChallenge");
                         }
                         else
                             printBasicError("The boss trainer challenge message is broken, broadcast failed.");
@@ -161,7 +161,7 @@ public class BattleStartListener
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(
                                     finalMessage, null, false, false,
-                                    false, "trainerchallenge", "showTrainerChallenge");
+                                    false, "trainer.challenge", "showTrainerChallenge");
                         }
                         else
                             printBasicError("The trainer challenge message is broken, broadcast failed.");
@@ -226,7 +226,7 @@ public class BattleStartListener
 
                                 // Send off the message, the needed notifier permission and the flag to check.
                                 iterateAndSendEventMessage(finalMessage, pokemonEntity, showBossChallenges, true,
-                                        false, "bosschallenge", "showBossChallenge");
+                                        false, "boss.challenge", "showBossChallenge");
                             }
                             else
                                 printBasicError("The boss challenge message is broken, broadcast failed.");
@@ -260,7 +260,7 @@ public class BattleStartListener
 
                                 // Send off the message, the needed notifier permission and the flag to check.
                                 iterateAndSendEventMessage(finalMessage, pokemonEntity, showShinyLegendaryChallenges, true,
-                                        false, "shinylegendarychallenge", "showShinyLegendaryChallenge");
+                                        false, "shinylegendary.challenge", "showShinyLegendaryChallenge");
                             }
                             else
                                 printBasicError("The shiny legendary challenge message is broken, broadcast failed.");
@@ -293,7 +293,7 @@ public class BattleStartListener
 
                                 // Send off the message, the needed notifier permission and the flag to check.
                                 iterateAndSendEventMessage(finalMessage, pokemonEntity, showLegendaryChallenges, true,
-                                        false, "legendarychallenge", "showLegendaryChallenge");
+                                        false, "legendary.challenge", "showLegendaryChallenge");
                             }
                             else
                                 printBasicError("The legendary challenge message is broken, broadcast failed.");
@@ -326,7 +326,7 @@ public class BattleStartListener
 
                                 // Send off the message, the needed notifier permission and the flag to check.
                                 iterateAndSendEventMessage(finalMessage, pokemonEntity, showShinyChallenges, true,
-                                        false, "shinychallenge", "showShinyChallenge");
+                                        false, "shiny.challenge", "showShinyChallenge");
                             }
                             else
                                 printBasicError("The shiny challenge message is broken, broadcast failed.");

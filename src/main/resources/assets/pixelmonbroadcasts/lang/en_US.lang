@@ -1,6 +1,12 @@
 # # # universal stuff # # #
+# Marginals (common headers/footers)
 universal.marginals.header=&5-----------------------------------------------------
 universal.marginals.footer=&5-----------------------------------------------------
+
+# Placeholders (for special situations)
+universal.placeholders.pokemon.is_egg=mysterious egg
+# Use a double percent character ("%%") if you want to add one, it needs escaping to work.
+universal.placeholders.ivpercent.is_egg=?%%
 
 
 # # # hover-enabled message info # # #
@@ -47,7 +53,7 @@ hovers.messages.past_tense.natures.unknown=&aIt had an &2unknown &anature...
 # Other messages
 hovers.messages.current_ivs=&bIVs&f:
 # %d = The total number of IVs for our checked Pokémon, then the percentage of the max.
-# Use a double percent sign ("%%") if you want a single one, it needs escaping to work.
+# Use a double percent character ("%%") if you want to add one, it needs escaping to work.
 hovers.messages.total_ivs=&a%d&f/&a186&f (&a%d%%&f)
 ## End of replacements. ^
 hovers.messages.info=&bInfo&f:
@@ -104,27 +110,40 @@ hub.errors.contact_staff=&cPlease contact staff if you believe this to be in err
 
 
 # # # /pixelmonbroadcasts toggle # # #
-# Messages
-toggle.messages.enable=&aYou will now be shown this message again.
-toggle.messages.disable=&eYou will no longer be shown this message.
-toggle.messages.info=&6Click any of the options below to toggle their messages.
-toggle.messages.challenge_toggles=&bChallenge message toggles&f:
-toggle.messages.spawning_toggles=&bSpawning message toggles&f:
-toggle.messages.blackout_toggles=&bBlackout message toggles&f:
-toggle.messages.forfeit_toggles=&bForfeit message toggles&f:
-toggle.messages.defeat_toggles=&bDefeat message toggles&f:
-toggle.messages.catch_toggles=&bCatch message toggles&f:
-toggle.messages.other_toggles=&bMiscellaneous message toggles&f:
+# Marginals (just a header, we use the universal footer)
+toggle.marginals.header=&5------------- &dEvent toggles (click to toggle) &5-------------
 
-# Texts
+# Messages
+toggle.messages.challenge_toggles=&bChallenge messages&f:
+toggle.messages.spawning_toggles=&bSpawning messages&f:
+toggle.messages.blackout_toggles=&bBlackout messages&f:
+toggle.messages.forfeit_toggles=&bForfeit messages&f:
+toggle.messages.defeat_toggles=&bDefeat messages&f:
+toggle.messages.catch_toggles=&bCatch messages&f:
+toggle.messages.pvp_toggles=&bPlayer battle messages&f:
+toggle.messages.other_toggles=&bMiscellaneous messages&f:
+
+# Texts - components
 toggle.text.shiny.on=&a&nshiny
 toggle.text.shiny.off=&c&nshiny
-toggle.text.legendary.on=&a&nlegendary
-toggle.text.legendary.off=&c&nlegendary
-toggle.text.shiny_legendary.on=&a&nshiny legendary
-toggle.text.shiny_legendary.off=&c&nshiny legendary
+toggle.text.legendary.on=&a&nlegend
+toggle.text.legendary.off=&c&nlegend
+toggle.text.shiny_legendary.on=&a&nshiny legend
+toggle.text.shiny_legendary.off=&c&nshiny legend
 toggle.text.boss.on=&a&nboss
 toggle.text.boss.off=&c&nboss
+toggle.text.trainer.on=&a&ntrainer
+toggle.text.trainer.off=&c&ntrainer
+toggle.text.boss_trainer.on=&a&nboss trainer
+toggle.text.boss_trainer.off=&c&nboss trainer
+
+# Texts - specific options
+toggle.text.pvp_start.on=&a&nstart
+toggle.text.pvp_start.off=&c&nstart
+toggle.text.pvp_draw.on=&a&ndraw
+toggle.text.pvp_draw.off=&c&ndraw
+toggle.text.pvp_defeat.on=&a&ndefeat
+toggle.text.pvp_defeat.off=&c&ndefeat
 toggle.text.hatch.on=&a&nhatch
 toggle.text.hatch.off=&c&nhatch
 toggle.text.shiny_hatch.on=&a&nshiny hatch

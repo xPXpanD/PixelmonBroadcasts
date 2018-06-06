@@ -50,6 +50,7 @@ public class PlaceholderMethods
     }
 
     // Sets up a message from the given info, with IV hovers thrown in in place of any placeholders.
+    // FIXME: It may be a good idea to toggle off showIVs if we're showing off an egg. Need to think about this.
     private static Text getHoverableLine(
             final String message, final EntityPixelmon pokemon, final boolean presentTense, final boolean showIVs)
     {
@@ -255,7 +256,15 @@ public class PlaceholderMethods
         {
             // Replace more placeholders.
             if (message.toLowerCase().contains("%pokemon" + insert + "%"))
-                message = message.replaceAll("(?i)%pokemon" + insert + "%", pokemon.getLocalizedName());
+            {
+                // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
+                // FIXME: Could do with an option, or a cleaner way to make this all work.
+                final String pokemonName =
+                        pokemon.isEgg ? getTranslation("universal.placeholders.pokemon.is_egg") : pokemon.getLocalizedName();
+
+                // Insert the checked Pokémon name.
+                message = message.replaceAll("(?i)%pokemon" + insert + "%", pokemonName);
+            }
             if (message.toLowerCase().contains("%world" + insert + "%"))
             {
                 message = message.replaceAll(
@@ -317,8 +326,15 @@ public class PlaceholderMethods
                 final BigDecimal percentIVs = totalIVs.multiply(
                         new BigDecimal("100")).divide(new BigDecimal("186"), 2, BigDecimal.ROUND_HALF_UP);
 
+                // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the stats.
+                // FIXME: Could do with an option, or a cleaner way to make this all work.
+                final String pokemonIVs =
+                        pokemon.isEgg ? getTranslation("universal.placeholders.ivpercent.is_egg") : percentIVs.toString() + '%';
+
+                // Insert the checked IV percentage.
+
                 // Apply.
-                message = message.replaceAll("(?i)%ivpercent" + insert + "%", percentIVs.toString() + '%');
+                message = message.replaceAll("(?i)%ivpercent" + insert + "%", pokemonIVs);
             }
         }
 
