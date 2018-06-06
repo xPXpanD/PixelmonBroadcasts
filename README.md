@@ -3,7 +3,7 @@ A sidemod for Pixelmon Reforged that adds configurable messages for tons of even
 
 For more details, check:
 
-http://pixelmonmod.com/wiki/index.php?title=Pixelmon_Broadcasts (coming soon)
+http://pixelmonmod.com/wiki/index.php?title=Pixelmon_Broadcasts
 
 Latest sources will be here for the time being, most likely in a broken state. Check releases for runnable code.
 
