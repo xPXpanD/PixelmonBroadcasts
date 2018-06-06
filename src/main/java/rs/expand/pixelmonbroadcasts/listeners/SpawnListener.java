@@ -63,7 +63,7 @@ public class SpawnListener
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(finalMessage, pokemon, hoverBossSpawns, true,
-                                    false, "boss.spawn", "showBossSpawn");
+                                    false, "spawn.boss", "showBossSpawn");
                         }
                         else
                             printBasicError("The boss spawn message is broken, broadcast failed.");
@@ -96,7 +96,7 @@ public class SpawnListener
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyLegendarySpawns, true,
-                                    false, "shinylegendary.spawn", "showShinyLegendarySpawn");
+                                    false, "spawn.shinylegendary", "showShinyLegendarySpawn");
                         }
                         else
                             printBasicError("The shiny legendary spawn message is broken, broadcast failed.");
@@ -128,7 +128,7 @@ public class SpawnListener
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(finalMessage, pokemon, hoverLegendarySpawns, true,
-                                    false, "legendary.spawn", "showLegendarySpawn");
+                                    false, "spawn.legendary", "showLegendarySpawn");
                         }
                         else
                             printBasicError("The legendary spawn message is broken, broadcast failed.");
@@ -160,7 +160,7 @@ public class SpawnListener
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(finalMessage, pokemon, hoverShinySpawns, true,
-                                    false, "shiny.spawn", "showShinySpawn");
+                                    false, "spawn.shiny", "showShinySpawn");
                         }
                         else
                             printBasicError("The shiny spawn message is broken, broadcast failed.");

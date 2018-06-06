@@ -55,7 +55,7 @@ public class WildDefeatListener
                     // Send off the message, the needed notifier permission and the flag to check.
                     iterateAndSendEventMessage(
                             finalMessage, pokemon, hoverBossDefeats, false,
-                            true, "boss.defeat", "showBossDefeat");
+                            true, "defeat.boss", "showBossDefeat");
                 }
                 else
                     printBasicError("The boss defeat message is broken, broadcast failed.");
@@ -90,7 +90,7 @@ public class WildDefeatListener
                     // Send off the message, the needed notifier permission and the flag to check.
                     // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
                     iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyLegendaryDefeats, false,
-                            true, "shinylegendary.defeat", "showShinyLegendaryDefeat");
+                            true, "defeat.shinylegendary", "showShinyLegendaryDefeat");
                 }
                 else
                     printBasicError("The shiny legendary defeat message is broken, broadcast failed.");
@@ -123,7 +123,7 @@ public class WildDefeatListener
 
                     // Send off the message, the needed notifier permission and the flag to check.
                     iterateAndSendEventMessage(finalMessage, pokemon, hoverLegendaryDefeats, false,
-                            true, "legendary.defeat", "showLegendaryDefeat");
+                            true, "defeat.legendary", "showLegendaryDefeat");
                 }
                 else
                     printBasicError("The legendary defeat message is broken, broadcast failed.");
@@ -157,7 +157,7 @@ public class WildDefeatListener
                     // Send off the message, the needed notifier permission and the flag to check.
                     iterateAndSendEventMessage(
                             finalMessage, pokemon, hoverShinyDefeats, false,
-                            true, "shiny.defeat", "showShinyDefeat");
+                            true, "defeat.shiny", "showShinyDefeat");
                 }
                 else
                     printBasicError("The shiny defeat message is broken, broadcast failed.");

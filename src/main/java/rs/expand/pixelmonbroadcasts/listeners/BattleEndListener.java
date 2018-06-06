@@ -133,7 +133,7 @@ public class BattleEndListener
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(finalMessage, null,
-                                    false, false, false, "pvp.draw", "showPVPDraw");
+                                    false, false, false, "draw.pvp", "showPVPDraw");
                         }
                         else
                             printBasicError("The PvP battle draw message is broken, broadcast failed.");
@@ -169,7 +169,7 @@ public class BattleEndListener
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(finalMessage, null,
-                                    false, false, false, "pvp.defeat", "showPVPDefeat");
+                                    false, false, false, "defeat.pvp", "showPVPDefeat");
                         }
                         else
                             printBasicError("The PvP battle end message is broken, broadcast failed.");
@@ -213,7 +213,7 @@ public class BattleEndListener
                                 // Send off the message, the needed notifier permission and the flag to check.
                                 iterateAndSendEventMessage(
                                         finalMessage, null, false, false,
-                                        false, "bosstrainer.forfeit", "showBossTrainerForfeit");
+                                        false, "forfeit.bosstrainer", "showBossTrainerForfeit");
                             }
                             else
                                 printBasicError("The boss trainer forfeiting message is broken, broadcast failed.");
@@ -246,7 +246,7 @@ public class BattleEndListener
                                 // Send off the message, the needed notifier permission and the flag to check.
                                 iterateAndSendEventMessage(
                                         finalMessage, null, false, false,
-                                        false, "trainer.forfeit", "showTrainerForfeit");
+                                        false, "forfeit.trainer", "showTrainerForfeit");
                             }
                             else
                                 printBasicError("The trainer forfeiting message is broken, broadcast failed.");
@@ -283,7 +283,7 @@ public class BattleEndListener
                                 // Send off the message, the needed notifier permission and the flag to check.
                                 iterateAndSendEventMessage(
                                         finalMessage, null, false, false,
-                                        false, "bosstrainer.blackout", "showBossTrainerBlackout");
+                                        false, "blackout.bosstrainer", "showBossTrainerBlackout");
                             }
                             else
                                 printBasicError("The boss trainer blackout message is broken, broadcast failed.");
@@ -316,7 +316,7 @@ public class BattleEndListener
                                 // Send off the message, the needed notifier permission and the flag to check.
                                 iterateAndSendEventMessage(
                                         finalMessage, null, false, false,
-                                        false, "trainer.blackout", "showTrainerBlackout");
+                                        false, "blackout.trainer", "showTrainerBlackout");
                             }
                             else
                                 printBasicError("The trainer blackout message is broken, broadcast failed.");
@@ -358,7 +358,7 @@ public class BattleEndListener
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(
                                     finalMessage, null, false, false,
-                                    false, "bosstrainer.defeat", "showBossTrainerDefeat");
+                                    false, "defeat.bosstrainer", "showBossTrainerDefeat");
                         }
                         else
                             printBasicError("The boss trainer defeat message is broken, broadcast failed.");
@@ -391,7 +391,7 @@ public class BattleEndListener
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(
                                     finalMessage, null, false, false,
-                                    false, "trainer.defeat", "showTrainerDefeat");
+                                    false, "defeat.trainer", "showTrainerDefeat");
                         }
                         else
                             printBasicError("The trainer defeat message is broken, broadcast failed.");
@@ -436,7 +436,7 @@ public class BattleEndListener
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(finalMessage, pokemon, hoverBossBlackouts, true,
-                                    false, "boss.blackout", "showBossBlackout");
+                                    false, "blackout.boss", "showBossBlackout");
                         }
                         else
                             printBasicError("The boss blackout message is broken, broadcast failed.");
@@ -470,7 +470,7 @@ public class BattleEndListener
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyLegendaryBlackouts, true,
-                                    false, "shinylegendary.blackout", "showShinyLegendaryBlackout");
+                                    false, "blackout.shinylegendary", "showShinyLegendaryBlackout");
                         }
                         else
                             printBasicError("The shiny legendary blackout message is broken, broadcast failed.");
@@ -503,7 +503,7 @@ public class BattleEndListener
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(finalMessage, pokemon, hoverLegendaryBlackouts, true,
-                                    false, "legendary.blackout", "showLegendaryBlackout");
+                                    false, "blackout.legendary", "showLegendaryBlackout");
                         }
                         else
                             printBasicError("The legendary blackout message is broken, broadcast failed.");
@@ -536,7 +536,7 @@ public class BattleEndListener
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyBlackouts, true,
-                                    false, "shiny.blackout", "showShinyBlackout");
+                                    false, "blackout.shiny", "showShinyBlackout");
                         }
                         else
                             printBasicError("The shiny blackout message is broken, broadcast failed.");
@@ -576,7 +576,7 @@ public class BattleEndListener
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(finalMessage, pokemon, hoverBossForfeits, true,
-                                    false, "boss.forfeit", "showBossForfeit");
+                                    false, "forfeit.boss", "showBossForfeit");
                         }
                         else
                             printBasicError("The boss forfeit message is broken, broadcast failed.");
@@ -610,7 +610,7 @@ public class BattleEndListener
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyLegendaryForfeits, true,
-                                    false, "shinylegendary.forfeit", "showShinyLegendaryForfeit");
+                                    false, "forfeit.shinylegendary", "showShinyLegendaryForfeit");
                         }
                         else
                             printBasicError("The shiny legendary forfeit message is broken, broadcast failed.");
@@ -643,7 +643,7 @@ public class BattleEndListener
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(finalMessage, pokemon, hoverLegendaryForfeits, true,
-                                    false, "legendary.forfeit", "showLegendaryForfeit");
+                                    false, "forfeit.legendary", "showLegendaryForfeit");
                         }
                         else
                             printBasicError("The legendary forfeit message is broken, broadcast failed.");
@@ -676,7 +676,7 @@ public class BattleEndListener
 
                             // Send off the message, the needed notifier permission and the flag to check.
                             iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyForfeits, true,
-                                    false, "shiny.forfeit", "showShinyForfeit");
+                                    false, "forfeit.shiny", "showShinyForfeit");
                         }
                         else
                             printBasicError("The shiny forfeit message is broken, broadcast failed.");

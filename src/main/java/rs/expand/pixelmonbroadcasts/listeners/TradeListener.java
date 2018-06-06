@@ -58,7 +58,7 @@ public class TradeListener
 
                 // Send off the message, the needed notifier permission and the flag to check.
                 iterateAndSendEventMessage(finalMessage, pokemon1Entity,
-                        false, false, false, "normal.trade", "showTrade");
+                        false, false, false, "trade.normal", "showTrade");
             }
             else
                 printBasicError("The trade message is broken, broadcast failed.");

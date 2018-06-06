@@ -82,7 +82,7 @@ public class Toggle implements CommandExecutor
                CHALLENGE TOGGLES
             \*                   */
             // Check perms. Add toggle status if perms look good.
-            if (showShinyChallenges && src.hasPermission("pixelmonbroadcasts.notify.shiny.challenge"))
+            if (showShinyChallenges && src.hasPermission("pixelmonbroadcasts.notify.challenge.shiny"))
             {
                 flags.add("showShinyChallenge");
 
@@ -92,7 +92,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.shiny.off") + statSeparator);
             }
-            if (showShinyLegendaryChallenges && src.hasPermission("pixelmonbroadcasts.notify.shinylegendary.challenge"))
+            if (showShinyLegendaryChallenges && src.hasPermission("pixelmonbroadcasts.notify.challenge.shinylegendary"))
             {
                 flags.add("showShinyLegendaryChallenge");
 
@@ -102,7 +102,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.shiny_legendary.off") + statSeparator);
             }
-            if (showLegendaryChallenges && src.hasPermission("pixelmonbroadcasts.notify.legendary.challenge"))
+            if (showLegendaryChallenges && src.hasPermission("pixelmonbroadcasts.notify.challenge.legendary"))
             {
                 flags.add("showLegendaryChallenge");
 
@@ -112,7 +112,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.legendary.off") + statSeparator);
             }
-            if (showBossChallenges && src.hasPermission("pixelmonbroadcasts.notify.boss.challenge"))
+            if (showBossChallenges && src.hasPermission("pixelmonbroadcasts.notify.challenge.boss"))
             {
                 flags.add("showBossChallenge");
 
@@ -122,7 +122,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.boss.off") + statSeparator);
             }
-            if (showTrainerChallenges && src.hasPermission("pixelmonbroadcasts.notify.trainer.challenge"))
+            if (showTrainerChallenges && src.hasPermission("pixelmonbroadcasts.notify.challenge.trainer"))
             {
                 flags.add("showTrainerChallenge");
 
@@ -132,7 +132,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.trainer.off") + statSeparator);
             }
-            if (showBossTrainerChallenges && src.hasPermission("pixelmonbroadcasts.notify.bosstrainer.challenge"))
+            if (showBossTrainerChallenges && src.hasPermission("pixelmonbroadcasts.notify.challenge.bosstrainer"))
             {
                 flags.add("showBossTrainerChallenge");
 
@@ -161,7 +161,7 @@ public class Toggle implements CommandExecutor
                BLACKOUT TOGGLES
             \*                  */
             // Check perms. Add toggle status if perms look good.
-            if (showShinyBlackouts && src.hasPermission("pixelmonbroadcasts.notify.shiny.blackout"))
+            if (showShinyBlackouts && src.hasPermission("pixelmonbroadcasts.notify.blackout.shiny"))
             {
                 flags.add("showShinyBlackout");
 
@@ -171,7 +171,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.shiny.off") + statSeparator);
             }
-            if (showShinyLegendaryBlackouts && src.hasPermission("pixelmonbroadcasts.notify.shinylegendary.blackout"))
+            if (showShinyLegendaryBlackouts && src.hasPermission("pixelmonbroadcasts.notify.blackout.shinylegendary"))
             {
                 flags.add("showShinyLegendaryBlackout");
 
@@ -181,7 +181,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.shiny_legendary.off") + statSeparator);
             }
-            if (showLegendaryBlackouts && src.hasPermission("pixelmonbroadcasts.notify.legendary.blackout"))
+            if (showLegendaryBlackouts && src.hasPermission("pixelmonbroadcasts.notify.blackout.legendary"))
             {
                 flags.add("showLegendaryBlackout");
 
@@ -191,7 +191,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.legendary.off") + statSeparator);
             }
-            if (showBossBlackouts && src.hasPermission("pixelmonbroadcasts.notify.boss.blackout"))
+            if (showBossBlackouts && src.hasPermission("pixelmonbroadcasts.notify.blackout.boss"))
             {
                 flags.add("showBossBlackout");
 
@@ -201,7 +201,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.boss.off") + statSeparator);
             }
-            if (showTrainerBlackouts && src.hasPermission("pixelmonbroadcasts.notify.trainer.blackout"))
+            if (showTrainerBlackouts && src.hasPermission("pixelmonbroadcasts.notify.blackout.trainer"))
             {
                 flags.add("showTrainerBlackout");
 
@@ -211,7 +211,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.trainer.off") + statSeparator);
             }
-            if (showBossTrainerBlackouts && src.hasPermission("pixelmonbroadcasts.notify.bosstrainer.blackout"))
+            if (showBossTrainerBlackouts && src.hasPermission("pixelmonbroadcasts.notify.blackout.bosstrainer"))
             {
                 flags.add("showBossTrainerBlackout");
 
@@ -240,7 +240,7 @@ public class Toggle implements CommandExecutor
                FORFEIT TOGGLES
             \*                 */
             // Check perms. Add toggle status if perms look good.
-            if (showShinyForfeits && src.hasPermission("pixelmonbroadcasts.notify.shiny.forfeit"))
+            if (showShinyForfeits && src.hasPermission("pixelmonbroadcasts.notify.forfeit.shiny"))
             {
                 flags.add("showShinyForfeit");
 
@@ -250,7 +250,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.shiny.off") + statSeparator);
             }
-            if (showShinyLegendaryForfeits && src.hasPermission("pixelmonbroadcasts.notify.shinylegendary.forfeit"))
+            if (showShinyLegendaryForfeits && src.hasPermission("pixelmonbroadcasts.notify.forfeit.shinylegendary"))
             {
                 flags.add("showShinyLegendaryForfeit");
 
@@ -260,7 +260,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.shiny_legendary.off") + statSeparator);
             }
-            if (showLegendaryForfeits && src.hasPermission("pixelmonbroadcasts.notify.legendary.forfeit"))
+            if (showLegendaryForfeits && src.hasPermission("pixelmonbroadcasts.notify.forfeit.legendary"))
             {
                 flags.add("showLegendaryForfeit");
 
@@ -270,7 +270,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.legendary.off") + statSeparator);
             }
-            if (showBossForfeits && src.hasPermission("pixelmonbroadcasts.notify.boss.forfeit"))
+            if (showBossForfeits && src.hasPermission("pixelmonbroadcasts.notify.forfeit.boss"))
             {
                 flags.add("showBossForfeit");
 
@@ -280,7 +280,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.boss.off") + statSeparator);
             }
-            if (showTrainerForfeits && src.hasPermission("pixelmonbroadcasts.notify.trainer.forfeit"))
+            if (showTrainerForfeits && src.hasPermission("pixelmonbroadcasts.notify.forfeit.trainer"))
             {
                 flags.add("showTrainerForfeit");
 
@@ -290,7 +290,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.trainer.off") + statSeparator);
             }
-            if (showBossTrainerForfeits && src.hasPermission("pixelmonbroadcasts.notify.bosstrainer.forfeit"))
+            if (showBossTrainerForfeits && src.hasPermission("pixelmonbroadcasts.notify.forfeit.bosstrainer"))
             {
                 flags.add("showBossTrainerForfeit");
 
@@ -319,7 +319,7 @@ public class Toggle implements CommandExecutor
                DEFEAT TOGGLES
             \*                */
             // Check perms. Add toggle status if perms look good.
-            if (showShinyDefeats && src.hasPermission("pixelmonbroadcasts.notify.shiny.defeat"))
+            if (showShinyDefeats && src.hasPermission("pixelmonbroadcasts.notify.defeat.shiny"))
             {
                 flags.add("showShinyDefeat");
 
@@ -329,7 +329,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.shiny.off") + statSeparator);
             }
-            if (showShinyLegendaryDefeats && src.hasPermission("pixelmonbroadcasts.notify.shinylegendary.defeat"))
+            if (showShinyLegendaryDefeats && src.hasPermission("pixelmonbroadcasts.notify.defeat.shinylegendary"))
             {
                 flags.add("showShinyLegendaryDefeat");
 
@@ -339,7 +339,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.shiny_legendary.off") + statSeparator);
             }
-            if (showLegendaryDefeats && src.hasPermission("pixelmonbroadcasts.notify.legendary.defeat"))
+            if (showLegendaryDefeats && src.hasPermission("pixelmonbroadcasts.notify.defeat.legendary"))
             {
                 flags.add("showLegendaryDefeat");
 
@@ -349,7 +349,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.legendary.off") + statSeparator);
             }
-            if (showBossDefeats && src.hasPermission("pixelmonbroadcasts.notify.boss.defeat"))
+            if (showBossDefeats && src.hasPermission("pixelmonbroadcasts.notify.defeat.boss"))
             {
                 flags.add("showBossDefeat");
 
@@ -359,7 +359,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.boss.off") + statSeparator);
             }
-            if (showTrainerDefeats && src.hasPermission("pixelmonbroadcasts.notify.trainer.defeat"))
+            if (showTrainerDefeats && src.hasPermission("pixelmonbroadcasts.notify.defeat.trainer"))
             {
                 flags.add("showTrainerDefeat");
 
@@ -369,7 +369,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.trainer.off") + statSeparator);
             }
-            if (showBossTrainerDefeats && src.hasPermission("pixelmonbroadcasts.notify.bosstrainer.defeat"))
+            if (showBossTrainerDefeats && src.hasPermission("pixelmonbroadcasts.notify.defeat.bosstrainer"))
             {
                 flags.add("showBossTrainerDefeat");
 
@@ -398,7 +398,7 @@ public class Toggle implements CommandExecutor
                SPAWN TOGGLES
             \*               */
             // Check perms. Add toggle status if perms look good.
-            if (showShinySpawns && src.hasPermission("pixelmonbroadcasts.notify.shiny.spawn"))
+            if (showShinySpawns && src.hasPermission("pixelmonbroadcasts.notify.spawn.shiny"))
             {
                 flags.add("showShinySpawn");
 
@@ -408,7 +408,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.shiny.off") + statSeparator);
             }
-            if (showShinyLegendarySpawns && src.hasPermission("pixelmonbroadcasts.notify.shinylegendary.spawn"))
+            if (showShinyLegendarySpawns && src.hasPermission("pixelmonbroadcasts.notify.spawn.shinylegendary"))
             {
                 flags.add("showShinyLegendarySpawn");
 
@@ -418,7 +418,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.shiny_legendary.off") + statSeparator);
             }
-            if (showLegendarySpawns && src.hasPermission("pixelmonbroadcasts.notify.legendary.spawn"))
+            if (showLegendarySpawns && src.hasPermission("pixelmonbroadcasts.notify.spawn.legendary"))
             {
                 flags.add("showLegendarySpawn");
 
@@ -428,7 +428,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.legendary.off") + statSeparator);
             }
-            if (showBossSpawns && src.hasPermission("pixelmonbroadcasts.notify.boss.spawn"))
+            if (showBossSpawns && src.hasPermission("pixelmonbroadcasts.notify.spawn.boss"))
             {
                 flags.add("showBossSpawn");
 
@@ -457,7 +457,7 @@ public class Toggle implements CommandExecutor
                CATCH TOGGLES
             \*               */
             // Check perms. Add toggle status if perms look good.
-            if (showShinyCatches && src.hasPermission("pixelmonbroadcasts.notify.shiny.catch"))
+            if (showShinyCatches && src.hasPermission("pixelmonbroadcasts.notify.catch.shiny"))
             {
                 flags.add("showShinyCatch");
 
@@ -467,7 +467,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.shiny.off") + statSeparator);
             }
-            if (showShinyLegendaryCatches && src.hasPermission("pixelmonbroadcasts.notify.shinylegendary.catch"))
+            if (showShinyLegendaryCatches && src.hasPermission("pixelmonbroadcasts.notify.catch.shinylegendary"))
             {
                 flags.add("showShinyLegendaryCatch");
 
@@ -477,7 +477,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.shiny_legendary.off") + statSeparator);
             }
-            if (showLegendaryCatches && src.hasPermission("pixelmonbroadcasts.notify.legendary.catch"))
+            if (showLegendaryCatches && src.hasPermission("pixelmonbroadcasts.notify.catch.legendary"))
             {
                 flags.add("showLegendaryCatch");
 
@@ -506,7 +506,7 @@ public class Toggle implements CommandExecutor
                PVP TOGGLES
             \*             */
             // Check perms. Add toggle status if perms look good.
-            if (showPVPStarts && src.hasPermission("pixelmonbroadcasts.notify.pvp.start"))
+            if (showPVPStarts && src.hasPermission("pixelmonbroadcasts.notify.start.pvp"))
             {
                 flags.add("showPVPStart");
 
@@ -516,7 +516,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.pvp_start.off") + statSeparator);
             }
-            if (showPVPDraws && src.hasPermission("pixelmonbroadcasts.notify.pvp.draw"))
+            if (showPVPDraws && src.hasPermission("pixelmonbroadcasts.notify.draw.pvp"))
             {
                 flags.add("showPVPDraw");
 
@@ -526,7 +526,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.pvp_draw.off") + statSeparator);
             }
-            if (showPVPDefeats && src.hasPermission("pixelmonbroadcasts.notify.pvp.defeat"))
+            if (showPVPDefeats && src.hasPermission("pixelmonbroadcasts.notify.defeat.pvp"))
             {
                 flags.add("showPVPDefeat");
 
@@ -555,7 +555,7 @@ public class Toggle implements CommandExecutor
                MISCELLANEOUS TOGGLES
             \*                       */
             // Check perms. Add toggle status if perms look good.
-            if (showHatches && src.hasPermission("pixelmonbroadcasts.notify.normal.hatch"))
+            if (showHatches && src.hasPermission("pixelmonbroadcasts.notify.hatch.normal"))
             {
                 flags.add("showHatch");
 
@@ -565,7 +565,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.hatch.off") + statSeparator);
             }
-            if (showShinyHatches && src.hasPermission("pixelmonbroadcasts.notify.shiny.hatch"))
+            if (showShinyHatches && src.hasPermission("pixelmonbroadcasts.notify.hatch.shiny"))
             {
                 flags.add("showShinyHatch");
 
@@ -575,7 +575,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.text.shiny_hatch.off") + statSeparator);
             }
-            if (showTrades && src.hasPermission("pixelmonbroadcasts.notify.normal.trade"))
+            if (showTrades && src.hasPermission("pixelmonbroadcasts.notify.trade.normal"))
             {
                 flags.add("showTrade");
 
