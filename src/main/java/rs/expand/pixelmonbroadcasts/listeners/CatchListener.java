@@ -42,7 +42,7 @@ public class CatchListener
             if (showShinyLegendaryCatches)
             {
                 // Parse placeholders and print!
-                if (shinyLegendaryCatchMessage != null)
+                if (isBroadcastPresent("broadcast.catch.shiny_legendary"))
                 {
                     // Set up our message. This is the same for all eligible players, so call it once and store it.
                     final String finalMessage = replacePlaceholders(
@@ -76,7 +76,7 @@ public class CatchListener
             if (showLegendaryCatches)
             {
                 // Parse placeholders and print!
-                if (legendaryCatchMessage != null)
+                if (isBroadcastPresent("broadcast.catch.legendary"))
                 {
                     // Set up our message. This is the same for all eligible players, so call it once and store it.
                     final String finalMessage = replacePlaceholders(
@@ -109,7 +109,7 @@ public class CatchListener
             if (showShinyCatches)
             {
                 // Parse placeholders and print!
-                if (shinyCatchMessage != null)
+                if (isBroadcastPresent("broadcast.catch.shiny"))
                 {
                     // Set up our message. This is the same for all eligible players, so call it once and store it.
                     final String finalMessage = replacePlaceholders(

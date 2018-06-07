@@ -44,7 +44,7 @@ public class HatchListener
             if (showShinyHatches)
             {
                 // Parse placeholders and print!
-                if (shinyHatchMessage != null)
+                if (isBroadcastPresent("broadcast.hatch.shiny"))
                 {
                     // Set up our message. This is the same for all eligible players, so call it once and store it.
                     // We use the normal hatch permission for shiny hatches, as per the config's explanation.
@@ -78,7 +78,7 @@ public class HatchListener
             if (showHatches)
             {
                 // Parse placeholders and print!
-                if (hatchMessage != null)
+                if (isBroadcastPresent("broadcast.hatch.normal"))
                 {
                     // Set up our message. This is the same for all eligible players, so call it once and store it.
                     final String finalMessage = replacePlaceholders(

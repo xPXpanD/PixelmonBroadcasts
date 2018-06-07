@@ -2,7 +2,7 @@
 package rs.expand.pixelmonbroadcasts.commands;
 
 // Remote imports.
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -69,7 +69,7 @@ public class Toggle implements CommandExecutor
             }
 
             // Get a player entity.
-            EntityPlayerMP player = (EntityPlayerMP) src;
+            EntityPlayer player = (EntityPlayer) src;
 
             // These are linked, and used to show available toggles. If one has two entries, the other gets two, too!
             final List<String> messages = new ArrayList<>();
@@ -658,7 +658,7 @@ public class Toggle implements CommandExecutor
     private void toggleFlag(CommandSource src, String flag)
     {
         // Get a player entity.
-        EntityPlayerMP player = (EntityPlayerMP) src;
+        EntityPlayer player = (EntityPlayer) src;
 
         // If the NBT "folder" we use does not exist, create it.
         if (player.getEntityData().getCompoundTag("pbToggles").hasNoTags())

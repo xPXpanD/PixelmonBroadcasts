@@ -46,7 +46,7 @@ public class WildDefeatListener
             if (showBossDefeats)
             {
                 // Parse placeholders and print!
-                if (bossDefeatMessage != null)
+                if (isBroadcastPresent("broadcast.defeat.boss"))
                 {
                     // Set up our message. This is the same for all eligible players, so call it once and store it.
                     final String finalMessage = replacePlaceholders(
@@ -81,7 +81,7 @@ public class WildDefeatListener
             if (showShinyLegendaryDefeats)
             {
                 // Parse placeholders and print!
-                if (shinyLegendaryDefeatMessage != null)
+                if (isBroadcastPresent("broadcast.defeat.shiny_legendary"))
                 {
                     // Set up our message. This is the same for all eligible players, so call it once and store it.
                     final String finalMessage = replacePlaceholders(
@@ -115,7 +115,7 @@ public class WildDefeatListener
             if (showLegendaryDefeats)
             {
                 // Parse placeholders and print!
-                if (legendaryDefeatMessage != null)
+                if (isBroadcastPresent("broadcast.defeat.legendary"))
                 {
                     // Set up our message. This is the same for all eligible players, so call it once and store it.
                     final String finalMessage = replacePlaceholders(
@@ -148,7 +148,7 @@ public class WildDefeatListener
             if (showShinyDefeats)
             {
                 // Parse placeholders and print!
-                if (shinyDefeatMessage != null)
+                if (isBroadcastPresent("broadcast.defeat.shiny"))
                 {
                     // Set up our message. This is the same for all eligible players, so call it once and store it.
                     final String finalMessage = replacePlaceholders(

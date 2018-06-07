@@ -40,6 +40,7 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 // TODO: Ideas for new events: HA, successful breed, evolution.
 // TODO: See if some of the BattleEnd stuff can be moved to separate more specific events.
 // TODO: Consider what to do with forfeit/blackout IV showing. Currently disabled.
+// TODO: Add a blackout option for normal Pokémon.
 
 @Plugin
 (

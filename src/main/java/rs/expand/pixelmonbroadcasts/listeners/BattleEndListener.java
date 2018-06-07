@@ -19,6 +19,7 @@ import java.util.*;
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndSendEventMessage;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlaceholders;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.isBroadcastPresent;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicError;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicMessage;
 
@@ -122,7 +123,7 @@ public class BattleEndListener
                     if (showPVPDraws)
                     {
                         // Parse placeholders and print!
-                        if (pvpDrawMessage != null)
+                        if (isBroadcastPresent("broadcast.draw.pvp"))
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
                             String finalMessage;
@@ -158,7 +159,7 @@ public class BattleEndListener
                     if (showPVPDefeats)
                     {
                         // Parse placeholders and print!
-                        if (pvpDefeatMessage != null)
+                        if (isBroadcastPresent("broadcast.defeat.pvp"))
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
                             String finalMessage;
@@ -204,7 +205,7 @@ public class BattleEndListener
                         if (showBossTrainerForfeits)
                         {
                             // Parse placeholders and print!
-                            if (bossTrainerForfeitMessage != null)
+                            if (isBroadcastPresent("broadcast.forfeit.boss_trainer"))
                             {
                                 // Set up our message. This is the same for all eligible players, so call it once and store it.
                                 final String finalMessage = replacePlaceholders(bossTrainerForfeitMessage,
@@ -237,7 +238,7 @@ public class BattleEndListener
                         if (showTrainerForfeits)
                         {
                             // Parse placeholders and print!
-                            if (trainerForfeitMessage != null)
+                            if (isBroadcastPresent("broadcast.forfeit.trainer"))
                             {
                                 // Set up our message. This is the same for all eligible players, so call it once and store it.
                                 final String finalMessage = replacePlaceholders(trainerForfeitMessage,
@@ -274,7 +275,7 @@ public class BattleEndListener
                         if (showBossTrainerBlackouts)
                         {
                             // Parse placeholders and print!
-                            if (bossTrainerBlackoutMessage != null)
+                            if (isBroadcastPresent("broadcast.blackout.boss_trainer"))
                             {
                                 // Set up our message. This is the same for all eligible players, so call it once and store it.
                                 final String finalMessage = replacePlaceholders(bossTrainerBlackoutMessage,
@@ -307,7 +308,7 @@ public class BattleEndListener
                         if (showTrainerBlackouts)
                         {
                             // Parse placeholders and print!
-                            if (trainerBlackoutMessage != null)
+                            if (isBroadcastPresent("broadcast.blackout.trainer"))
                             {
                                 // Set up our message. This is the same for all eligible players, so call it once and store it.
                                 final String finalMessage = replacePlaceholders(trainerBlackoutMessage,
@@ -349,7 +350,7 @@ public class BattleEndListener
                     if (showBossTrainerDefeats)
                     {
                         // Parse placeholders and print!
-                        if (bossTrainerDefeatMessage != null)
+                        if (isBroadcastPresent("broadcast.defeat.boss_trainer"))
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
                             final String finalMessage = replacePlaceholders(bossTrainerDefeatMessage,
@@ -382,7 +383,7 @@ public class BattleEndListener
                     if (showTrainerDefeats)
                     {
                         // Parse placeholders and print!
-                        if (trainerDefeatMessage != null)
+                        if (isBroadcastPresent("broadcast.defeat.trainer"))
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
                             final String finalMessage = replacePlaceholders(trainerDefeatMessage,
@@ -428,7 +429,7 @@ public class BattleEndListener
                     if (showBossBlackouts)
                     {
                         // Parse placeholders and print!
-                        if (bossBlackoutMessage != null)
+                        if (isBroadcastPresent("broadcast.blackout.boss"))
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
                             final String finalMessage = replacePlaceholders(bossBlackoutMessage,
@@ -461,7 +462,7 @@ public class BattleEndListener
                     if (showShinyLegendaryBlackouts)
                     {
                         // Parse placeholders and print!
-                        if (shinyLegendaryBlackoutMessage != null)
+                        if (isBroadcastPresent("broadcast.blackout.shiny_legendary"))
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
                             // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
@@ -495,7 +496,7 @@ public class BattleEndListener
                     if (showLegendaryBlackouts)
                     {
                         // Parse placeholders and print!
-                        if (legendaryBlackoutMessage != null)
+                        if (isBroadcastPresent("broadcast.blackout.legendary"))
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
                             final String finalMessage = replacePlaceholders(legendaryBlackoutMessage,
@@ -528,7 +529,7 @@ public class BattleEndListener
                     if (showShinyBlackouts)
                     {
                         // Parse placeholders and print!
-                        if (shinyBlackoutMessage != null)
+                        if (isBroadcastPresent("broadcast.blackout.shiny"))
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
                             final String finalMessage = replacePlaceholders(shinyBlackoutMessage,
@@ -568,7 +569,7 @@ public class BattleEndListener
                     if (showBossForfeits)
                     {
                         // Parse placeholders and print!
-                        if (bossForfeitMessage != null)
+                        if (isBroadcastPresent("broadcast.forfeit.boss"))
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
                             final String finalMessage = replacePlaceholders(bossForfeitMessage,
@@ -601,7 +602,7 @@ public class BattleEndListener
                     if (showShinyLegendaryForfeits)
                     {
                         // Parse placeholders and print!
-                        if (shinyLegendaryForfeitMessage != null)
+                        if (isBroadcastPresent("broadcast.forfeit.shiny_legendary"))
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
                             // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
@@ -635,7 +636,7 @@ public class BattleEndListener
                     if (showLegendaryForfeits)
                     {
                         // Parse placeholders and print!
-                        if (legendaryForfeitMessage != null)
+                        if (isBroadcastPresent("broadcast.forfeit.legendary"))
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
                             final String finalMessage = replacePlaceholders(legendaryForfeitMessage,
@@ -668,7 +669,7 @@ public class BattleEndListener
                     if (showShinyForfeits)
                     {
                         // Parse placeholders and print!
-                        if (shinyForfeitMessage != null)
+                        if (isBroadcastPresent("broadcast.forfeit.shiny"))
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
                             final String finalMessage = replacePlaceholders(shinyForfeitMessage,

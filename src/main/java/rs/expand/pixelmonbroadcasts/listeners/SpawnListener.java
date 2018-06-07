@@ -33,6 +33,7 @@ public class SpawnListener
             // I put bosses under this check, as well. Who knows what servers cook up for player parties?
             if (!pokemon.hasOwner())
             {
+                final String broadcast;
                 final String pokemonName = pokemon.getLocalizedName();
                 final World world = pokemon.getEntityWorld();
                 final BlockPos location = event.action.spawnLocation.location.pos;
@@ -54,19 +55,15 @@ public class SpawnListener
 
                     if (showBossSpawns)
                     {
-                        // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
-                        if (bossSpawnMessage != null)
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            final String finalMessage = replacePlaceholders(
-                                    bossSpawnMessage, null, false, false, pokemon, location);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.spawn.boss");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, pokemon, hoverBossSpawns, true,
-                                    false, "spawn.boss", "showBossSpawn");
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, pokemon, null, location, hoverBossSpawns,
+                                    true, false, "spawn.boss", "showBossSpawn");
                         }
-                        else
-                            printBasicError("The boss spawn message is broken, broadcast failed.");
                     }
                 }
                 else if (EnumPokemon.legendaries.contains(pokemonName) && pokemon.getIsShiny())
@@ -86,20 +83,15 @@ public class SpawnListener
 
                     if (showShinyLegendarySpawns)
                     {
-                        // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
-                        if (shinyLegendarySpawnMessage != null)
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
-                            final String finalMessage = replacePlaceholders(
-                                    shinyLegendarySpawnMessage, null, false, false, pokemon, location);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.spawn.shiny_legendary");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyLegendarySpawns, true,
-                                    false, "spawn.shinylegendary", "showShinyLegendarySpawn");
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, pokemon, null, location, hoverShinyLegendarySpawns,
+                                    true, false, "spawn.shinylegendary", "showShinyLegendarySpawn");
                         }
-                        else
-                            printBasicError("The shiny legendary spawn message is broken, broadcast failed.");
                     }
                 }
                 else if (EnumPokemon.legendaries.contains(pokemonName))
@@ -119,19 +111,15 @@ public class SpawnListener
 
                     if (showLegendarySpawns)
                     {
-                        // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
-                        if (legendarySpawnMessage != null)
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            final String finalMessage = replacePlaceholders(
-                                    legendarySpawnMessage, null, false, false, pokemon, location);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.spawn.legendary");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, pokemon, hoverLegendarySpawns, true,
-                                    false, "spawn.legendary", "showLegendarySpawn");
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, pokemon, null, location, hoverLegendarySpawns,
+                                    true, false, "spawn.legendary", "showLegendarySpawn");
                         }
-                        else
-                            printBasicError("The legendary spawn message is broken, broadcast failed.");
                     }
                 }
                 else if (pokemon.getIsShiny())
@@ -151,19 +139,15 @@ public class SpawnListener
 
                     if (showShinySpawns)
                     {
-                        // Parse placeholders and print! Pass a null object for the player, so our receiving method knows to ignore.
-                        if (shinySpawnMessage != null)
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            final String finalMessage = replacePlaceholders(
-                                    shinySpawnMessage, null, false, false, pokemon, location);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.spawn.shiny");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, pokemon, hoverShinySpawns, true,
-                                    false, "spawn.shiny", "showShinySpawn");
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, pokemon, null, location, hoverShinySpawns,
+                                    true, false, "spawn.shiny", "showShinySpawn");
                         }
-                        else
-                            printBasicError("The shiny spawn message is broken, broadcast failed.");
                     }
                 }
             }

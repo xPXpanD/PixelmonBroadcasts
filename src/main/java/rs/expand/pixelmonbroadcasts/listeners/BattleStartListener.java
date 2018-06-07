@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndSendEventMessage;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlaceholders;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.isBroadcastPresent;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicError;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicMessage;
 
@@ -55,7 +56,7 @@ public class BattleStartListener
                 if (showPVPStarts)
                 {
                     // Parse placeholders and print!
-                    if (pvpStartMessage != null)
+                    if (isBroadcastPresent("broadcast.start.pvp"))
                     {
                         // Create short variables for convenience.
                         final BlockPos winPos = ((PlayerParticipant) participant1).player.getPosition();
@@ -119,7 +120,7 @@ public class BattleStartListener
                     if (showBossTrainerChallenges)
                     {
                         // Parse placeholders and print!
-                        if (bossTrainerChallengeMessage != null)
+                        if (isBroadcastPresent("broadcast.challenge.boss_trainer"))
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
                             final String finalMessage = replacePlaceholders(bossTrainerChallengeMessage,
@@ -152,7 +153,7 @@ public class BattleStartListener
                     if (showTrainerChallenges)
                     {
                         // Parse placeholders and print!
-                        if (trainerChallengeMessage != null)
+                        if (isBroadcastPresent("broadcast.challenge.trainer"))
                         {
                             // Set up our message. This is the same for all eligible players, so call it once and store it.
                             final String finalMessage = replacePlaceholders(trainerChallengeMessage,
@@ -218,7 +219,7 @@ public class BattleStartListener
                         if (showBossChallenges)
                         {
                             // Parse placeholders and print!
-                            if (bossChallengeMessage != null)
+                            if (isBroadcastPresent("broadcast.challenge.boss"))
                             {
                                 // Set up our message. This is the same for all eligible players, so call it once and store it.
                                 final String finalMessage = replacePlaceholders(bossChallengeMessage,
@@ -251,7 +252,7 @@ public class BattleStartListener
                         if (showShinyLegendaryChallenges)
                         {
                             // Parse placeholders and print!
-                            if (shinyLegendaryChallengeMessage != null)
+                            if (isBroadcastPresent("broadcast.challenge.shiny_legendary"))
                             {
                                 // Set up our message. This is the same for all eligible players, so call it once and store it.
                                 // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
@@ -285,7 +286,7 @@ public class BattleStartListener
                         if (showLegendaryChallenges)
                         {
                             // Parse placeholders and print!
-                            if (legendaryChallengeMessage != null)
+                            if (isBroadcastPresent("broadcast.challenge.legendary"))
                             {
                                 // Set up our message. This is the same for all eligible players, so call it once and store it.
                                 final String finalMessage = replacePlaceholders(legendaryChallengeMessage,
@@ -318,7 +319,7 @@ public class BattleStartListener
                         if (showShinyChallenges)
                         {
                             // Parse placeholders and print!
-                            if (shinyChallengeMessage != null)
+                            if (isBroadcastPresent("broadcast.challenge.shiny"))
                             {
                                 // Set up our message. This is the same for all eligible players, so call it once and store it.
                                 final String finalMessage = replacePlaceholders(shinyChallengeMessage,

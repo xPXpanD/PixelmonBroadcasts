@@ -1,7 +1,7 @@
 package rs.expand.pixelmonbroadcasts.utilities;
 
 // Remote imports.
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.EntityPlayer;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.source.ConsoleSource;
@@ -60,7 +60,7 @@ public class PrintingMethods
     }
 
     // Check if the given player has the given flag (or flags) set, and if so, return a clean status that we can use.
-    public static boolean checkToggleStatus(final EntityPlayerMP recipient, final String... flags)
+    public static boolean checkToggleStatus(final EntityPlayer recipient, final String... flags)
     {
         // Did we get provided just one flag? This will generally be the most common situation.
         if (flags.length == 1)
@@ -109,43 +109,31 @@ public class PrintingMethods
         }
     }
 
-    // Checks whether a broadcast's message is present. Prints an error if the actual config could not be read.
-    public static boolean checkBroadcastStatus(String key)
-    {
-        if (broadcastConfig != null)
-            return broadcastConfig.getNode(key).getString() != null;
-        else
-        {
-            printBasicError("The broadcasts config could not be read! Broadcasts will not work!");
-            return false;
-        }
-    }
-
     // Gets a key from broadcasts.conf, formats it (ampersands to section characters), and then returns it.
     // Also swaps any provided placeholders with String representations of the Objects given, if present.
-    public static String sendBroadcast(String key, final Object... params)
+    public static String getBroadcast(String key)
     {
         if (broadcastConfig != null)
         {
             // Get the broadcast from the broadcast config, if it's there.
-            String broadcast = broadcastConfig.getNode(key).getString();
+            final String broadcast = broadcastConfig.getNode(key).getString();
 
             // Did we get a broadcast?
             if (broadcast != null)
-            {
-                // If any parameters are available, find all placeholders in the broadcast and replace them.
-                for (int i = 0; i < params.length; i++)
-                    broadcast = broadcast.replace("{" + i+1 + "}", params[i].toString());
-
                 return TextSerializers.FORMATTING_CODE.deserialize(broadcast).toString();
-            }
             // We did not get a broadcast, return the provided key and make sure it's unformatted.
             else
-                return "§r" + key;
+            {
+                printBasicError("The following broadcast could not be found: §4" + key);
+                return null;
+            }
         }
         // We could not read the config, return the provided key and make sure it's unformatted.
         else
-            return "§r" + key;
+        {
+            printBasicError("The broadcasts file could not be read! Broadcasts will not work!");
+            return null;
+        }
     }
 
     // Gets a key from messages.conf, formats it (ampersands to section characters), and then returns it.
