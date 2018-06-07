@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Remote imports.
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.statLineStart;
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.statSeparator;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
 public class PlaceholderMethods
@@ -70,7 +68,7 @@ public class PlaceholderMethods
             // Grab a growth string.
             final EnumGrowth growth = pokemon.getGrowth();
             final String sizeString = statLineStart +
-                    getTensedTranslation(presentTense, "hovers.messages.sizes." + growth.name().toLowerCase());
+                    getTensedTranslation(presentTense, "hover.size." + growth.name().toLowerCase());
 
             // Get an IV composite StringBuilder.
             final StringBuilder ivsLine = new StringBuilder();
@@ -82,50 +80,49 @@ public class PlaceholderMethods
                 {
                     case 0:
                     {
-                        statString = getTranslation("hovers.text.stats.hp");
+                        statString = getTranslation("hover.status.hp");
                         statValue = HPIV;
                         break;
                     }
                     case 1:
                     {
-                        statString = getTranslation("hovers.text.stats.attack");
+                        statString = getTranslation("hover.status.attack");
                         statValue = attackIV;
                         break;
                     }
                     case 2:
                     {
-                        statString = getTranslation("hovers.text.stats.defense");
+                        statString = getTranslation("hover.status.defense");
                         statValue = defenseIV;
                         break;
                     }
                     case 3:
                     {
-                        statString = getTranslation("hovers.text.stats.special_attack");
+                        statString = getTranslation("hover.status.special_attack");
                         statValue = spAttIV;
                         break;
                     }
                     case 4:
                     {
-                        statString = getTranslation("hovers.text.stats.special_defense");
+                        statString = getTranslation("hover.status.special_defense");
                         statValue = spDefIV;
                         break;
                     }
                     case 5:
                     {
-                        statString = getTranslation("hovers.text.stats.speed");
+                        statString = getTranslation("hover.status.speed");
                         statValue = speedIV;
                         break;
                     }
                 }
 
-
                 if (statValue < 31)
-                    ivsLine.append(getTranslation("hovers.text.stats.below_max", statValue, statString));
+                    ivsLine.append(getTranslation("hover.status.below_max", statValue, statString));
                 else
-                    ivsLine.append(getTranslation("hovers.text.stats.maxed_out", statValue, statString));
+                    ivsLine.append(getTranslation("hover.status.maxed_out", statValue, statString));
 
                 if (i < 5)
-                    ivsLine.append(statSeparator);
+                    ivsLine.append(getTranslation("hover.status.separator"));
             }
 
             // Grab a gender string.
@@ -135,24 +132,24 @@ public class PlaceholderMethods
                 case Male:
                 {
                     genderString = statLineStart +
-                            getTensedTranslation(presentTense, "hovers.messages.genders.male");
+                            getTensedTranslation(presentTense, "hover.gender.male");
                     break;
                 }
                 case Female:
                 {
                     genderString = statLineStart +
-                            getTensedTranslation(presentTense, "hovers.messages.genders.female");
+                            getTensedTranslation(presentTense, "hover.gender.female");
                     break;
                 }
                 default:
                     genderString = statLineStart +
-                            getTensedTranslation(presentTense, "hovers.messages.genders.none");
+                            getTensedTranslation(presentTense, "hover.gender.none");
                     break;
             }
 
             // Get a nature and see which stats we get from it.
             final EnumNature nature = pokemon.getNature();
-            final String natureString = getTranslation("hovers.text.natures." + nature.name().toLowerCase());
+            final String natureString = getTranslation("hover.nature." + nature.name().toLowerCase());
             final String boostedStat = getTranslatedNatureStat(EnumNature.getNatureFromIndex(nature.index).increasedStat);
             final String cutStat = getTranslatedNatureStat(EnumNature.getNatureFromIndex(nature.index).decreasedStat);
 
@@ -163,12 +160,12 @@ public class PlaceholderMethods
             if (nature.increasedStat.equals(StatsType.None))
             {
                 natureCompositeString = statLineStart + getTensedTranslation(
-                        presentTense, "hovers.messages.natures.balanced", natureString, boostedStat, cutStat);
+                        presentTense, "hover.nature.balanced", natureString, boostedStat, cutStat);
             }
             else
             {
                 natureCompositeString = statLineStart + getTensedTranslation(
-                        presentTense, "hovers.messages.natures.special", natureString, boostedStat, cutStat);
+                        presentTense, "hover.nature.special", natureString, boostedStat, cutStat);
             }
 
             // Populate a List. Every entry will be its own line. May be a bit hacky, but it's easy to work with.
@@ -177,13 +174,13 @@ public class PlaceholderMethods
             // FIXME: Only shown on defeat/hatch. Shows bogus values on other events, Pixelmon bug. Enable when fixed.
             if (showIVs)
             {
-                hovers.add(getTranslation("hovers.messages.current_ivs"));
-                hovers.add(statLineStart + getTranslation("hovers.messages.total_ivs", totalIVs, percentIVs));
+                hovers.add(getTranslation("hover.current_ivs"));
+                hovers.add(statLineStart + getTranslation("hover.total_ivs", totalIVs, percentIVs));
                 hovers.add(statLineStart + ivsLine.toString());
             }
 
             // Print a header, as well as fancy messages for the size, the gender and the nature.
-            hovers.add(getTranslation("hovers.messages.info"));
+            hovers.add(getTranslation("hover.info"));
             hovers.add(sizeString);
             hovers.add(genderString);
             hovers.add(natureCompositeString);
@@ -204,9 +201,9 @@ public class PlaceholderMethods
 
         // Splits our input key, adds the correct tense at a constant known location, and then pieces it back together.
         if (presentTense)
-            tensedKey = key.substring(0, 16) + "present_tense." + key.substring(16);
+            tensedKey = key.substring(0, 14) + "present." + key.substring(14);
         else
-            tensedKey = key.substring(0, 16) + "past_tense." + key.substring(16);
+            tensedKey = key.substring(0, 14) + "past." + key.substring(14);
 
         // Send back the translation of our new freshly-tensed key.
         return getTranslation(tensedKey, params);
@@ -218,17 +215,17 @@ public class PlaceholderMethods
         switch(stat)
         {
             case Attack:
-                return getTranslation("hovers.text.stats.attack");
+                return getTranslation("hover.status.attack");
             case Defence:
-                return getTranslation("hovers.text.stats.defense");
+                return getTranslation("hover.status.defense");
             case SpecialAttack:
-                return getTranslation("hovers.text.stats.special_attack");
+                return getTranslation("hover.status.special_attack");
             case SpecialDefence:
-                return getTranslation("hovers.text.stats.special_defense");
+                return getTranslation("hover.status.special_defense");
             case Speed:
-                return getTranslation("hovers.text.stats.speed");
-            default: // Should not be reachable.
-                return "ERROR";
+                return getTranslation("hover.status.speed");
+            default:
+                return getTranslation("hover.status.none");
         }
     }
 
@@ -260,7 +257,7 @@ public class PlaceholderMethods
                 // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
                 // FIXME: Could do with an option, or a cleaner way to make this all work.
                 final String pokemonName =
-                        pokemon.isEgg ? getTranslation("universal.placeholders.pokemon.is_egg") : pokemon.getLocalizedName();
+                        pokemon.isEgg ? getTranslation("placeholder.pokemon.is_egg") : pokemon.getLocalizedName();
 
                 // Insert the checked Pokémon name.
                 message = message.replaceAll("(?i)%pokemon" + insert + "%", pokemonName);
@@ -329,7 +326,7 @@ public class PlaceholderMethods
                 // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the stats.
                 // FIXME: Could do with an option, or a cleaner way to make this all work.
                 final String pokemonIVs =
-                        pokemon.isEgg ? getTranslation("universal.placeholders.ivpercent.is_egg") : percentIVs.toString() + '%';
+                        pokemon.isEgg ? getTranslation("placeholder.ivpercent.is_egg") : percentIVs.toString() + '%';
 
                 // Insert the checked IV percentage.
 

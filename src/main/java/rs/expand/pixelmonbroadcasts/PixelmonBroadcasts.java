@@ -2,6 +2,7 @@
 package rs.expand.pixelmonbroadcasts;
 
 // Remote imports.
+import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -44,9 +45,9 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 (
         id = "pixelmonbroadcasts",
         name = "PixelmonBroadcasts",
-        version = "0.1.1",
+        version = "0.2.0",
         dependencies = @Dependency(id = "pixelmon"),
-        description = "Adds fully custom legendary-like messages for tons of events.",
+        description = "Adds fully custom legendary-like messages for tons of events, and optionally logs them, too.",
         authors = "XpanD"
 
         /*                                                                                                         *\
@@ -63,8 +64,6 @@ public class PixelmonBroadcasts
     // Start setting up some basic variables that we'll fill in remotely when we read the config.
     //public static Integer configVersion;
     public static String commandAlias;
-    public static String statSeparator;
-    public static String statLineStart;
 
     // Set up logging settings.
     public static boolean logLegendarySpawns;
@@ -211,10 +210,21 @@ public class PixelmonBroadcasts
     public static String tradeMessage;
 
     // Create and set up a config path, and grab an OS-specific file path separator. This will usually be a forward slash.
-    public static String primaryPath = "config" + FileSystems.getDefault().getSeparator();
-    public static Path primaryConfigPath = Paths.get(primaryPath, "PixelmonBroadcasts.conf");
-    public static ConfigurationLoader<CommentedConfigurationNode> primaryConfigLoader =
-            HoconConfigurationLoader.builder().setPath(primaryConfigPath).build();
+    private static String fileSystemSeparator = FileSystems.getDefault().getSeparator();
+    public static String primaryPath = "config" + fileSystemSeparator + "PixelmonBroadcasts" + fileSystemSeparator;
+    public static Path broadcastPath = Paths.get(primaryPath, "broadcasts.conf");
+    public static Path messagePath = Paths.get(primaryPath, "messages.conf");
+    public static Path configPath = Paths.get(primaryPath, "settings.conf");
+
+    private static ConfigurationLoader<CommentedConfigurationNode> broadcastLoader =
+            HoconConfigurationLoader.builder().setPath(broadcastPath).build();
+    private static ConfigurationLoader<CommentedConfigurationNode> messageLoader =
+            HoconConfigurationLoader.builder().setPath(messagePath).build();
+    public static ConfigurationLoader<CommentedConfigurationNode> settingLoader =
+            HoconConfigurationLoader.builder().setPath(configPath).build();
+
+    public static CommentedConfigurationNode messageConfig = null;
+    public static CommentedConfigurationNode broadcastConfig = null;
 
     /*                       *\
          Utility commands.
@@ -244,57 +254,64 @@ public class PixelmonBroadcasts
         // We start printing stuff, here. If any warnings/errors pop up they'll be shown here.
         printBasicMessage("");
         printBasicMessage("================== P I X E L M O N   B R O A D C A S T S ==================");
-        printBasicMessage("--> §aLoading and validating Pixelmon Broadcasts config...");
 
-        // Sets up a config if needed, and then loads in settings. Returns true if the load was a success.
-        if (ConfigMethods.tryCreateAndLoadConfig())
+        // Create a config directory if it doesn't exist. Silently swallow an error if it does. I/O is awkward.
+        ConfigMethods.checkConfigDir();
+
+        // Load the main config, the file with all of our settings.
+        printBasicMessage("--> §aLoading and validating Pixelmon Broadcasts settings...");
+        ConfigMethods.loadConfig("settings");
+
+        // Also load the broadcasts and translations. Store the whole thing in memory, so we can read whenever.
+        printBasicMessage("--> §aLoading broadcast messages and translations...");
+        try { messageConfig = PixelmonBroadcasts.messageLoader.load(); }
+        catch (final IOException ignored) {}
+        try { broadcastConfig = PixelmonBroadcasts.broadcastLoader.load(); }
+        catch (final IOException ignored) {}
+
+        // Register listeners with Pixelmon.
+        printBasicMessage("--> §aRegistering listeners with Pixelmon...");
+        Pixelmon.EVENT_BUS.register(new BattleEndListener());
+        Pixelmon.EVENT_BUS.register(new BattleStartListener());
+        Pixelmon.EVENT_BUS.register(new CatchListener());
+        Pixelmon.EVENT_BUS.register(new HatchListener());
+        Pixelmon.EVENT_BUS.register(new SpawnListener());
+        Pixelmon.EVENT_BUS.register(new TradeListener());
+        Pixelmon.EVENT_BUS.register(new WildDefeatListener());
+
+        // Check Pixelmon's config and get whether the legendary spawning message is in. Complain if it is.
+        printBasicMessage("--> §aChecking Pixelmon config for legendary message settings...");
+        Boolean configStatus = toBooleanObject(
+                PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").getString());
+
+        // Is the config setting we're reading available?
+        if (configStatus != null)
         {
-            // Register listeners with Pixelmon.
-            printBasicMessage("--> §aRegistering listeners with Pixelmon...");
-            Pixelmon.EVENT_BUS.register(new BattleEndListener());
-            Pixelmon.EVENT_BUS.register(new BattleStartListener());
-            Pixelmon.EVENT_BUS.register(new CatchListener());
-            Pixelmon.EVENT_BUS.register(new HatchListener());
-            Pixelmon.EVENT_BUS.register(new SpawnListener());
-            Pixelmon.EVENT_BUS.register(new TradeListener());
-            Pixelmon.EVENT_BUS.register(new WildDefeatListener());
-
-            // Check Pixelmon's config and get whether the legendary spawning message is in. Complain if it is.
-            printBasicMessage("--> §aChecking Pixelmon config for legendary message settings...");
-            Boolean configStatus = toBooleanObject(
-                    PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").getString());
-
-            // Is the config setting we're reading available?
-            if (configStatus != null)
+            // Is the setting turned on? Complaining, commence!
+            if (configStatus)
             {
-                // Is the setting turned on? Complaining, commence!
-                if (configStatus)
-                {
-                    printBasicMessage("    §ePixelmon's \"§6displayLegendaryGlobalMessage§e\" setting is enabled.");
-                    printBasicMessage("    §eThis setting will now be disabled, as it conflicts with this sidemod.");
-                    printBasicMessage("    §eIf you remove this mod, revert this in Pixelmon's config!");
+                printBasicMessage("    §ePixelmon's \"§6displayLegendaryGlobalMessage§e\" setting is enabled.");
+                printBasicMessage("    §eThis setting will now be disabled, as it conflicts with this sidemod.");
+                printBasicMessage("    §eIf you remove this mod, revert this in Pixelmon's config!");
 
-                    PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").setValue(false);
-                    PixelmonConfig.saveConfig();
-                }
-            }
-
-            // Register commands.
-            printBasicMessage("--> §aRegistering main command and subcommands...");
-
-            // The method used returns "false" if it fails, and prints some failure-specific errors.
-            if (ConfigMethods.registerCommands())
-            {
-                if (commandAlias != null && !commandAlias.equals("pixelmonbroadcasts"))
-                    printBasicMessage("    §aRegistered main command as §2/pixelmonbroadcasts§a, alias §2/" + commandAlias);
-                else
-                    printBasicMessage("    §aRegistered main command as §2/pixelmonbroadcasts§a, no alias.");
-
-                printBasicMessage("--> §aPre-init completed. All systems nominal.");
+                PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").setValue(false);
+                PixelmonConfig.saveConfig();
             }
         }
-        else
-            printBasicMessage("    §cEncountered a critical error, aborting... If this is a bug, please report.");
+
+        // Register commands.
+        printBasicMessage("--> §aRegistering main command and subcommands...");
+
+        // The method used returns "false" if it fails, and prints some failure-specific errors.
+        if (ConfigMethods.registerCommands())
+        {
+            if (commandAlias != null && !commandAlias.equals("pixelmonbroadcasts"))
+                printBasicMessage("    §aRegistered main command as §2/pixelmonbroadcasts§a, alias §2/" + commandAlias);
+            else
+                printBasicMessage("    §aRegistered main command as §2/pixelmonbroadcasts§a, no alias.");
+
+            printBasicMessage("--> §aPre-init completed. All systems nominal.");
+        }
 
         printBasicMessage("===========================================================================");
         printBasicMessage("");

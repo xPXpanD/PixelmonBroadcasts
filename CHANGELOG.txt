@@ -1,4 +1,15 @@
-1.0.0 for 6.3.0
+0.2.0 for 6.3.0
 Released ???
+
+   * Added a lang option for showing neutral stats in hovers, instead of just "ERROR".
+   * Updated CHANGELOG.txt with missed changes, and corrected versions. Oops.
+
+0.1.1 for 6.3.0
+Released June 6th, 2018.
+
+   * Changed permission layout to hopefully make a bit more sense.
+
+0.1.0 for 6.3.0
+Released June 6th, 2018.
 
    * Initial release.

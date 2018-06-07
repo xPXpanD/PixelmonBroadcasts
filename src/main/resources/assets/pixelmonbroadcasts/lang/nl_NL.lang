@@ -1,159 +1,159 @@
 # # # universal stuff # # #
 # Marginals (common headers/footers)
-universal.marginals.header=&5-----------------------------------------------------
-universal.marginals.footer=&5-----------------------------------------------------
+universal.header=&5-----------------------------------------------------
+universal.footer=&5-----------------------------------------------------
 
 # Placeholders (for special situations)
-universal.placeholders.pokemon.is_egg=mysterious egg
+placeholder.pokemon.is_egg=mysterious egg
 # Use a double percent character ("%%") if you want to add one, it needs escaping to work.
-universal.placeholders.ivpercent.is_egg=?%%
+placeholder.ivpercent.is_egg=?%%
 
 
 # # # hover-enabled message info # # #
 # Present tense messages (spawns, catches, hatches)
-hovers.messages.present_tense.sizes.microscopic=&aDeze Pokémon is &2&omicroscopisch&a!
-hovers.messages.present_tense.sizes.pygmy=&aDeze Pokémon is &2een pygmee&a!
-hovers.messages.present_tense.sizes.runt=&aDeze Pokémon is &2erg klein&a.
-hovers.messages.present_tense.sizes.small=&aDeze Pokémon is &2klein&a.
-hovers.messages.present_tense.sizes.ordinary=&aDeze Pokémon is &2gewoon&a.
-hovers.messages.present_tense.sizes.huge=&aDeze Pokémon is &2groot&a.
-hovers.messages.present_tense.sizes.giant=&aDeze Pokémon is &2erg groot&a.
-hovers.messages.present_tense.sizes.enormous=&aDeze Pokémon is &2enorm&a!
-hovers.messages.present_tense.sizes.ginormous=&aDeze Pokémon is &2&ngigantisch&a!
-hovers.messages.present_tense.sizes.unknown=&aDe grootte van deze Pokémon is &2onbekend&a...
-hovers.messages.present_tense.genders.male=&aDeze Pokémon is een &2mannetje&a.
-hovers.messages.present_tense.genders.female=&aDeze Pokémon is een &2vrouwtje&a.
-hovers.messages.present_tense.genders.none=&aDeze Pokémon heeft &2geen geslacht&a.
+hover.present_tense.size.microscopic=&aDeze Pokémon is &2&omicroscopisch&a!
+hover.present_tense.size.pygmy=&aDeze Pokémon is &2een pygmee&a!
+hover.present_tense.size.runt=&aDeze Pokémon is &2erg klein&a.
+hover.present_tense.size.small=&aDeze Pokémon is &2klein&a.
+hover.present_tense.size.ordinary=&aDeze Pokémon is &2gewoon&a.
+hover.present_tense.size.huge=&aDeze Pokémon is &2groot&a.
+hover.present_tense.size.giant=&aDeze Pokémon is &2erg groot&a.
+hover.present_tense.size.enormous=&aDeze Pokémon is &2enorm&a!
+hover.present_tense.size.ginormous=&aDeze Pokémon is &2&ngigantisch&a!
+hover.present_tense.size.unknown=&aDe grootte van deze Pokémon is &2onbekend&a...
+hover.present_tense.gender.male=&aDeze Pokémon is een &2mannetje&a.
+hover.present_tense.gender.female=&aDeze Pokémon is een &2vrouwtje&a.
+hover.present_tense.gender.none=&aDeze Pokémon heeft &2geen geslacht&a.
 # %s = The nature we're showing/using, then the boosted stat, then the cut one.
-hovers.messages.present_tense.natures.balanced=&aDeze Pokémon is "&2%s&a", met gebalanceerde statistieken.
-hovers.messages.present_tense.natures.special=&aDeze Pokémon is "&2%s&a", met hogere &2%s &aen lagere &2%s&a.
-hovers.messages.present_tense.natures.unknown=&aDeze Pokémon heeft een &2onbekend &akarakter...
+hover.present_tense.nature.balanced=&aDeze Pokémon is "&2%s&a", met gebalanceerde statistieken.
+hover.present_tense.nature.special=&aDeze Pokémon is "&2%s&a", met hogere &2%s &aen lagere &2%s&a.
+hover.present_tense.nature.unknown=&aDeze Pokémon heeft een &2onbekend &akarakter...
 ## End of replacements. ^
 
 # Past tense messages (defeats)
-hovers.messages.past_tense.sizes.microscopic=&aDeze Pokémon was &2&omicroscopisch&a...
-hovers.messages.past_tense.sizes.pygmy=&aDeze Pokémon was &2een pygmee&a...
-hovers.messages.past_tense.sizes.runt=&aDeze Pokémon was &2erg klein&a.
-hovers.messages.past_tense.sizes.small=&aDeze Pokémon was &2klein&a.
-hovers.messages.past_tense.sizes.ordinary=&aDeze Pokémon was &2gewoon&a.
-hovers.messages.past_tense.sizes.huge=&aDeze Pokémon was &2groot&a.
-hovers.messages.past_tense.sizes.giant=&aDeze Pokémon was &2erg groot&a.
-hovers.messages.past_tense.sizes.enormous=&aDeze Pokémon was &2enorm&a...
-hovers.messages.past_tense.sizes.ginormous=&aDeze Pokémon was &2&ngigantisch&a...
-hovers.messages.past_tense.sizes.unknown=&aDe grootte van deze Pokémon was &2onbekend&a...
-hovers.messages.past_tense.genders.male=&aDeze Pokémon was een &2mannetje&a.
-hovers.messages.past_tense.genders.female=&aDeze Pokémon was een &2vrouwtje&a.
-hovers.messages.past_tense.genders.none=&aDeze Pokémon had &2geen geslacht&a.
+hover.past_tense.size.microscopic=&aDeze Pokémon was &2&omicroscopisch&a...
+hover.past_tense.size.pygmy=&aDeze Pokémon was &2een pygmee&a...
+hover.past_tense.size.runt=&aDeze Pokémon was &2erg klein&a.
+hover.past_tense.size.small=&aDeze Pokémon was &2klein&a.
+hover.past_tense.size.ordinary=&aDeze Pokémon was &2gewoon&a.
+hover.past_tense.size.huge=&aDeze Pokémon was &2groot&a.
+hover.past_tense.size.giant=&aDeze Pokémon was &2erg groot&a.
+hover.past_tense.size.enormous=&aDeze Pokémon was &2enorm&a...
+hover.past_tense.size.ginormous=&aDeze Pokémon was &2&ngigantisch&a...
+hover.past_tense.size.unknown=&aDe grootte van deze Pokémon was &2onbekend&a...
+hover.past_tense.gender.male=&aDeze Pokémon was een &2mannetje&a.
+hover.past_tense.gender.female=&aDeze Pokémon was een &2vrouwtje&a.
+hover.past_tense.gender.none=&aDeze Pokémon had &2geen geslacht&a.
 # %s = The nature we're showing/using, then the boosted stat, then the cut one.
-hovers.messages.past_tense.natures.balanced=&aDeze Pokémon was "&2%s&a", met gebalanceerde statistieken.
-hovers.messages.past_tense.natures.special=&aDeze Pokémon was "&2%s&a", met hogere &2%s &aen lagere &2%s&a.
-hovers.messages.past_tense.natures.unknown=&aDeze Pokémon had een &2onbekend &akarakter...
+hover.past_tense.nature.balanced=&aDeze Pokémon was "&2%s&a", met gebalanceerde statistieken.
+hover.past_tense.nature.special=&aDeze Pokémon was "&2%s&a", met hogere &2%s &aen lagere &2%s&a.
+hover.past_tense.nature.unknown=&aDeze Pokémon had een &2onbekend &akarakter...
 ## End of replacements. ^
 
 # Other messages
-hovers.messages.current_ivs=&bIVs&f:
+hover.current_ivs=&bIVs&f:
 # %d = The total number of IVs for our checked Pokémon, then the percentage of the max.
 # Use a double percent sign ("%%") if you want a single one, it needs escaping to work.
-hovers.messages.total_ivs=&a%d&f/&a186&f (&a%d%%&f)
+hover.total_ivs=&a%d&f/&a186&f (&a%d%%&f)
 ## End of replacements. ^
-hovers.messages.info=&bInfo&f:
+hover.info=&bInfo&f:
 
 # Texts (TODO: Vertalingen?)
-hovers.text.natures.hardy=hardy
-hovers.text.natures.serious=serious
-hovers.text.natures.docile=docile
-hovers.text.natures.bashful=bashful
-hovers.text.natures.quirky=quirky
-hovers.text.natures.lonely=lonely
-hovers.text.natures.brave=brave
-hovers.text.natures.adamant=adamant
-hovers.text.natures.naughty=naughty
-hovers.text.natures.bold=bold
-hovers.text.natures.relaxed=relaxed
-hovers.text.natures.impish=impish
-hovers.text.natures.lax=lax
-hovers.text.natures.timid=timid
-hovers.text.natures.hasty=hasty
-hovers.text.natures.jolly=jolly
-hovers.text.natures.naive=naive
-hovers.text.natures.modest=modest
-hovers.text.natures.mild=mild
-hovers.text.natures.quiet=quiet
-hovers.text.natures.rash=rash
-hovers.text.natures.calm=calm
-hovers.text.natures.gentle=gentle
-hovers.text.natures.sassy=sassy
-hovers.text.natures.careful=careful
-hovers.text.natures.unknown=unknown
-hovers.text.stats.hp=HP
-hovers.text.stats.attack=Atk
-hovers.text.stats.defense=Def
-hovers.text.stats.special_attack=SAtk
-hovers.text.stats.special_defense=SDef
-hovers.text.stats.speed=Spd
+hover.nature.hardy=hardy
+hover.nature.serious=serious
+hover.nature.docile=docile
+hover.nature.bashful=bashful
+hover.nature.quirky=quirky
+hover.nature.lonely=lonely
+hover.nature.brave=brave
+hover.nature.adamant=adamant
+hover.nature.naughty=naughty
+hover.nature.bold=bold
+hover.nature.relaxed=relaxed
+hover.nature.impish=impish
+hover.nature.lax=lax
+hover.nature.timid=timid
+hover.nature.hasty=hasty
+hover.nature.jolly=jolly
+hover.nature.naive=naive
+hover.nature.modest=modest
+hover.nature.mild=mild
+hover.nature.quiet=quiet
+hover.nature.rash=rash
+hover.nature.calm=calm
+hover.nature.gentle=gentle
+hover.nature.sassy=sassy
+hover.nature.careful=careful
+hover.nature.unknown=unknown
+hover.status.hp=HP
+hover.status.attack=Atk
+hover.status.defense=Def
+hover.status.special_attack=SAtk
+hover.status.special_defense=SDef
+hover.status.speed=Spd
 # %d = The actual value of the stat (usually an IV) we're showing.
 # %s = The name of the stat to show. The config's statSeparator gets auto-added after.
-hovers.text.stats.below_max=&a%d &2%s
-hovers.text.stats.maxed_out=&a&o%d &r&2%s
+hover.status.below_max=&a%d &2%s
+hover.status.maxed_out=&a&o%d &r&2%s
 ## End of replacements. ^
 
 
 # # # /pixelmonbroadcasts base (info hub) # # #
 # %s = The command's alias if present, or otherwise the command itself. Note: Clickable.
-hub.messages.toggle_syntax=&6/%s toggle
-hub.messages.reload_syntax=&6/%s reload
+hub.toggle_syntax=&6/%s toggle
+hub.reload_syntax=&6/%s reload
 ## End of replacements. ^
-hub.messages.toggle_info=&eOpent instellingen voor het tonen van evenementsberichten.
-hub.messages.reload_info=&eHerlaadt direct de configuratie van Pixelmon Broadcasts.
-hub.errors.no_permissions=&cU heeft geen toestemming om Pixelmon Broadcasts te gebruiken.
+hub.toggle_info=&eOpent instellingen voor het tonen van evenementsberichten.
+hub.reload_info=&eHerlaadt direct de configuratie van Pixelmon Broadcasts.
+hub.error.no_permissions=&cU heeft geen toestemming om Pixelmon Broadcasts te gebruiken.
 # T: Personeel is erg zakelijk, maar dit past wel op één regel. TODO?
-hub.errors.contact_staff=&cNeem contact op met personeel als u denkt dat dit niet klopt.
+hub.error.contact_staff=&cNeem contact op met personeel als u denkt dat dit niet klopt.
 
 
 # # # /pixelmonbroadcasts toggle # # #
 # Marginals (just a header, we use the universal footer)
-toggle.marginals.header=&5------------- &dOpties (klik om te veranderen) &5-------------
+toggle.header=&5------------- &dOpties (klik om te veranderen) &5-------------
 
 # Messages
-toggle.messages.challenge_toggles=&bUitdagingsberichten&f:
-toggle.messages.spawning_toggles=&bSpawn-berichten&f:
-toggle.messages.blackout_toggles=&bBlackout-berichten&f:
-toggle.messages.forfeit_toggles=&bOpgeef-berichten&f:
-toggle.messages.defeat_toggles=&bWin-berichten&f:
-toggle.messages.catch_toggles=&bVang-berichten&f:
-toggle.messages.pvp_toggles=&bPvP-berichten&f:
-toggle.messages.other_toggles=&bAndere berichten&f:
+toggle.challenge_toggles=&bUitdagingsberichten&f:
+toggle.spawning_toggles=&bSpawn-berichten&f:
+toggle.blackout_toggles=&bBlackout-berichten&f:
+toggle.forfeit_toggles=&bOpgeef-berichten&f:
+toggle.defeat_toggles=&bWin-berichten&f:
+toggle.catch_toggles=&bVang-berichten&f:
+toggle.pvp_toggles=&bPvP-berichten&f:
+toggle.other_toggles=&bAndere berichten&f:
 
 # Texts - components
 # T: Onvertaald, vertalingen werken hier niet echt lekker en dit zijn redelijk bekende concepten.
-toggle.text.shiny.on=&a&nshiny
-toggle.text.shiny.off=&c&nshiny
-toggle.text.legendary.on=&a&nlegend
-toggle.text.legendary.off=&c&nlegend
-toggle.text.shiny_legendary.on=&a&nshiny legend
-toggle.text.shiny_legendary.off=&c&nshiny legend
-toggle.text.boss.on=&a&nboss
-toggle.text.boss.off=&c&nboss
-toggle.text.trainer.on=&a&ntrainer
-toggle.text.trainer.off=&c&ntrainer
-toggle.text.boss_trainer.on=&a&nboss trainer
-toggle.text.boss_trainer.off=&c&nboss trainer
+toggle.shiny.on=&a&nshiny
+toggle.shiny.off=&c&nshiny
+toggle.legendary.on=&a&nlegend
+toggle.legendary.off=&c&nlegend
+toggle.shiny_legendary.on=&a&nshiny legend
+toggle.shiny_legendary.off=&c&nshiny legend
+toggle.boss.on=&a&nboss
+toggle.boss.off=&c&nboss
+toggle.trainer.on=&a&ntrainer
+toggle.trainer.off=&c&ntrainer
+toggle.boss_trainer.on=&a&nboss trainer
+toggle.boss_trainer.off=&c&nboss trainer
 
 # Texts - specific options
-toggle.text.pvp_start.on=&a&nstart
-toggle.text.pvp_start.off=&c&nstart
-toggle.text.pvp_draw.on=&a&ndraw
-toggle.text.pvp_draw.off=&c&ndraw
-toggle.text.pvp_defeat.on=&a&ndefeat
-toggle.text.pvp_defeat.off=&c&ndefeat
-toggle.text.hatch.on=&a&nhatch
-toggle.text.hatch.off=&c&nhatch
-toggle.text.shiny_hatch.on=&a&nshiny hatch
-toggle.text.shiny_hatch.off=&c&nshiny hatch
-toggle.text.trade.on=&a&ntrade
-toggle.text.trade.off=&c&ntrade
+toggle.pvp_start.on=&a&nstart
+toggle.pvp_start.off=&c&nstart
+toggle.pvp_draw.on=&a&ndraw
+toggle.pvp_draw.off=&c&ndraw
+toggle.pvp_defeat.on=&a&ndefeat
+toggle.pvp_defeat.off=&c&ndefeat
+toggle.hatch.on=&a&nhatch
+toggle.hatch.off=&c&nhatch
+toggle.shiny_hatch.on=&a&nshiny hatch
+toggle.shiny_hatch.off=&c&nshiny hatch
+toggle.trade.on=&a&ntrade
+toggle.trade.off=&c&ntrade
 
 
 # # # /pixelmonbroadcasts reload # # #
-reload.messages.reload_complete=&bDe configuratie van Pixelmon Broadcasts is opnieuw geladen!
-reload.messages.check_console=&bBekijk de console voor eventuele fouten.
+reload.reload_complete=&bDe configuratie van Pixelmon Broadcasts is opnieuw geladen!
+reload.check_console=&bBekijk de console voor eventuele fouten.

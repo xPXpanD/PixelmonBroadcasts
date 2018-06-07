@@ -35,10 +35,10 @@ public class Reload implements CommandExecutor
         if (src instanceof Player)
         {
             // Not entirely sure why I made this use the lang, but hey. Two lines, no harm.
-            sendTranslation(src, "universal.marginals.header");
-            sendTranslation(src, "reload.messages.reload_complete");
-            sendTranslation(src, "reload.messages.check_console");
-            sendTranslation(src, "universal.marginals.footer");
+            sendTranslation(src, "universal.header");
+            sendTranslation(src, "reload.reload_complete");
+            sendTranslation(src, "reload.check_console");
+            sendTranslation(src, "universal.footer");
         }
         else
         {

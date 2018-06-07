@@ -2,12 +2,16 @@ package rs.expand.pixelmonbroadcasts.utilities;
 
 // Remote imports.
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.TextComponentTranslation;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.serializer.TextSerializers;
+
 import java.util.*;
+
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.broadcastConfig;
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.messageConfig;
 
 // A collection of methods that are commonly used. One changed word or color here, and half the mod changes. Sweet.
 public class PrintingMethods
@@ -105,64 +109,96 @@ public class PrintingMethods
         }
     }
 
-    // Gets a key from the language file, formats it using our own custom parseRemoteString, and then returns it.
-    public static String getTranslation(final String key, final Object... params)
+    // Checks whether a broadcast's message is present. Prints an error if the actual config could not be read.
+    public static boolean checkBroadcastStatus(String key)
     {
-        // Format the key grabbed from our language file, replacing ampersands with section symbols.
-        return parseRemoteString(new TextComponentTranslation(key, params).getUnformattedComponentText());
+        if (broadcastConfig != null)
+            return broadcastConfig.getNode(key).getString() != null;
+        else
+        {
+            printBasicError("The broadcasts config could not be read! Broadcasts will not work!");
+            return false;
+        }
     }
 
-    // Gets a key from the language file, formats it using our own custom parseRemoteString, and then sends it.
+    // Gets a key from broadcasts.conf, formats it (ampersands to section characters), and then returns it.
+    // Also swaps any provided placeholders with String representations of the Objects given, if present.
+    public static String sendBroadcast(String key, final Object... params)
+    {
+        if (broadcastConfig != null)
+        {
+            // Get the broadcast from the broadcast config, if it's there.
+            String broadcast = broadcastConfig.getNode(key).getString();
+
+            // Did we get a broadcast?
+            if (broadcast != null)
+            {
+                // If any parameters are available, find all placeholders in the broadcast and replace them.
+                for (int i = 0; i < params.length; i++)
+                    broadcast = broadcast.replace("{" + i+1 + "}", params[i].toString());
+
+                return TextSerializers.FORMATTING_CODE.deserialize(broadcast).toString();
+            }
+            // We did not get a broadcast, return the provided key and make sure it's unformatted.
+            else
+                return "§r" + key;
+        }
+        // We could not read the config, return the provided key and make sure it's unformatted.
+        else
+            return "§r" + key;
+    }
+
+    // Gets a key from messages.conf, formats it (ampersands to section characters), and then returns it.
+    // Also swaps any provided placeholders with String representations of the Objects given, if present.
+    public static String getTranslation(String key, final Object... params)
+    {
+        if (messageConfig != null)
+        {
+            // Get the message from the message config, if it's there.
+            String message = messageConfig.getNode("legendarySpawnMessage").getString();
+
+            // Did we get a message?
+            if (message != null)
+            {
+                // If any parameters are available, find all placeholders in the message and replace them.
+                for (int i = 0; i < params.length; i++)
+                    message = message.replace("{" + i+1 + "}", params[i].toString());
+
+                return TextSerializers.FORMATTING_CODE.deserialize(message).toString();
+            }
+            // We did not get a message, return the provided key and make sure it's unformatted.
+            else
+                return "§r" + key;
+        }
+        // We could not read the config, return the provided key and make sure it's unformatted.
+        else
+            return "§r" + key;
+    }
+
+    // Gets a key from messages.conf, formats it (ampersands to section characters), and then sends it.
+    // Also swaps any provided placeholders with String representations of the Objects given, if present.
     public static void sendTranslation(CommandSource recipient, String key, Object... params)
     {
-        // Format the key grabbed from our language file, replacing ampersands with section symbols.
-        final String formattedInput =
-                parseRemoteString(new TextComponentTranslation(key, params).getUnformattedComponentText());
-
-        // Send the now-formatted input directly to the player.
-        recipient.sendMessage(Text.of(formattedInput));
-    }
-
-    // Takes a config String and changes any ampersands to section symbols, which we can use internally.
-    // Only runs during config (re-)loads, after which we commit the parsed strings to memory.
-    static String parseRemoteString(final String input)
-    {
-        // Were we able to read the String being checked from the config?
-        if (input != null)
+        if (messageConfig != null)
         {
-            // Set up a list of valid formatting codes.
-            final List<Character> validFormattingCharacters = Arrays.asList
-            (
-                    // Color numbers.
-                    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                    // Color letters, lower and upper case.
-                    'a', 'b', 'c', 'd', 'e', 'f', 'A', 'B', 'C', 'D', 'E', 'F',
-                    // Other formatting codes.
-                    'k', 'l', 'm', 'n', 'o', 'r'
-            );
+            // Get the message from the message config, if it's there.
+            String message = messageConfig.getNode("legendarySpawnMessage").getString();
 
-            // Start replacing our ampersands.
-            final StringBuilder mutableInput = new StringBuilder(input);
-            for (int i = 0; i < mutableInput.length(); i++)
+            // Did we get a message?
+            if (message != null)
             {
-                // Is the character that's currently being checked an ampersand?
-                if (mutableInput.charAt(i) == '&')
-                {
-                    // Make sure the iterator is still inside of the input String's length. Let's not check out of bounds.
-                    if ((i + 1) < mutableInput.length())
-                    {
-                        // Look ahead: Does the next character contain a known formatting character? Replace the ampersand!
-                        if (validFormattingCharacters.contains(mutableInput.charAt(i + 1)))
-                            mutableInput.setCharAt(i, '§');
-                    }
-                }
+                // If any parameters are available, find all placeholders in the message and replace them.
+                for (int i = 0; i < params.length; i++)
+                    message = message.replace("{" + i+1 + "}", params[i].toString());
+
+                recipient.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(message).toText());
             }
-
-            // Replace our old input String with the one that we fixed formatting on.
-            return mutableInput.toString();
+            // We did not get a message, return the provided key and make sure it's unformatted.
+            else
+                recipient.sendMessage(Text.of("§r" + key));
         }
-
-        // If we could not read from the config, this is hit.
-        return null;
+        // We could not read the config, return the provided key and make sure it's unformatted.
+        else
+            recipient.sendMessage(Text.of("§r" + key));
     }
 }

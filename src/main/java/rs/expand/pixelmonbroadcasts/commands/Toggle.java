@@ -88,9 +88,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showShinyChallenge"))
-                    messages.add(getTranslation("toggle.text.shiny.on") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.shiny.off") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny.off") + getTranslation("hover.status.separator"));
             }
             if (showShinyLegendaryChallenges && src.hasPermission("pixelmonbroadcasts.notify.challenge.shinylegendary"))
             {
@@ -98,9 +98,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showShinyLegendaryChallenge"))
-                    messages.add(getTranslation("toggle.text.shiny_legendary.on") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny_legendary.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.shiny_legendary.off") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny_legendary.off") + getTranslation("hover.status.separator"));
             }
             if (showLegendaryChallenges && src.hasPermission("pixelmonbroadcasts.notify.challenge.legendary"))
             {
@@ -108,9 +108,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showLegendaryChallenge"))
-                    messages.add(getTranslation("toggle.text.legendary.on") + statSeparator);
+                    messages.add(getTranslation("toggle.legendary.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.legendary.off") + statSeparator);
+                    messages.add(getTranslation("toggle.legendary.off") + getTranslation("hover.status.separator"));
             }
             if (showBossChallenges && src.hasPermission("pixelmonbroadcasts.notify.challenge.boss"))
             {
@@ -118,9 +118,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showBossChallenge"))
-                    messages.add(getTranslation("toggle.text.boss.on") + statSeparator);
+                    messages.add(getTranslation("toggle.boss.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.boss.off") + statSeparator);
+                    messages.add(getTranslation("toggle.boss.off") + getTranslation("hover.status.separator"));
             }
             if (showTrainerChallenges && src.hasPermission("pixelmonbroadcasts.notify.challenge.trainer"))
             {
@@ -128,9 +128,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showTrainerChallenge"))
-                    messages.add(getTranslation("toggle.text.trainer.on") + statSeparator);
+                    messages.add(getTranslation("toggle.trainer.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.trainer.off") + statSeparator);
+                    messages.add(getTranslation("toggle.trainer.off") + getTranslation("hover.status.separator"));
             }
             if (showBossTrainerChallenges && src.hasPermission("pixelmonbroadcasts.notify.challenge.bosstrainer"))
             {
@@ -138,16 +138,16 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showBossTrainerChallenge"))
-                    messages.add(getTranslation("toggle.text.boss_trainer.on") + statSeparator);
+                    messages.add(getTranslation("toggle.boss_trainer.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.boss_trainer.off") + statSeparator);
+                    messages.add(getTranslation("toggle.boss_trainer.off") + getTranslation("hover.status.separator"));
             }
 
             // If we have any toggles lined up, print and clear.
             if (!messages.isEmpty())
             {
                 // Get and add the "challenge toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.messages.challenge_toggles")));
+                toggleMessageList.add(Text.of(getTranslation("toggle.challenge_toggles")));
 
                 // Get a clickable line with all the toggles that we can squeeze onto it.
                 toggleMessageList.add(getClickableLine(messages, flags));
@@ -167,9 +167,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showShinyBlackout"))
-                    messages.add(getTranslation("toggle.text.shiny.on") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.shiny.off") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny.off") + getTranslation("hover.status.separator"));
             }
             if (showShinyLegendaryBlackouts && src.hasPermission("pixelmonbroadcasts.notify.blackout.shinylegendary"))
             {
@@ -177,9 +177,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showShinyLegendaryBlackout"))
-                    messages.add(getTranslation("toggle.text.shiny_legendary.on") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny_legendary.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.shiny_legendary.off") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny_legendary.off") + getTranslation("hover.status.separator"));
             }
             if (showLegendaryBlackouts && src.hasPermission("pixelmonbroadcasts.notify.blackout.legendary"))
             {
@@ -187,9 +187,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showLegendaryBlackout"))
-                    messages.add(getTranslation("toggle.text.legendary.on") + statSeparator);
+                    messages.add(getTranslation("toggle.legendary.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.legendary.off") + statSeparator);
+                    messages.add(getTranslation("toggle.legendary.off") + getTranslation("hover.status.separator"));
             }
             if (showBossBlackouts && src.hasPermission("pixelmonbroadcasts.notify.blackout.boss"))
             {
@@ -197,9 +197,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showBossBlackout"))
-                    messages.add(getTranslation("toggle.text.boss.on") + statSeparator);
+                    messages.add(getTranslation("toggle.boss.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.boss.off") + statSeparator);
+                    messages.add(getTranslation("toggle.boss.off") + getTranslation("hover.status.separator"));
             }
             if (showTrainerBlackouts && src.hasPermission("pixelmonbroadcasts.notify.blackout.trainer"))
             {
@@ -207,9 +207,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showTrainerBlackout"))
-                    messages.add(getTranslation("toggle.text.trainer.on") + statSeparator);
+                    messages.add(getTranslation("toggle.trainer.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.trainer.off") + statSeparator);
+                    messages.add(getTranslation("toggle.trainer.off") + getTranslation("hover.status.separator"));
             }
             if (showBossTrainerBlackouts && src.hasPermission("pixelmonbroadcasts.notify.blackout.bosstrainer"))
             {
@@ -217,16 +217,16 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showBossTrainerBlackout"))
-                    messages.add(getTranslation("toggle.text.boss_trainer.on") + statSeparator);
+                    messages.add(getTranslation("toggle.boss_trainer.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.boss_trainer.off") + statSeparator);
+                    messages.add(getTranslation("toggle.boss_trainer.off") + getTranslation("hover.status.separator"));
             }
 
             // If we have any toggles lined up, print and clear.
             if (!messages.isEmpty())
             {
                 // Get and add the "defeat toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.messages.blackout_toggles")));
+                toggleMessageList.add(Text.of(getTranslation("toggle.blackout_toggles")));
 
                 // Get a clickable line with all the toggles that we can squeeze onto it.
                 toggleMessageList.add(getClickableLine(messages, flags));
@@ -246,9 +246,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showShinyForfeit"))
-                    messages.add(getTranslation("toggle.text.shiny.on") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.shiny.off") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny.off") + getTranslation("hover.status.separator"));
             }
             if (showShinyLegendaryForfeits && src.hasPermission("pixelmonbroadcasts.notify.forfeit.shinylegendary"))
             {
@@ -256,9 +256,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showShinyLegendaryForfeit"))
-                    messages.add(getTranslation("toggle.text.shiny_legendary.on") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny_legendary.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.shiny_legendary.off") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny_legendary.off") + getTranslation("hover.status.separator"));
             }
             if (showLegendaryForfeits && src.hasPermission("pixelmonbroadcasts.notify.forfeit.legendary"))
             {
@@ -266,9 +266,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showLegendaryForfeit"))
-                    messages.add(getTranslation("toggle.text.legendary.on") + statSeparator);
+                    messages.add(getTranslation("toggle.legendary.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.legendary.off") + statSeparator);
+                    messages.add(getTranslation("toggle.legendary.off") + getTranslation("hover.status.separator"));
             }
             if (showBossForfeits && src.hasPermission("pixelmonbroadcasts.notify.forfeit.boss"))
             {
@@ -276,9 +276,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showBossForfeit"))
-                    messages.add(getTranslation("toggle.text.boss.on") + statSeparator);
+                    messages.add(getTranslation("toggle.boss.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.boss.off") + statSeparator);
+                    messages.add(getTranslation("toggle.boss.off") + getTranslation("hover.status.separator"));
             }
             if (showTrainerForfeits && src.hasPermission("pixelmonbroadcasts.notify.forfeit.trainer"))
             {
@@ -286,9 +286,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showTrainerForfeit"))
-                    messages.add(getTranslation("toggle.text.trainer.on") + statSeparator);
+                    messages.add(getTranslation("toggle.trainer.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.trainer.off") + statSeparator);
+                    messages.add(getTranslation("toggle.trainer.off") + getTranslation("hover.status.separator"));
             }
             if (showBossTrainerForfeits && src.hasPermission("pixelmonbroadcasts.notify.forfeit.bosstrainer"))
             {
@@ -296,16 +296,16 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showBossTrainerForfeit"))
-                    messages.add(getTranslation("toggle.text.boss_trainer.on") + statSeparator);
+                    messages.add(getTranslation("toggle.boss_trainer.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.boss_trainer.off") + statSeparator);
+                    messages.add(getTranslation("toggle.boss_trainer.off") + getTranslation("hover.status.separator"));
             }
 
             // If we have any toggles lined up, print and clear.
             if (!messages.isEmpty())
             {
                 // Get and add the "defeat toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.messages.forfeit_toggles")));
+                toggleMessageList.add(Text.of(getTranslation("toggle.forfeit_toggles")));
 
                 // Get a clickable line with all the toggles that we can squeeze onto it.
                 toggleMessageList.add(getClickableLine(messages, flags));
@@ -325,9 +325,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showShinyDefeat"))
-                    messages.add(getTranslation("toggle.text.shiny.on") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.shiny.off") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny.off") + getTranslation("hover.status.separator"));
             }
             if (showShinyLegendaryDefeats && src.hasPermission("pixelmonbroadcasts.notify.defeat.shinylegendary"))
             {
@@ -335,9 +335,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showShinyLegendaryDefeat"))
-                    messages.add(getTranslation("toggle.text.shiny_legendary.on") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny_legendary.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.shiny_legendary.off") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny_legendary.off") + getTranslation("hover.status.separator"));
             }
             if (showLegendaryDefeats && src.hasPermission("pixelmonbroadcasts.notify.defeat.legendary"))
             {
@@ -345,9 +345,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showLegendaryDefeat"))
-                    messages.add(getTranslation("toggle.text.legendary.on") + statSeparator);
+                    messages.add(getTranslation("toggle.legendary.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.legendary.off") + statSeparator);
+                    messages.add(getTranslation("toggle.legendary.off") + getTranslation("hover.status.separator"));
             }
             if (showBossDefeats && src.hasPermission("pixelmonbroadcasts.notify.defeat.boss"))
             {
@@ -355,9 +355,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showBossDefeat"))
-                    messages.add(getTranslation("toggle.text.boss.on") + statSeparator);
+                    messages.add(getTranslation("toggle.boss.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.boss.off") + statSeparator);
+                    messages.add(getTranslation("toggle.boss.off") + getTranslation("hover.status.separator"));
             }
             if (showTrainerDefeats && src.hasPermission("pixelmonbroadcasts.notify.defeat.trainer"))
             {
@@ -365,9 +365,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showTrainerDefeat"))
-                    messages.add(getTranslation("toggle.text.trainer.on") + statSeparator);
+                    messages.add(getTranslation("toggle.trainer.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.trainer.off") + statSeparator);
+                    messages.add(getTranslation("toggle.trainer.off") + getTranslation("hover.status.separator"));
             }
             if (showBossTrainerDefeats && src.hasPermission("pixelmonbroadcasts.notify.defeat.bosstrainer"))
             {
@@ -375,16 +375,16 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showBossTrainerDefeat"))
-                    messages.add(getTranslation("toggle.text.boss_trainer.on") + statSeparator);
+                    messages.add(getTranslation("toggle.boss_trainer.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.boss_trainer.off") + statSeparator);
+                    messages.add(getTranslation("toggle.boss_trainer.off") + getTranslation("hover.status.separator"));
             }
 
             // If we have any toggles lined up, print and clear.
             if (!messages.isEmpty())
             {
                 // Get and add the "defeat toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.messages.defeat_toggles")));
+                toggleMessageList.add(Text.of(getTranslation("toggle.defeat_toggles")));
 
                 // Get a clickable line with all the toggles that we can squeeze onto it.
                 toggleMessageList.add(getClickableLine(messages, flags));
@@ -404,9 +404,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showShinySpawn"))
-                    messages.add(getTranslation("toggle.text.shiny.on") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.shiny.off") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny.off") + getTranslation("hover.status.separator"));
             }
             if (showShinyLegendarySpawns && src.hasPermission("pixelmonbroadcasts.notify.spawn.shinylegendary"))
             {
@@ -414,9 +414,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showShinyLegendarySpawn"))
-                    messages.add(getTranslation("toggle.text.shiny_legendary.on") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny_legendary.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.shiny_legendary.off") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny_legendary.off") + getTranslation("hover.status.separator"));
             }
             if (showLegendarySpawns && src.hasPermission("pixelmonbroadcasts.notify.spawn.legendary"))
             {
@@ -424,9 +424,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showLegendarySpawn"))
-                    messages.add(getTranslation("toggle.text.legendary.on") + statSeparator);
+                    messages.add(getTranslation("toggle.legendary.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.legendary.off") + statSeparator);
+                    messages.add(getTranslation("toggle.legendary.off") + getTranslation("hover.status.separator"));
             }
             if (showBossSpawns && src.hasPermission("pixelmonbroadcasts.notify.spawn.boss"))
             {
@@ -434,16 +434,16 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showBossSpawn"))
-                    messages.add(getTranslation("toggle.text.boss.on") + statSeparator);
+                    messages.add(getTranslation("toggle.boss.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.boss.off") + statSeparator);
+                    messages.add(getTranslation("toggle.boss.off") + getTranslation("hover.status.separator"));
             }
 
             // If we have any toggles lined up, print and clear.
             if (!messages.isEmpty())
             {
                 // Get and add the "spawn toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.messages.spawning_toggles")));
+                toggleMessageList.add(Text.of(getTranslation("toggle.spawning_toggles")));
 
                 // Get a clickable line with all the toggles that we can squeeze onto it.
                 toggleMessageList.add(getClickableLine(messages, flags));
@@ -463,9 +463,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showShinyCatch"))
-                    messages.add(getTranslation("toggle.text.shiny.on") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.shiny.off") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny.off") + getTranslation("hover.status.separator"));
             }
             if (showShinyLegendaryCatches && src.hasPermission("pixelmonbroadcasts.notify.catch.shinylegendary"))
             {
@@ -473,9 +473,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showShinyLegendaryCatch"))
-                    messages.add(getTranslation("toggle.text.shiny_legendary.on") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny_legendary.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.shiny_legendary.off") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny_legendary.off") + getTranslation("hover.status.separator"));
             }
             if (showLegendaryCatches && src.hasPermission("pixelmonbroadcasts.notify.catch.legendary"))
             {
@@ -483,16 +483,16 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showLegendaryCatch"))
-                    messages.add(getTranslation("toggle.text.legendary.on") + statSeparator);
+                    messages.add(getTranslation("toggle.legendary.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.legendary.off") + statSeparator);
+                    messages.add(getTranslation("toggle.legendary.off") + getTranslation("hover.status.separator"));
             }
 
             // If we have any toggles lined up, print and clear.
             if (!messages.isEmpty())
             {
                 // Get and add the "catch toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.messages.catch_toggles")));
+                toggleMessageList.add(Text.of(getTranslation("toggle.catch_toggles")));
 
                 // Get a clickable line with all the toggles that we can squeeze onto it.
                 toggleMessageList.add(getClickableLine(messages, flags));
@@ -512,9 +512,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showPVPStart"))
-                    messages.add(getTranslation("toggle.text.pvp_start.on") + statSeparator);
+                    messages.add(getTranslation("toggle.pvp_start.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.pvp_start.off") + statSeparator);
+                    messages.add(getTranslation("toggle.pvp_start.off") + getTranslation("hover.status.separator"));
             }
             if (showPVPDraws && src.hasPermission("pixelmonbroadcasts.notify.draw.pvp"))
             {
@@ -522,9 +522,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showPVPDraw"))
-                    messages.add(getTranslation("toggle.text.pvp_draw.on") + statSeparator);
+                    messages.add(getTranslation("toggle.pvp_draw.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.pvp_draw.off") + statSeparator);
+                    messages.add(getTranslation("toggle.pvp_draw.off") + getTranslation("hover.status.separator"));
             }
             if (showPVPDefeats && src.hasPermission("pixelmonbroadcasts.notify.defeat.pvp"))
             {
@@ -532,16 +532,16 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showPVPDefeat"))
-                    messages.add(getTranslation("toggle.text.pvp_defeat.on") + statSeparator);
+                    messages.add(getTranslation("toggle.pvp_defeat.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.pvp_defeat.off") + statSeparator);
+                    messages.add(getTranslation("toggle.pvp_defeat.off") + getTranslation("hover.status.separator"));
             }
 
             // If we have any toggles lined up, print and clear.
             if (!messages.isEmpty())
             {
                 // Get and add the "catch toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.messages.pvp_toggles")));
+                toggleMessageList.add(Text.of(getTranslation("toggle.pvp_toggles")));
 
                 // Get a clickable line with all the toggles that we can squeeze onto it.
                 toggleMessageList.add(getClickableLine(messages, flags));
@@ -561,9 +561,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showHatch"))
-                    messages.add(getTranslation("toggle.text.hatch.on") + statSeparator);
+                    messages.add(getTranslation("toggle.hatch.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.hatch.off") + statSeparator);
+                    messages.add(getTranslation("toggle.hatch.off") + getTranslation("hover.status.separator"));
             }
             if (showShinyHatches && src.hasPermission("pixelmonbroadcasts.notify.hatch.shiny"))
             {
@@ -571,9 +571,9 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showShinyHatch"))
-                    messages.add(getTranslation("toggle.text.shiny_hatch.on") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny_hatch.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.shiny_hatch.off") + statSeparator);
+                    messages.add(getTranslation("toggle.shiny_hatch.off") + getTranslation("hover.status.separator"));
             }
             if (showTrades && src.hasPermission("pixelmonbroadcasts.notify.trade.normal"))
             {
@@ -581,16 +581,16 @@ public class Toggle implements CommandExecutor
 
                 // Only returns "false" if explicitly toggled off by the user.
                 if (checkToggleStatus(player, "showTrade"))
-                    messages.add(getTranslation("toggle.text.trade.on") + statSeparator);
+                    messages.add(getTranslation("toggle.trade.on") + getTranslation("hover.status.separator"));
                 else
-                    messages.add(getTranslation("toggle.text.trade.off") + statSeparator);
+                    messages.add(getTranslation("toggle.trade.off") + getTranslation("hover.status.separator"));
             }
 
             // If we have any toggles lined up, print. No need to clear here, GC should handle it.
             if (!messages.isEmpty())
             {
                 // Get and add the "miscellaneous toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.messages.other_toggles")));
+                toggleMessageList.add(Text.of(getTranslation("toggle.other_toggles")));
 
                 // Get a clickable line with all the toggles that we can squeeze onto it.
                 toggleMessageList.add(getClickableLine(messages, flags));
@@ -600,7 +600,7 @@ public class Toggle implements CommandExecutor
                END OF TOGGLES
             \*                */
             // Add a header.
-            sendTranslation(src, "toggle.marginals.header");
+            sendTranslation(src, "toggle.header");
 
             if (toggleMessageList.isEmpty())
             {
@@ -616,7 +616,7 @@ public class Toggle implements CommandExecutor
             }
 
             // Add a footer.
-            sendTranslation(src, "universal.marginals.footer");
+            sendTranslation(src, "universal.footer");
         }
         else
             printBasicError("This command can only be run by players.");
