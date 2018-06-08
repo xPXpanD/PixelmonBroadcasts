@@ -146,6 +146,39 @@ public class ConfigMethods
                     // Set up some error arrays, so we can print errors to the console on boot/reload if stuff broke.
                     final List<String> optionsErrorArray = new ArrayList<>();
 
+                    /*                 *\
+                       normal settings
+                    \*                 */
+                    String normalCatchOptions = settingsConfig.getNode("normalCatchOptions").getString();
+                    if (normalCatchOptions == null)
+                        optionsErrorArray.add("normalCatchOptions");
+                    else
+                    {
+                        normalCatchOptions = normalCatchOptions.toLowerCase();
+
+                        if (normalCatchOptions.contains("log"))
+                            PixelmonBroadcasts.logNormalCatches = true;
+                        if (normalCatchOptions.contains("show"))
+                            PixelmonBroadcasts.showNormalCatches = true;
+                        if (normalCatchOptions.contains("hover"))
+                            PixelmonBroadcasts.hoverNormalCatches = true;
+                    }
+
+                    String normalBlackoutOptions = settingsConfig.getNode("normalBlackoutOptions").getString();
+                    if (normalBlackoutOptions == null)
+                        optionsErrorArray.add("normalBlackoutOptions");
+                    else
+                    {
+                        normalBlackoutOptions = normalBlackoutOptions.toLowerCase();
+
+                        if (normalBlackoutOptions.contains("log"))
+                            PixelmonBroadcasts.logNormalBlackouts = true;
+                        if (normalBlackoutOptions.contains("show"))
+                            PixelmonBroadcasts.showNormalBlackouts = true;
+                        if (normalBlackoutOptions.contains("hover"))
+                            PixelmonBroadcasts.hoverNormalBlackouts = true;
+                    }
+
                     /*                    *\
                        legendary settings
                     \*                    */
@@ -196,19 +229,19 @@ public class ConfigMethods
                             PixelmonBroadcasts.hoverLegendaryCatches = true;
                     }
 
-                    String legendaryDefeatOptions = settingsConfig.getNode("legendaryDefeatOptions").getString();
-                    if (legendaryDefeatOptions == null)
-                        optionsErrorArray.add("legendaryDefeatOptions");
+                    String legendaryVictoryOptions = settingsConfig.getNode("legendaryVictoryOptions").getString();
+                    if (legendaryVictoryOptions == null)
+                        optionsErrorArray.add("legendaryVictoryOptions");
                     else
                     {
-                        legendaryDefeatOptions = legendaryDefeatOptions.toLowerCase();
+                        legendaryVictoryOptions = legendaryVictoryOptions.toLowerCase();
 
-                        if (legendaryDefeatOptions.contains("log"))
-                            PixelmonBroadcasts.logLegendaryDefeats = true;
-                        if (legendaryDefeatOptions.contains("show"))
-                            PixelmonBroadcasts.showLegendaryDefeats = true;
-                        if (legendaryDefeatOptions.contains("hover"))
-                            PixelmonBroadcasts.hoverLegendaryDefeats = true;
+                        if (legendaryVictoryOptions.contains("log"))
+                            PixelmonBroadcasts.logLegendaryVictories = true;
+                        if (legendaryVictoryOptions.contains("show"))
+                            PixelmonBroadcasts.showLegendaryVictories = true;
+                        if (legendaryVictoryOptions.contains("hover"))
+                            PixelmonBroadcasts.hoverLegendaryVictories = true;
                     }
 
                     String legendaryBlackoutOptions = settingsConfig.getNode("legendaryBlackoutOptions").getString();
@@ -291,19 +324,19 @@ public class ConfigMethods
                             PixelmonBroadcasts.hoverShinyLegendaryCatches = true;
                     }
 
-                    String shinyLegendaryDefeatOptions = settingsConfig.getNode("shinyLegendaryDefeatOptions").getString();
-                    if (shinyLegendaryDefeatOptions == null)
-                        optionsErrorArray.add("shinyLegendaryDefeatOptions");
+                    String shinyLegendaryVictoryOptions = settingsConfig.getNode("shinyLegendaryVictoryOptions").getString();
+                    if (shinyLegendaryVictoryOptions == null)
+                        optionsErrorArray.add("shinyLegendaryVictoryOptions");
                     else
                     {
-                        shinyLegendaryDefeatOptions = shinyLegendaryDefeatOptions.toLowerCase();
+                        shinyLegendaryVictoryOptions = shinyLegendaryVictoryOptions.toLowerCase();
 
-                        if (shinyLegendaryDefeatOptions.contains("log"))
-                            PixelmonBroadcasts.logShinyLegendaryDefeats = true;
-                        if (shinyLegendaryDefeatOptions.contains("show"))
-                            PixelmonBroadcasts.showShinyLegendaryDefeats = true;
-                        if (shinyLegendaryDefeatOptions.contains("hover"))
-                            PixelmonBroadcasts.hoverShinyLegendaryDefeats = true;
+                        if (shinyLegendaryVictoryOptions.contains("log"))
+                            PixelmonBroadcasts.logShinyLegendaryVictories = true;
+                        if (shinyLegendaryVictoryOptions.contains("show"))
+                            PixelmonBroadcasts.showShinyLegendaryVictories = true;
+                        if (shinyLegendaryVictoryOptions.contains("hover"))
+                            PixelmonBroadcasts.hoverShinyLegendaryVictories = true;
                     }
 
                     String shinyLegendaryBlackoutOptions = settingsConfig.getNode("shinyLegendaryBlackoutOptions").getString();
@@ -386,19 +419,19 @@ public class ConfigMethods
                             PixelmonBroadcasts.hoverShinyCatches = true;
                     }
 
-                    String shinyDefeatOptions = settingsConfig.getNode("shinyDefeatOptions").getString();
-                    if (shinyDefeatOptions == null)
-                        optionsErrorArray.add("shinyDefeatOptions");
+                    String shinyVictoryOptions = settingsConfig.getNode("shinyVictoryOptions").getString();
+                    if (shinyVictoryOptions == null)
+                        optionsErrorArray.add("shinyVictoryOptions");
                     else
                     {
-                        shinyDefeatOptions = shinyDefeatOptions.toLowerCase();
+                        shinyVictoryOptions = shinyVictoryOptions.toLowerCase();
 
-                        if (shinyDefeatOptions.contains("log"))
-                            PixelmonBroadcasts.logShinyDefeats = true;
-                        if (shinyDefeatOptions.contains("show"))
-                            PixelmonBroadcasts.showShinyDefeats = true;
-                        if (shinyDefeatOptions.contains("hover"))
-                            PixelmonBroadcasts.hoverShinyDefeats = true;
+                        if (shinyVictoryOptions.contains("log"))
+                            PixelmonBroadcasts.logShinyVictories = true;
+                        if (shinyVictoryOptions.contains("show"))
+                            PixelmonBroadcasts.showShinyVictories = true;
+                        if (shinyVictoryOptions.contains("hover"))
+                            PixelmonBroadcasts.hoverShinyVictories = true;
                     }
 
                     String shinyBlackoutOptions = settingsConfig.getNode("shinyBlackoutOptions").getString();
@@ -466,19 +499,19 @@ public class ConfigMethods
                             PixelmonBroadcasts.hoverBossChallenges = true;
                     }
 
-                    String bossDefeatOptions = settingsConfig.getNode("bossDefeatOptions").getString();
-                    if (bossDefeatOptions == null)
-                        optionsErrorArray.add("bossDefeatOptions");
+                    String bossVictoryOptions = settingsConfig.getNode("bossVictoryOptions").getString();
+                    if (bossVictoryOptions == null)
+                        optionsErrorArray.add("bossVictoryOptions");
                     else
                     {
-                        bossDefeatOptions = bossDefeatOptions.toLowerCase();
+                        bossVictoryOptions = bossVictoryOptions.toLowerCase();
 
-                        if (bossDefeatOptions.contains("log"))
-                            PixelmonBroadcasts.logBossDefeats = true;
-                        if (bossDefeatOptions.contains("show"))
-                            PixelmonBroadcasts.showBossDefeats = true;
-                        if (bossDefeatOptions.contains("hover"))
-                            PixelmonBroadcasts.hoverBossDefeats = true;
+                        if (bossVictoryOptions.contains("log"))
+                            PixelmonBroadcasts.logBossVictories = true;
+                        if (bossVictoryOptions.contains("show"))
+                            PixelmonBroadcasts.showBossVictories = true;
+                        if (bossVictoryOptions.contains("hover"))
+                            PixelmonBroadcasts.hoverBossVictories = true;
                     }
 
                     String bossBlackoutOptions = settingsConfig.getNode("bossBlackoutOptions").getString();
@@ -511,9 +544,9 @@ public class ConfigMethods
                             PixelmonBroadcasts.hoverBossForfeits = true;
                     }
 
-                    /*                 *\
-                       trainer settings
-                    \*                 */
+                    /*                       *\
+                       boss trainer settings
+                    \*                       */
 
                     // Get options. Extract and set them, if we managed to grab them successfully.
                     String bossTrainerChallengeOptions = settingsConfig.getNode("bossTrainerChallengeOptions").getString();
@@ -529,17 +562,17 @@ public class ConfigMethods
                             PixelmonBroadcasts.showBossTrainerChallenges = true;
                     }
 
-                    String bossTrainerDefeatOptions = settingsConfig.getNode("bossTrainerDefeatOptions").getString();
-                    if (bossTrainerDefeatOptions == null)
-                        optionsErrorArray.add("bossTrainerDefeatOptions");
+                    String bossTrainerVictoryOptions = settingsConfig.getNode("bossTrainerVictoryOptions").getString();
+                    if (bossTrainerVictoryOptions == null)
+                        optionsErrorArray.add("bossTrainerVictoryOptions");
                     else
                     {
-                        bossTrainerDefeatOptions = bossTrainerDefeatOptions.toLowerCase();
+                        bossTrainerVictoryOptions = bossTrainerVictoryOptions.toLowerCase();
 
-                        if (bossTrainerDefeatOptions.contains("log"))
-                            PixelmonBroadcasts.logBossTrainerDefeats = true;
-                        if (bossTrainerDefeatOptions.contains("show"))
-                            PixelmonBroadcasts.showBossTrainerDefeats = true;
+                        if (bossTrainerVictoryOptions.contains("log"))
+                            PixelmonBroadcasts.logBossTrainerVictories = true;
+                        if (bossTrainerVictoryOptions.contains("show"))
+                            PixelmonBroadcasts.showBossTrainerVictories = true;
                     }
 
                     String bossTrainerBlackoutOptions = settingsConfig.getNode("bossTrainerBlackoutOptions").getString();
@@ -586,17 +619,17 @@ public class ConfigMethods
                             PixelmonBroadcasts.showTrainerChallenges = true;
                     }
 
-                    String trainerDefeatOptions = settingsConfig.getNode("trainerDefeatOptions").getString();
-                    if (trainerDefeatOptions == null)
-                        optionsErrorArray.add("trainerDefeatOptions");
+                    String trainerVictoryOptions = settingsConfig.getNode("trainerVictoryOptions").getString();
+                    if (trainerVictoryOptions == null)
+                        optionsErrorArray.add("trainerVictoryOptions");
                     else
                     {
-                        trainerDefeatOptions = trainerDefeatOptions.toLowerCase();
+                        trainerVictoryOptions = trainerVictoryOptions.toLowerCase();
 
-                        if (trainerDefeatOptions.contains("log"))
-                            PixelmonBroadcasts.logTrainerDefeats = true;
-                        if (trainerDefeatOptions.contains("show"))
-                            PixelmonBroadcasts.showTrainerDefeats = true;
+                        if (trainerVictoryOptions.contains("log"))
+                            PixelmonBroadcasts.logTrainerVictories = true;
+                        if (trainerVictoryOptions.contains("show"))
+                            PixelmonBroadcasts.showTrainerVictories = true;
                     }
 
                     String trainerBlackoutOptions = settingsConfig.getNode("trainerBlackoutOptions").getString();
@@ -643,17 +676,17 @@ public class ConfigMethods
                             PixelmonBroadcasts.showPVPStarts = true;
                     }
 
-                    String pvpDefeatOptions = settingsConfig.getNode("pvpDefeatOptions").getString();
-                    if (pvpDefeatOptions == null)
-                        optionsErrorArray.add("pvpDefeatOptions");
+                    String pvpVictoryOptions = settingsConfig.getNode("pvpVictoryOptions").getString();
+                    if (pvpVictoryOptions == null)
+                        optionsErrorArray.add("pvpVictoryOptions");
                     else
                     {
-                        pvpDefeatOptions = pvpDefeatOptions.toLowerCase();
+                        pvpVictoryOptions = pvpVictoryOptions.toLowerCase();
 
-                        if (pvpDefeatOptions.contains("log"))
-                            PixelmonBroadcasts.logPVPDefeats = true;
-                        if (pvpDefeatOptions.contains("show"))
-                            PixelmonBroadcasts.showPVPDefeats = true;
+                        if (pvpVictoryOptions.contains("log"))
+                            PixelmonBroadcasts.logPVPVictories = true;
+                        if (pvpVictoryOptions.contains("show"))
+                            PixelmonBroadcasts.showPVPVictories = true;
                     }
 
                     String pvpDrawOptions = settingsConfig.getNode("pvpDrawOptions").getString();
@@ -674,19 +707,19 @@ public class ConfigMethods
                     \*                */
 
                     // Get options. Extract and set them, if we managed to grab them successfully.
-                    String hatchOptions = settingsConfig.getNode("hatchOptions").getString();
-                    if (hatchOptions == null)
-                        optionsErrorArray.add("hatchOptions");
+                    String normalHatchOptions = settingsConfig.getNode("normalHatchOptions").getString();
+                    if (normalHatchOptions == null)
+                        optionsErrorArray.add("normalHatchOptions");
                     else
                     {
-                        hatchOptions = hatchOptions.toLowerCase();
+                        normalHatchOptions = normalHatchOptions.toLowerCase();
 
-                        if (hatchOptions.contains("log"))
-                            PixelmonBroadcasts.logHatches = true;
-                        if (hatchOptions.contains("show"))
-                            PixelmonBroadcasts.showHatches = true;
-                        if (hatchOptions.contains("hover"))
-                            PixelmonBroadcasts.hoverHatches = true;
+                        if (normalHatchOptions.contains("log"))
+                            PixelmonBroadcasts.logNormalHatches = true;
+                        if (normalHatchOptions.contains("show"))
+                            PixelmonBroadcasts.showNormalHatches = true;
+                        if (normalHatchOptions.contains("hover"))
+                            PixelmonBroadcasts.hoverNormalHatches = true;
                     }
 
                     String shinyHatchOptions = settingsConfig.getNode("shinyHatchOptions").getString();

@@ -11,17 +11,15 @@ import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumPokemon;
 import com.pixelmonmod.pixelmon.enums.battle.BattleResults;
 import com.pixelmonmod.pixelmon.enums.battle.EnumBattleEndCause;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.*;
 
 // Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndSendEventMessage;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlaceholders;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.isBroadcastPresent;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicError;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicMessage;
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
 public class BattleEndListener
 {
@@ -80,7 +78,7 @@ public class BattleEndListener
         // Check if we have a winner AND a loser amongst the participants. Usually trainer/PvP stuff.
         else if (hasWinnerAndLoser)
         {
-            // Should be safe -- haven't managed to get two defeats without it deciding on a draw instead.
+            // Should be safe -- haven't managed to get two DEFEAT results yet, it seems to always pick DRAW there.
             participant1 = winners.get(0);
             participant2 = losers.get(0);
         }
@@ -97,13 +95,12 @@ public class BattleEndListener
         // Seemed like a Pixelmon bug, so I reported it.
         if (event.cause != EnumBattleEndCause.FORCE)
         {
+            // Create a shorthand broadcast variable for convenience.
+            String broadcast;
+
             // Was our battle between two valid players?
             if (participant1 instanceof PlayerParticipant && participant2 instanceof PlayerParticipant)
             {
-                // Create some internal convenience variables.
-                final BlockPos player1Pos = ((PlayerParticipant) participant1).player.getPosition();
-                final BlockPos player2Pos = ((PlayerParticipant) participant2).player.getPosition();
-
                 if (endedInDraw || battleForfeited)
                 {
                     if (logPVPDraws)
@@ -111,8 +108,8 @@ public class BattleEndListener
                         // Print a PvP draw message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §7Players §f" + participant1.getDisplayName() +
-                                "§7 and §f" + participant2.getDisplayName() +
+                                "§5PBR §f// §7Players §f" + participant1Name +
+                                "§7 and §f" + participant2Name +
                                 "§7 ended their battle in a draw, in world \"§f" + worldName +
                                 "§7\", at X:§f" + location.getX() +
                                 "§7 Y:§f" + location.getY() +
@@ -122,29 +119,26 @@ public class BattleEndListener
 
                     if (showPVPDraws)
                     {
-                        // Parse placeholders and print!
-                        if (isBroadcastPresent("broadcast.draw.pvp"))
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            String finalMessage;
-                            finalMessage = replacePlaceholders(pvpDrawMessage, participant1Name,
-                                    false, false, null, player1Pos);
-                            finalMessage = replacePlaceholders(finalMessage, participant2Name,
-                                    false, true, null, player2Pos);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.draw.pvp");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, null,
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            // Replace the placeholders for player 2's side, first. We'll grab the normal ones in the final sweep.
+                            broadcast = replacePlayer2Placeholders(broadcast, null, (EntityPlayer) participant2.getEntity());
+
+                            // Swap player 1 placeholders, and then send.
+                            iterateAndSendBroadcast(broadcast, null, (EntityPlayer) participant1.getEntity(),
                                     false, false, false, "draw.pvp", "showPVPDraw");
                         }
-                        else
-                            printBasicError("The PvP battle draw message is broken, broadcast failed.");
                     }
                 }
                 else
                 {
-                    if (logPVPDefeats)
+                    if (logPVPVictories)
                     {
-                        // Print a PvP defeat message to console.
+                        // Print a PvP victory message to console.
                         printBasicMessage
                         (
                                 "§5PBR §f// §7Player §f" + participant1Name +
@@ -156,38 +150,36 @@ public class BattleEndListener
                         );
                     }
 
-                    if (showPVPDefeats)
+                    if (showPVPVictories)
                     {
-                        // Parse placeholders and print!
-                        if (isBroadcastPresent("broadcast.defeat.pvp"))
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            String finalMessage;
-                            finalMessage = replacePlaceholders(pvpDefeatMessage, participant1Name,
-                                    false, false, null, player1Pos);
-                            finalMessage = replacePlaceholders(finalMessage, participant2Name,
-                                    false, true, null, player2Pos);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.victory.pvp");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, null,
-                                    false, false, false, "defeat.pvp", "showPVPDefeat");
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            // Replace the placeholders for player 2's side, first. We'll grab the normal ones in the final sweep.
+                            broadcast = replacePlayer2Placeholders(broadcast, null, (EntityPlayer) participant2.getEntity());
+
+                            // Swap player 1 placeholders, and then send.
+                            iterateAndSendBroadcast(broadcast, null, (EntityPlayer) participant1.getEntity(),
+                                    false, false, false, "victory.pvp", "showPVPVictory");
                         }
-                        else
-                            printBasicError("The PvP battle end message is broken, broadcast failed.");
                     }
                 }
             }
-            // Do we have a trainer who won from a player?
+            // Did a trainer win from a player? Participant orders got figured out earlier, if a winner and loser were present.
             else if (participant1 instanceof TrainerParticipant && participant2 instanceof PlayerParticipant)
             {
-                // We know now that we have a trainer, so make a variable for it here so we don't have to keep casting.
-                final TrainerParticipant trainer1 = (TrainerParticipant) participant1;
+                // We have a trainer, so create some convenient variables to avoid repeated casts.
+                final TrainerParticipant trainer = (TrainerParticipant) participant1;
+                final EntityPlayer playerEntity = (EntityPlayer) participant2.getEntity();
 
                 // Was the battle forfeited? I thiiink only the player can do this, right now.
                 if (battleForfeited)
                 {
                     // Is our trainer a boss trainer?
-                    if (trainer1.trainer.getBossMode().isBossPokemon())
+                    if (trainer.trainer.getBossMode().isBossPokemon())
                     {
                         if (logBossTrainerForfeits)
                         {
@@ -204,20 +196,15 @@ public class BattleEndListener
 
                         if (showBossTrainerForfeits)
                         {
-                            // Parse placeholders and print!
-                            if (isBroadcastPresent("broadcast.forfeit.boss_trainer"))
-                            {
-                                // Set up our message. This is the same for all eligible players, so call it once and store it.
-                                final String finalMessage = replacePlaceholders(bossTrainerForfeitMessage,
-                                        participant2Name, false, false, null, location);
+                            // Get a broadcast from the broadcasts config file, if the key can be found.
+                            broadcast = getBroadcast("broadcast.forfeit.boss_trainer");
 
-                                // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(
-                                        finalMessage, null, false, false,
+                            // Did we find a message? Iterate all available players, and send to those who should receive!
+                            if (broadcast != null)
+                            {
+                                iterateAndSendBroadcast(broadcast, null, playerEntity, false, false,
                                         false, "forfeit.bosstrainer", "showBossTrainerForfeit");
                             }
-                            else
-                                printBasicError("The boss trainer forfeiting message is broken, broadcast failed.");
                         }
                     }
                     else
@@ -237,27 +224,22 @@ public class BattleEndListener
 
                         if (showTrainerForfeits)
                         {
-                            // Parse placeholders and print!
-                            if (isBroadcastPresent("broadcast.forfeit.trainer"))
-                            {
-                                // Set up our message. This is the same for all eligible players, so call it once and store it.
-                                final String finalMessage = replacePlaceholders(trainerForfeitMessage,
-                                        participant2Name, false, false, null, location);
+                            // Get a broadcast from the broadcasts config file, if the key can be found.
+                            broadcast = getBroadcast("broadcast.forfeit.trainer");
 
-                                // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(
-                                        finalMessage, null, false, false,
+                            // Did we find a message? Iterate all available players, and send to those who should receive!
+                            if (broadcast != null)
+                            {
+                                iterateAndSendBroadcast(broadcast, null, playerEntity, false, false,
                                         false, "forfeit.trainer", "showTrainerForfeit");
                             }
-                            else
-                                printBasicError("The trainer forfeiting message is broken, broadcast failed.");
                         }
                     }
                 }
                 else
                 {
                     // Is our trainer a boss trainer?
-                    if (trainer1.trainer.getBossMode().isBossPokemon())
+                    if (trainer.trainer.getBossMode().isBossPokemon())
                     {
                         if (logBossTrainerBlackouts)
                         {
@@ -274,20 +256,15 @@ public class BattleEndListener
 
                         if (showBossTrainerBlackouts)
                         {
-                            // Parse placeholders and print!
-                            if (isBroadcastPresent("broadcast.blackout.boss_trainer"))
-                            {
-                                // Set up our message. This is the same for all eligible players, so call it once and store it.
-                                final String finalMessage = replacePlaceholders(bossTrainerBlackoutMessage,
-                                        participant2Name, false, false, null, location);
+                            // Get a broadcast from the broadcasts config file, if the key can be found.
+                            broadcast = getBroadcast("broadcast.blackout.boss_trainer");
 
-                                // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(
-                                        finalMessage, null, false, false,
+                            // Did we find a message? Iterate all available players, and send to those who should receive!
+                            if (broadcast != null)
+                            {
+                                iterateAndSendBroadcast(broadcast, null, playerEntity, false, false,
                                         false, "blackout.bosstrainer", "showBossTrainerBlackout");
                             }
-                            else
-                                printBasicError("The boss trainer blackout message is broken, broadcast failed.");
                         }
                     }
                     else if (showTrainerBlackouts)
@@ -307,36 +284,32 @@ public class BattleEndListener
 
                         if (showTrainerBlackouts)
                         {
-                            // Parse placeholders and print!
-                            if (isBroadcastPresent("broadcast.blackout.trainer"))
-                            {
-                                // Set up our message. This is the same for all eligible players, so call it once and store it.
-                                final String finalMessage = replacePlaceholders(trainerBlackoutMessage,
-                                        participant2Name, false, false, null, location);
+                            // Get a broadcast from the broadcasts config file, if the key can be found.
+                            broadcast = getBroadcast("broadcast.blackout.trainer");
 
-                                // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(
-                                        finalMessage, null, false, false,
+                            // Did we find a message? Iterate all available players, and send to those who should receive!
+                            if (broadcast != null)
+                            {
+                                iterateAndSendBroadcast(broadcast, null, playerEntity, false, false,
                                         false, "blackout.trainer", "showTrainerBlackout");
                             }
-                            else
-                                printBasicError("The trainer blackout message is broken, broadcast failed.");
                         }
                     }
                 }
             }
-            // Did a player defeat a trainer?
+            // Did a player defeat a trainer? Participant orders got figured out earlier, if a winner and loser were present.
             else if (participant1 instanceof PlayerParticipant && participant2 instanceof TrainerParticipant)
             {
-                // We know now that we have a trainer, so make a variable for it here so we don't have to keep casting.
+                // We have a trainer, so create some convenient variables to avoid repeated casts.
                 final TrainerParticipant trainer2 = (TrainerParticipant) participant2;
+                final EntityPlayer playerEntity = (EntityPlayer) participant1.getEntity();
 
                 // Is our trainer a boss trainer?
                 if ((trainer2.trainer.getBossMode().isBossPokemon()))
                 {
-                    if (logBossTrainerDefeats)
+                    if (logBossTrainerVictories)
                     {
-                        // Print a defeat message to console.
+                        // Print a victory message to console.
                         printBasicMessage
                         (
                                 "§5PBR §f// §7Player §1" + participant1Name +
@@ -347,29 +320,24 @@ public class BattleEndListener
                         );
                     }
 
-                    if (showBossTrainerDefeats)
+                    if (showBossTrainerVictories)
                     {
-                        // Parse placeholders and print!
-                        if (isBroadcastPresent("broadcast.defeat.boss_trainer"))
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            final String finalMessage = replacePlaceholders(bossTrainerDefeatMessage,
-                                    participant1Name, false, false, null, location);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.victory.boss_trainer");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(
-                                    finalMessage, null, false, false,
-                                    false, "defeat.bosstrainer", "showBossTrainerDefeat");
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, null, playerEntity, false, false,
+                                    false, "victory.bosstrainer", "showBossTrainerVictory");
                         }
-                        else
-                            printBasicError("The boss trainer defeat message is broken, broadcast failed.");
                     }
                 }
                 else
                 {
-                    if (logTrainerDefeats)
+                    if (logTrainerVictories)
                     {
-                        // Print a defeat message to console.
+                        // Print a victory message to console.
                         printBasicMessage
                         (
                                 "§5PBR §f// §7Player §f" + participant1Name +
@@ -380,32 +348,25 @@ public class BattleEndListener
                         );
                     }
 
-                    if (showTrainerDefeats)
+                    if (showTrainerVictories)
                     {
-                        // Parse placeholders and print!
-                        if (isBroadcastPresent("broadcast.defeat.trainer"))
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            final String finalMessage = replacePlaceholders(trainerDefeatMessage,
-                                    participant1Name, false, false, null, location);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.victory.trainer");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(
-                                    finalMessage, null, false, false,
-                                    false, "defeat.trainer", "showTrainerDefeat");
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, null, playerEntity, false, false,
+                                    false, "victory.trainer", "showTrainerVictory");
                         }
-                        else
-                            printBasicError("The trainer defeat message is broken, broadcast failed.");
                     }
                 }
             }
-            // Did a player lose to a wild Pokémon?
+            // Did a player lose to a wild Pokémon? Participant orders got figured out earlier, if a winner and loser were present.
             else if (participant1 instanceof WildPixelmonParticipant && participant2 instanceof PlayerParticipant && !endedInFlee)
             {
-                printBasicError("Abnormal: " + event.abnormal);
-                printBasicError("Participant1: " + participant1);
-                printBasicError("Participant2: " + participant2);
-
+                // Create shorthand variables for convenience.
+                final EntityPlayer playerEntity = (EntityPlayer) participant2.getEntity();
                 final EntityPixelmon pokemon = (EntityPixelmon) participant1.getEntity();
                 final String pokemonName = participant1.getDisplayName();
 
@@ -428,19 +389,15 @@ public class BattleEndListener
 
                     if (showBossBlackouts)
                     {
-                        // Parse placeholders and print!
-                        if (isBroadcastPresent("broadcast.blackout.boss"))
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            final String finalMessage = replacePlaceholders(bossBlackoutMessage,
-                                    participant2Name, false, false, pokemon, location);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.blackout.boss");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, pokemon, hoverBossBlackouts, true,
-                                    false, "blackout.boss", "showBossBlackout");
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, null, playerEntity, hoverBossBlackouts,
+                                    false, true, "blackout.boss", "showBossBlackout");
                         }
-                        else
-                            printBasicError("The boss blackout message is broken, broadcast failed.");
                     }
                 }
                 else if (EnumPokemon.legendaries.contains(pokemonName) && pokemon.getIsShiny())
@@ -461,20 +418,15 @@ public class BattleEndListener
 
                     if (showShinyLegendaryBlackouts)
                     {
-                        // Parse placeholders and print!
-                        if (isBroadcastPresent("broadcast.blackout.shiny_legendary"))
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
-                            final String finalMessage = replacePlaceholders(shinyLegendaryBlackoutMessage,
-                                    participant2Name, false, false, pokemon, location);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.blackout.shiny_legendary");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyLegendaryBlackouts, true,
-                                    false, "blackout.shinylegendary", "showShinyLegendaryBlackout");
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, null, playerEntity, hoverShinyLegendaryBlackouts,
+                                    false, true, "blackout.shinylegendary", "showShinyLegendaryBlackout");
                         }
-                        else
-                            printBasicError("The shiny legendary blackout message is broken, broadcast failed.");
                     }
                 }
                 else if (EnumPokemon.legendaries.contains(pokemonName))
@@ -495,19 +447,15 @@ public class BattleEndListener
 
                     if (showLegendaryBlackouts)
                     {
-                        // Parse placeholders and print!
-                        if (isBroadcastPresent("broadcast.blackout.legendary"))
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            final String finalMessage = replacePlaceholders(legendaryBlackoutMessage,
-                                    participant2Name, false, false, pokemon, location);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.blackout.legendary");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, pokemon, hoverLegendaryBlackouts, true,
-                                    false, "blackout.legendary", "showLegendaryBlackout");
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, null, playerEntity, hoverLegendaryBlackouts,
+                                    false, true, "blackout.legendary", "showLegendaryBlackout");
                         }
-                        else
-                            printBasicError("The legendary blackout message is broken, broadcast failed.");
                     }
                 }
                 else if (pokemon.getIsShiny())
@@ -528,24 +476,52 @@ public class BattleEndListener
 
                     if (showShinyBlackouts)
                     {
-                        // Parse placeholders and print!
-                        if (isBroadcastPresent("broadcast.blackout.shiny"))
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            final String finalMessage = replacePlaceholders(shinyBlackoutMessage,
-                                    participant2Name, false, false, pokemon, location);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.blackout.shiny");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyBlackouts, true,
-                                    false, "blackout.shiny", "showShinyBlackout");
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, null, playerEntity, hoverShinyBlackouts,
+                                    false, true, "blackout.shiny", "showShinyBlackout");
                         }
-                        else
-                            printBasicError("The shiny blackout message is broken, broadcast failed.");
+                    }
+                }
+                else
+                {
+                    if (logNormalBlackouts)
+                    {
+                        // Print a blackout message to console.
+                        printBasicMessage
+                        (
+                                "§5PBR §f// §cPlayer §4" + participant2Name +
+                                "§c was knocked out by a normal §4" + pokemonName +
+                                "§c in world \"§4" + worldName +
+                                "§c\", at X:§4" + location.getX() +
+                                "§c Y:§4" + location.getY() +
+                                "§c Z:§4" + location.getZ()
+                        );
+                    }
+
+                    if (showNormalBlackouts)
+                    {
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.blackout.normal");
+
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, null, playerEntity, hoverNormalBlackouts,
+                                    false, true, "blackout.normal", "showNormalBlackout");
+                        }
                     }
                 }
             }
+            // Did a player flee from battle? Participant types and orders got figured out earlier, again.
             else if (endedInFlee)
             {
+                // Create shorthand variables for convenience.
+                final EntityPlayer playerEntity = (EntityPlayer) participant2.getEntity();
                 final EntityPixelmon pokemon = (EntityPixelmon) participant1.getEntity();
                 final String pokemonName = participant1.getDisplayName();
 
@@ -568,19 +544,15 @@ public class BattleEndListener
 
                     if (showBossForfeits)
                     {
-                        // Parse placeholders and print!
-                        if (isBroadcastPresent("broadcast.forfeit.boss"))
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            final String finalMessage = replacePlaceholders(bossForfeitMessage,
-                                    participant2Name, false, false, pokemon, location);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.forfeit.boss");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, pokemon, hoverBossForfeits, true,
-                                    false, "forfeit.boss", "showBossForfeit");
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, null, playerEntity, hoverBossForfeits,
+                                    false, false, "forfeit.boss", "showBossForfeit");
                         }
-                        else
-                            printBasicError("The boss forfeit message is broken, broadcast failed.");
                     }
                 }
                 else if (EnumPokemon.legendaries.contains(pokemonName) && pokemon.getIsShiny())
@@ -601,20 +573,15 @@ public class BattleEndListener
 
                     if (showShinyLegendaryForfeits)
                     {
-                        // Parse placeholders and print!
-                        if (isBroadcastPresent("broadcast.forfeit.shiny_legendary"))
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
-                            final String finalMessage = replacePlaceholders(shinyLegendaryForfeitMessage,
-                                    participant2Name, false, false, pokemon, location);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.forfeit.shiny_legendary");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyLegendaryForfeits, true,
-                                    false, "forfeit.shinylegendary", "showShinyLegendaryForfeit");
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, null, playerEntity, hoverShinyLegendaryForfeits,
+                                    false, false, "forfeit.shinylegendary", "showShinyLegendaryForfeit");
                         }
-                        else
-                            printBasicError("The shiny legendary forfeit message is broken, broadcast failed.");
                     }
                 }
                 else if (EnumPokemon.legendaries.contains(pokemonName))
@@ -635,19 +602,15 @@ public class BattleEndListener
 
                     if (showLegendaryForfeits)
                     {
-                        // Parse placeholders and print!
-                        if (isBroadcastPresent("broadcast.forfeit.legendary"))
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            final String finalMessage = replacePlaceholders(legendaryForfeitMessage,
-                                    participant2Name, false, false, pokemon, location);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.forfeit.legendary");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, pokemon, hoverLegendaryForfeits, true,
-                                    false, "forfeit.legendary", "showLegendaryForfeit");
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, null, playerEntity, hoverLegendaryForfeits,
+                                    false, false, "forfeit.legendary", "showLegendaryForfeit");
                         }
-                        else
-                            printBasicError("The legendary forfeit message is broken, broadcast failed.");
                     }
                 }
                 else if (pokemon.getIsShiny())
@@ -668,19 +631,15 @@ public class BattleEndListener
 
                     if (showShinyForfeits)
                     {
-                        // Parse placeholders and print!
-                        if (isBroadcastPresent("broadcast.forfeit.shiny"))
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            final String finalMessage = replacePlaceholders(shinyForfeitMessage,
-                                    participant2Name, false, false, pokemon, location);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.forfeit.shiny");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyForfeits, true,
-                                    false, "forfeit.shiny", "showShinyForfeit");
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, null, playerEntity, hoverShinyForfeits,
+                                    false, false, "forfeit.shiny", "showShinyForfeit");
                         }
-                        else
-                            printBasicError("The shiny forfeit message is broken, broadcast failed.");
                     }
                 }
             }

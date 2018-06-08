@@ -23,20 +23,13 @@ public class PlaceholderMethods
     // Iterates through the online player list, and sends a broadcast to those with the right perms and toggle status.
     // This method also adds a hoverable IV spread if the "hover" option is set for this broadcast.
     public static void iterateAndSendBroadcast(
-            String broadcast, final EntityPixelmon pokemon, final EntityPlayer player, final BlockPos location,
-            final boolean hasHover, final boolean presentTense, final boolean showIVs, final String permission,
-            final String... flags)
+            String broadcast, final EntityPixelmon pokemon, final EntityPlayer player, final boolean hasHover,
+            final boolean presentTense, final boolean showIVs, final String permission, final String... flags)
     {
-        // If our broadcast has any placeholders inside, replace them with the matching value. Case-insensitive.
-        // Do we require any coordinates?
-        broadcast = broadcast.replaceAll("(?i)%xpos%", String.valueOf(location.getX()));
-        broadcast = broadcast.replaceAll("(?i)%ypos%", String.valueOf(location.getY()));
-        broadcast = broadcast.replaceAll("(?i)%zpos%", String.valueOf(location.getZ()));
-
         // Do we have a Pokémon entity? Replace Pokémon-specific placeholders.
         if (pokemon != null)
         {
-            // Replace more placeholders.
+            // Insert the Pokémon's name.
             if (broadcast.toLowerCase().contains("%pokemon%"))
             {
                 // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
@@ -44,9 +37,13 @@ public class PlaceholderMethods
                 final String pokemonName =
                         pokemon.isEgg ? getTranslation("placeholder.pokemon.is_egg") : pokemon.getLocalizedName();
 
-                // Insert the checked Pokémon name.
+                // Proceed with insertion.
                 broadcast = broadcast.replaceAll("(?i)%pokemon%", pokemonName);
             }
+
+            // Insert the "placeholder.shiny" String.
+            if (pokemon.getIsShiny())
+                broadcast = broadcast.replaceAll("(?i)%shiny%", getTranslation("placeholder.shiny"));
 
             // Also run some special logic for IV percentages. Same idea as with the above.
             if (showIVs && broadcast.toLowerCase().contains("%ivpercent%"))
@@ -74,7 +71,7 @@ public class PlaceholderMethods
             }
 
             // Replace situation-specific placeholders via an external method. Pass data from the Pokémon.
-            broadcast = replaceNeutralPlaceholders(broadcast, pokemon.getEntityWorld(), location);
+            broadcast = replaceNeutralPlaceholders(broadcast, pokemon.getEntityWorld(), pokemon.getPosition());
         }
 
         // Do we have a player entity? Replace player-specific placeholders.
@@ -87,7 +84,7 @@ public class PlaceholderMethods
             if (pokemon == null)
             {
                 // Replace situation-specific placeholders via an external method. Pass data from the player entity.
-                broadcast = replaceNeutralPlaceholders(broadcast, player.getEntityWorld(), location);
+                broadcast = replaceNeutralPlaceholders(broadcast, player.getEntityWorld(), player.getPosition());
             }
         }
 
@@ -114,9 +111,14 @@ public class PlaceholderMethods
     }
 
     // Replaces placeholders that can have multiple sources (players, Pokémon).
-    // Can be used for both players, but it's a bit cheeky -- it assumes that both players are in the same world/biome.
+    // Can be used for both players, but it's a bit cheeky -- we'll assume that player 1's data is good enough.
     private static String replaceNeutralPlaceholders(String broadcast, final World world, final BlockPos location)
     {
+        // Insert coordinates.
+        broadcast = broadcast.replaceAll("(?i)%xpos2%", String.valueOf(location.getX()));
+        broadcast = broadcast.replaceAll("(?i)%ypos2%", String.valueOf(location.getY()));
+        broadcast = broadcast.replaceAll("(?i)%zpos2%", String.valueOf(location.getZ()));
+
         // Insert a world name.
         broadcast = broadcast.replaceAll("(?i)%world(\\d*?)%", world.getWorldInfo().getWorldName());
 
@@ -163,32 +165,31 @@ public class PlaceholderMethods
     }
 
     // Takes a config String, and replaces any known placeholders with the proper replacements as many times as needed.
+    // Note to self: (//d+) can be used to match a practically infinite amount of numbers, with at least one required.
     public static String replacePlayer2Placeholders(
-            String broadcast, final EntityPlayer player, final EntityPixelmon pokemon, final BlockPos location)
+            String broadcast, final EntityPixelmon pokemon, final EntityPlayer player)
     {
-        // If our broadcast has any placeholders inside, replace them with the matching value. Case-insensitive.
-        // Do we require any coordinates?
-        broadcast = broadcast.replaceAll("(?i)%xpos(\\d+)%", String.valueOf(location.getX()));
-        broadcast = broadcast.replaceAll("(?i)%ypos(\\d+)%", String.valueOf(location.getY()));
-        broadcast = broadcast.replaceAll("(?i)%zpos(\\d+)%", String.valueOf(location.getZ()));
-
         // Do we have a Pokémon entity? Replace Pokémon-specific placeholders.
         if (pokemon != null)
         {
-            // Replace more placeholders.
-            if (broadcast.matches(".*%(?i)pokemon(\\d+)%.*"))
+            // Insert the Pokémon's name.
+            if (broadcast.matches(".*%(?i)pokemon2%.*"))
             {
                 // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
                 // FIXME: Could do with an option, or a cleaner way to make this all work.
                 final String pokemonName =
                         pokemon.isEgg ? getTranslation("placeholder.pokemon.is_egg") : pokemon.getLocalizedName();
 
-                // Insert the checked Pokémon name.
-                broadcast = broadcast.replaceAll("(?i)%pokemon(\\d+)%", pokemonName);
+                // Proceed with insertion.
+                broadcast = broadcast.replaceAll("(?i)%pokemon2%", pokemonName);
             }
 
+            // Insert the "placeholder.shiny" String.
+            if (pokemon.getIsShiny())
+                broadcast = broadcast.replaceAll("(?i)%shiny2%", getTranslation("placeholder.shiny"));
+
             // Also run some special logic for IV percentages. Same idea as with the above.
-            if (broadcast.matches(".*%(?i)ivpercent(\\d+)%.*"))
+            if (broadcast.matches(".*%(?i)ivpercent2%.*"))
             {
                 // Grab the Pokémon's stats.
                 final int HPIV = pokemon.stats.ivs.HP;
@@ -209,24 +210,24 @@ public class PlaceholderMethods
                         pokemon.isEgg ? getTranslation("placeholder.ivpercent.is_egg") : percentIVs.toString() + '%';
 
                 // Apply.
-                broadcast = broadcast.replaceAll("(?i)%ivpercent(\\d+)%", pokemonIVs);
+                broadcast = broadcast.replaceAll("(?i)%ivpercent2%", pokemonIVs);
             }
 
             // Replace situation-specific placeholders via an external method. Pass data from the Pokémon.
-            broadcast = replaceNeutralPlaceholders(broadcast, pokemon.getEntityWorld(), location);
+            broadcast = replaceNeutralPlaceholders(broadcast, pokemon.getEntityWorld(), pokemon.getPosition());
         }
 
         // Do we have a player entity? Replace player-specific placeholders.
         if (player != null)
         {
             // Insert the player's name.
-            broadcast = broadcast.replaceAll("(?i)%player(\\d+)%", player.getName());
+            broadcast = broadcast.replaceAll("(?i)%player2%", player.getName());
 
             // Did we not get sent a Pokémon? Try to get some data from the provided player, instead.
             if (pokemon == null)
             {
                 // Replace situation-specific placeholders via an external method. Pass data from the player entity.
-                broadcast = replaceNeutralPlaceholders(broadcast, player.getEntityWorld(), location);
+                broadcast = replaceNeutralPlaceholders(broadcast, player.getEntityWorld(), player.getPosition());
             }
         }
 

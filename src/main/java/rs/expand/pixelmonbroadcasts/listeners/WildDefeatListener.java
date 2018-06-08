@@ -1,12 +1,12 @@
-// Listens for Pokémon that get defeated.
+// Listens for Pokémon that get defeated by players.
 package rs.expand.pixelmonbroadcasts.listeners;
 
 // Remote imports.
 import com.pixelmonmod.pixelmon.api.events.BeatWildPixelmonEvent;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumPokemon;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 // Local imports.
@@ -21,146 +21,127 @@ public class WildDefeatListener
     @SubscribeEvent
     public void onBeatWildLegendaryEvent(final BeatWildPixelmonEvent event)
     {
+        // Create shorthand variables for convenience.
+        final String broadcast;
         final EntityPixelmon pokemon = (EntityPixelmon) event.wpp.getEntity();
-        final String pokemonName = pokemon.getLocalizedName();
-        final String playerName = event.player.getName();
-        final World world = pokemon.getEntityWorld();
+        final EntityPlayer player = event.player;
         final BlockPos location = pokemon.getPosition();
+        final String pokemonName = pokemon.getLocalizedName();
 
         if (pokemon.isBossPokemon())
         {
-            if (logBossDefeats)
+            if (logBossVictories)
             {
-                // Print a defeat message to console.
+                // Print a victory message to console.
                 printBasicMessage
                 (
-                        "§5PBR §f// §ePlayer §6" + playerName +
+                        "§5PBR §f// §ePlayer §6" + player.getName() +
                         "§e defeated a boss §6" + pokemonName +
-                        "§e boss in world \"§6" + world.getWorldInfo().getWorldName() +
+                        "§e boss in world \"§6" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§e\", at X:§6" + location.getX() +
                         "§e Y:§6" + location.getY() +
                         "§e Z:§6" + location.getZ()
                 );
             }
 
-            if (showBossDefeats)
+            if (showBossVictories)
             {
-                // Parse placeholders and print!
-                if (isBroadcastPresent("broadcast.defeat.boss"))
-                {
-                    // Set up our message. This is the same for all eligible players, so call it once and store it.
-                    final String finalMessage = replacePlaceholders(
-                            bossDefeatMessage, playerName, true, false, pokemon, location);
+                // Get a broadcast from the broadcasts config file, if the key can be found.
+                broadcast = getBroadcast("broadcast.victory.boss");
 
-                    // Send off the message, the needed notifier permission and the flag to check.
-                    iterateAndSendEventMessage(
-                            finalMessage, pokemon, hoverBossDefeats, false,
-                            true, "defeat.boss", "showBossDefeat");
+                // Did we find a message? Iterate all available players, and send to those who should receive!
+                if (broadcast != null)
+                {
+                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverBossVictories,
+                            false, true, "victory.boss", "showBossVictory");
                 }
-                else
-                    printBasicError("The boss defeat message is broken, broadcast failed.");
             }
         }
         else if (EnumPokemon.legendaries.contains(pokemonName) && pokemon.getIsShiny())
         {
-            if (logShinyLegendaryDefeats)
+            if (logShinyLegendaryVictories)
             {
-                // Print a defeat message to console, with the above shiny String mixed in.
+                // Print a victory message to console, with the above shiny String mixed in.
                 printBasicMessage
                 (
-                        "§5PBR §f// §cPlayer §4" + playerName +
+                        "§5PBR §f// §cPlayer §4" + player.getName() +
                         "§c defeated a shiny legendary §4" + pokemonName +
-                        "§c in world \"§4" + world.getWorldInfo().getWorldName() +
+                        "§c in world \"§4" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§c\", at X:§4" + location.getX() +
                         "§c Y:§4" + location.getY() +
                         "§c Z:§4" + location.getZ()
                 );
             }
 
-            // Shiny legendary message logic, go!
-            if (showShinyLegendaryDefeats)
+            if (showShinyLegendaryVictories)
             {
-                // Parse placeholders and print!
-                if (isBroadcastPresent("broadcast.defeat.shiny_legendary"))
-                {
-                    // Set up our message. This is the same for all eligible players, so call it once and store it.
-                    final String finalMessage = replacePlaceholders(
-                            shinyLegendaryDefeatMessage, playerName, true, false, pokemon, location);
+                // Get a broadcast from the broadcasts config file, if the key can be found.
+                broadcast = getBroadcast("broadcast.victory.shiny_legendary");
 
-                    // Send off the message, the needed notifier permission and the flag to check.
-                    // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
-                    iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyLegendaryDefeats, false,
-                            true, "defeat.shinylegendary", "showShinyLegendaryDefeat");
+                // Did we find a message? Iterate all available players, and send to those who should receive!
+                if (broadcast != null)
+                {
+                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyLegendaryVictories,
+                            false, true, "victory.shinylegendary", "showShinyLegendaryVictory");
                 }
-                else
-                    printBasicError("The shiny legendary defeat message is broken, broadcast failed.");
             }
         }
         else if (EnumPokemon.legendaries.contains(pokemonName))
         {
-            if (logLegendaryDefeats)
+            if (logLegendaryVictories)
             {
-                // Print a defeat message to console, with the above shiny String mixed in.
+                // Print a victory message to console, with the above shiny String mixed in.
                 printBasicMessage
                 (
-                        "§5PBR §f// §cPlayer §4" + playerName +
+                        "§5PBR §f// §cPlayer §4" + player.getName() +
                         "§c defeated a legendary §4" + pokemonName +
-                        "§c in world \"§4" + world.getWorldInfo().getWorldName() +
+                        "§c in world \"§4" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§c\", at X:§4" + location.getX() +
                         "§c Y:§4" + location.getY() +
                         "§c Z:§4" + location.getZ()
                 );
             }
 
-            if (showLegendaryDefeats)
+            if (showLegendaryVictories)
             {
-                // Parse placeholders and print!
-                if (isBroadcastPresent("broadcast.defeat.legendary"))
-                {
-                    // Set up our message. This is the same for all eligible players, so call it once and store it.
-                    final String finalMessage = replacePlaceholders(
-                            legendaryDefeatMessage, playerName, true, false, pokemon, location);
+                // Get a broadcast from the broadcasts config file, if the key can be found.
+                broadcast = getBroadcast("broadcast.victory.legendary");
 
-                    // Send off the message, the needed notifier permission and the flag to check.
-                    iterateAndSendEventMessage(finalMessage, pokemon, hoverLegendaryDefeats, false,
-                            true, "defeat.legendary", "showLegendaryDefeat");
+                // Did we find a message? Iterate all available players, and send to those who should receive!
+                if (broadcast != null)
+                {
+                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverLegendaryVictories,
+                            false, true, "victory.legendary", "showLegendaryVictory");
                 }
-                else
-                    printBasicError("The legendary defeat message is broken, broadcast failed.");
             }
         }
         else if (pokemon.getIsShiny())
         {
-            if (logShinyDefeats)
+            if (logShinyVictories)
             {
-                // Print a defeat message to console.
+                // Print a victory message to console.
                 printBasicMessage
                 (
-                        "§5PBR §f// §cPlayer §4" + playerName +
+                        "§5PBR §f// §cPlayer §4" + player.getName() +
                         "§c defeated a shiny §4" + pokemonName +
-                        "§c in world \"§4" + world.getWorldInfo().getWorldName() +
+                        "§c in world \"§4" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§c\", at X:§4" + location.getX() +
                         "§c Y:§4" + location.getY() +
                         "§c Z:§4" + location.getZ()
                 );
             }
 
-            if (showShinyDefeats)
+            if (showShinyVictories)
             {
-                // Parse placeholders and print!
-                if (isBroadcastPresent("broadcast.defeat.shiny"))
-                {
-                    // Set up our message. This is the same for all eligible players, so call it once and store it.
-                    final String finalMessage = replacePlaceholders(
-                            shinyDefeatMessage, playerName, true, false, pokemon, location);
+                // Get a broadcast from the broadcasts config file, if the key can be found.
+                broadcast = getBroadcast("broadcast.victory.shiny");
 
-                    // Send off the message, the needed notifier permission and the flag to check.
-                    iterateAndSendEventMessage(
-                            finalMessage, pokemon, hoverShinyDefeats, false,
-                            true, "defeat.shiny", "showShinyDefeat");
+                // Did we find a message? Iterate all available players, and send to those who should receive!
+                if (broadcast != null)
+                {
+                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyVictories,
+                            false, true, "victory.shiny", "showShinyVictory");
                 }
-                else
-                    printBasicError("The shiny defeat message is broken, broadcast failed.");
             }
         }
     }

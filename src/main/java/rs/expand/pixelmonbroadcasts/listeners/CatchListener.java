@@ -5,6 +5,7 @@ package rs.expand.pixelmonbroadcasts.listeners;
 import com.pixelmonmod.pixelmon.api.events.CaptureEvent;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumPokemon;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -18,9 +19,11 @@ public class CatchListener
     @SubscribeEvent
     public void onCatchPokemonEvent(final CaptureEvent.SuccessfulCapture event)
     {
+        // Create shorthand variables for convenience.
+        final String broadcast;
         final EntityPixelmon pokemon = event.getPokemon();
+        final EntityPlayer player = event.player;
         final String pokemonName = pokemon.getLocalizedName();
-        final String playerName = event.player.getName();
         final BlockPos location = event.pokeball.getPosition();
 
         if (EnumPokemon.legendaries.contains(pokemonName) && pokemon.getIsShiny())
@@ -30,7 +33,7 @@ public class CatchListener
                 // Print a catch message to console, with the above shiny String mixed in.
                 printBasicMessage
                 (
-                        "§5PBR §f// §aPlayer §2" + playerName +
+                        "§5PBR §f// §aPlayer §2" + player.getName() +
                         "§a caught a shiny legendary §2" + pokemonName +
                         "§a in world \"§2" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§a\", at X:§2" + location.getX() +
@@ -41,20 +44,15 @@ public class CatchListener
 
             if (showShinyLegendaryCatches)
             {
-                // Parse placeholders and print!
-                if (isBroadcastPresent("broadcast.catch.shiny_legendary"))
-                {
-                    // Set up our message. This is the same for all eligible players, so call it once and store it.
-                    final String finalMessage = replacePlaceholders(
-                            shinyLegendaryCatchMessage, playerName, true, false, pokemon, location);
+                // Get a broadcast from the broadcasts config file, if the key can be found.
+                broadcast = getBroadcast("broadcast.catch.shiny_legendary");
 
-                    // Send off the message, the needed notifier permission and the flag to check.
-                    // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
-                    iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyLegendaryCatches, true,
-                            true, "catch.shinylegendary", "showShinyLegendaryCatch");
+                // Did we find a message? Iterate all available players, and send to those who should receive!
+                if (broadcast != null)
+                {
+                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyLegendaryCatches,
+                            true, true, "catch.shinylegendary", "showShinyLegendaryCatch");
                 }
-                else
-                    printBasicError("The shiny legendary catch message is broken, broadcast failed.");
             }
         }
         else if (EnumPokemon.legendaries.contains(pokemonName))
@@ -64,7 +62,7 @@ public class CatchListener
                 // Print a catch message to console, with the above shiny String mixed in.
                 printBasicMessage
                 (
-                        "§5PBR §f// §aPlayer §2" + playerName +
+                        "§5PBR §f// §aPlayer §2" + player.getName() +
                         "§a caught a legendary §2" + pokemonName +
                         "§a in world \"§2" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§a\", at X:§2" + location.getX() +
@@ -75,19 +73,15 @@ public class CatchListener
 
             if (showLegendaryCatches)
             {
-                // Parse placeholders and print!
-                if (isBroadcastPresent("broadcast.catch.legendary"))
-                {
-                    // Set up our message. This is the same for all eligible players, so call it once and store it.
-                    final String finalMessage = replacePlaceholders(
-                            legendaryCatchMessage, playerName, true, false, pokemon, location);
+                // Get a broadcast from the broadcasts config file, if the key can be found.
+                broadcast = getBroadcast("broadcast.catch.legendary");
 
-                    // Send off the message, the needed notifier permission and the flag to check.
-                    iterateAndSendEventMessage(finalMessage, pokemon, hoverLegendaryCatches, true,
-                            true, "catch.legendary", "showLegendaryCatch");
+                // Did we find a message? Iterate all available players, and send to those who should receive!
+                if (broadcast != null)
+                {
+                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverLegendaryCatches,
+                            true, true, "catch.legendary", "showLegendaryCatch");
                 }
-                else
-                    printBasicError("The legendary catch message is broken, broadcast failed.");
             }
         }
         else if (pokemon.getIsShiny())
@@ -97,7 +91,7 @@ public class CatchListener
                 // Print a catch message to console.
                 printBasicMessage
                 (
-                        "§5PBR §f// §bPlayer §3" + playerName +
+                        "§5PBR §f// §bPlayer §3" + player.getName() +
                         "§b caught a shiny §3" + pokemonName +
                         "§b in world \"§3" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§b\", at X:§3" + location.getX() +
@@ -108,19 +102,44 @@ public class CatchListener
 
             if (showShinyCatches)
             {
-                // Parse placeholders and print!
-                if (isBroadcastPresent("broadcast.catch.shiny"))
-                {
-                    // Set up our message. This is the same for all eligible players, so call it once and store it.
-                    final String finalMessage = replacePlaceholders(
-                            shinyCatchMessage, playerName, true, false, pokemon, location);
+                // Get a broadcast from the broadcasts config file, if the key can be found.
+                broadcast = getBroadcast("broadcast.catch.shiny");
 
-                    // Send off the message, the needed notifier permission and the flag to check.
-                    iterateAndSendEventMessage(finalMessage, pokemon, hoverShinyCatches, true,
-                            true, "catch.shiny", "showShinyCatch");
+                // Did we find a message? Iterate all available players, and send to those who should receive!
+                if (broadcast != null)
+                {
+                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyCatches,
+                            true, true, "catch.shiny", "showShinyCatch");
                 }
-                else
-                    printBasicError("The shiny catch message is broken, broadcast failed.");
+            }
+        }
+        else
+        {
+            if (logNormalCatches)
+            {
+                // Print a catch message to console.
+                printBasicMessage
+                (
+                        "§5PBR §f// §bPlayer §3" + player.getName() +
+                        "§b caught a normal §3" + pokemonName +
+                        "§b in world \"§3" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                        "§b\", at X:§3" + location.getX() +
+                        "§b Y:§3" + location.getY() +
+                        "§b Z:§3" + location.getZ()
+                );
+            }
+
+            if (showNormalCatches)
+            {
+                // Get a broadcast from the broadcasts config file, if the key can be found.
+                broadcast = getBroadcast("broadcast.catch.normal");
+
+                // Did we find a message? Iterate all available players, and send to those who should receive!
+                if (broadcast != null)
+                {
+                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverNormalCatches,
+                            true, true, "catch.normal", "showNormalCatch");
+                }
             }
         }
     }

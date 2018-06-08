@@ -30,7 +30,7 @@ hover.present_tense.nature.special=&aDeze Pokémon is "&2%s&a", met hogere &2%s 
 hover.present_tense.nature.unknown=&aDeze Pokémon heeft een &2onbekend &akarakter...
 ## End of replacements. ^
 
-# Past tense messages (defeats)
+# Past tense messages (victories)
 hover.past_tense.size.microscopic=&aDeze Pokémon was &2&omicroscopisch&a...
 hover.past_tense.size.pygmy=&aDeze Pokémon was &2een pygmee&a...
 hover.past_tense.size.runt=&aDeze Pokémon was &2erg klein&a.
@@ -119,7 +119,7 @@ toggle.challenge_toggles=&bUitdagingsberichten&f:
 toggle.spawning_toggles=&bSpawn-berichten&f:
 toggle.blackout_toggles=&bBlackout-berichten&f:
 toggle.forfeit_toggles=&bOpgeef-berichten&f:
-toggle.defeat_toggles=&bWin-berichten&f:
+toggle.victory_toggles=&bWin-berichten&f:
 toggle.catch_toggles=&bVang-berichten&f:
 toggle.pvp_toggles=&bPvP-berichten&f:
 toggle.other_toggles=&bAndere berichten&f:
@@ -144,8 +144,8 @@ toggle.pvp_start.on=&a&nstart
 toggle.pvp_start.off=&c&nstart
 toggle.pvp_draw.on=&a&ndraw
 toggle.pvp_draw.off=&c&ndraw
-toggle.pvp_defeat.on=&a&ndefeat
-toggle.pvp_defeat.off=&c&ndefeat
+toggle.pvp_victory.on=&a&nvictory
+toggle.pvp_victory.off=&c&nvictory
 toggle.hatch.on=&a&nhatch
 toggle.hatch.off=&c&nhatch
 toggle.shiny_hatch.on=&a&nshiny hatch

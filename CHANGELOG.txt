@@ -1,15 +1,27 @@
 0.2.0 for 6.3.0
 Released ???
 
-   * Added a lang option for showing neutral stats in hovers, instead of just "ERROR".
-   * Updated CHANGELOG.txt with missed changes, and corrected versions. Oops.
+    Permission changes:
+    * "pixelmonbroadcasts.notify.trade.normal" is now "pixelmonbroadcasts.notify.trade".
+
+    Additions:
+    * Split up configuration into three separate files, found in the PixelmonBroadcasts folder.
+    * Added on-the-fly translation support. Changed messages now apply immediately on file save!
+    * Added a lang option for showing neutral stats in hovers, instead of just "ERROR".
+    * Trades now support the showing of shiny Pokémon, using the new %shiny% placeholder.
+
+    Fixes and tweaks:
+    * Enabled showing IVs on Pokémon that a player blacked out to. Turn off the hover to disable.
+    * Fixed some potential bugs with players with edited names. There may be more, please report.
+    * Removed a few leftover debug messages when players blacked out to wild Pokémon. Oops.
+    * Updated CHANGELOG.txt with missed changes in 0.1.1, and corrected versions.
 
 0.1.1 for 6.3.0
 Released June 6th, 2018.
 
-   * Changed permission layout to hopefully make a bit more sense.
+    * Changed permission layout to hopefully make a bit more sense.
 
 0.1.0 for 6.3.0
 Released June 6th, 2018.
 
-   * Initial release.
+    * Initial release.

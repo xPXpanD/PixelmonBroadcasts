@@ -9,17 +9,16 @@ import com.pixelmonmod.pixelmon.battles.controller.participants.TrainerParticipa
 import com.pixelmonmod.pixelmon.battles.controller.participants.WildPixelmonParticipant;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumPokemon;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 // Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndSendEventMessage;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlaceholders;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.isBroadcastPresent;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicError;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicMessage;
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndSendBroadcast;
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlayer2Placeholders;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
 // FIXME: Pokémon using moves like Teleport to warp away from you show up as YOU having fled.
 public class BattleStartListener
@@ -34,6 +33,9 @@ public class BattleStartListener
         // Are there any players in this battle?
         if (participant1 instanceof PlayerParticipant || participant2 instanceof PlayerParticipant)
         {
+            // Create a shorthand broadcast variable for convenience.
+            String broadcast;
+
             // Did a PvP battle just start? (two players, one on either side)
             if (participant1 instanceof PlayerParticipant && participant2 instanceof PlayerParticipant)
             {
@@ -55,27 +57,19 @@ public class BattleStartListener
 
                 if (showPVPStarts)
                 {
-                    // Parse placeholders and print!
-                    if (isBroadcastPresent("broadcast.start.pvp"))
+                    // Get a broadcast from the broadcasts config file, if the key can be found.
+                    broadcast = getBroadcast("broadcast.start.pvp");
+
+                    // Did we find a message? Iterate all available players, and send to those who should receive!
+                    if (broadcast != null)
                     {
-                        // Create short variables for convenience.
-                        final BlockPos winPos = ((PlayerParticipant) participant1).player.getPosition();
-                        final BlockPos losePos = ((PlayerParticipant) participant2).player.getPosition();
+                        // Replace the placeholders for player 2's side, first. We'll grab the normal ones in the final sweep.
+                        broadcast = replacePlayer2Placeholders(broadcast, null, (EntityPlayer) participant2.getEntity());
 
-                        // Set up our message. This is the same for all eligible players, so call it once and store it.
-                        String finalMessage;
-                        finalMessage = replacePlaceholders(pvpStartMessage, participant1.getDisplayName(),
-                                false, false, null, winPos);
-                        finalMessage = replacePlaceholders(finalMessage, participant2.getDisplayName(),
-                                false, true, null, losePos);
-
-                        // Send off the message, the needed notifier permission and the flag to check.
-                        // Pass null for the Pokémon, as we don't have one. Automatically disables some placeholders.
-                        iterateAndSendEventMessage(finalMessage, null,
+                        // Swap player 1 placeholders, and then send.
+                        iterateAndSendBroadcast(broadcast, null, (EntityPlayer) participant1.getEntity(),
                                 false, true, false, "start.pvp", "showPVPStart");
                     }
-                    else
-                        printBasicError("The PvP battle start message is broken, broadcast failed.");
                 }
             }
             // Are there any trainer NPCs in the battle?
@@ -98,9 +92,9 @@ public class BattleStartListener
                 }
 
                 // Set up even more variables.
-                final String playerName = player.getDisplayName();
                 final String worldName = player.getWorld().getWorldInfo().getWorldName();
                 final BlockPos location = player.getEntity().getPosition();
+                final EntityPlayer playerEntity = (EntityPlayer) player.getEntity();
 
                 if (npc.trainer.getBossMode().isBossPokemon())
                 {
@@ -109,7 +103,7 @@ public class BattleStartListener
                         // Print a challenge message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §7Player §f" + playerName +
+                                "§5PBR §f// §7Player §f" + player.getDisplayName() +
                                 "§7 challenged a §fboss trainer §7in world \"§f" + worldName +
                                 "§7\", at X:§f" + location.getX() +
                                 "§7 Y:§f" + location.getY() +
@@ -119,20 +113,15 @@ public class BattleStartListener
 
                     if (showBossTrainerChallenges)
                     {
-                        // Parse placeholders and print!
-                        if (isBroadcastPresent("broadcast.challenge.boss_trainer"))
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            final String finalMessage = replacePlaceholders(bossTrainerChallengeMessage,
-                                    playerName, false, false, null, location);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.challenge.boss_trainer");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(
-                                    finalMessage, null, false, false,
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, null, playerEntity, false, true,
                                     false, "challenge.bosstrainer", "showBossTrainerChallenge");
                         }
-                        else
-                            printBasicError("The boss trainer challenge message is broken, broadcast failed.");
                     }
                 }
                 else
@@ -142,7 +131,7 @@ public class BattleStartListener
                         // Print a challenge message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §7Player §f" + playerName +
+                                "§5PBR §f// §7Player §f" + player.getDisplayName() +
                                 "§7 challenged a §ftrainer §7in world \"§f" + worldName +
                                 "§7\", at X:§f" + location.getX() +
                                 "§7 Y:§f" + location.getY() +
@@ -152,20 +141,15 @@ public class BattleStartListener
 
                     if (showTrainerChallenges)
                     {
-                        // Parse placeholders and print!
-                        if (isBroadcastPresent("broadcast.challenge.trainer"))
-                        {
-                            // Set up our message. This is the same for all eligible players, so call it once and store it.
-                            final String finalMessage = replacePlaceholders(trainerChallengeMessage,
-                                    playerName, false, false, null, location);
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.challenge.trainer");
 
-                            // Send off the message, the needed notifier permission and the flag to check.
-                            iterateAndSendEventMessage(
-                                    finalMessage, null, false, false,
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, null, playerEntity, false, true,
                                     false, "challenge.trainer", "showTrainerChallenge");
                         }
-                        else
-                            printBasicError("The trainer challenge message is broken, broadcast failed.");
                     }
                 }
             }
@@ -189,11 +173,10 @@ public class BattleStartListener
                 }
 
                 // Set up even more common variables.
-                final String playerName = player.getDisplayName();
-                final String pokemonName = pokemon.getDisplayName();
-                final World world = pokemon.getWorld();
-                final BlockPos location = pokemon.getEntity().getPosition();
+                final EntityPlayer playerEntity = (EntityPlayer) player.getEntity();
                 final EntityPixelmon pokemonEntity = (EntityPixelmon) pokemon.getEntity();
+                final String pokemonName = pokemon.getDisplayName();
+                final BlockPos location = pokemon.getEntity().getPosition();
 
                 // Make sure our Pokémon participant has no owner -- it has to be wild.
                 // I put bosses under this check, as well. Who knows what servers cook up for player parties?
@@ -209,7 +192,7 @@ public class BattleStartListener
                             (
                                     "§5PBR §f// §ePlayer §6" + player.getDisplayName() +
                                     "§e engaged a boss §6" + pokemonName +
-                                    "§e in world \"§6" + world.getWorldInfo().getWorldName() +
+                                    "§e in world \"§6" + pokemon.getWorld().getWorldInfo().getWorldName() +
                                     "§e\", at X:§6" + location.getX() +
                                     "§e Y:§6" + location.getY() +
                                     "§e Z:§6" + location.getZ()
@@ -218,19 +201,15 @@ public class BattleStartListener
 
                         if (showBossChallenges)
                         {
-                            // Parse placeholders and print!
-                            if (isBroadcastPresent("broadcast.challenge.boss"))
-                            {
-                                // Set up our message. This is the same for all eligible players, so call it once and store it.
-                                final String finalMessage = replacePlaceholders(bossChallengeMessage,
-                                        playerName, false, false, pokemonEntity, location);
+                            // Get a broadcast from the broadcasts config file, if the key can be found.
+                            broadcast = getBroadcast("broadcast.challenge.boss");
 
-                                // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(finalMessage, pokemonEntity, showBossChallenges, true,
-                                        false, "challenge.boss", "showBossChallenge");
+                            // Did we find a message? Iterate all available players, and send to those who should receive!
+                            if (broadcast != null)
+                            {
+                                iterateAndSendBroadcast(broadcast, pokemonEntity, playerEntity, showBossChallenges,
+                                        true, false, "challenge.boss", "showBossChallenge");
                             }
-                            else
-                                printBasicError("The boss challenge message is broken, broadcast failed.");
                         }
                     }
                     else if (EnumPokemon.legendaries.contains(pokemonName) && pokemonEntity.getIsShiny())
@@ -242,7 +221,7 @@ public class BattleStartListener
                             (
                                     "§5PBR §f// §aPlayer §2" + player.getDisplayName() +
                                     "§a engaged a shiny legendary §2" + pokemonName +
-                                    "§a in world \"§2" + world.getWorldInfo().getWorldName() +
+                                    "§a in world \"§2" + pokemon.getWorld().getWorldInfo().getWorldName() +
                                     "§a\", at X:§2" + location.getX() +
                                     "§a Y:§2" + location.getY() +
                                     "§a Z:§2" + location.getZ()
@@ -251,20 +230,15 @@ public class BattleStartListener
 
                         if (showShinyLegendaryChallenges)
                         {
-                            // Parse placeholders and print!
-                            if (isBroadcastPresent("broadcast.challenge.shiny_legendary"))
-                            {
-                                // Set up our message. This is the same for all eligible players, so call it once and store it.
-                                // We use the normal legendary permission for shiny legendaries, as per the config's explanation.
-                                final String finalMessage = replacePlaceholders(shinyLegendaryChallengeMessage,
-                                        playerName, false, false, pokemonEntity, location);
+                            // Get a broadcast from the broadcasts config file, if the key can be found.
+                            broadcast = getBroadcast("broadcast.challenge.shiny_legendary");
 
-                                // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(finalMessage, pokemonEntity, showShinyLegendaryChallenges, true,
-                                        false, "challenge.shinylegendary", "showShinyLegendaryChallenge");
+                            // Did we find a message? Iterate all available players, and send to those who should receive!
+                            if (broadcast != null)
+                            {
+                                iterateAndSendBroadcast(broadcast, pokemonEntity, playerEntity, showShinyLegendaryChallenges,
+                                        true, false, "challenge.shinylegendary", "showShinyLegendaryChallenge");
                             }
-                            else
-                                printBasicError("The shiny legendary challenge message is broken, broadcast failed.");
                         }
                     }
                     else if (EnumPokemon.legendaries.contains(pokemonName))
@@ -276,7 +250,7 @@ public class BattleStartListener
                             (
                                     "§5PBR §f// §aPlayer §2" + player.getDisplayName() +
                                     "§a engaged a legendary §2" + pokemonName +
-                                    "§a in world \"§2" + world.getWorldInfo().getWorldName() +
+                                    "§a in world \"§2" + pokemon.getWorld().getWorldInfo().getWorldName() +
                                     "§a\", at X:§2" + location.getX() +
                                     "§a Y:§2" + location.getY() +
                                     "§a Z:§2" + location.getZ()
@@ -285,19 +259,15 @@ public class BattleStartListener
 
                         if (showLegendaryChallenges)
                         {
-                            // Parse placeholders and print!
-                            if (isBroadcastPresent("broadcast.challenge.legendary"))
-                            {
-                                // Set up our message. This is the same for all eligible players, so call it once and store it.
-                                final String finalMessage = replacePlaceholders(legendaryChallengeMessage,
-                                        playerName, false, false, pokemonEntity, location);
+                            // Get a broadcast from the broadcasts config file, if the key can be found.
+                            broadcast = getBroadcast("broadcast.challenge.legendary");
 
-                                // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(finalMessage, pokemonEntity, showLegendaryChallenges, true,
-                                        false, "challenge.legendary", "showLegendaryChallenge");
+                            // Did we find a message? Iterate all available players, and send to those who should receive!
+                            if (broadcast != null)
+                            {
+                                iterateAndSendBroadcast(broadcast, pokemonEntity, playerEntity, showLegendaryChallenges,
+                                        true, false, "challenge.legendary", "showLegendaryChallenge");
                             }
-                            else
-                                printBasicError("The legendary challenge message is broken, broadcast failed.");
                         }
                     }
                     else if (pokemonEntity.getIsShiny())
@@ -309,7 +279,7 @@ public class BattleStartListener
                             (
                                     "§5PBR §f// §bPlayer §3" + player.getDisplayName() +
                                     "§b engaged a shiny §3" + pokemonName +
-                                    "§b in world \"§3" + world.getWorldInfo().getWorldName() +
+                                    "§b in world \"§3" + pokemon.getWorld().getWorldInfo().getWorldName() +
                                     "§b\", at X:§3" + location.getX() +
                                     "§b Y:§3" + location.getY() +
                                     "§b Z:§3" + location.getZ()
@@ -318,19 +288,15 @@ public class BattleStartListener
 
                         if (showShinyChallenges)
                         {
-                            // Parse placeholders and print!
-                            if (isBroadcastPresent("broadcast.challenge.shiny"))
-                            {
-                                // Set up our message. This is the same for all eligible players, so call it once and store it.
-                                final String finalMessage = replacePlaceholders(shinyChallengeMessage,
-                                        playerName, false, false, pokemonEntity, location);
+                            // Get a broadcast from the broadcasts config file, if the key can be found.
+                            broadcast = getBroadcast("broadcast.challenge.shiny");
 
-                                // Send off the message, the needed notifier permission and the flag to check.
-                                iterateAndSendEventMessage(finalMessage, pokemonEntity, showShinyChallenges, true,
-                                        false, "challenge.shiny", "showShinyChallenge");
+                            // Did we find a message? Iterate all available players, and send to those who should receive!
+                            if (broadcast != null)
+                            {
+                                iterateAndSendBroadcast(broadcast, pokemonEntity, playerEntity, showShinyChallenges,
+                                        true, false, "challenge.shiny", "showShinyChallenge");
                             }
-                            else
-                                printBasicError("The shiny challenge message is broken, broadcast failed.");
                         }
                     }
                 }

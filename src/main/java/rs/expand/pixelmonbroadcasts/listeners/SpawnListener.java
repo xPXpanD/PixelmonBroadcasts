@@ -33,9 +33,9 @@ public class SpawnListener
             // I put bosses under this check, as well. Who knows what servers cook up for player parties?
             if (!pokemon.hasOwner())
             {
+                // Create shorthand variables for convenience.
                 final String broadcast;
                 final String pokemonName = pokemon.getLocalizedName();
-                final World world = pokemon.getEntityWorld();
                 final BlockPos location = event.action.spawnLocation.location.pos;
 
                 if (pokemon.isBossPokemon())
@@ -46,7 +46,7 @@ public class SpawnListener
                         printBasicMessage
                         (
                                 "§5PBR §f// §eA boss §6" + pokemonName +
-                                "§e has spawned in world \"§6" + world.getWorldInfo().getWorldName() +
+                                "§e has spawned in world \"§6" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                                 "§e\", at X:§6" + location.getX() +
                                 "§e Y:§6" + location.getY() +
                                 "§e Z:§6" + location.getZ()
@@ -61,7 +61,7 @@ public class SpawnListener
                         // Did we find a message? Iterate all available players, and send to those who should receive!
                         if (broadcast != null)
                         {
-                            iterateAndSendBroadcast(broadcast, pokemon, null, location, hoverBossSpawns,
+                            iterateAndSendBroadcast(broadcast, pokemon, null, hoverBossSpawns,
                                     true, false, "spawn.boss", "showBossSpawn");
                         }
                     }
@@ -74,7 +74,7 @@ public class SpawnListener
                         printBasicMessage
                         (
                                 "§5PBR §f// §aA shiny legendary §2" + pokemonName +
-                                "§a has spawned in world \"§2" + world.getWorldInfo().getWorldName() +
+                                "§a has spawned in world \"§2" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                                 "§a\", at X:§2" + location.getX() +
                                 "§a Y:§2" + location.getY() +
                                 "§a Z:§2" + location.getZ()
@@ -89,7 +89,7 @@ public class SpawnListener
                         // Did we find a message? Iterate all available players, and send to those who should receive!
                         if (broadcast != null)
                         {
-                            iterateAndSendBroadcast(broadcast, pokemon, null, location, hoverShinyLegendarySpawns,
+                            iterateAndSendBroadcast(broadcast, pokemon, null, hoverShinyLegendarySpawns,
                                     true, false, "spawn.shinylegendary", "showShinyLegendarySpawn");
                         }
                     }
@@ -102,7 +102,7 @@ public class SpawnListener
                         printBasicMessage
                         (
                                 "§5PBR §f// §aA legendary §2" + pokemonName +
-                                "§a has spawned in world \"§2" + world.getWorldInfo().getWorldName() +
+                                "§a has spawned in world \"§2" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                                 "§a\", at X:§2" + location.getX() +
                                 "§a Y:§2" + location.getY() +
                                 "§a Z:§2" + location.getZ()
@@ -117,7 +117,7 @@ public class SpawnListener
                         // Did we find a message? Iterate all available players, and send to those who should receive!
                         if (broadcast != null)
                         {
-                            iterateAndSendBroadcast(broadcast, pokemon, null, location, hoverLegendarySpawns,
+                            iterateAndSendBroadcast(broadcast, pokemon, null, hoverLegendarySpawns,
                                     true, false, "spawn.legendary", "showLegendarySpawn");
                         }
                     }
@@ -130,7 +130,7 @@ public class SpawnListener
                         printBasicMessage
                         (
                                 "§5PBR §f// §bA shiny §3" + pokemonName +
-                                "§b has spawned in world \"§3" + world.getWorldInfo().getWorldName() +
+                                "§b has spawned in world \"§3" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                                 "§b\", at X:§3" + location.getX() +
                                 "§b Y:§3" + location.getY() +
                                 "§b Z:§3" + location.getZ()
@@ -145,7 +145,7 @@ public class SpawnListener
                         // Did we find a message? Iterate all available players, and send to those who should receive!
                         if (broadcast != null)
                         {
-                            iterateAndSendBroadcast(broadcast, pokemon, null, location, hoverShinySpawns,
+                            iterateAndSendBroadcast(broadcast, pokemon, null, hoverShinySpawns,
                                     true, false, "spawn.shiny", "showShinySpawn");
                         }
                     }
