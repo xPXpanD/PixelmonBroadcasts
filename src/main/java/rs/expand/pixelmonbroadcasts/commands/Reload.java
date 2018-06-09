@@ -19,7 +19,7 @@ public class Reload implements CommandExecutor
     public CommandResult execute(final CommandSource src, final CommandContext args)
     {
         if (src instanceof Player)
-            printBasicMessage("§4PBR §f// §dPlayer §5" + src.getName() + "§d reloaded the Pixelmon Broadcasts config!");
+            printBasicMessage("§4PBR §f// §dPlayer §5" + src.getName() + "§d reloaded the Pixelmon Broadcasts configs!");
 
         // Load up all the configs and figure out the info alias. Start printing. Methods may insert errors as they go.
         printBasicMessage("");
@@ -55,7 +55,7 @@ public class Reload implements CommandExecutor
         else
         {
             // These messages, however, are locked in. They won't be visible in-game.
-            src.sendMessage(Text.of("§bReloaded the main Pixelmon Broadcasts config!"));
+            src.sendMessage(Text.of("§bReloaded the Pixelmon Broadcasts configs!"));
             src.sendMessage(Text.of("§bPlease check the console for any errors."));
         }
 

@@ -36,9 +36,6 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 // TODO: Implement logging to a custom log file with the right option passed.
 // TODO: Ideas for new events: HA, successful breed, evolution.
 // TODO: See if some of the BattleEnd stuff can be moved to separate and more specific events.
-// TODO: Consider what to do with forfeit/blackout IV showing. Currently disabled.
-
-// TODO: Update console colors.
 
 @Plugin
 (

@@ -142,12 +142,12 @@ public class BattleEndListener
                         // Print a PvP victory message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §7Player §f" + participant1Name +
-                                "§7 defeated player §f" + participant2Name +
-                                "§7 in world \"§f" + worldName +
-                                "§7\", at X:§f" + location.getX() +
-                                "§7 Y:§f" + location.getY() +
-                                "§7 Z:§f" + location.getZ()
+                                "§5PBR §f// §ePlayer §6" + participant1Name +
+                                "§e defeated player §6" + participant2Name +
+                                "§e in world \"§6" + worldName +
+                                "§e\", at X:§6" + location.getX() +
+                                "§e Y:§6" + location.getY() +
+                                "§e Z:§6" + location.getZ()
                         );
                     }
 
@@ -187,11 +187,11 @@ public class BattleEndListener
                             // Print a forfeit message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §6Player §e" + participant2Name +
-                                    "§6 fled from a §eboss trainer §6in world \"§e" + worldName +
-                                    "§6\", at X:§e" + location.getX() +
-                                    "§6 Y:§e" + location.getY() +
-                                    "§6 Z:§e" + location.getZ()
+                                "§5PBR §f// §6Player §e" + participant2Name +
+                                "§6 fled from a boss trainer in world \"§e" + worldName +
+                                "§6\", at X:§e" + location.getX() +
+                                "§6 Y:§e" + location.getY() +
+                                "§6 Z:§e" + location.getZ()
                             );
                         }
 
@@ -215,11 +215,11 @@ public class BattleEndListener
                             // Print a forfeit message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §6Player §e" + participant2Name +
-                                    "§6 fled from a §etrainer §6in world \"§e" + worldName +
-                                    "§6\", at X:§e" + location.getX() +
-                                    "§6 Y:§e" + location.getY() +
-                                    "§6 Z:§e" + location.getZ()
+                                "§5PBR §f// §6Player §e" + participant2Name +
+                                "§6 fled from a normal trainer in world \"§e" + worldName +
+                                "§6\", at X:§e" + location.getX() +
+                                "§6 Y:§e" + location.getY() +
+                                "§6 Z:§e" + location.getZ()
                             );
                         }
 
@@ -247,11 +247,11 @@ public class BattleEndListener
                             // Print a blackout message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §6Player §e" + participant2Name +
-                                    "§6 was knocked out by a §eboss trainer §6in world \"§e" + worldName +
-                                    "§6\", at X:§e" + location.getX() +
-                                    "§6 Y:§e" + location.getY() +
-                                    "§6 Z:§e" + location.getZ()
+                                    "§5PBR §f// §cPlayer §4" + participant2Name +
+                                    "§c was knocked out by a boss trainer in world \"§4" + worldName +
+                                    "§c\", at X:§4" + location.getX() +
+                                    "§c Y:§4" + location.getY() +
+                                    "§c Z:§4" + location.getZ()
                             );
                         }
 
@@ -275,11 +275,11 @@ public class BattleEndListener
                             // Print a blackout message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §6Player §e" + participant2Name +
-                                    "§6 was knocked out by a §etrainer §6in world \"§e" + worldName +
-                                    "§6\", at X:§e" + location.getX() +
-                                    "§6 Y:§e" + location.getY() +
-                                    "§6 Z:§e" + location.getZ()
+                                    "§5PBR §f// §cPlayer §4" + participant2Name +
+                                    "§c was knocked out by a normal trainer in world \"§4" + worldName +
+                                    "§c\", at X:§4" + location.getX() +
+                                    "§c Y:§4" + location.getY() +
+                                    "§c Z:§4" + location.getZ()
                             );
                         }
 
@@ -313,11 +313,11 @@ public class BattleEndListener
                         // Print a victory message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §7Player §1" + participant1Name +
-                                "§7 defeated a §fboss trainer §7in world \"§f" + worldName +
-                                "§7\", at X:§f" + location.getX() +
-                                "§7 Y:§f" + location.getY() +
-                                "§7 Z:§f" + location.getZ()
+                                "§5PBR §f// §ePlayer §6" + participant1Name +
+                                "§e defeated a boss trainer in world \"§6" + worldName +
+                                "§e\", at X:§6" + location.getX() +
+                                "§e Y:§6" + location.getY() +
+                                "§e Z:§6" + location.getZ()
                         );
                     }
 
@@ -341,11 +341,11 @@ public class BattleEndListener
                         // Print a victory message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §7Player §f" + participant1Name +
-                                "§7 defeated a §ftrainer §7in world \"§f" + worldName +
-                                "§7\", at X:§f" + location.getX() +
-                                "§7 Y:§f" + location.getY() +
-                                "§7 Z:§f" + location.getZ()
+                                "§5PBR §f// §ePlayer §6" + participant1Name +
+                                "§e defeated a normal trainer in world \"§6" + worldName +
+                                "§e\", at X:§6" + location.getX() +
+                                "§e Y:§6" + location.getY() +
+                                "§e Z:§6" + location.getZ()
                         );
                     }
 
@@ -379,12 +379,12 @@ public class BattleEndListener
                         // Print a blackout message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §ePlayer §6" + participant2Name +
-                                "§e was knocked out by a boss §6" + pokemonName +
-                                "§e in world \"§6" + worldName +
-                                "§e\", at X:§6" + location.getX() +
-                                "§e Y:§6" + location.getY() +
-                                "§e Z:§6" + location.getZ()
+                                "§5PBR §f// §cPlayer §4" + participant2Name +
+                                "§c was knocked out by a boss §4" + pokemonName +
+                                "§c in world \"§4" + worldName +
+                                "§c\", at X:§4" + location.getX() +
+                                "§c Y:§4" + location.getY() +
+                                "§c Z:§4" + location.getZ()
                         );
                     }
 
@@ -534,12 +534,12 @@ public class BattleEndListener
                         // Print a forfeit message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §ePlayer §6" + participant2Name +
-                                "§e fled from a boss §6" + pokemonName +
-                                "§e in world \"§6" + worldName +
-                                "§e\", at X:§6" + location.getX() +
-                                "§e Y:§6" + location.getY() +
-                                "§e Z:§6" + location.getZ()
+                                "§5PBR §f// §6Player §e" + participant2Name +
+                                "§6 fled from a boss §e" + pokemonName +
+                                "§6 in world \"§e" + worldName +
+                                "§6\", at X:§e" + location.getX() +
+                                "§6 Y:§e" + location.getY() +
+                                "§6 Z:§e" + location.getZ()
                         );
                     }
 
@@ -563,12 +563,12 @@ public class BattleEndListener
                         // Print a forfeit message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §cPlayer §4" + participant2Name +
-                                "§c fled from a shiny legendary §4" + pokemonName +
-                                "§c in world \"§4" + worldName +
-                                "§c\", at X:§4" + location.getX() +
-                                "§c Y:§4" + location.getY() +
-                                "§c Z:§4" + location.getZ()
+                                "§5PBR §f// §6Player §e" + participant2Name +
+                                "§6 fled from a shiny legendary §e" + pokemonName +
+                                "§6 in world \"§e" + worldName +
+                                "§6\", at X:§e" + location.getX() +
+                                "§6 Y:§e" + location.getY() +
+                                "§6 Z:§e" + location.getZ()
                         );
                     }
 
@@ -592,12 +592,12 @@ public class BattleEndListener
                         // Print a forfeit message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §cPlayer §4" + participant2Name +
-                                "§c fled from a legendary §4" + pokemonName +
-                                "§c in world \"§4" + worldName +
-                                "§c\", at X:§4" + location.getX() +
-                                "§c Y:§4" + location.getY() +
-                                "§c Z:§4" + location.getZ()
+                                "§5PBR §f// §6Player §e" + participant2Name +
+                                "§6 fled from a legendary §e" + pokemonName +
+                                "§6 in world \"§e" + worldName +
+                                "§6\", at X:§e" + location.getX() +
+                                "§6 Y:§e" + location.getY() +
+                                "§6 Z:§e" + location.getZ()
                         );
                     }
 
@@ -621,12 +621,12 @@ public class BattleEndListener
                         // Print a forfeit message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §cPlayer §4" + participant2Name +
-                                "§c fled from a shiny §4" + pokemonName +
-                                "§c in world \"§4" + worldName +
-                                "§c\", at X:§4" + location.getX() +
-                                "§c Y:§4" + location.getY() +
-                                "§c Z:§4" + location.getZ()
+                                "§5PBR §f// §6Player §e" + participant2Name +
+                                "§6 fled from a shiny §e" + pokemonName +
+                                "§6 in world \"§e" + worldName +
+                                "§6\", at X:§e" + location.getX() +
+                                "§6 Y:§e" + location.getY() +
+                                "§6 Z:§e" + location.getZ()
                         );
                     }
 

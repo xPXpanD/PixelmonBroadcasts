@@ -51,7 +51,7 @@ public class ConfigMethods
         else
         {
             printBasicMessage("    §cCommand (re-)initialization failed. Please report, this is a bug.");
-            printBasicMessage("    §cSidemod commands are likely dead. A reboot/reload may work.");
+            printBasicMessage("    §cSidemod commands are likely dead. A reboot may work.");
 
             return false;
         }

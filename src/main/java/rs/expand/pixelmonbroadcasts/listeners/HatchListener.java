@@ -64,7 +64,7 @@ public class HatchListener
                 printBasicMessage
                 (
                         "§5PBR §f// §dPlayer §5" + player.getName() +
-                        "§d's §5" + pokemon.getLocalizedName() +
+                        "§d's normal §5" + pokemon.getLocalizedName() +
                         "§d egg hatched in world \"§5" + world.getWorldInfo().getWorldName() +
                         "§d\" at X:§5" + location.getX() +
                         "§d Y:§5" + location.getY() +

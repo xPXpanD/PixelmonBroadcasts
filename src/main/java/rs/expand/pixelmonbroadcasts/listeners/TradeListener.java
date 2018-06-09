@@ -38,12 +38,12 @@ public class TradeListener
             // Print a trade message to console.
             printBasicMessage
             (
-                    "§5PBR §f// Player §7" + player1.getName() +
-                    "§f has traded a " + pokemon1ShinynessString +
-                    "§7" + pokemon1.getLocalizedName() +
-                    "§f for §7" + player2.getName() +
-                    "§f's " + pokemon2ShinynessString +
-                    "§7" + pokemon2.getLocalizedName()
+                    "§5PBR §f// §dPlayer §5" + player1.getName() +
+                    "§d has traded a " + pokemon1ShinynessString +
+                    "§5" + pokemon1.getLocalizedName() +
+                    "§d for §5" + player2.getName() +
+                    "§d's " + pokemon2ShinynessString +
+                    "§5" + pokemon2.getLocalizedName()
             );
         }
 

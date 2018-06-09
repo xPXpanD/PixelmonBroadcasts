@@ -19,8 +19,7 @@ import java.util.List;
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
-// TODO: Figure out how to squeeze more lines into a fully decked-out toggle list.
-// Paginated lists break horribly (lines getting cut off, it doesn't seem to like multiple Texts), I've tried that.
+// TODO: Maybe get paginated lists working. Tried it before, but it seems to cut things off randomly...
 public class Toggle implements CommandExecutor
 {
     // The command executor.

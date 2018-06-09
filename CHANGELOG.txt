@@ -1,5 +1,5 @@
 0.2.0 for 6.3.0
-Released ???
+Released June 9th, 2018.
 
     Permission changes:
     * "pixelmonbroadcasts.notify.trade.normal" is now "pixelmonbroadcasts.notify.trade".
@@ -7,7 +7,7 @@ Released ???
     * PvP "start"/"end" permissions have been merged into the old "challenge"/"victory" groups.
 
     Additions:
-    * Added support for showing normal Pokémon catches and blackouts.
+    * Added support for showing catches and blackouts for Pokémon that aren't special.
     * Added a lang option for showing neutral stats in hovers, instead of just "ERROR".
     * Rewrote configuration/translation with a three-file setup, found in the PixelmonBroadcasts folder.
     * The %world% and %biome% placeholders should now work properly on trainer/PvP broadcasts.

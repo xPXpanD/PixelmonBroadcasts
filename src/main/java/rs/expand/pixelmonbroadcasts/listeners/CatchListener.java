@@ -50,8 +50,8 @@ public class CatchListener
                 // Did we find a message? Iterate all available players, and send to those who should receive!
                 if (broadcast != null)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyLegendaryCatches,
-                            true, revealShinyLegendaryCatches, "catch.shinylegendary", "showShinyLegendaryCatch");
+                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyLegendaryCatches, true,
+                            revealShinyLegendaryCatches, "catch.shinylegendary", "showShinyLegendaryCatch");
                 }
             }
         }
@@ -79,8 +79,8 @@ public class CatchListener
                 // Did we find a message? Iterate all available players, and send to those who should receive!
                 if (broadcast != null)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverLegendaryCatches,
-                            true, revealLegendaryCatches, "catch.legendary", "showLegendaryCatch");
+                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverLegendaryCatches, true,
+                            revealLegendaryCatches, "catch.legendary", "showLegendaryCatch");
                 }
             }
         }
@@ -108,8 +108,8 @@ public class CatchListener
                 // Did we find a message? Iterate all available players, and send to those who should receive!
                 if (broadcast != null)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyCatches,
-                            true, revealShinyCatches, "catch.shiny", "showShinyCatch");
+                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyCatches, true,
+                            revealShinyCatches, "catch.shiny", "showShinyCatch");
                 }
             }
         }
@@ -120,12 +120,12 @@ public class CatchListener
                 // Print a catch message to console.
                 printBasicMessage
                 (
-                        "§5PBR §f// §bPlayer §3" + player.getName() +
-                        "§b caught a normal §3" + pokemonName +
-                        "§b in world \"§3" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                        "§b\", at X:§3" + location.getX() +
-                        "§b Y:§3" + location.getY() +
-                        "§b Z:§3" + location.getZ()
+                        "§5PBR §f// §fPlayer §7" + player.getName() +
+                        "§f caught a normal §7" + pokemonName +
+                        "§f in world \"§7" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                        "§f\", at X:§7" + location.getX() +
+                        "§f Y:§7" + location.getY() +
+                        "§f Z:§7" + location.getZ()
                 );
             }
 
@@ -137,8 +137,8 @@ public class CatchListener
                 // Did we find a message? Iterate all available players, and send to those who should receive!
                 if (broadcast != null)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverNormalCatches,
-                            true, revealNormalCatches, "catch.normal", "showNormalCatch");
+                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverNormalCatches, true,
+                            revealNormalCatches, "catch.normal", "showNormalCatch");
                 }
             }
         }

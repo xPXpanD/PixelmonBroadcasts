@@ -11,7 +11,6 @@ import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumPokemon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 // Local imports.
@@ -46,12 +45,12 @@ public class BattleStartListener
                     // Print a PvP starting message to console.
                     printBasicMessage
                     (
-                            "§5PBR §f// §7Player §f" + participant1.getDisplayName() +
-                            "§7 started battling player §f" + participant2.getDisplayName() +
-                            "§7 in world \"§f" + participant1.getWorld().getWorldInfo().getWorldName() +
-                            "§7\", at X:§f" + location.getX() +
-                            "§7 Y:§f" + location.getY() +
-                            "§7 Z:§f" + location.getZ()
+                            "§5PBR §f// §ePlayer §6" + participant1.getDisplayName() +
+                            "§e started battling player §6" + participant2.getDisplayName() +
+                            "§e in world \"§6" + participant1.getWorld().getWorldInfo().getWorldName() +
+                            "§e\", at X:§6" + location.getX() +
+                            "§e Y:§6" + location.getY() +
+                            "§e Z:§6" + location.getZ()
                     );
                 }
 
@@ -103,11 +102,11 @@ public class BattleStartListener
                         // Print a challenge message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §7Player §f" + player.getDisplayName() +
-                                "§7 challenged a §fboss trainer §7in world \"§f" + worldName +
-                                "§7\", at X:§f" + location.getX() +
-                                "§7 Y:§f" + location.getY() +
-                                "§7 Z:§f" + location.getZ()
+                                "§5PBR §f// §ePlayer §6" + player.getDisplayName() +
+                                "§e challenged a boss trainer in world \"§6" + worldName +
+                                "§e\", at X:§6" + location.getX() +
+                                "§e Y:§6" + location.getY() +
+                                "§e Z:§6" + location.getZ()
                         );
                     }
 
@@ -131,11 +130,11 @@ public class BattleStartListener
                         // Print a challenge message to console.
                         printBasicMessage
                         (
-                                "§5PBR §f// §7Player §f" + player.getDisplayName() +
-                                "§7 challenged a §ftrainer §7in world \"§f" + worldName +
-                                "§7\", at X:§f" + location.getX() +
-                                "§7 Y:§f" + location.getY() +
-                                "§7 Z:§f" + location.getZ()
+                                "§5PBR §f// §ePlayer §6" + player.getDisplayName() +
+                                "§e challenged a normal trainer in world \"§6" + worldName +
+                                "§e\", at X:§6" + location.getX() +
+                                "§e Y:§6" + location.getY() +
+                                "§e Z:§6" + location.getZ()
                         );
                     }
 
