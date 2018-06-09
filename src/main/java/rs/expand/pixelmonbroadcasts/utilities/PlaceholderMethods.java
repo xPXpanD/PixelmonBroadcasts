@@ -41,12 +41,8 @@ public class PlaceholderMethods
                 broadcast = broadcast.replaceAll("(?i)%pokemon%", pokemonName);
             }
 
-            // Insert the "placeholder.shiny" String.
-            if (pokemon.getIsShiny())
-                broadcast = broadcast.replaceAll("(?i)%shiny%", getTranslation("placeholder.shiny"));
-
             // Also run some special logic for IV percentages. Same idea as with the above.
-            if (showIVs && broadcast.toLowerCase().contains("%ivpercent%"))
+            if (broadcast.toLowerCase().contains("%ivpercent%"))
             {
                 // Grab the Pokémon's stats.
                 final int HPIV = pokemon.stats.ivs.HP;
@@ -71,7 +67,7 @@ public class PlaceholderMethods
             }
 
             // Replace situation-specific placeholders via an external method. Pass data from the Pokémon.
-            broadcast = replaceNeutralPlaceholders(broadcast, pokemon.getEntityWorld(), pokemon.getPosition());
+            broadcast = replaceNeutralPlaceholders(broadcast, pokemon, pokemon.getEntityWorld(), pokemon.getPosition());
         }
 
         // Do we have a player entity? Replace player-specific placeholders.
@@ -84,7 +80,7 @@ public class PlaceholderMethods
             if (pokemon == null)
             {
                 // Replace situation-specific placeholders via an external method. Pass data from the player entity.
-                broadcast = replaceNeutralPlaceholders(broadcast, player.getEntityWorld(), player.getPosition());
+                broadcast = replaceNeutralPlaceholders(broadcast, null, player.getEntityWorld(), player.getPosition());
             }
         }
 
@@ -112,7 +108,8 @@ public class PlaceholderMethods
 
     // Replaces placeholders that can have multiple sources (players, Pokémon).
     // Can be used for both players, but it's a bit cheeky -- we'll assume that player 1's data is good enough.
-    private static String replaceNeutralPlaceholders(String broadcast, final World world, final BlockPos location)
+    public static String replaceNeutralPlaceholders(
+            String broadcast, final EntityPixelmon pokemon, final World world, final BlockPos location)
     {
         // Insert coordinates.
         broadcast = broadcast.replaceAll("(?i)%xpos2%", String.valueOf(location.getX()));
@@ -121,6 +118,12 @@ public class PlaceholderMethods
 
         // Insert a world name.
         broadcast = broadcast.replaceAll("(?i)%world(\\d*?)%", world.getWorldInfo().getWorldName());
+
+        // Insert the "placeholder.shiny" String.
+        if (pokemon != null && pokemon.getIsShiny())
+            broadcast = broadcast.replaceAll("(?i)%shiny%", getTranslation("placeholder.shiny"));
+        else
+            broadcast = broadcast.replaceAll("(?i)%shiny%", "");
 
         // Insert a biome. Same reasoning as above, for multiple players.
         if (broadcast.toLowerCase().contains("%biome%") || broadcast.toLowerCase().contains("%biome2%"))
@@ -184,10 +187,6 @@ public class PlaceholderMethods
                 broadcast = broadcast.replaceAll("(?i)%pokemon2%", pokemonName);
             }
 
-            // Insert the "placeholder.shiny" String.
-            if (pokemon.getIsShiny())
-                broadcast = broadcast.replaceAll("(?i)%shiny2%", getTranslation("placeholder.shiny"));
-
             // Also run some special logic for IV percentages. Same idea as with the above.
             if (broadcast.matches(".*%(?i)ivpercent2%.*"))
             {
@@ -214,7 +213,7 @@ public class PlaceholderMethods
             }
 
             // Replace situation-specific placeholders via an external method. Pass data from the Pokémon.
-            broadcast = replaceNeutralPlaceholders(broadcast, pokemon.getEntityWorld(), pokemon.getPosition());
+            broadcast = replaceNeutralPlaceholders(broadcast, pokemon, pokemon.getEntityWorld(), pokemon.getPosition());
         }
 
         // Do we have a player entity? Replace player-specific placeholders.
@@ -227,7 +226,7 @@ public class PlaceholderMethods
             if (pokemon == null)
             {
                 // Replace situation-specific placeholders via an external method. Pass data from the player entity.
-                broadcast = replaceNeutralPlaceholders(broadcast, player.getEntityWorld(), player.getPosition());
+                broadcast = replaceNeutralPlaceholders(broadcast, null, player.getEntityWorld(), player.getPosition());
             }
         }
 
@@ -253,8 +252,7 @@ public class PlaceholderMethods
 
         // Grab a growth string.
         final EnumGrowth growth = pokemon.getGrowth();
-        final String sizeString = getTranslation("hover.status.line_start") +
-                getTensedTranslation(presentTense, "hover.size." + growth.name().toLowerCase());
+        final String sizeString = getTensedTranslation(presentTense, "hover.size." + growth.name().toLowerCase());
 
         // Get an IV composite StringBuilder.
         final StringBuilder ivsLine = new StringBuilder();
@@ -316,26 +314,11 @@ public class PlaceholderMethods
         switch (pokemon.getGender())
         {
             case Male:
-            {
-                genderString = getTranslation("hover.status.line_start") +
-                        getTensedTranslation(presentTense, "hover.gender.male");
-
-                break;
-            }
+                genderString = getTensedTranslation(presentTense, "hover.gender.male"); break;
             case Female:
-            {
-                genderString = getTranslation("hover.status.line_start") +
-                        getTensedTranslation(presentTense, "hover.gender.female");
-
-                break;
-            }
+                genderString = getTensedTranslation(presentTense, "hover.gender.female"); break;
             default:
-            {
-                genderString = getTranslation("hover.status.line_start") +
-                        getTensedTranslation(presentTense, "hover.gender.none");
-
-                break;
-            }
+                genderString = getTensedTranslation(presentTense, "hover.gender.none"); break;
         }
 
         // Get a nature and see which stats we get from it.
@@ -350,12 +333,12 @@ public class PlaceholderMethods
         // Grab the value of the increased stat (could use either). If it's "None", we have a neutral nature type.
         if (nature.increasedStat.equals(StatsType.None))
         {
-            natureCompositeString = getTranslation("hover.status.line_start") +
+            natureCompositeString =
                     getTensedTranslation(presentTense, "hover.nature.balanced", natureString, boostedStat, cutStat);
         }
         else
         {
-            natureCompositeString = getTranslation("hover.status.line_start") +
+            natureCompositeString =
                     getTensedTranslation(presentTense, "hover.nature.special", natureString, boostedStat, cutStat);
         }
 
@@ -366,7 +349,7 @@ public class PlaceholderMethods
         if (showIVs)
         {
             hovers.add(getTranslation("hover.current_ivs"));
-            hovers.add(getTranslation("hover.status.line_start") + getTranslation("hover.total_ivs", totalIVs, percentIVs));
+            hovers.add(getTranslation("hover.total_ivs", totalIVs, percentIVs));
             hovers.add(getTranslation("hover.status.line_start") + ivsLine.toString());
         }
 
@@ -390,9 +373,9 @@ public class PlaceholderMethods
 
         // Splits our input key, adds the correct tense at a constant known location, and then pieces it back together.
         if (presentTense)
-            tensedKey = key.substring(0, 6) + "present." + key.substring(6);
+            tensedKey = key.substring(0, 6) + "present_tense." + key.substring(6);
         else
-            tensedKey = key.substring(0, 6) + "past." + key.substring(6);
+            tensedKey = key.substring(0, 6) + "past_tense." + key.substring(6);
 
         // Send back the translation of our new freshly-tensed key.
         return getTranslation(tensedKey, params);

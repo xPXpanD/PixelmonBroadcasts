@@ -3,15 +3,19 @@ Released ???
 
     Permission changes:
     * "pixelmonbroadcasts.notify.trade.normal" is now "pixelmonbroadcasts.notify.trade".
+    * All "defeat"-type permissions are now "victory"-type permissions to avoid confusion.
+    * PvP "start"/"end" permissions have been merged into the old "challenge"/"victory" groups.
 
     Additions:
-    * Split up configuration into three separate files, found in the PixelmonBroadcasts folder.
-    * Added on-the-fly translation support. Changed messages now apply immediately on file save!
+    * Added support for showing normal Pokémon catches and blackouts.
     * Added a lang option for showing neutral stats in hovers, instead of just "ERROR".
+    * Rewrote configuration/translation with a three-file setup, found in the PixelmonBroadcasts folder.
+    * The %world% and %biome% placeholders should now work properly on trainer/PvP broadcasts.
     * Trades now support the showing of shiny Pokémon, using the new %shiny% placeholder.
 
     Fixes and tweaks:
-    * Enabled showing IVs on Pokémon that a player blacked out to. Turn off the hover to disable.
+    * Enabled showing IVs on Pokémon that a player lost to or fled from. Turn off hover to disable.
+    * Fixed an issue where old options would occasionally get stuck when reloading with changes made.
     * Fixed some potential bugs with players with edited names. There may be more, please report.
     * Removed a few leftover debug messages when players blacked out to wild Pokémon. Oops.
     * Updated CHANGELOG.txt with missed changes in 0.1.1, and corrected versions.

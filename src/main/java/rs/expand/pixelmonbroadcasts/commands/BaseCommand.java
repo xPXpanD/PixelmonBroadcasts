@@ -54,7 +54,7 @@ public class BaseCommand implements CommandExecutor
                 src.sendMessage(clickableLine);
 
                 if (src instanceof Player)
-                    src.sendMessage(Text.of(statLineStart + getTranslation("hub.toggle_info")));
+                    src.sendMessage(Text.of(getTranslation("hub.toggle_info")));
                 else
                 {
                     // Message locked in, as it's not visible in-game. Keeps the lang workload down, with minimal loss.
@@ -66,20 +66,20 @@ public class BaseCommand implements CommandExecutor
             {
                 hasPermissions = true;
 
-                final String finalMessage = getTranslation("hub.reload_syntax", commandAlias);
+                final String finalMessage = getTranslation("hub.reload_syntax", commandAlias, "test1", "test2");
 
                 LiteralText clickableLine = Text.builder(finalMessage)
                         .onClick(TextActions.runCommand("/pixelmonbroadcasts reload"))
                         .build();
 
                 src.sendMessage(clickableLine);
-                    src.sendMessage(Text.of(statLineStart + getTranslation("hub.reload_info")));
+                src.sendMessage(Text.of(getTranslation("hub.reload_info")));
             }
 
             if (!hasPermissions)
             {
-                sendTranslation(src, "hub.error.no_permissions");
-                sendTranslation(src, "hub.error.contact_staff");
+                sendTranslation(src, "hub.no_permissions");
+                sendTranslation(src, "hub.contact_staff");
             }
             else if (calledRemotely)
             {

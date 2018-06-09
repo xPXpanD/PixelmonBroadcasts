@@ -9,9 +9,9 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.broadcastConfig;
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.messageConfig;
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 
 // A collection of methods that are commonly used. One changed word or color here, and half the mod changes. Sweet.
 public class PrintingMethods
@@ -46,16 +46,6 @@ public class PrintingMethods
             printBasicMessage("§cCould not read options node \"§4" + node + "§c\".");
 
         printBasicMessage("§cThe main config contains invalid options. Disabling these.");
-        printBasicMessage("§cCheck the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
-    }
-
-    // If we can't read a main config message, format and throw this error.
-    static void printMessageNodeError(final List<String> nodes)
-    {
-        for (final String node : nodes)
-            printBasicMessage("§cCould not read message node \"§4" + node + "§c\".");
-
-        printBasicMessage("§cThe main config contains invalid messages. Hiding these.");
         printBasicMessage("§cCheck the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
     }
 
@@ -113,25 +103,19 @@ public class PrintingMethods
     // Also swaps any provided placeholders with String representations of the Objects given, if present.
     public static String getBroadcast(String key)
     {
-        if (broadcastConfig != null)
-        {
-            // Get the broadcast from the broadcast config, if it's there.
-            final String broadcast = broadcastConfig.getNode(key).getString();
+        // This is slightly hacky, but split the incoming key up into separate nodes so we can read it.
+        final String[] keySet = key.split("\\.");
 
-            // Did we get a broadcast?
-            if (broadcast != null)
-                return TextSerializers.FORMATTING_CODE.deserialize(broadcast).toString();
-            // We did not get a broadcast, return the provided key and make sure it's unformatted.
-            else
-            {
-                printBasicError("The following broadcast could not be found: §4" + key);
-                return null;
-            }
-        }
-        // We could not read the config, return the provided key and make sure it's unformatted.
+        // Get the broadcast from the broadcast config, if it's there.
+        final String broadcast = broadcastsConfig.getNode((Object[]) keySet).getString();
+
+        // Did we get a broadcast?
+        if (broadcast != null)
+            return TextSerializers.FORMATTING_CODE.replaceCodes(broadcast, '§');
+        // We did not get a broadcast, return the provided key and make sure it's unformatted.
         else
         {
-            printBasicError("The broadcasts file could not be read! Broadcasts will not work!");
+            printBasicError("The following broadcast could not be found: §4" + key);
             return null;
         }
     }
@@ -140,25 +124,22 @@ public class PrintingMethods
     // Also swaps any provided placeholders with String representations of the Objects given, if present.
     public static String getTranslation(String key, final Object... params)
     {
-        if (messageConfig != null)
+        // This is slightly hacky, but split the incoming key up into separate nodes so we can read it.
+        final String[] keySet = key.split("\\.");
+
+        // Get the message from the message config, if it's there.
+        String message = messagesConfig.getNode((Object[]) keySet).getString();
+
+        // Did we get a message?
+        if (message != null)
         {
-            // Get the message from the message config, if it's there.
-            String message = messageConfig.getNode("legendarySpawnMessage").getString();
+            // If any parameters are available, find all placeholders in the message and replace them.
+            for (int i = 0; i < params.length; i++)
+                message = message.replace("{" + (i+1) + "}", params[i].toString());
 
-            // Did we get a message?
-            if (message != null)
-            {
-                // If any parameters are available, find all placeholders in the message and replace them.
-                for (int i = 0; i < params.length; i++)
-                    message = message.replace("{" + i+1 + "}", params[i].toString());
-
-                return TextSerializers.FORMATTING_CODE.deserialize(message).toString();
-            }
-            // We did not get a message, return the provided key and make sure it's unformatted.
-            else
-                return "§r" + key;
+            return TextSerializers.FORMATTING_CODE.replaceCodes(message, '§');
         }
-        // We could not read the config, return the provided key and make sure it's unformatted.
+        // We did not get a message, return the provided key and make sure it's unformatted.
         else
             return "§r" + key;
     }
@@ -167,25 +148,22 @@ public class PrintingMethods
     // Also swaps any provided placeholders with String representations of the Objects given, if present.
     public static void sendTranslation(CommandSource recipient, String key, Object... params)
     {
-        if (messageConfig != null)
+        // This is slightly hacky, but split the incoming key up into separate nodes so we can read it.
+        final String[] keySet = key.split("\\.");
+
+        // Get the message from the message config, if it's there.
+        String message = messagesConfig.getNode((Object[]) keySet).getString();
+
+        // Did we get a message?
+        if (message != null)
         {
-            // Get the message from the message config, if it's there.
-            String message = messageConfig.getNode("legendarySpawnMessage").getString();
+            // If any parameters are available, find all placeholders in the message and replace them.
+            for (int i = 0; i < params.length; i++)
+                message = message.replace("{" + (i+1) + "}", params[i].toString());
 
-            // Did we get a message?
-            if (message != null)
-            {
-                // If any parameters are available, find all placeholders in the message and replace them.
-                for (int i = 0; i < params.length; i++)
-                    message = message.replace("{" + i+1 + "}", params[i].toString());
-
-                recipient.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(message).toText());
-            }
-            // We did not get a message, return the provided key and make sure it's unformatted.
-            else
-                recipient.sendMessage(Text.of("§r" + key));
+            recipient.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(message).toText());
         }
-        // We could not read the config, return the provided key and make sure it's unformatted.
+        // We did not get a message, return the provided key and make sure it's unformatted.
         else
             recipient.sendMessage(Text.of("§r" + key));
     }

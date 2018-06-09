@@ -52,7 +52,7 @@ public class HatchListener
                 if (broadcast != null)
                 {
                     iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyHatches,
-                            true, true, "hatch.shiny", "showShinyHatch");
+                            true, revealShinyHatches, "hatch.shiny", "showShinyHatch");
                 }
             }
         }
@@ -81,7 +81,7 @@ public class HatchListener
                 if (broadcast != null)
                 {
                     iterateAndSendBroadcast(broadcast, pokemon, player, hoverNormalHatches,
-                            true, true, "hatch.normal", "showNormalHatch");
+                            true, revealNormalHatches, "hatch.normal", "showNormalHatch");
                 }
             }
         }

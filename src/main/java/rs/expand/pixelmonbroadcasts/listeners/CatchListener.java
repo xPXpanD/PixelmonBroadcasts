@@ -51,7 +51,7 @@ public class CatchListener
                 if (broadcast != null)
                 {
                     iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyLegendaryCatches,
-                            true, true, "catch.shinylegendary", "showShinyLegendaryCatch");
+                            true, revealShinyLegendaryCatches, "catch.shinylegendary", "showShinyLegendaryCatch");
                 }
             }
         }
@@ -80,7 +80,7 @@ public class CatchListener
                 if (broadcast != null)
                 {
                     iterateAndSendBroadcast(broadcast, pokemon, player, hoverLegendaryCatches,
-                            true, true, "catch.legendary", "showLegendaryCatch");
+                            true, revealLegendaryCatches, "catch.legendary", "showLegendaryCatch");
                 }
             }
         }
@@ -109,7 +109,7 @@ public class CatchListener
                 if (broadcast != null)
                 {
                     iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyCatches,
-                            true, true, "catch.shiny", "showShinyCatch");
+                            true, revealShinyCatches, "catch.shiny", "showShinyCatch");
                 }
             }
         }
@@ -138,7 +138,7 @@ public class CatchListener
                 if (broadcast != null)
                 {
                     iterateAndSendBroadcast(broadcast, pokemon, player, hoverNormalCatches,
-                            true, true, "catch.normal", "showNormalCatch");
+                            true, revealNormalCatches, "catch.normal", "showNormalCatch");
                 }
             }
         }

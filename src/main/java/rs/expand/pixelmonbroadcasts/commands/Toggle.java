@@ -57,7 +57,7 @@ public class Toggle implements CommandExecutor
                     case "showTrainerBlackout": case "showTrainerForfeit":
                     case "showBossTrainerChallenge": case "showBossTrainerVictory":
                     case "showBossTrainerBlackout": case "showBossTrainerForfeit":
-                    case "showPVPStart": case "showPVPVictory": case "showPVPDraw":
+                    case "showPVPChallenge": case "showPVPVictory": case "showPVPDraw":
                     case "showNormalHatch": case "showShinyHatch":
                     case "showTrade":
                     {
@@ -145,12 +145,111 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.boss_trainer.off") + separator);
             }
+            if (showPVPChallenges && src.hasPermission("pixelmonbroadcasts.notify.challenge.pvp"))
+            {
+                flags.add("showPVPChallenge");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showPVPChallenge"))
+                    messages.add(getTranslation("toggle.pvp.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.pvp.off") + separator);
+            }
 
             // If we have any toggles lined up, print and clear.
             if (!messages.isEmpty())
             {
                 // Get and add the "challenge toggles" header message.
                 toggleMessageList.add(Text.of(getTranslation("toggle.challenge_toggles")));
+
+                // Get a clickable line with all the toggles that we can squeeze onto it.
+                toggleMessageList.add(getClickableLine(messages, flags));
+
+                // Clear the Lists so we can reuse them, if need be.
+                messages.clear();
+                flags.clear();
+            }
+
+            /*                 *\
+               VICTORY TOGGLES
+            \*                 */
+            // Check perms. Add toggle status if perms look good.
+            if (showShinyVictories && src.hasPermission("pixelmonbroadcasts.notify.victory.shiny"))
+            {
+                flags.add("showShinyVictory");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showShinyVictory"))
+                    messages.add(getTranslation("toggle.shiny.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.shiny.off") + separator);
+            }
+            if (showShinyLegendaryVictories && src.hasPermission("pixelmonbroadcasts.notify.victory.shinylegendary"))
+            {
+                flags.add("showShinyLegendaryVictory");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showShinyLegendaryVictory"))
+                    messages.add(getTranslation("toggle.shiny_legendary.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.shiny_legendary.off") + separator);
+            }
+            if (showLegendaryVictories && src.hasPermission("pixelmonbroadcasts.notify.victory.legendary"))
+            {
+                flags.add("showLegendaryVictory");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showLegendaryVictory"))
+                    messages.add(getTranslation("toggle.legendary.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.legendary.off") + separator);
+            }
+            if (showBossVictories && src.hasPermission("pixelmonbroadcasts.notify.victory.boss"))
+            {
+                flags.add("showBossVictory");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showBossVictory"))
+                    messages.add(getTranslation("toggle.boss.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.boss.off") + separator);
+            }
+            if (showTrainerVictories && src.hasPermission("pixelmonbroadcasts.notify.victory.trainer"))
+            {
+                flags.add("showTrainerVictory");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showTrainerVictory"))
+                    messages.add(getTranslation("toggle.trainer.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.trainer.off") + separator);
+            }
+            if (showBossTrainerVictories && src.hasPermission("pixelmonbroadcasts.notify.victory.bosstrainer"))
+            {
+                flags.add("showBossTrainerVictory");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showBossTrainerVictory"))
+                    messages.add(getTranslation("toggle.boss_trainer.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.boss_trainer.off") + separator);
+            }
+            if (showPVPVictories && src.hasPermission("pixelmonbroadcasts.notify.victory.pvp"))
+            {
+                flags.add("showPVPVictory");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showPVPVictory"))
+                    messages.add(getTranslation("toggle.pvp.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.pvp.off") + separator);
+            }
+
+            // If we have any toggles lined up, print and clear.
+            if (!messages.isEmpty())
+            {
+                // Get and add the "victory toggles" header message.
+                toggleMessageList.add(Text.of(getTranslation("toggle.victory_toggles")));
 
                 // Get a clickable line with all the toggles that we can squeeze onto it.
                 toggleMessageList.add(getClickableLine(messages, flags));
@@ -318,85 +417,6 @@ public class Toggle implements CommandExecutor
                 flags.clear();
             }
 
-            /*                 *\
-               VICTORY TOGGLES
-            \*                 */
-            // Check perms. Add toggle status if perms look good.
-            if (showShinyVictories && src.hasPermission("pixelmonbroadcasts.notify.victory.shiny"))
-            {
-                flags.add("showShinyVictory");
-
-                // Only returns "false" if explicitly toggled off by the user.
-                if (checkToggleStatus(player, "showShinyVictory"))
-                    messages.add(getTranslation("toggle.shiny.on") + separator);
-                else
-                    messages.add(getTranslation("toggle.shiny.off") + separator);
-            }
-            if (showShinyLegendaryVictories && src.hasPermission("pixelmonbroadcasts.notify.victory.shinylegendary"))
-            {
-                flags.add("showShinyLegendaryVictory");
-
-                // Only returns "false" if explicitly toggled off by the user.
-                if (checkToggleStatus(player, "showShinyLegendaryVictory"))
-                    messages.add(getTranslation("toggle.shiny_legendary.on") + separator);
-                else
-                    messages.add(getTranslation("toggle.shiny_legendary.off") + separator);
-            }
-            if (showLegendaryVictories && src.hasPermission("pixelmonbroadcasts.notify.victory.legendary"))
-            {
-                flags.add("showLegendaryVictory");
-
-                // Only returns "false" if explicitly toggled off by the user.
-                if (checkToggleStatus(player, "showLegendaryVictory"))
-                    messages.add(getTranslation("toggle.legendary.on") + separator);
-                else
-                    messages.add(getTranslation("toggle.legendary.off") + separator);
-            }
-            if (showBossVictories && src.hasPermission("pixelmonbroadcasts.notify.victory.boss"))
-            {
-                flags.add("showBossVictory");
-
-                // Only returns "false" if explicitly toggled off by the user.
-                if (checkToggleStatus(player, "showBossVictory"))
-                    messages.add(getTranslation("toggle.boss.on") + separator);
-                else
-                    messages.add(getTranslation("toggle.boss.off") + separator);
-            }
-            if (showTrainerVictories && src.hasPermission("pixelmonbroadcasts.notify.victory.trainer"))
-            {
-                flags.add("showTrainerVictory");
-
-                // Only returns "false" if explicitly toggled off by the user.
-                if (checkToggleStatus(player, "showTrainerVictory"))
-                    messages.add(getTranslation("toggle.trainer.on") + separator);
-                else
-                    messages.add(getTranslation("toggle.trainer.off") + separator);
-            }
-            if (showBossTrainerVictories && src.hasPermission("pixelmonbroadcasts.notify.victory.bosstrainer"))
-            {
-                flags.add("showBossTrainerVictory");
-
-                // Only returns "false" if explicitly toggled off by the user.
-                if (checkToggleStatus(player, "showBossTrainerVictory"))
-                    messages.add(getTranslation("toggle.boss_trainer.on") + separator);
-                else
-                    messages.add(getTranslation("toggle.boss_trainer.off") + separator);
-            }
-
-            // If we have any toggles lined up, print and clear.
-            if (!messages.isEmpty())
-            {
-                // Get and add the "victory toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.victory_toggles")));
-
-                // Get a clickable line with all the toggles that we can squeeze onto it.
-                toggleMessageList.add(getClickableLine(messages, flags));
-
-                // Clear the Lists so we can reuse them, if need be.
-                messages.clear();
-                flags.clear();
-            }
-
             /*               *\
                SPAWN TOGGLES
             \*               */
@@ -505,20 +525,10 @@ public class Toggle implements CommandExecutor
                 flags.clear();
             }
 
-            /*             *\
-               PVP TOGGLES
-            \*             */
+            /*              *\
+               DRAW TOGGLES
+            \*              */
             // Check perms. Add toggle status if perms look good.
-            if (showPVPStarts && src.hasPermission("pixelmonbroadcasts.notify.start.pvp"))
-            {
-                flags.add("showPVPStart");
-
-                // Only returns "false" if explicitly toggled off by the user.
-                if (checkToggleStatus(player, "showPVPStart"))
-                    messages.add(getTranslation("toggle.pvp_start.on") + separator);
-                else
-                    messages.add(getTranslation("toggle.pvp_start.off") + separator);
-            }
             if (showPVPDraws && src.hasPermission("pixelmonbroadcasts.notify.draw.pvp"))
             {
                 flags.add("showPVPDraw");
@@ -529,29 +539,15 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.pvp_draw.off") + separator);
             }
-            if (showPVPVictories && src.hasPermission("pixelmonbroadcasts.notify.victory.pvp"))
-            {
-                flags.add("showPVPVictory");
 
-                // Only returns "false" if explicitly toggled off by the user.
-                if (checkToggleStatus(player, "showPVPVictory"))
-                    messages.add(getTranslation("toggle.pvp_victory.on") + separator);
-                else
-                    messages.add(getTranslation("toggle.pvp_victory.off") + separator);
-            }
-
-            // If we have any toggles lined up, print and clear.
+            // If we have any toggles lined up, print. No need to clear here, GC should handle it.
             if (!messages.isEmpty())
             {
-                // Get and add the "catch toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.pvp_toggles")));
+                // Get and add the "miscellaneous toggles" header message.
+                toggleMessageList.add(Text.of(getTranslation("toggle.draw_toggles")));
 
                 // Get a clickable line with all the toggles that we can squeeze onto it.
                 toggleMessageList.add(getClickableLine(messages, flags));
-
-                // Clear the Lists so we can reuse them, if need be.
-                messages.clear();
-                flags.clear();
             }
 
             /*                       *\
@@ -636,7 +632,7 @@ public class Toggle implements CommandExecutor
         messages.set(messages.size() - 1, lastEntry);
 
         // Set up a basic Text that we'll be returning, after adding all passed hoverable options to it.
-        Text returnText = Text.of(getTranslation("hover.line_start"));
+        Text returnText = Text.of(getTranslation("toggle.line_start"));
 
         // Set up a temporary Text for putting the message/flag pair that we're currently processing into.
         Text actionPair;

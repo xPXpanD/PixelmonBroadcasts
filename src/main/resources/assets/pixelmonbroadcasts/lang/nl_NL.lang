@@ -105,9 +105,9 @@ hub.reload_syntax=&6/%s reload
 ## End of replacements. ^
 hub.toggle_info=&eOpent instellingen voor het tonen van evenementsberichten.
 hub.reload_info=&eHerlaadt direct de configuratie van Pixelmon Broadcasts.
-hub.error.no_permissions=&cU heeft geen toestemming om Pixelmon Broadcasts te gebruiken.
+hub.no_permissions=&cU heeft geen toestemming om Pixelmon Broadcasts te gebruiken.
 # T: Personeel is erg zakelijk, maar dit past wel op één regel. TODO?
-hub.error.contact_staff=&cNeem contact op met personeel als u denkt dat dit niet klopt.
+hub.contact_staff=&cNeem contact op met personeel als u denkt dat dit niet klopt.
 
 
 # # # /pixelmonbroadcasts toggle # # #
@@ -140,8 +140,8 @@ toggle.boss_trainer.on=&a&nboss trainer
 toggle.boss_trainer.off=&c&nboss trainer
 
 # Texts - specific options
-toggle.pvp_start.on=&a&nstart
-toggle.pvp_start.off=&c&nstart
+toggle.pvp_challenge.on=&a&nstart
+toggle.pvp_challenge.off=&c&nstart
 toggle.pvp_draw.on=&a&ndraw
 toggle.pvp_draw.off=&c&ndraw
 toggle.pvp_victory.on=&a&nvictory

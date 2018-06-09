@@ -39,7 +39,7 @@ public class BattleStartListener
             // Did a PvP battle just start? (two players, one on either side)
             if (participant1 instanceof PlayerParticipant && participant2 instanceof PlayerParticipant)
             {
-                if (logPVPStarts)
+                if (logPVPChallenges)
                 {
                     final BlockPos location = participant1.getEntity().getPosition();
 
@@ -55,10 +55,10 @@ public class BattleStartListener
                     );
                 }
 
-                if (showPVPStarts)
+                if (showPVPChallenges)
                 {
                     // Get a broadcast from the broadcasts config file, if the key can be found.
-                    broadcast = getBroadcast("broadcast.start.pvp");
+                    broadcast = getBroadcast("broadcast.challenge.pvp");
 
                     // Did we find a message? Iterate all available players, and send to those who should receive!
                     if (broadcast != null)
@@ -68,7 +68,7 @@ public class BattleStartListener
 
                         // Swap player 1 placeholders, and then send.
                         iterateAndSendBroadcast(broadcast, null, (EntityPlayer) participant1.getEntity(),
-                                false, true, false, "start.pvp", "showPVPStart");
+                                false, true, false, "challenge.pvp", "showPVPChallenge");
                     }
                 }
             }

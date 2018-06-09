@@ -53,7 +53,7 @@ public class WildDefeatListener
                 if (broadcast != null)
                 {
                     iterateAndSendBroadcast(broadcast, pokemon, player, hoverBossVictories,
-                            false, true, "victory.boss", "showBossVictory");
+                            false, revealBossVictories, "victory.boss", "showBossVictory");
                 }
             }
         }
@@ -82,7 +82,7 @@ public class WildDefeatListener
                 if (broadcast != null)
                 {
                     iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyLegendaryVictories,
-                            false, true, "victory.shinylegendary", "showShinyLegendaryVictory");
+                            false, revealShinyLegendaryVictories, "victory.shinylegendary", "showShinyLegendaryVictory");
                 }
             }
         }
@@ -111,7 +111,7 @@ public class WildDefeatListener
                 if (broadcast != null)
                 {
                     iterateAndSendBroadcast(broadcast, pokemon, player, hoverLegendaryVictories,
-                            false, true, "victory.legendary", "showLegendaryVictory");
+                            false, revealLegendaryVictories, "victory.legendary", "showLegendaryVictory");
                 }
             }
         }
@@ -140,7 +140,7 @@ public class WildDefeatListener
                 if (broadcast != null)
                 {
                     iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyVictories,
-                            false, true, "victory.shiny", "showShinyVictory");
+                            false, revealShinyVictories, "victory.shiny", "showShinyVictory");
                 }
             }
         }
