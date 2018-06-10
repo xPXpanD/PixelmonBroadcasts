@@ -1,5 +1,5 @@
 0.2.1 for 6.3.0
-Released June 9th, 2018.
+Released June 10th, 2018.
 
     Fixes and tweaks:
     * Fixed %biome% on spawns and catches always showing the biome at 0, 0, 0.
