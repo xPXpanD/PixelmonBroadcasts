@@ -36,12 +36,13 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 // TODO: Implement logging to a custom log file with the right option passed.
 // TODO: Ideas for new events: HA, successful breed, evolution.
 // TODO: See if some of the BattleEnd stuff can be moved to separate and more specific events.
+// TODO: Maybe make events clickable? Staff node, teleport people to the source. Dunno.
 
 @Plugin
 (
         id = "pixelmonbroadcasts",
         name = "PixelmonBroadcasts",
-        version = "0.2.0",
+        version = "0.2.1",
         dependencies = @Dependency(id = "pixelmon"),
         description = "Adds fully custom legendary-like messages for tons of events, and optionally logs them, too.",
         authors = "XpanD"

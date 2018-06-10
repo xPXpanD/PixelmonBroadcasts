@@ -1,3 +1,14 @@
+0.2.1 for 6.3.0
+Released June 9th, 2018.
+
+    Fixes and tweaks:
+    * Fixed %biome% on spawns and catches always showing the biome at 0, 0, 0.
+    * Fixed %xpos%, %ypos% and %zpos% not working right.
+    * Fixed an odd error where a Pokémon could apparently forfeit a fight with another Pokémon.
+    * Fixed normal catch and blackout messages not being toggle-able.
+    * Fixed PvP draws referencing two removed "toggle.pvp_draw" keys, and a missing comma.
+    * Toggle categories now sort mostly alphabetically. Stuff was changing too often to keep up with.
+
 0.2.0 for 6.3.0
 Released June 9th, 2018.
 

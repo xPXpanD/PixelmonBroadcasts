@@ -19,7 +19,7 @@ public class SpawnListener
     @SubscribeEvent
     public void onSpawnPokemonEvent(final SpawnEvent event)
     {
-        // See which entity was spawned.
+        // Create an entity from the event info that we can check.
         final Entity spawnedEntity = event.action.getOrCreateEntity();
 
         // Check if the entity is a Pokémon, not a trainer or the like.
@@ -54,6 +54,9 @@ public class SpawnListener
 
                     if (showBossSpawns)
                     {
+                        // Sets the position of the entity we created, as it's 0 on all coordinates by default.
+                        pokemon.setPosition(location.getX(), location.getY(), location.getZ());
+
                         // Get a broadcast from the broadcasts config file, if the key can be found.
                         broadcast = getBroadcast("broadcast.spawn.boss");
 
@@ -82,6 +85,9 @@ public class SpawnListener
 
                     if (showShinyLegendarySpawns)
                     {
+                        // Sets the position of the entity we created, as it's 0 on all coordinates by default.
+                        pokemon.setPosition(location.getX(), location.getY(), location.getZ());
+
                         // Get a broadcast from the broadcasts config file, if the key can be found.
                         broadcast = getBroadcast("broadcast.spawn.shiny_legendary");
 
@@ -110,6 +116,9 @@ public class SpawnListener
 
                     if (showLegendarySpawns)
                     {
+                        // Sets the position of the entity we created, as it's 0 on all coordinates by default.
+                        pokemon.setPosition(location.getX(), location.getY(), location.getZ());
+
                         // Get a broadcast from the broadcasts config file, if the key can be found.
                         broadcast = getBroadcast("broadcast.spawn.legendary");
 
@@ -138,6 +147,9 @@ public class SpawnListener
 
                     if (showShinySpawns)
                     {
+                        // Sets the position of the entity we created, as it's 0 on all coordinates by default.
+                        pokemon.setPosition(location.getX(), location.getY(), location.getZ());
+
                         // Get a broadcast from the broadcasts config file, if the key can be found.
                         broadcast = getBroadcast("broadcast.spawn.shiny");
 

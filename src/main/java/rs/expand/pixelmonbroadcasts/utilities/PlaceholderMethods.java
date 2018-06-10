@@ -108,22 +108,22 @@ public class PlaceholderMethods
 
     // Replaces placeholders that can have multiple sources (players, Pokémon).
     // Can be used for both players, but it's a bit cheeky -- we'll assume that player 1's data is good enough.
-    public static String replaceNeutralPlaceholders(
+    private static String replaceNeutralPlaceholders(
             String broadcast, final EntityPixelmon pokemon, final World world, final BlockPos location)
     {
         // Insert coordinates.
-        broadcast = broadcast.replaceAll("(?i)%xpos2%", String.valueOf(location.getX()));
-        broadcast = broadcast.replaceAll("(?i)%ypos2%", String.valueOf(location.getY()));
-        broadcast = broadcast.replaceAll("(?i)%zpos2%", String.valueOf(location.getZ()));
+        broadcast = broadcast.replaceAll("(?i)%xpos(\\d*?)%", String.valueOf(location.getX()));
+        broadcast = broadcast.replaceAll("(?i)%ypos(\\d*?)%", String.valueOf(location.getY()));
+        broadcast = broadcast.replaceAll("(?i)%zpos(\\d*?)%", String.valueOf(location.getZ()));
 
         // Insert a world name.
         broadcast = broadcast.replaceAll("(?i)%world(\\d*?)%", world.getWorldInfo().getWorldName());
 
         // Insert the "placeholder.shiny" String.
         if (pokemon != null && pokemon.getIsShiny())
-            broadcast = broadcast.replaceAll("(?i)%shiny%", getTranslation("placeholder.shiny"));
+            broadcast = broadcast.replaceAll("(?i)%shiny(\\d*?)%", getTranslation("placeholder.shiny"));
         else
-            broadcast = broadcast.replaceAll("(?i)%shiny%", "");
+            broadcast = broadcast.replaceAll("(?i)%shiny(\\d*?)%", "");
 
         // Insert a biome. Same reasoning as above, for multiple players.
         if (broadcast.toLowerCase().contains("%biome%") || broadcast.toLowerCase().contains("%biome2%"))

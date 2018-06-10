@@ -49,7 +49,6 @@ public class BattleEndListener
         // Get our battle results, and whether we have the right amount of participants.
         final boolean endedInDraw = neutrals.size() > 1 && getResult(event.results) == BattleResults.DRAW;
         final boolean endedInFlee = neutrals.size() > 1 && getResult(event.results) == BattleResults.FLEE;
-        final boolean hasWinnerAndLoser = !winners.isEmpty() && !losers.isEmpty();
         final boolean battleForfeited = event.cause == EnumBattleEndCause.FORFEIT;
 
         // Set up two participants.
@@ -61,27 +60,29 @@ public class BattleEndListener
             participant1 = neutrals.get(0);
             participant2 = neutrals.get(1);
         }
-        // Check if somebody fled. We should have one participant set to "VICTORY" (and added to winners), and one "FLEE".
-        else if (endedInFlee)
-        {
-            // Hardwire participant1 to be the Pokémon participant.
-            if (neutrals.get(0) instanceof WildPixelmonParticipant)
-            {
-                participant1 = neutrals.get(0);
-                participant2 = neutrals.get(1);
-            }
-            else
-            {
-                participant1 = neutrals.get(1);
-                participant2 = neutrals.get(0);
-            }
-        }
         // Check if we have a winner AND a loser amongst the participants. Usually trainer/PvP stuff.
-        else if (hasWinnerAndLoser)
+        else if (!winners.isEmpty() && !losers.isEmpty())
         {
             // Should be safe -- haven't managed to get two DEFEAT results yet, it seems to always pick DRAW there.
             participant1 = winners.get(0);
             participant2 = losers.get(0);
+        }
+        // Check if somebody fled. We should have one participant set to "VICTORY" (and added to winners), and one "FLEE".
+        else if (endedInFlee)
+        {
+            // Hardwire participant1 to be the Pokémon participant.
+            if (neutrals.get(0) instanceof WildPixelmonParticipant && neutrals.get(1) instanceof PlayerParticipant)
+            {
+                participant1 = neutrals.get(0);
+                participant2 = neutrals.get(1);
+            }
+            else if (neutrals.get(0) instanceof PlayerParticipant && neutrals.get(1) instanceof WildPixelmonParticipant)
+            {
+                participant1 = neutrals.get(1);
+                participant2 = neutrals.get(0);
+            }
+            // We got a weird result (two Pokémon?), stop execution.
+            else return;
         }
         // We didn't hit anything that was valid, stop execution.
         else return;

@@ -44,6 +44,9 @@ public class CatchListener
 
             if (showShinyLegendaryCatches)
             {
+                // Sets the position of the entity we created, as it's 0 on all coordinates by default.
+                pokemon.setPosition(location.getX(), location.getY(), location.getZ());
+
                 // Get a broadcast from the broadcasts config file, if the key can be found.
                 broadcast = getBroadcast("broadcast.catch.shiny_legendary");
 
@@ -73,6 +76,9 @@ public class CatchListener
 
             if (showLegendaryCatches)
             {
+                // Sets the position of the entity we created, as it's 0 on all coordinates by default.
+                pokemon.setPosition(location.getX(), location.getY(), location.getZ());
+
                 // Get a broadcast from the broadcasts config file, if the key can be found.
                 broadcast = getBroadcast("broadcast.catch.legendary");
 
@@ -102,6 +108,9 @@ public class CatchListener
 
             if (showShinyCatches)
             {
+                // Sets the position of the entity we created, as it's 0 on all coordinates by default.
+                pokemon.setPosition(location.getX(), location.getY(), location.getZ());
+
                 // Get a broadcast from the broadcasts config file, if the key can be found.
                 broadcast = getBroadcast("broadcast.catch.shiny");
 
@@ -131,6 +140,9 @@ public class CatchListener
 
             if (showNormalCatches)
             {
+                // Sets the position of the entity we created, as it's 0 on all coordinates by default.
+                pokemon.setPosition(location.getX(), location.getY(), location.getZ());
+
                 // Get a broadcast from the broadcasts config file, if the key can be found.
                 broadcast = getBroadcast("broadcast.catch.normal");
 
