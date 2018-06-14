@@ -1,3 +1,20 @@
+0.2.2 for 6.3.1
+Released ???
+
+    Additions:
+    * Added custom broadcasts for several event spawns, such as the legendary birds and Arceus.
+
+    Changes in messages.conf:
+    * Added "toggle.summon_toggles", "toggle.summon.on" and "toggle.summon.off". Edit in or refresh.
+
+    Changes to permissions:
+    * Added "pixelmonbroadcasts.notify.summon.birdtrio".
+
+    Fixes and tweaks:
+    * Moved the vanilla legendary message warning to a later start-up phase. People were missing it.
+
+    Note: The messages.conf in 0.2.1 said it was unchanged, but I forgot I added normal toggles. Sorry.
+
 0.2.1 for 6.3.0
 Released June 10th, 2018.
 

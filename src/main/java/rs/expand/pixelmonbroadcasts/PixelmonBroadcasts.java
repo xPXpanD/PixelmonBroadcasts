@@ -34,15 +34,21 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 
 // TODO: Title-style display option?
 // TODO: Implement logging to a custom log file with the right option passed.
-// TODO: Ideas for new events: HA, successful breed, evolution.
+// TODO: Ideas for new events: HA, successful breed, evolution, event spawns, maaaaybe level.
 // TODO: See if some of the BattleEnd stuff can be moved to separate and more specific events.
 // TODO: Maybe make events clickable? Staff node, teleport people to the source. Dunno.
+
+// FIXME: Implement event spawns.
+// FIXME: See if the fact that Toggle is per-player can be made more obvious.
+// TODO: Add ability support to reveal-enabled hovers.
+// TODO: Cancel challenge messages for event legendaries or make a more comprehensive summon check.
+// FIXME: Bad event listeners from other mods may cause events to hang (stuck loop), which causes insane spam from us. Fix?
 
 @Plugin
 (
         id = "pixelmonbroadcasts",
         name = "PixelmonBroadcasts",
-        version = "0.2.1",
+        version = "0.3.0",
         dependencies = @Dependency(id = "pixelmon"),
         description = "Adds fully custom legendary-like messages for tons of events, and optionally logs them, too.",
         authors = "XpanD"
@@ -72,6 +78,7 @@ public class PixelmonBroadcasts
     public static boolean logBossTrainerForfeits;
     public static boolean logBossTrainerVictories;
     public static boolean logBossVictories;
+    public static boolean logBirdTrioSummons;
     public static boolean logLegendaryBlackouts;
     public static boolean logLegendaryCatches;
     public static boolean logLegendaryChallenges;
@@ -113,6 +120,7 @@ public class PixelmonBroadcasts
     public static boolean showBossTrainerForfeits;
     public static boolean showBossTrainerVictories;
     public static boolean showBossVictories;
+    public static boolean showBirdTrioSummons;
     public static boolean showLegendaryBlackouts;
     public static boolean showLegendaryCatches;
     public static boolean showLegendaryChallenges;
@@ -252,6 +260,7 @@ public class PixelmonBroadcasts
             printBasicMessage("--> §aRegistering listeners with Pixelmon...");
             Pixelmon.EVENT_BUS.register(new BattleEndListener());
             Pixelmon.EVENT_BUS.register(new BattleStartListener());
+            Pixelmon.EVENT_BUS.register(new BirdSpawnListener());
             Pixelmon.EVENT_BUS.register(new CatchListener());
             Pixelmon.EVENT_BUS.register(new HatchListener());
             Pixelmon.EVENT_BUS.register(new SpawnListener());

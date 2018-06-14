@@ -60,6 +60,7 @@ public class Toggle implements CommandExecutor
                     case "showPVPChallenge": case "showPVPVictory": case "showPVPDraw":
                     case "showNormalHatch": case "showShinyHatch":
                     case "showTrade":
+                    case "showBirdTrioSummon":
                     {
                         // Got a valid flag. Toggle it.
                         toggleFlag(src, input);
@@ -159,7 +160,7 @@ public class Toggle implements CommandExecutor
             // If we have any toggles lined up, print and clear.
             if (!messages.isEmpty())
             {
-                // Get and add the "victory toggles" header message.
+                // Get and add the "blackout toggles" header message.
                 toggleMessageList.add(Text.of(getTranslation("toggle.blackout_toggles")));
 
                 // Get a clickable line with all the toggles that we can squeeze onto it.
@@ -336,7 +337,7 @@ public class Toggle implements CommandExecutor
             // If we have any toggles lined up, print. No need to clear here, GC should handle it.
             if (!messages.isEmpty())
             {
-                // Get and add the "miscellaneous toggles" header message.
+                // Get and add the "draw toggles" header message.
                 toggleMessageList.add(Text.of(getTranslation("toggle.draw_toggles")));
 
                 // Get a clickable line with all the toggles that we can squeeze onto it.
@@ -415,7 +416,7 @@ public class Toggle implements CommandExecutor
             // If we have any toggles lined up, print and clear.
             if (!messages.isEmpty())
             {
-                // Get and add the "victory toggles" header message.
+                // Get and add the "forfeit toggles" header message.
                 toggleMessageList.add(Text.of(getTranslation("toggle.forfeit_toggles")));
 
                 // Get a clickable line with all the toggles that we can squeeze onto it.
@@ -476,6 +477,35 @@ public class Toggle implements CommandExecutor
             {
                 // Get and add the "spawn toggles" header message.
                 toggleMessageList.add(Text.of(getTranslation("toggle.spawning_toggles")));
+
+                // Get a clickable line with all the toggles that we can squeeze onto it.
+                toggleMessageList.add(getClickableLine(messages, flags));
+
+                // Clear the Lists so we can reuse them, if need be.
+                messages.clear();
+                flags.clear();
+            }
+
+            /*               *\
+               SUMMON TOGGLES
+            \*               */
+            // Check perms. Add toggle status if perms look good.
+            if (showBirdTrioSummons && src.hasPermission("pixelmonbroadcasts.notify.spawn.shiny"))
+            {
+                flags.add("showBirdTrioSummon");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showBirdTrioSummon"))
+                    messages.add(getTranslation("toggle.bird_trio.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.bird_trio.off") + separator);
+            }
+
+            // If we have any toggles lined up, print and clear.
+            if (!messages.isEmpty())
+            {
+                // Get and add the "summon toggles" header message.
+                toggleMessageList.add(Text.of(getTranslation("toggle.summon_toggles")));
 
                 // Get a clickable line with all the toggles that we can squeeze onto it.
                 toggleMessageList.add(getClickableLine(messages, flags));
@@ -612,7 +642,7 @@ public class Toggle implements CommandExecutor
             // If we have any toggles lined up, print. No need to clear here, GC should handle it.
             if (!messages.isEmpty())
             {
-                // Get and add the "miscellaneous toggles" header message.
+                // Get and add the "other toggles" header message.
                 toggleMessageList.add(Text.of(getTranslation("toggle.other_toggles")));
 
                 // Get a clickable line with all the toggles that we can squeeze onto it.

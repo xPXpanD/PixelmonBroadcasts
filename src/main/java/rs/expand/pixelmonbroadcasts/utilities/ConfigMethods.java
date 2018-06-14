@@ -579,6 +579,21 @@ public class ConfigMethods
             PixelmonBroadcasts.showPVPDraws = pvpDrawOptions.contains("show");
         }
 
+        /*                 *\
+           summon settings
+        \*                 */
+
+        // Get options. Extract and set them, if we managed to grab them successfully.
+        String birdTrioSummonOptions = settingsConfig.getNode("birdTrioSummonOptions").getString();
+        if (birdTrioSummonOptions == null)
+            optionsErrorArray.add("birdTrioSummonOptions");
+        else
+        {
+            birdTrioSummonOptions = birdTrioSummonOptions.toLowerCase();
+            PixelmonBroadcasts.logBirdTrioSummons = birdTrioSummonOptions.contains("log");
+            PixelmonBroadcasts.showBirdTrioSummons = birdTrioSummonOptions.contains("show");
+        }
+
         /*                *\
            hatch settings
         \*                */
