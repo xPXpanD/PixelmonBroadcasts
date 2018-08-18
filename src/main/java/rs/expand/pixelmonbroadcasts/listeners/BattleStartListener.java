@@ -206,7 +206,7 @@ public class BattleStartListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, playerEntity, showBossChallenges,
+                                iterateAndSendBroadcast(broadcast, pokemonEntity, playerEntity, hoverBossChallenges,
                                         true, false, "challenge.boss", "showBossChallenge");
                             }
                         }
@@ -235,7 +235,7 @@ public class BattleStartListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, playerEntity, showShinyLegendaryChallenges,
+                                iterateAndSendBroadcast(broadcast, pokemonEntity, playerEntity, hoverShinyLegendaryChallenges,
                                         true, false, "challenge.shinylegendary", "showShinyLegendaryChallenge");
                             }
                         }
@@ -264,7 +264,7 @@ public class BattleStartListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, playerEntity, showLegendaryChallenges,
+                                iterateAndSendBroadcast(broadcast, pokemonEntity, playerEntity, hoverLegendaryChallenges,
                                         true, false, "challenge.legendary", "showLegendaryChallenge");
                             }
                         }
@@ -293,7 +293,7 @@ public class BattleStartListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, playerEntity, showShinyChallenges,
+                                iterateAndSendBroadcast(broadcast, pokemonEntity, playerEntity, hoverShinyChallenges,
                                         true, false, "challenge.shiny", "showShinyChallenge");
                             }
                         }

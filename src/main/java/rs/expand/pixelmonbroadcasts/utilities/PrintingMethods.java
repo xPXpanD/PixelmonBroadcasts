@@ -9,7 +9,6 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 

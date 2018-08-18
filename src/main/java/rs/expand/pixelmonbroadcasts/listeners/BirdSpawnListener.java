@@ -1,4 +1,4 @@
-// Listens for people using bird shrines.
+// Listens for people using bird shrines. Work in progress, currently commented out in production code.
 package rs.expand.pixelmonbroadcasts.listeners;
 
 // Remote imports.
@@ -8,15 +8,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 // Local imports.
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logBirdTrioSummons;
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.showBirdTrioSummons;
+//import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logBirdTrioSummons;
+//import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.showBirdTrioSummons;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndSendBroadcast;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.getBroadcast;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicMessage;
 
 public class BirdSpawnListener
 {
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void onActivateBirdShrineEvent(final PlayerActivateShrineEvent event)
     {
         // Create shorthand variables for convenience.
@@ -59,5 +59,5 @@ public class BirdSpawnListener
                         true, false, "summon.birdtrio", "showBirdTrioSummon");
             }
         }
-    }
+    }*/
 }

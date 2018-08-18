@@ -2,6 +2,7 @@
 package rs.expand.pixelmonbroadcasts;
 
 // Remote imports.
+import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,18 +38,22 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 // TODO: Ideas for new events: HA, successful breed, evolution, event spawns, maaaaybe level.
 // TODO: See if some of the BattleEnd stuff can be moved to separate and more specific events.
 // TODO: Maybe make events clickable? Staff node, teleport people to the source. Dunno.
-
-// FIXME: Implement event spawns.
-// FIXME: See if the fact that Toggle is per-player can be made more obvious.
+// TODO: Add a logger for individual player Pokémon being knocked out, for the Nuzlocke crowd.
+// TODO: Add a vanish check?
+// TODO: Listen to commands being used, fire the right event if we have a successful hatch/spawn/etc..
 // TODO: Add ability support to reveal-enabled hovers.
 // TODO: Cancel challenge messages for event legendaries or make a more comprehensive summon check.
 // FIXME: Bad event listeners from other mods may cause events to hang (stuck loop), which causes insane spam from us. Fix?
+// FIXME: Biome names are always English.
+// FIXME: Roll over cleanly to a new line if more than 5 toggles are available in a single category?
+// FIXME: Get rid of the DedicatedServer debug line in front of all basic console messages.
+// FIXME: Replacing some uses of "the" with "a" in broadcasts might help? Precursor events aren't guaranteed to fire.
 
 @Plugin
 (
         id = "pixelmonbroadcasts",
         name = "PixelmonBroadcasts",
-        version = "0.3.0",
+        version = "0.2.2",
         dependencies = @Dependency(id = "pixelmon"),
         description = "Adds fully custom legendary-like messages for tons of events, and optionally logs them, too.",
         authors = "XpanD"
@@ -64,6 +69,9 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 // Note: printBasicMessage is a static import for a method from PrintingMethods, for convenience. So are the listeners.
 public class PixelmonBroadcasts
 {
+    // Set up an internal variable so we can see if we loaded correctly.
+    private boolean loadedCorrectly = false;
+
     // Start setting up some basic variables that we'll fill in remotely when we read the config.
     //public static Integer configVersion;
     public static String commandAlias;
@@ -78,7 +86,7 @@ public class PixelmonBroadcasts
     public static boolean logBossTrainerForfeits;
     public static boolean logBossTrainerVictories;
     public static boolean logBossVictories;
-    public static boolean logBirdTrioSummons;
+    //public static boolean logBirdTrioSummons;
     public static boolean logLegendaryBlackouts;
     public static boolean logLegendaryCatches;
     public static boolean logLegendaryChallenges;
@@ -120,7 +128,7 @@ public class PixelmonBroadcasts
     public static boolean showBossTrainerForfeits;
     public static boolean showBossTrainerVictories;
     public static boolean showBossVictories;
-    public static boolean showBirdTrioSummons;
+    //public static boolean showBirdTrioSummons;
     public static boolean showLegendaryBlackouts;
     public static boolean showLegendaryCatches;
     public static boolean showLegendaryChallenges;
@@ -242,16 +250,16 @@ public class PixelmonBroadcasts
             .executor(new BaseCommand())
             .build();
 
-    // Originally ran on pre-init, but I could not get info from Pixelmon's config at that stage. This seems to work.
     @Listener
-    public void onGameInitEvent(final GameInitializationEvent event)
+    public void onGamePreInitEvent(final GamePreInitializationEvent event)
     {
         // Load up all the configs and figure out the info alias. Start printing. Methods may insert errors as they go.
         printBasicMessage("");
         printBasicMessage("================== P I X E L M O N   B R O A D C A S T S ==================");
 
         // Load up all configuration files. Creates new configs/folders if necessary. Commit settings to memory.
-        boolean loadedCorrectly = ConfigMethods.tryCreateAndLoadConfigs();
+        // Store whether we actually loaded things up correctly in this bool, which we can check again later.
+        loadedCorrectly = ConfigMethods.tryCreateAndLoadConfigs();
 
         // If we got a good result from the config loading method, proceed to initializing more stuff.
         if (loadedCorrectly)
@@ -260,32 +268,12 @@ public class PixelmonBroadcasts
             printBasicMessage("--> §aRegistering listeners with Pixelmon...");
             Pixelmon.EVENT_BUS.register(new BattleEndListener());
             Pixelmon.EVENT_BUS.register(new BattleStartListener());
-            Pixelmon.EVENT_BUS.register(new BirdSpawnListener());
+            //Pixelmon.EVENT_BUS.register(new BirdSpawnListener());
             Pixelmon.EVENT_BUS.register(new CatchListener());
             Pixelmon.EVENT_BUS.register(new HatchListener());
             Pixelmon.EVENT_BUS.register(new SpawnListener());
             Pixelmon.EVENT_BUS.register(new TradeListener());
             Pixelmon.EVENT_BUS.register(new WildDefeatListener());
-
-            // Check Pixelmon's config and get whether the legendary spawning message is in. Complain if it is.
-            printBasicMessage("--> §aChecking Pixelmon config for legendary message settings...");
-            final Boolean configStatus = toBooleanObject(
-                    PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").getString());
-
-            // Is the config setting we're reading available?
-            if (configStatus != null)
-            {
-                // Is the setting turned on? Complaining, commence!
-                if (configStatus)
-                {
-                    printBasicMessage("    §ePixelmon's \"§6displayLegendaryGlobalMessage§e\" setting is enabled.");
-                    printBasicMessage("    §eThis setting will now be disabled, as it conflicts with this sidemod.");
-                    printBasicMessage("    §eIf you remove this mod, revert this in Pixelmon's config!");
-
-                    PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").setValue(false);
-                    PixelmonConfig.saveConfig();
-                }
-            }
 
             // (re-)register the main command and alias. Use the result we get back to see if everything worked.
             printBasicMessage("--> §aRegistering commands with Sponge...");
@@ -298,5 +286,45 @@ public class PixelmonBroadcasts
         // We're done, one way or another. Add a footer, and a space to avoid clutter with other marginal'd mods.
         printBasicMessage("===========================================================================");
         printBasicMessage("");
+    }
+
+    @Listener
+    public void onServerStartedEvent(final GameStartedServerEvent event)
+    {
+        if (loadedCorrectly)
+        {
+            // Check Pixelmon's config and get whether the legendary spawning message is in.
+            final Boolean configStatus = toBooleanObject(
+                    PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").getString());
+
+            // Is the config setting we're reading available, /and/ is the setting turned on? Complain!
+            if (configStatus != null && configStatus)
+            {
+                // Complaining, commence.
+                printBasicMessage("================== P I X E L M O N   B R O A D C A S T S ==================");
+                printBasicMessage("--> §ePixelmon's \"§6displayLegendaryGlobalMessage§e\" setting is enabled.");
+                printBasicMessage("    §eThis setting will now be disabled, as it conflicts with this sidemod.");
+                printBasicMessage("    §eIf you remove this mod, revert this in Pixelmon's config!");
+                printBasicMessage("===========================================================================");
+
+                // Flip the setting in Pixelmon's config.
+                PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").setValue(false);
+                PixelmonConfig.saveConfig();
+
+                // Force a config reload from disk.
+                try
+                {
+                    PixelmonConfig.reload(true);
+                }
+                catch (IOException F)
+                {
+                    printBasicMessage("");
+                    printBasicMessage("§cSomething went wrong during Pixelmon config reload from disk! Trace:");
+                    F.printStackTrace();
+                }
+            }
+
+            // TODO: Do config version warning messages here, too, when we start needing them.
+        }
     }
 }

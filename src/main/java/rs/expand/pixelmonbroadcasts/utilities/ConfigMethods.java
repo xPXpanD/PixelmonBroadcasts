@@ -581,7 +581,7 @@ public class ConfigMethods
 
         /*                 *\
            summon settings
-        \*                 */
+        \*
 
         // Get options. Extract and set them, if we managed to grab them successfully.
         String birdTrioSummonOptions = settingsConfig.getNode("birdTrioSummonOptions").getString();
@@ -592,7 +592,7 @@ public class ConfigMethods
             birdTrioSummonOptions = birdTrioSummonOptions.toLowerCase();
             PixelmonBroadcasts.logBirdTrioSummons = birdTrioSummonOptions.contains("log");
             PixelmonBroadcasts.showBirdTrioSummons = birdTrioSummonOptions.contains("show");
-        }
+        }*/
 
         /*                *\
            hatch settings

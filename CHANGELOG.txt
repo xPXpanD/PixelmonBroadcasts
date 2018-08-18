@@ -1,29 +1,35 @@
-0.2.2 for 6.3.1
-Released ???
+0.2.2 for 6.3.4
+Released August 18th, 2018.
 
-    Additions:
-    * Added custom broadcasts for several event spawns, such as the legendary birds and Arceus.
+    Message file changes:
+    * Changed "toggle.header" to "&5--------- &dPersonal event toggles (click to change) &5--------".
+    * Changed "toggle.boss_trainer.on" to "&a&nleader" to prevent cut-off.
+    * Changed "toggle.boss_trainer.off" to "&c&nleader" to prevent cut-off.
 
-    Changes in messages.conf:
-    * Added "toggle.summon_toggles", "toggle.summon.on" and "toggle.summon.off". Edit in or refresh.
+    Broadcast file changes:
+    * Changed all default mentions of "boss trainer" to "leader" to mirror the above.
 
-    Changes to permissions:
-    * Added "pixelmonbroadcasts.notify.summon.birdtrio".
+    Fixes:
+    * Fixed hovers on certain challenge messages always being enabled.
+    * Fixed the Pixelmon legendary message check not reloading the config immediately after editing it.
+    * Hopefully worked around a rare error with battle participants going null when a battle ends.
 
-    Fixes and tweaks:
-    * Moved the vanilla legendary message warning to a later start-up phase. People were missing it.
-
-    Note: The messages.conf in 0.2.1 said it was unchanged, but I forgot I added normal toggles. Sorry.
+    Tweaks:
+    * Clarified toggles only applying to the person setting them, to avoid further confusion. See changes.
+    * Moved the "shiny legend" toggle so it shows after "shiny" and "legend" if enabled. Bit cleaner.
+    * Split the mod's start-up messages into two blocks, with one only showing up if something's wrong.
 
 0.2.1 for 6.3.0
 Released June 10th, 2018.
 
-    Fixes and tweaks:
+    Fixes:
     * Fixed %biome% on spawns and catches always showing the biome at 0, 0, 0.
     * Fixed %xpos%, %ypos% and %zpos% not working right.
     * Fixed an odd error where a Pokémon could apparently forfeit a fight with another Pokémon.
     * Fixed normal catch and blackout messages not being toggle-able.
     * Fixed PvP draws referencing two removed "toggle.pvp_draw" keys, and a missing comma.
+
+    Tweaks:
     * Toggle categories now sort mostly alphabetically. Stuff was changing too often to keep up with.
 
 0.2.0 for 6.3.0
@@ -34,26 +40,28 @@ Released June 9th, 2018.
     * All "defeat"-type permissions are now "victory"-type permissions to avoid confusion.
     * PvP "start"/"end" permissions have been merged into the old "challenge"/"victory" groups.
 
-    Additions:
-    * Added support for showing catches and blackouts for Pokémon that aren't special.
-    * Added a lang option for showing neutral stats in hovers, instead of just "ERROR".
-    * Rewrote configuration/translation with a three-file setup, found in the PixelmonBroadcasts folder.
-    * The %world% and %biome% placeholders should now work properly on trainer/PvP broadcasts.
-    * Trades now support the showing of shiny Pokémon, using the new %shiny% placeholder.
-
-    Fixes and tweaks:
-    * Enabled showing IVs on Pokémon that a player lost to or fled from. Turn off hover to disable.
+    Fixes:
     * Fixed an issue where old options would occasionally get stuck when reloading with changes made.
     * Fixed some potential bugs with players with edited names. There may be more, please report.
     * Removed a few leftover debug messages when players blacked out to wild Pokémon. Oops.
     * Updated CHANGELOG.txt with missed changes in 0.1.1, and corrected versions.
 
+    Additions:
+    * Added a lang option for showing neutral stats in hovers, instead of just "ERROR".
+    * Added support for showing catches and blackouts for Pokémon that aren't special.
+    * Enabled showing IVs on Pokémon that a player lost to or fled from. Turn off hover to disable.
+    * Rewrote configuration/translation with a three-file setup, found in the PixelmonBroadcasts folder.
+    * Split up the old detailed "hover" into a more basic "hover" (safe info) and a new "reveal". (IVs)
+    * The %world% and %biome% placeholders should now work properly on trainer/PvP broadcasts.
+    * Trades now support the showing of shiny Pokémon, using the new %shiny% placeholder.
+
 0.1.1 for 6.3.0
 Released June 6th, 2018.
 
+    Tweaks:
     * Changed permission layout to hopefully make a bit more sense.
 
 0.1.0 for 6.3.0
 Released June 6th, 2018.
 
-    * Initial release.
+    Initial release.
