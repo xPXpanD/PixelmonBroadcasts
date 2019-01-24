@@ -26,6 +26,7 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 // TODO: See if tracking gym leaders is possible. Maybe look into marking placed leaders with trainer.isGymLeader.
 // FIXME: Keep name ordering (from battle start message) persistent regardless of outcome. Pre-sort alphabetically?
 // FIXME: In PvP, if both sides use a self-killing move or otherwise die it picks a winner. Make this a draw, somehow.
+// FIXME: Similarly, using Explosion to kill something special prints no message.
 public class BattleEndListener
 {
     @SubscribeEvent
@@ -98,11 +99,15 @@ public class BattleEndListener
             if (event.cause != EnumBattleEndCause.FORCE)
             {
                 // Create a shorthand broadcast variable for convenience.
-                String broadcast;
+                final String broadcast;
 
                 // Was our battle between two valid players?
                 if (participant1 instanceof PlayerParticipant && participant2 instanceof PlayerParticipant)
                 {
+                    // Create some more shorthand variables for convenience.
+                    final EntityPlayer player1Entity;
+                    final EntityPlayer player2Entity;
+
                     if (endedInDraw || battleForfeited)
                     {
                         // Create a list of participants, and then sort them based on their display names.
@@ -110,12 +115,16 @@ public class BattleEndListener
                         ArrayList<BattleParticipant> participants = new ArrayList<>(Arrays.asList(participant1, participant2));
                         participants.sort(Comparator.comparing(t -> BattleParticipant.class.getName()));
 
+                        // Fill in earlier variables.
+                        player1Entity = (EntityPlayer) participants.get(0).getEntity();
+                        player2Entity = (EntityPlayer) participants.get(1).getEntity();
+
                         if (logPVPDraws)
                         {
                             // Print a PvP draw message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §7Players §f" + participants.get(0).getName().getFormattedText() +
+                                    "§5PBR §f// §7Players §f" + participants.get(0).getName().getUnformattedText() +
                                     "§7 and §f" + participants.get(1).getName().getUnformattedText() +
                                     "§7 ended their battle in a draw, in world \"§f" + worldName +
                                     "§7\", at X:§f" + location.getX() +
@@ -132,17 +141,19 @@ public class BattleEndListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                // Replace the placeholders for player 2's side, first. We'll grab the normal ones in the final sweep.
-                                broadcast = replacePlayer2Placeholders(broadcast, null, (EntityPlayer) participants.get(0).getEntity());
-
-                                // Swap player 1 placeholders, and then send.
-                                iterateAndSendBroadcast(broadcast, null, (EntityPlayer) participants.get(1).getEntity(),
-                                        false, false, false, "draw.pvp", "showPVPDraw");
+                                // Did we find a message? Iterate all available players, and send to those who should receive!
+                                iterateAndSendBroadcast(broadcast, null, null,
+                                        player1Entity, player2Entity, false, false, false,
+                                        "draw.pvp", "showPVPDraw");
                             }
                         }
                     }
                     else
                     {
+                        // Fill in earlier variables.
+                        player1Entity = (EntityPlayer) participant1.getEntity();
+                        player2Entity = (EntityPlayer) participant2.getEntity();
+
                         if (logPVPVictories)
                         {
                             // Print a PvP victory message to console.
@@ -165,12 +176,10 @@ public class BattleEndListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                // Replace the placeholders for player 2's side, first. We'll grab the normal ones in the final sweep.
-                                broadcast = replacePlayer2Placeholders(broadcast, null, (EntityPlayer) participant2.getEntity());
-
-                                // Swap player 1 placeholders, and then send.
-                                iterateAndSendBroadcast(broadcast, null, (EntityPlayer) participant1.getEntity(),
-                                        false, false, false, "victory.pvp", "showPVPVictory");
+                                // Did we find a message? Iterate all available players, and send to those who should receive!
+                                iterateAndSendBroadcast(broadcast, null, null,
+                                        player1Entity, player2Entity, false, false, false,
+                                        "victory.pvp", "showPVPVictory");
                             }
                         }
                     }
@@ -209,8 +218,9 @@ public class BattleEndListener
                                 // Did we find a message? Iterate all available players, and send to those who should receive!
                                 if (broadcast != null)
                                 {
-                                    iterateAndSendBroadcast(broadcast, null, playerEntity, false, false,
-                                            false, "forfeit.bosstrainer", "showBossTrainerForfeit");
+                                    iterateAndSendBroadcast(broadcast, null, null,
+                                            playerEntity, null, false, false, false,
+                                            "forfeit.bosstrainer", "showBossTrainerForfeit");
                                 }
                             }
                         }
@@ -237,8 +247,9 @@ public class BattleEndListener
                                 // Did we find a message? Iterate all available players, and send to those who should receive!
                                 if (broadcast != null)
                                 {
-                                    iterateAndSendBroadcast(broadcast, null, playerEntity, false, false,
-                                            false, "forfeit.trainer", "showTrainerForfeit");
+                                    iterateAndSendBroadcast(broadcast, null, null,
+                                            playerEntity, null,false, false, false,
+                                            "forfeit.trainer", "showTrainerForfeit");
                                 }
                             }
                         }
@@ -269,8 +280,9 @@ public class BattleEndListener
                                 // Did we find a message? Iterate all available players, and send to those who should receive!
                                 if (broadcast != null)
                                 {
-                                    iterateAndSendBroadcast(broadcast, null, playerEntity, false, false,
-                                            false, "blackout.bosstrainer", "showBossTrainerBlackout");
+                                    iterateAndSendBroadcast(broadcast, null, null,
+                                            playerEntity, null, false, false, false,
+                                            "blackout.bosstrainer", "showBossTrainerBlackout");
                                 }
                             }
                         }
@@ -297,8 +309,9 @@ public class BattleEndListener
                                 // Did we find a message? Iterate all available players, and send to those who should receive!
                                 if (broadcast != null)
                                 {
-                                    iterateAndSendBroadcast(broadcast, null, playerEntity, false, false,
-                                            false, "blackout.trainer", "showTrainerBlackout");
+                                    iterateAndSendBroadcast(broadcast, null, null,
+                                            playerEntity, null, false, false, false,
+                                            "blackout.trainer", "showTrainerBlackout");
                                 }
                             }
                         }
@@ -335,8 +348,9 @@ public class BattleEndListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, null, playerEntity, false, false,
-                                        false, "victory.bosstrainer", "showBossTrainerVictory");
+                                iterateAndSendBroadcast(broadcast, null, null,
+                                        playerEntity, null, false, false, false,
+                                        "victory.bosstrainer", "showBossTrainerVictory");
                             }
                         }
                     }
@@ -363,8 +377,9 @@ public class BattleEndListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, null, playerEntity, false, false,
-                                        false, "victory.trainer", "showTrainerVictory");
+                                iterateAndSendBroadcast(broadcast, null, null,
+                                        playerEntity, null, false, false, false,
+                                        "victory.trainer", "showTrainerVictory");
                             }
                         }
                     }
@@ -407,8 +422,9 @@ public class BattleEndListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemon, playerEntity, hoverBossBlackouts,
-                                        false, revealBossBlackouts, "blackout.boss", "showBossBlackout");
+                                iterateAndSendBroadcast(broadcast, pokemon, null, playerEntity,
+                                        null, hoverBossBlackouts, false, revealBossBlackouts,
+                                        "blackout.boss", "showBossBlackout");
                             }
                         }
                     }
@@ -436,8 +452,9 @@ public class BattleEndListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemon, playerEntity, hoverShinyLegendaryBlackouts,
-                                        false, revealShinyLegendaryBlackouts, "blackout.shinylegendary", "showShinyLegendaryBlackout");
+                                iterateAndSendBroadcast(broadcast, pokemon, null, playerEntity,
+                                        null, hoverShinyLegendaryBlackouts, false, revealShinyLegendaryBlackouts,
+                                        "blackout.shinylegendary", "showShinyLegendaryBlackout");
                             }
                         }
                     }
@@ -465,8 +482,9 @@ public class BattleEndListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemon, playerEntity, hoverLegendaryBlackouts,
-                                        false, revealLegendaryBlackouts, "blackout.legendary", "showLegendaryBlackout");
+                                iterateAndSendBroadcast(broadcast, pokemon, null, playerEntity,
+                                        null, hoverLegendaryBlackouts, false, revealLegendaryBlackouts,
+                                        "blackout.legendary", "showLegendaryBlackout");
                             }
                         }
                     }
@@ -494,8 +512,9 @@ public class BattleEndListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemon, playerEntity, hoverShinyBlackouts,
-                                        false, revealShinyBlackouts, "blackout.shiny", "showShinyBlackout");
+                                iterateAndSendBroadcast(broadcast, pokemon, null, playerEntity,
+                                        null, hoverShinyBlackouts, false, revealShinyBlackouts,
+                                        "blackout.shiny", "showShinyBlackout");
                             }
                         }
                     }
@@ -523,8 +542,9 @@ public class BattleEndListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemon, playerEntity, hoverNormalBlackouts,
-                                        false, revealNormalBlackouts, "blackout.normal", "showNormalBlackout");
+                                iterateAndSendBroadcast(broadcast, pokemon, null, playerEntity,
+                                        null, hoverNormalBlackouts, false, revealNormalBlackouts,
+                                        "blackout.normal", "showNormalBlackout");
                             }
                         }
                     }
@@ -567,8 +587,9 @@ public class BattleEndListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemon, playerEntity, hoverBossForfeits,
-                                        false, revealBossForfeits, "forfeit.boss", "showBossForfeit");
+                                iterateAndSendBroadcast(broadcast, pokemon, null, playerEntity,
+                                        null, hoverBossForfeits, false, revealBossForfeits,
+                                        "forfeit.boss", "showBossForfeit");
                             }
                         }
                     }
@@ -596,8 +617,9 @@ public class BattleEndListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemon, playerEntity, hoverShinyLegendaryForfeits,
-                                        false, revealShinyLegendaryForfeits, "forfeit.shinylegendary", "showShinyLegendaryForfeit");
+                                iterateAndSendBroadcast(broadcast, pokemon, null, playerEntity,
+                                        null, hoverShinyLegendaryForfeits, false, revealShinyLegendaryForfeits,
+                                        "forfeit.shinylegendary", "showShinyLegendaryForfeit");
                             }
                         }
                     }
@@ -625,8 +647,9 @@ public class BattleEndListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemon, playerEntity, hoverLegendaryForfeits,
-                                        false, revealLegendaryForfeits, "forfeit.legendary", "showLegendaryForfeit");
+                                iterateAndSendBroadcast(broadcast, pokemon, null, playerEntity,
+                                        null, hoverLegendaryForfeits, false, revealLegendaryForfeits,
+                                        "forfeit.legendary", "showLegendaryForfeit");
                             }
                         }
                     }
@@ -654,8 +677,9 @@ public class BattleEndListener
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemon, playerEntity, hoverShinyForfeits,
-                                        false, revealShinyForfeits, "forfeit.shiny", "showShinyForfeit");
+                                iterateAndSendBroadcast(broadcast, pokemon,null, playerEntity,
+                                        null, hoverShinyForfeits, false, revealShinyForfeits,
+                                        "forfeit.shiny", "showShinyForfeit");
                             }
                         }
                     }

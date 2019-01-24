@@ -20,7 +20,6 @@ public class CatchListener
     public void onCatchPokemonEvent(final CaptureEvent.SuccessfulCapture event)
     {
         // Create shorthand variables for convenience.
-        final String broadcast;
         final EntityPixelmon pokemon = event.getPokemon();
         final EntityPlayer player = event.player;
         final String baseName = pokemon.getPokemonName();
@@ -48,13 +47,14 @@ public class CatchListener
                 pokemon.setPosition(location.getX(), location.getY(), location.getZ());
 
                 // Get a broadcast from the broadcasts config file, if the key can be found.
-                broadcast = getBroadcast("broadcast.catch.shiny_legendary");
+                final String broadcast = getBroadcast("broadcast.catch.shiny_legendary");
 
                 // Did we find a message? Iterate all available players, and send to those who should receive!
                 if (broadcast != null)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyLegendaryCatches, true,
-                            revealShinyLegendaryCatches, "catch.shinylegendary", "showShinyLegendaryCatch");
+                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
+                            hoverShinyLegendaryCatches, true, revealShinyLegendaryCatches,
+                            "catch.shinylegendary", "showShinyLegendaryCatch");
                 }
             }
         }
@@ -80,13 +80,14 @@ public class CatchListener
                 pokemon.setPosition(location.getX(), location.getY(), location.getZ());
 
                 // Get a broadcast from the broadcasts config file, if the key can be found.
-                broadcast = getBroadcast("broadcast.catch.legendary");
+                final String broadcast = getBroadcast("broadcast.catch.legendary");
 
                 // Did we find a message? Iterate all available players, and send to those who should receive!
                 if (broadcast != null)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverLegendaryCatches, true,
-                            revealLegendaryCatches, "catch.legendary", "showLegendaryCatch");
+                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
+                            hoverLegendaryCatches, true, revealLegendaryCatches,
+                            "catch.legendary", "showLegendaryCatch");
                 }
             }
         }
@@ -112,13 +113,14 @@ public class CatchListener
                 pokemon.setPosition(location.getX(), location.getY(), location.getZ());
 
                 // Get a broadcast from the broadcasts config file, if the key can be found.
-                broadcast = getBroadcast("broadcast.catch.shiny");
+                final String broadcast = getBroadcast("broadcast.catch.shiny");
 
                 // Did we find a message? Iterate all available players, and send to those who should receive!
                 if (broadcast != null)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyCatches, true,
-                            revealShinyCatches, "catch.shiny", "showShinyCatch");
+                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
+                            hoverShinyCatches, true, revealShinyCatches,
+                            "catch.shiny", "showShinyCatch");
                 }
             }
         }
@@ -144,13 +146,14 @@ public class CatchListener
                 pokemon.setPosition(location.getX(), location.getY(), location.getZ());
 
                 // Get a broadcast from the broadcasts config file, if the key can be found.
-                broadcast = getBroadcast("broadcast.catch.normal");
+                final String broadcast = getBroadcast("broadcast.catch.normal");
 
                 // Did we find a message? Iterate all available players, and send to those who should receive!
                 if (broadcast != null)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverNormalCatches, true,
-                            revealNormalCatches, "catch.normal", "showNormalCatch");
+                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
+                            hoverNormalCatches, true, revealNormalCatches,
+                            "catch.normal", "showNormalCatch");
                 }
             }
         }

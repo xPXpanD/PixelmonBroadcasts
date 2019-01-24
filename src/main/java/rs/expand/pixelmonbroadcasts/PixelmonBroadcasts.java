@@ -51,7 +51,7 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 (
         id = "pixelmonbroadcasts",
         name = "PixelmonBroadcasts",
-        version = "0.2.3",
+        version = "0.3",
         dependencies = @Dependency(id = "pixelmon", version = "7.0"),
         description = "Adds fully custom legendary-like messages for tons of events, and optionally logs them, too.",
         authors = "XpanD"

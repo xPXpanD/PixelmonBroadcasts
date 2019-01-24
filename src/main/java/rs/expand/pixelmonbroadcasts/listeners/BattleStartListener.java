@@ -12,14 +12,10 @@ import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 
 // Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndSendBroadcast;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlayer2Placeholders;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
 // FIXME: Pokémon using moves like Teleport to warp away from you show up as YOU having fled.
@@ -35,16 +31,14 @@ public class BattleStartListener
         // Are there any players in this battle?
         if (participant1 instanceof PlayerParticipant || participant2 instanceof PlayerParticipant)
         {
-            // Create a shorthand broadcast variable for convenience.
-            String broadcast;
-
             // Did a PvP battle just start? (two players, one on either side)
             if (participant1 instanceof PlayerParticipant && participant2 instanceof PlayerParticipant)
             {
                 // Create a list of participants, and then sort them based on their display names.
                 // This ensures names and their associated stats are always in the same place.
-                ArrayList<BattleParticipant> participants = new ArrayList<>(Arrays.asList(participant1, participant2));
-                participants.sort(Comparator.comparing(t -> BattleParticipant.class.getName()));
+                // TODO: Actually get this working, it didn't last time.
+                //ArrayList<BattleParticipant> participants = new ArrayList<>(Arrays.asList(participant1, participant2));
+                //participants.sort(Comparator.comparing(t -> BattleParticipant.class.getName()));
 
                 if (logPVPChallenges)
                 {
@@ -54,8 +48,8 @@ public class BattleStartListener
                     // Print a PvP starting message to console.
                     printBasicMessage
                     (
-                            "§5PBR §f// §ePlayer §6" + participants.get(0).getName().getUnformattedText() +
-                            "§e started battling player §6" + participants.get(1).getName().getFormattedText() +
+                            "§5PBR §f// §ePlayer §6" + participant1.getName().getUnformattedText() +
+                            "§e started battling player §6" + participant2.getName().getUnformattedText() +
                             "§e in world \"§6" + participant1.getWorld().getWorldInfo().getWorldName() +
                             "§e\", at X:§6" + location.getX() +
                             "§e Y:§6" + location.getY() +
@@ -66,17 +60,19 @@ public class BattleStartListener
                 if (showPVPChallenges)
                 {
                     // Get a broadcast from the broadcasts config file, if the key can be found.
-                    broadcast = getBroadcast("broadcast.challenge.pvp");
+                    final String broadcast = getBroadcast("broadcast.challenge.pvp");
+
+                    // Create some more shorthand variables to avoid making this super hard to follow.
+                    final EntityPlayer player1Entity = (EntityPlayer) participant1.getEntity();
+                    final EntityPlayer player2Entity = (EntityPlayer) participant2.getEntity();
 
                     // Did we find a message? Iterate all available players, and send to those who should receive!
                     if (broadcast != null)
                     {
-                        // Replace the placeholders for player 2's side, first. We'll grab the normal ones in the final sweep.
-                        broadcast = replacePlayer2Placeholders(broadcast, null, (EntityPlayer) participants.get(0).getEntity());
-
-                        // Swap player 1 placeholders, and then send.
-                        iterateAndSendBroadcast(broadcast, null, (EntityPlayer) participants.get(1).getEntity(),
-                                false, true, false, "challenge.pvp", "showPVPChallenge");
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        iterateAndSendBroadcast(broadcast, null, null,
+                                player1Entity, player2Entity, false, true, false,
+                                "challenge.pvp", "showPVPChallenge");
                     }
                 }
             }
@@ -122,13 +118,14 @@ public class BattleStartListener
                     if (showBossTrainerChallenges)
                     {
                         // Get a broadcast from the broadcasts config file, if the key can be found.
-                        broadcast = getBroadcast("broadcast.challenge.boss_trainer");
+                        final String broadcast = getBroadcast("broadcast.challenge.boss_trainer");
 
                         // Did we find a message? Iterate all available players, and send to those who should receive!
                         if (broadcast != null)
                         {
-                            iterateAndSendBroadcast(broadcast, null, playerEntity, false, true,
-                                    false, "challenge.bosstrainer", "showBossTrainerChallenge");
+                            iterateAndSendBroadcast(broadcast, null, null, playerEntity,
+                                    null, false, true, false,
+                                    "challenge.bosstrainer", "showBossTrainerChallenge");
                         }
                     }
                 }
@@ -150,13 +147,14 @@ public class BattleStartListener
                     if (showTrainerChallenges)
                     {
                         // Get a broadcast from the broadcasts config file, if the key can be found.
-                        broadcast = getBroadcast("broadcast.challenge.trainer");
+                        final String broadcast = getBroadcast("broadcast.challenge.trainer");
 
                         // Did we find a message? Iterate all available players, and send to those who should receive!
                         if (broadcast != null)
                         {
-                            iterateAndSendBroadcast(broadcast, null, playerEntity, false, true,
-                                    false, "challenge.trainer", "showTrainerChallenge");
+                            iterateAndSendBroadcast(broadcast, null, null, playerEntity,
+                                    null, false, true, false,
+                                    "challenge.trainer", "showTrainerChallenge");
                         }
                     }
                 }
@@ -210,13 +208,14 @@ public class BattleStartListener
                         if (showBossChallenges)
                         {
                             // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.challenge.boss");
+                            final String broadcast = getBroadcast("broadcast.challenge.boss");
 
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, playerEntity, hoverBossChallenges,
-                                        true, false, "challenge.boss", "showBossChallenge");
+                                iterateAndSendBroadcast(broadcast, pokemonEntity, null, playerEntity,
+                                        null, hoverBossChallenges, true, false,
+                                        "challenge.boss", "showBossChallenge");
                             }
                         }
                     }
@@ -239,13 +238,14 @@ public class BattleStartListener
                         if (showShinyLegendaryChallenges)
                         {
                             // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.challenge.shiny_legendary");
+                            final String broadcast = getBroadcast("broadcast.challenge.shiny_legendary");
 
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, playerEntity, hoverShinyLegendaryChallenges,
-                                        true, false, "challenge.shinylegendary", "showShinyLegendaryChallenge");
+                                iterateAndSendBroadcast(broadcast, pokemonEntity, null, playerEntity,
+                                        null, hoverShinyLegendaryChallenges, true, false,
+                                        "challenge.shinylegendary", "showShinyLegendaryChallenge");
                             }
                         }
                     }
@@ -268,13 +268,14 @@ public class BattleStartListener
                         if (showLegendaryChallenges)
                         {
                             // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.challenge.legendary");
+                            final String broadcast = getBroadcast("broadcast.challenge.legendary");
 
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, playerEntity, hoverLegendaryChallenges,
-                                        true, false, "challenge.legendary", "showLegendaryChallenge");
+                                iterateAndSendBroadcast(broadcast, pokemonEntity, null, playerEntity,
+                                        null, hoverLegendaryChallenges, true, false,
+                                        "challenge.legendary", "showLegendaryChallenge");
                             }
                         }
                     }
@@ -297,13 +298,14 @@ public class BattleStartListener
                         if (showShinyChallenges)
                         {
                             // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.challenge.shiny");
+                            final String broadcast = getBroadcast("broadcast.challenge.shiny");
 
                             // Did we find a message? Iterate all available players, and send to those who should receive!
                             if (broadcast != null)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, playerEntity, hoverShinyChallenges,
-                                        true, false, "challenge.shiny", "showShinyChallenge");
+                                iterateAndSendBroadcast(broadcast, pokemonEntity, null, playerEntity,
+                                        null, hoverShinyChallenges, true, false,
+                                        "challenge.shiny", "showShinyChallenge");
                             }
                         }
                     }

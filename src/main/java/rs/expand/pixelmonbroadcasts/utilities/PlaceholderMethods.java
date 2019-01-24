@@ -1,6 +1,6 @@
 package rs.expand.pixelmonbroadcasts.utilities;
 
-// Local imports.
+// Remote imports.
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.StatsType;
@@ -16,22 +16,46 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-// Remote imports.
+// Local imports.
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
 public class PlaceholderMethods
 {
     // Iterates through the online player list, and sends a broadcast to those with the right perms and toggle status.
-    // This method also adds a hoverable IV spread if the "hover" option is set for this broadcast.
+    // This method also adds a hoverable IV spread if the "hover" option is set for the received broadcast.
     public static void iterateAndSendBroadcast(
-            String broadcast, final EntityPixelmon pokemonEntity, final EntityPlayer player, final boolean hasHover,
-            final boolean presentTense, final boolean showIVs, final String permission, final String... flags)
+            String broadcast, final Object pokemonObject, final Object pokemon2Object, final EntityPlayer player,
+            final EntityPlayer player2, final boolean hasHover, final boolean presentTense, final boolean showIVs,
+            final String permission, final String flag)
     {
-        // Do we have a Pokémon entity? Replace Pokémon-specific placeholders.
-        if (pokemonEntity != null)
+        // Do we have a Pokémon object? Replace Pokémon-specific placeholders.
+        if (pokemonObject != null)
         {
-            // Create a single Pokemon object that we can repeatedly extract data from.
-            final Pokemon pokemon = pokemonEntity.getPokemonData();
+            // Is our received object of the older EntityPixelmon type, or is it Pokemon?
+            final Pokemon pokemon;
+            if (pokemonObject instanceof EntityPixelmon)
+            {
+                // Make the entity a bit easier to access. It probably has more info than a Pokemon object would -- use it!
+                EntityPixelmon pokemonEntity = (EntityPixelmon) pokemonObject;
+
+                // Extract a Pokemon object for later use.
+                pokemon = pokemonEntity.getPokemonData();
+
+                // Get the Pokémon's biome, nicely formatted (spaces!) and all. Replace placeholder.
+                final String biome = getFormattedBiome(pokemonEntity.getEntityWorld(), pokemonEntity.getPosition());
+                broadcast = broadcast.replaceAll("(?i)%biome%", biome);
+
+                // Insert a world name.
+                broadcast = broadcast.replaceAll("(?i)%world%", pokemonEntity.getEntityWorld().getWorldInfo().getWorldName());
+
+                // Insert coordinates.
+                BlockPos position = pokemonEntity.getPosition();
+                broadcast = broadcast.replaceAll("(?i)%xpos%", String.valueOf(position.getX()));
+                broadcast = broadcast.replaceAll("(?i)%ypos%", String.valueOf(position.getY()));
+                broadcast = broadcast.replaceAll("(?i)%zpos%", String.valueOf(position.getZ()));
+            }
+            else
+                pokemon = (Pokemon) pokemonObject;
 
             // Insert the Pokémon's name.
             if (broadcast.toLowerCase().contains("%pokemon%"))
@@ -39,14 +63,20 @@ public class PlaceholderMethods
                 // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
                 // FIXME: Could do with an option, or a cleaner way to make this all work.
                 final String pokemonName =
-                        pokemon.isEgg() ? getTranslation("placeholder.pokemon.is_egg") : pokemonEntity.getLocalizedName();
+                        pokemon.isEgg() ? getTranslation("placeholder.pokemon.is_egg") : pokemon.getSpecies().getLocalizedName();
 
                 // Proceed with insertion.
                 broadcast = broadcast.replaceAll("(?i)%pokemon%", pokemonName);
             }
 
-            // Also run some special logic for IV percentages. Same idea as with the above.
-            if (broadcast.toLowerCase().contains("%ivpercent%"))
+            // Insert IV percentage. If our Pokémon's an egg, be careful and avoid spoiling stuff.
+            // FIXME: Could do with an option, or a cleaner way to make this all work.
+            if (pokemon.isEgg())
+            {
+                broadcast =
+                        broadcast.replaceAll("(?i)%ivpercent%", getTranslation("placeholder.ivpercent.is_egg"));
+            }
+            else
             {
                 // Grab the Pokémon's stats.
                 final int HPIV = pokemon.getStats().ivs.hp;
@@ -61,18 +91,89 @@ public class PlaceholderMethods
                 final BigDecimal percentIVs = totalIVs.multiply(
                         new BigDecimal("100")).divide(new BigDecimal("186"), 2, BigDecimal.ROUND_HALF_UP);
 
-                // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the stats.
-                // FIXME: Could do with an option, or a cleaner way to make this all work.
-                final String pokemonIVs =
-                        pokemon.isEgg() ? getTranslation("placeholder.ivpercent.is_egg") : percentIVs.toString() + '%';
-
-                // Apply.
-                broadcast = broadcast.replaceAll("(?i)%ivpercent%", pokemonIVs);
+                // Return the percentage.
+                broadcast = broadcast.replaceAll("(?i)%ivpercent%", percentIVs.toString() + '%');
             }
 
-            // Replace situation-specific placeholders via an external method. Pass data from the Pokémon.
-            broadcast =
-                    replaceNeutralPlaceholders(broadcast, pokemonEntity, pokemonEntity.getEntityWorld(), pokemonEntity.getPosition());
+            // Insert the "placeholder.shiny" String, if applicable. Gotta be careful with eggs again.
+            if (!pokemon.isEgg() && pokemon.getIsShiny())
+                broadcast = broadcast.replaceAll("(?i)%shiny%", getTranslation("placeholder.shiny"));
+            else
+                broadcast = broadcast.replaceAll("(?i)%shiny%", "");
+
+            // Rinse and repeat the above for a second Pokémon, if present.
+            if (pokemon2Object != null)
+            {
+                // We've got a second Pokémon, so make that accessible too.
+                final Pokemon pokemon2;
+                if (pokemon2Object instanceof EntityPixelmon)
+                {
+                    // Make this one easier to access, too. We'll need it.
+                    EntityPixelmon pokemon2Entity = (EntityPixelmon) pokemon2Object;
+
+                    // Extract a Pokemon object for later use.
+                    pokemon2 = pokemon2Entity.getPokemonData();
+
+                    // Get the Pokémon's biome, nicely formatted (spaces!) and all. Replace placeholder.
+                    final String biome = getFormattedBiome(pokemon2Entity.getEntityWorld(), pokemon2Entity.getPosition());
+                    broadcast = broadcast.replaceAll("(?i)%biome2%", biome);
+
+                    // Insert a world name.
+                    broadcast = broadcast.replaceAll("(?i)%world2%", pokemon2Entity.getEntityWorld().getWorldInfo().getWorldName());
+
+                    // Insert coordinates.
+                    BlockPos position = pokemon2Entity.getPosition();
+                    broadcast = broadcast.replaceAll("(?i)%xpos2%", String.valueOf(position.getX()));
+                    broadcast = broadcast.replaceAll("(?i)%ypos2%", String.valueOf(position.getY()));
+                    broadcast = broadcast.replaceAll("(?i)%zpos2%", String.valueOf(position.getZ()));
+                }
+                else
+                    pokemon2 = (Pokemon) pokemon2Object;
+
+                // Insert the Pokémon's name.
+                if (broadcast.toLowerCase().contains("%pokemon2%"))
+                {
+                    // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
+                    // FIXME: Could do with an option, or a cleaner way to make this all work.
+                    final String pokemon2Name =
+                            pokemon2.isEgg() ? getTranslation("placeholder.pokemon.is_egg") : pokemon2.getSpecies().getLocalizedName();
+
+                    // Proceed with insertion.
+                    broadcast = broadcast.replaceAll("(?i)%pokemon2%", pokemon2Name);
+                }
+
+                // Insert IV percentage. If our Pokémon's an egg, be careful and avoid spoiling stuff.
+                // FIXME: Could do with an option, or a cleaner way to make this all work.
+                if (pokemon2.isEgg())
+                {
+                    broadcast =
+                            broadcast.replaceAll("(?i)%ivpercent2%", getTranslation("placeholder.ivpercent.is_egg"));
+                }
+                else
+                {
+                    // Grab the Pokémon's stats.
+                    final int HPIV = pokemon2.getStats().ivs.hp;
+                    final int attackIV = pokemon2.getStats().ivs.attack;
+                    final int defenseIV = pokemon2.getStats().ivs.defence;
+                    final int spAttIV = pokemon2.getStats().ivs.specialAttack;
+                    final int spDefIV = pokemon2.getStats().ivs.specialDefence;
+                    final int speedIV = pokemon2.getStats().ivs.speed;
+
+                    // Process them.
+                    final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
+                    final BigDecimal percentIVs = totalIVs.multiply(
+                            new BigDecimal("100")).divide(new BigDecimal("186"), 2, BigDecimal.ROUND_HALF_UP);
+
+                    // Return the percentage.
+                    broadcast = broadcast.replaceAll("(?i)%ivpercent2%", percentIVs.toString() + '%');
+                }
+
+                // Insert the "placeholder.shiny" String, if applicable. Gotta be careful with eggs again.
+                if (!pokemon2.isEgg() && pokemon2.getIsShiny())
+                    broadcast = broadcast.replaceAll("(?i)%shiny2%", getTranslation("placeholder.shiny"));
+                else
+                    broadcast = broadcast.replaceAll("(?i)%shiny2%", "");
+            }
         }
 
         // Do we have a player entity? Replace player-specific placeholders.
@@ -82,21 +183,37 @@ public class PlaceholderMethods
             broadcast = broadcast.replaceAll("(?i)%player%", player.getName());
 
             // Did we not get sent a Pokémon? Try to get some data from the provided player, instead.
-            if (pokemonEntity == null)
+            if (pokemonObject == null)
             {
                 // Replace situation-specific placeholders via an external method. Pass data from the player entity.
-                broadcast = replaceNeutralPlaceholders(broadcast, null, player.getEntityWorld(), player.getPosition());
+                //broadcast = replaceNeutralPlaceholders(broadcast, null, player.getEntityWorld(), player.getPosition());
+                // TODO
+            }
+        }
+
+        // Do we have a player entity? Replace player-specific placeholders.
+        if (player2 != null)
+        {
+            // Insert the player's name.
+            broadcast = broadcast.replaceAll("(?i)%player2%", player2.getName());
+
+            // Did we not get sent a Pokémon? Try to get some data from the provided player, instead.
+            if (pokemonObject == null)
+            {
+                // Replace situation-specific placeholders via an external method. Pass data from the player entity.
+                //broadcast = replaceNeutralPlaceholders(broadcast, null, player.getEntityWorld(), player.getPosition());
+                // TODO
             }
         }
 
         // Make a Text out of our broadcast, which we can either send directly or add a hover to, depending on options.
-        final Text broadcastAsText;
+        final Text broadcastText;
 
         // If hovers are enabled, make the line hoverable.
-        if (pokemonEntity != null && hasHover)
-            broadcastAsText = getHoverableLine(broadcast, pokemonEntity, presentTense, showIVs);
+        if (pokemonObject != null && hasHover)
+            broadcastText = getHoverableLine(broadcast, pokemonObject, presentTense, showIVs);
         else
-            broadcastAsText = Text.of(broadcast);
+            broadcastText = Text.of(broadcast);
 
         // Sift through the online players.
         Sponge.getGame().getServer().getOnlinePlayers().forEach((recipient) ->
@@ -105,151 +222,70 @@ public class PlaceholderMethods
             if (recipient.hasPermission("pixelmonbroadcasts.notify." + permission))
             {
                 // Does the iterated player want our broadcast? Send it if we get "true" returned.
-                if (checkToggleStatus((EntityPlayer) recipient, flags))
-                    recipient.sendMessage(broadcastAsText);
+                if (checkToggleStatus((EntityPlayer) recipient, flag))
+                    recipient.sendMessage(broadcastText);
             }
         });
     }
 
-    // Replaces placeholders that can have multiple sources (players, Pokémon).
-    // Can be used for both players, but it's a bit cheeky -- we'll assume that player 1's data is good enough.
-    private static String replaceNeutralPlaceholders(
-            String broadcast, final EntityPixelmon pokemonEntity, final World world, final BlockPos location)
+    public static boolean checkToggleStatus(final EntityPlayer recipient, final String... flags)
     {
-        // Insert coordinates.
-        broadcast = broadcast.replaceAll("(?i)%xpos(\\d*?)%", String.valueOf(location.getX()));
-        broadcast = broadcast.replaceAll("(?i)%ypos(\\d*?)%", String.valueOf(location.getY()));
-        broadcast = broadcast.replaceAll("(?i)%zpos(\\d*?)%", String.valueOf(location.getZ()));
-
-        // Insert a world name.
-        broadcast = broadcast.replaceAll("(?i)%world(\\d*?)%", world.getWorldInfo().getWorldName());
-
-        // Insert the "placeholder.shiny" String. Make sure the Pokémon isn't an egg.
-        if (pokemonEntity != null && !pokemonEntity.getPokemonData().isEgg() && pokemonEntity.getPokemonData().getIsShiny())
-            broadcast = broadcast.replaceAll("(?i)%shiny(\\d*?)%", getTranslation("placeholder.shiny"));
-        else
-            broadcast = broadcast.replaceAll("(?i)%shiny(\\d*?)%", "");
-
-        // Insert a biome. Same reasoning as above, for multiple players.
-        if (broadcast.toLowerCase().contains("%biome%") || broadcast.toLowerCase().contains("%biome2%"))
+        // Does the player have a flag set for this notification?
+        if (recipient.getEntityData().getCompoundTag("pbToggles").hasKey(flags[0]))
         {
-            // Grab the name. This compiles fine if the access transformer is loaded correctly, despite any errors.
-            String biome = world.getBiomeForCoordsBody(location).biomeName;
-
-            // Add a space in front of every capital letter after the first.
-            int capitalCount = 0, iterator = 0;
-            while (iterator < biome.length())
-            {
-                // Is there an upper case character at the checked location?
-                if (Character.isUpperCase(biome.charAt(iterator)))
-                {
-                    // Add to the pile.
-                    capitalCount++;
-
-                    // Did we get more than one capital letter on the pile?
-                    if (capitalCount > 1)
-                    {
-                        // Look back: Was the previous character a space? If not, proceed with adding one.
-                        if (biome.charAt(iterator - 1) != ' ')
-                        {
-                            // Add a space at the desired location.
-                            biome = biome.substring(0, iterator) + ' ' + biome.substring(iterator);
-
-                            // Up the main iterator so we do not repeat the check on the character we're at now.
-                            iterator++;
-                        }
-                    }
-                }
-
-                // Up the iterator for another go, if we're below length().
-                iterator++;
-            }
-
-            // Apply.
-            broadcast = broadcast.replaceAll("(?i)%biome(\\d*?)%", biome);
+            // Return the flag's status.
+            return recipient.getEntityData().getCompoundTag("pbToggles").getBoolean(flags[0]);
         }
 
-        return broadcast;
+        // If we hit this the payer does not have the flag, so return the default state ("true").
+        return true;
     }
 
-    // Takes a config String, and replaces any known placeholders with the proper replacements as many times as needed.
-    // Note to self: (//d+) can be used to match a practically infinite amount of numbers, with at least one required.
-    public static String replacePlayer2Placeholders(
-            String broadcast, final EntityPixelmon pokemonEntity, final EntityPlayer player)
+    private static String getFormattedBiome(World world, BlockPos location)
     {
-        // Do we have a Pokémon entity? Replace Pokémon-specific placeholders.
-        if (pokemonEntity != null)
+        // Grab the name. This compiles fine if the access transformer is loaded correctly, despite any errors.
+        String biome = world.getBiomeForCoordsBody(location).biomeName;
+
+        // Add a space in front of every capital letter after the first.
+        int capitalCount = 0, iterator = 0;
+        while (iterator < biome.length())
         {
-            // Create a single Pokemon object that we can repeatedly extract data from.
-            final Pokemon pokemon = pokemonEntity.getPokemonData();
-
-            // Insert the Pokémon's name.
-            if (broadcast.matches(".*%(?i)pokemon2%.*"))
+            // Is there an upper case character at the checked location?
+            if (Character.isUpperCase(biome.charAt(iterator)))
             {
-                // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
-                // FIXME: Could do with an option, or a cleaner way to make this all work.
-                final String pokemonName =
-                        pokemon.isEgg() ? getTranslation("placeholder.pokemon.is_egg") : pokemonEntity.getLocalizedName();
+                // Add to the pile.
+                capitalCount++;
 
-                // Proceed with insertion.
-                broadcast = broadcast.replaceAll("(?i)%pokemon2%", pokemonName);
+                // Did we get more than one capital letter on the pile?
+                if (capitalCount > 1)
+                {
+                    // Look back: Was the previous character a space? If not, proceed with adding one.
+                    if (biome.charAt(iterator - 1) != ' ')
+                    {
+                        // Add a space at the desired location.
+                        biome = biome.substring(0, iterator) + ' ' + biome.substring(iterator);
+
+                        // Up the main iterator so we do not repeat the check on the character we're at now.
+                        iterator++;
+                    }
+                }
             }
 
-            // Also run some special logic for IV percentages. Same idea as with the above.
-            if (broadcast.matches(".*%(?i)ivpercent2%.*"))
-            {
-                // Grab the Pokémon's stats.
-                final int HPIV = pokemon.getStats().ivs.hp;
-                final int attackIV = pokemon.getStats().ivs.attack;
-                final int defenseIV = pokemon.getStats().ivs.defence;
-                final int spAttIV = pokemon.getStats().ivs.specialAttack;
-                final int spDefIV = pokemon.getStats().ivs.specialDefence;
-                final int speedIV = pokemon.getStats().ivs.speed;
-
-                // Process them.
-                final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
-                final BigDecimal percentIVs = totalIVs.multiply(
-                        new BigDecimal("100")).divide(new BigDecimal("186"), 2, BigDecimal.ROUND_HALF_UP);
-
-                // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the stats.
-                // FIXME: Could do with an option, or a cleaner way to make this all work.
-                final String pokemonIVs =
-                        pokemon.isEgg() ? getTranslation("placeholder.ivpercent.is_egg") : percentIVs.toString() + '%';
-
-                // Apply.
-                broadcast = broadcast.replaceAll("(?i)%ivpercent2%", pokemonIVs);
-            }
-
-            // Replace situation-specific placeholders via an external method. Pass data from the Pokémon.
-            broadcast =
-                    replaceNeutralPlaceholders(broadcast, pokemonEntity, pokemonEntity.getEntityWorld(), pokemonEntity.getPosition());
+            // Up the iterator for another go, if we're below length().
+            iterator++;
         }
 
-        // Do we have a player entity? Replace player-specific placeholders.
-        if (player != null)
-        {
-            // Insert the player's name.
-            broadcast = broadcast.replaceAll("(?i)%player2%", player.getName());
-
-            // Did we not get sent a Pokémon? Try to get some data from the provided player, instead.
-            if (pokemonEntity == null)
-            {
-                // Replace situation-specific placeholders via an external method. Pass data from the player entity.
-                broadcast = replaceNeutralPlaceholders(broadcast, null, player.getEntityWorld(), player.getPosition());
-            }
-        }
-
-        // Send back the final formatted broadcast.
-        return broadcast;
+        return biome;
     }
 
     // Sets up a broadcast from the given info, with IV hovers thrown in in place of any placeholders.
     // FIXME: It may be a good idea to toggle off showIVs if we're showing off an egg. Need to think about this more.
     private static Text getHoverableLine(
-            final String broadcast, final EntityPixelmon pokemonEntity, final boolean presentTense, final boolean showIVs)
+            final String broadcast, final Object pokemonObject, final boolean presentTense, final boolean showIVs)
     {
-        // Create a single Pokemon object that we can repeatedly extract data from.
-        final Pokemon pokemon = pokemonEntity.getPokemonData();
+        // Is our received object of the older EntityPixelmon type, or is it Pokemon?
+        Pokemon pokemon =
+                pokemonObject instanceof EntityPixelmon ? ((EntityPixelmon) pokemonObject).getPokemonData() : (Pokemon) pokemonObject;
 
         // We have at least one Pokémon, so start setup for this first one.
         final int HPIV = pokemon.getStats().ivs.hp;
@@ -373,41 +409,5 @@ public class PlaceholderMethods
         return Text.builder(broadcast)
                 .onHover(TextActions.showText(Text.of(String.join("\n§r", hovers))))
                 .build();
-    }
-
-    // Inserts the correct tense into lang keys that might have multiple tenses. Returns the translation.
-    private static String getTensedTranslation(final boolean presentTense, final String key, final Object... params)
-    {
-        // Set up a String to translate and then return.
-        final String tensedKey;
-
-        // Splits our input key, adds the correct tense at a constant known location, and then pieces it back together.
-        if (presentTense)
-            tensedKey = key.substring(0, 6) + "present_tense." + key.substring(6);
-        else
-            tensedKey = key.substring(0, 6) + "past_tense." + key.substring(6);
-
-        // Send back the translation of our new freshly-tensed key.
-        return getTranslation(tensedKey, params);
-    }
-
-    // Get translated names for a given nature's positive and negative stats from the lang.
-    private static String getTranslatedNatureStat(StatsType stat)
-    {
-        switch(stat)
-        {
-            case Attack:
-                return getTranslation("hover.status.attack");
-            case Defence:
-                return getTranslation("hover.status.defense");
-            case SpecialAttack:
-                return getTranslation("hover.status.special_attack");
-            case SpecialDefence:
-                return getTranslation("hover.status.special_defense");
-            case Speed:
-                return getTranslation("hover.status.speed");
-            default:
-                return getTranslation("hover.status.none");
-        }
     }
 }

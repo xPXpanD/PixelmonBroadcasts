@@ -11,12 +11,12 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
-
 import java.util.ArrayList;
 import java.util.List;
 
 // Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.checkToggleStatus;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
 // TODO: Maybe get paginated lists working. Tried it before, but it seems to cut things off randomly...

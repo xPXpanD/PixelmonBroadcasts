@@ -3,7 +3,7 @@ package rs.expand.pixelmonbroadcasts.listeners;
 
 // Remote imports.
 import com.pixelmonmod.pixelmon.api.events.EggHatchEvent;
-import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,24 +21,26 @@ public class HatchListener
     public void onHatchEvent(final EggHatchEvent event)
     {
         // Create shorthand variables for convenience.
-        final String broadcast;
-        final EntityPlayer player = event.pokemon.getOwnerPlayer();
+        final Pokemon pokemon = event.pokemon;
+        final String baseName = pokemon.getSpecies().getPokemonName();
+        final String localizedName = pokemon.getSpecies().getLocalizedName();
+        final EntityPlayer player = pokemon.getOwnerPlayer();
         final BlockPos location = player.getPosition();
         final World world = player.getEntityWorld();
 
-        // Create an entity we can pass on for the egg. A bit awkward, but it should work.
-        final EntityPixelmon pokemon =
-                event.pokemon.getOrSpawnPixelmon(world, location.getX(), location.getY(), location.getZ());
-
-        if (pokemon.getPokemonData().getIsShiny())
+        if (pokemon.getIsShiny())
         {
             if (logShinyHatches)
             {
+                // If we're in a localized setup, log both names.
+                final String nameString =
+                        baseName.equals(localizedName) ? baseName : baseName + " §d(§5" + localizedName + "§d)";
+
                 // Print a hatch message to console.
                 printBasicMessage
                 (
                         "§5PBR §f// §dPlayer §5" + player.getName() +
-                        "§d's shiny §5" + pokemon.getPokemonName() +
+                        "§d's shiny §5" + nameString +
                         "§d egg hatched in world \"§5" + world.getWorldInfo().getWorldName() +
                         "§d\" at X:§5" + location.getX() +
                         "§d Y:§5" + location.getY() +
@@ -49,13 +51,14 @@ public class HatchListener
             if (showShinyHatches)
             {
                 // Get a broadcast from the broadcasts config file, if the key can be found.
-                broadcast = getBroadcast("broadcast.hatch.shiny");
+                final String broadcast = getBroadcast("broadcast.hatch.shiny");
 
                 // Did we find a message? Iterate all available players, and send to those who should receive!
                 if (broadcast != null)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyHatches,
-                            true, revealShinyHatches, "hatch.shiny", "showShinyHatch");
+                    iterateAndSendBroadcast(broadcast, pokemon, null, player,
+                            null, hoverShinyHatches, true, revealShinyHatches,
+                            "hatch.shiny", "showShinyHatch");
                 }
             }
         }
@@ -63,11 +66,15 @@ public class HatchListener
         {
             if (logNormalHatches)
             {
+                // If we're in a localized setup, log both names.
+                final String nameString =
+                        baseName.equals(localizedName) ? baseName : baseName + " §d(§5" + localizedName + "§d)";
+
                 // Print a hatch message to console.
                 printBasicMessage
                 (
                         "§5PBR §f// §dPlayer §5" + player.getName() +
-                        "§d's normal §5" + pokemon.getPokemonName() +
+                        "§d's normal §5" + nameString +
                         "§d egg hatched in world \"§5" + world.getWorldInfo().getWorldName() +
                         "§d\" at X:§5" + location.getX() +
                         "§d Y:§5" + location.getY() +
@@ -78,13 +85,14 @@ public class HatchListener
             if (showNormalHatches)
             {
                 // Get a broadcast from the broadcasts config file, if the key can be found.
-                broadcast = getBroadcast("broadcast.hatch.normal");
+                final String broadcast = getBroadcast("broadcast.hatch.normal");
 
                 // Did we find a message? Iterate all available players, and send to those who should receive!
                 if (broadcast != null)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverNormalHatches,
-                            true, revealNormalHatches, "hatch.normal", "showNormalHatch");
+                    iterateAndSendBroadcast(broadcast, pokemon, null, player,
+                            null, hoverNormalHatches, true, revealNormalHatches,
+                            "hatch.normal", "showNormalHatch");
                 }
             }
         }

@@ -52,8 +52,9 @@ public class WildDefeatListener
                 // Did we find a message? Iterate all available players, and send to those who should receive!
                 if (broadcast != null)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverBossVictories,
-                            false, revealBossVictories, "victory.boss", "showBossVictory");
+                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
+                            hoverBossVictories, false, revealBossVictories,
+                            "victory.boss", "showBossVictory");
                 }
             }
         }
@@ -81,8 +82,9 @@ public class WildDefeatListener
                 // Did we find a message? Iterate all available players, and send to those who should receive!
                 if (broadcast != null)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyLegendaryVictories,
-                            false, revealShinyLegendaryVictories, "victory.shinylegendary", "showShinyLegendaryVictory");
+                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
+                            hoverShinyLegendaryVictories, false, revealShinyLegendaryVictories,
+                            "victory.shinylegendary", "showShinyLegendaryVictory");
                 }
             }
         }
@@ -110,8 +112,9 @@ public class WildDefeatListener
                 // Did we find a message? Iterate all available players, and send to those who should receive!
                 if (broadcast != null)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverLegendaryVictories,
-                            false, revealLegendaryVictories, "victory.legendary", "showLegendaryVictory");
+                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
+                            hoverLegendaryVictories, false, revealLegendaryVictories,
+                            "victory.legendary", "showLegendaryVictory");
                 }
             }
         }
@@ -139,8 +142,9 @@ public class WildDefeatListener
                 // Did we find a message? Iterate all available players, and send to those who should receive!
                 if (broadcast != null)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, player, hoverShinyVictories,
-                            false, revealShinyVictories, "victory.shiny", "showShinyVictory");
+                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
+                            hoverShinyVictories, false, revealShinyVictories,
+                            "victory.shiny", "showShinyVictory");
                 }
             }
         }

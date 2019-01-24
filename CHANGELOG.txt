@@ -1,4 +1,4 @@
-0.2.3 for 7.0
+0.3 for 7.0
 Released January 25th, 2019.
 
     Fixes:
@@ -7,7 +7,8 @@ Released January 25th, 2019.
 
     Broadcast file changes:
     * Added a note on formatting codes to the "broadcasts.conf" file, too.
-    * Corrected a small formatting issue on shiny eggs being hatched.
+    * Corrected a small formatting issue on shiny eggs being hatched. (last part of line wasn't bold)
+    * Fixed the trade event broadcast very rarely showing incorrect shiny status for one of the Pokémon.
     * Reworded many broadcasts to preserve consistency even when precursor events aren't announced.
 
     Tweaks:

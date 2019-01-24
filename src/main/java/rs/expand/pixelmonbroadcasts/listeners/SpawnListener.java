@@ -42,7 +42,7 @@ public class SpawnListener
                 {
                     if (logBossSpawns)
                     {
-                        // If we're in a localized setup, show both names.
+                        // If we're in a localized setup, log both names.
                         final String nameString =
                                 baseName.equals(localizedName) ? baseName : baseName + " §e(§6" + localizedName + "§e)";
 
@@ -68,8 +68,9 @@ public class SpawnListener
                         // Did we find a message? Iterate all available players, and send to those who should receive!
                         if (broadcast != null)
                         {
-                            iterateAndSendBroadcast(broadcast, pokemon, null, hoverBossSpawns,
-                                    true, false, "spawn.boss", "showBossSpawn");
+                            iterateAndSendBroadcast(broadcast, pokemon, null, null,
+                                    null, hoverBossSpawns, true, false,
+                                    "spawn.boss", "showBossSpawn");
                         }
                     }
                 }
@@ -77,7 +78,7 @@ public class SpawnListener
                 {
                     if (logShinyLegendarySpawns)
                     {
-                        // If we're in a localized setup, show both names.
+                        // If we're in a localized setup, log both names.
                         final String nameString =
                                 baseName.equals(localizedName) ? baseName : baseName + " §a(§2" + localizedName + "§a)";
 
@@ -103,8 +104,9 @@ public class SpawnListener
                         // Did we find a message? Iterate all available players, and send to those who should receive!
                         if (broadcast != null)
                         {
-                            iterateAndSendBroadcast(broadcast, pokemon, null, hoverShinyLegendarySpawns,
-                                    true, false, "spawn.shinylegendary", "showShinyLegendarySpawn");
+                            iterateAndSendBroadcast(broadcast, pokemon, null, null,
+                                    null, hoverShinyLegendarySpawns, true, false,
+                                    "spawn.shinylegendary", "showShinyLegendarySpawn");
                         }
                     }
                 }
@@ -112,7 +114,7 @@ public class SpawnListener
                 {
                     if (logLegendarySpawns)
                     {
-                        // If we're in a localized setup, show both names.
+                        // If we're in a localized setup, log both names.
                         final String nameString =
                                 baseName.equals(localizedName) ? baseName : baseName + " §a(§2" + localizedName + "§a)";
 
@@ -138,8 +140,9 @@ public class SpawnListener
                         // Did we find a message? Iterate all available players, and send to those who should receive!
                         if (broadcast != null)
                         {
-                            iterateAndSendBroadcast(broadcast, pokemon, null, hoverLegendarySpawns,
-                                    true, false, "spawn.legendary", "showLegendarySpawn");
+                            iterateAndSendBroadcast(broadcast, pokemon, null, null,
+                                    null, hoverLegendarySpawns, true, false,
+                                    "spawn.legendary", "showLegendarySpawn");
                         }
                     }
                 }
@@ -147,7 +150,7 @@ public class SpawnListener
                 {
                     if (logShinySpawns)
                     {
-                        // If we're in a localized setup, show both names.
+                        // If we're in a localized setup, log both names.
                         final String nameString =
                                 baseName.equals(localizedName) ? baseName : baseName + " §b(§3" + localizedName + "§b)";
 
@@ -173,8 +176,9 @@ public class SpawnListener
                         // Did we find a message? Iterate all available players, and send to those who should receive!
                         if (broadcast != null)
                         {
-                            iterateAndSendBroadcast(broadcast, pokemon, null, hoverShinySpawns,
-                                    true, false, "spawn.shiny", "showShinySpawn");
+                            iterateAndSendBroadcast(broadcast, pokemon, null, null, null,
+                                    hoverShinySpawns, true, false,
+                                    "spawn.shiny", "showShinySpawn");
                         }
                     }
                 }
