@@ -44,23 +44,21 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 // TODO: Add ability support to reveal-enabled hovers.
 // TODO: Cancel challenge messages for event legendaries or make a more comprehensive summon check.
 // FIXME: Bad event listeners from other mods may cause events to hang (stuck loop), which causes insane spam from us. Fix?
-// FIXME: Biome names are always English.
+// FIXME: Biome names are always English. Maybe add to the lang, and use English biome names as keys.
 // FIXME: Roll over cleanly to a new line if more than 5 toggles are available in a single category?
-// FIXME: Get rid of the DedicatedServer debug line in front of all basic console messages.
-// FIXME: Replacing some uses of "the" with "a" in broadcasts might help? Precursor events aren't guaranteed to fire.
 
 @Plugin
 (
         id = "pixelmonbroadcasts",
         name = "PixelmonBroadcasts",
-        version = "0.2.2",
-        dependencies = @Dependency(id = "pixelmon"),
+        version = "0.2.3",
+        dependencies = @Dependency(id = "pixelmon", version = "7.0"),
         description = "Adds fully custom legendary-like messages for tons of events, and optionally logs them, too.",
         authors = "XpanD"
 
         /*                                                                                                         *\
-            Loosely inspired by PixelAnnouncer, which I totally forgot existed up until I first wanted to release.
-            After people reminded me that PA was a thing, I ended up making a full-on replacement for it.
+            Loosely inspired by PixelAnnouncer, which I totally forgot existed up until I wanted to release.
+            After people reminded me that PA was a thing, I ended up making PBR a full-on replacement for it.
 
             Thanks for the go-ahead on that, Proxying! Let's make this count.                             -- XpanD
         \*                                                                                                         */

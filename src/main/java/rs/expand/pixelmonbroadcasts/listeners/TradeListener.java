@@ -3,9 +3,9 @@ package rs.expand.pixelmonbroadcasts.listeners;
 
 // Remote imports.
 import com.pixelmonmod.pixelmon.api.events.PixelmonTradeEvent;
-import com.pixelmonmod.pixelmon.config.PixelmonEntityList;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 // Local imports.
@@ -20,30 +20,32 @@ public class TradeListener
     @SubscribeEvent
     public void onTradeCompletedEvent(final PixelmonTradeEvent event)
     {
-        // Create shorthand Player variables for convenience.
+        // Create shorthand variables for convenience.
         final EntityPlayer player1 = event.player1;
         final EntityPlayer player2 = event.player2;
+        final BlockPos player1pos = event.player1.getPosition();
+        final BlockPos player2pos = event.player2.getPosition();
 
-        // Create entities to pass on from both players' Pokémon.
+        // Create entities to pass on from both players' Pokémon. A bit awkward, but it should work.
         final EntityPixelmon pokemon1 =
-                (EntityPixelmon) PixelmonEntityList.createEntityFromNBT(event.pokemon1, player1.getEntityWorld());
+                event.pokemon1.getOrSpawnPixelmon(player1.getEntityWorld(), player1pos.getX(), player1pos.getY(), player1pos.getZ());
         final EntityPixelmon pokemon2 =
-                (EntityPixelmon) PixelmonEntityList.createEntityFromNBT(event.pokemon2, player2.getEntityWorld());
+                event.pokemon2.getOrSpawnPixelmon(player2.getEntityWorld(), player2pos.getX(), player2pos.getY(), player2pos.getZ());
 
         if (logTrades)
         {
-            String pokemon1ShinynessString = pokemon1.getIsShiny() ? "shiny " : "normal ";
-            String pokemon2ShinynessString = pokemon2.getIsShiny() ? "shiny " : "normal ";
+            String pokemon1ShinynessString = pokemon1.getPokemonData().getIsShiny() ? "shiny " : "normal ";
+            String pokemon2ShinynessString = pokemon2.getPokemonData().getIsShiny() ? "shiny " : "normal ";
 
             // Print a trade message to console.
             printBasicMessage
             (
                     "§5PBR §f// §dPlayer §5" + player1.getName() +
                     "§d has traded a " + pokemon1ShinynessString +
-                    "§5" + pokemon1.getLocalizedName() +
+                    "§5" + pokemon1.getPokemonName() +
                     "§d for §5" + player2.getName() +
                     "§d's " + pokemon2ShinynessString +
-                    "§5" + pokemon2.getLocalizedName()
+                    "§5" + pokemon2.getPokemonName()
             );
         }
 

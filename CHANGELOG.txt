@@ -1,3 +1,17 @@
+0.2.3 for 7.0
+Released January 25th, 2019.
+
+    Fixes:
+    * Fixed legendary-related messages not working if their names weren't English. Sorry for the delay!
+
+    Broadcast file changes:
+    * Added a note on formatting codes to the "broadcasts.conf" file, too.
+    * Corrected a small formatting issue on shiny eggs being hatched.
+    * Reworded many broadcasts to preserve consistency even when precursor events aren't announced.
+
+    Tweaks:
+    * Made it so localized setups end up logging both the localized and English Pokémon names.
+
 0.2.2 for 6.3.4
 Released August 18th, 2018.
 
@@ -19,7 +33,7 @@ Released August 18th, 2018.
     * Moved the "shiny legend" toggle so it shows after "shiny" and "legend" if enabled. Bit cleaner.
     * Split the mod's start-up messages into two blocks, with one only showing up if something's wrong.
 
-0.2.1 for 6.3.0
+0.2.1 for 6.3
 Released June 10th, 2018.
 
     Fixes:
@@ -32,7 +46,7 @@ Released June 10th, 2018.
     Tweaks:
     * Toggle categories now sort mostly alphabetically. Stuff was changing too often to keep up with.
 
-0.2.0 for 6.3.0
+0.2.0 for 6.3
 Released June 9th, 2018.
 
     Permission changes:
@@ -55,13 +69,13 @@ Released June 9th, 2018.
     * The %world% and %biome% placeholders should now work properly on trainer/PvP broadcasts.
     * Trades now support the showing of shiny Pokémon, using the new %shiny% placeholder.
 
-0.1.1 for 6.3.0
+0.1.1 for 6.3
 Released June 6th, 2018.
 
     Tweaks:
     * Changed permission layout to hopefully make a bit more sense.
 
-0.1.0 for 6.3.0
+0.1.0 for 6.3
 Released June 6th, 2018.
 
     Initial release.

@@ -4,7 +4,7 @@ package rs.expand.pixelmonbroadcasts.listeners;
 // Remote imports.
 import com.pixelmonmod.pixelmon.api.events.CaptureEvent;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
-import com.pixelmonmod.pixelmon.enums.EnumPokemon;
+import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -23,10 +23,10 @@ public class CatchListener
         final String broadcast;
         final EntityPixelmon pokemon = event.getPokemon();
         final EntityPlayer player = event.player;
-        final String pokemonName = pokemon.getLocalizedName();
+        final String baseName = pokemon.getPokemonName();
         final BlockPos location = event.pokeball.getPosition();
 
-        if (EnumPokemon.legendaries.contains(pokemonName) && pokemon.getIsShiny())
+        if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().getIsShiny())
         {
             if (logShinyLegendaryCatches)
             {
@@ -34,7 +34,7 @@ public class CatchListener
                 printBasicMessage
                 (
                         "§5PBR §f// §aPlayer §2" + player.getName() +
-                        "§a caught a shiny legendary §2" + pokemonName +
+                        "§a caught a shiny legendary §2" + baseName +
                         "§a in world \"§2" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§a\", at X:§2" + location.getX() +
                         "§a Y:§2" + location.getY() +
@@ -58,7 +58,7 @@ public class CatchListener
                 }
             }
         }
-        else if (EnumPokemon.legendaries.contains(pokemonName))
+        else if (EnumSpecies.legendaries.contains(baseName))
         {
             if (logLegendaryCatches)
             {
@@ -66,7 +66,7 @@ public class CatchListener
                 printBasicMessage
                 (
                         "§5PBR §f// §aPlayer §2" + player.getName() +
-                        "§a caught a legendary §2" + pokemonName +
+                        "§a caught a legendary §2" + baseName +
                         "§a in world \"§2" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§a\", at X:§2" + location.getX() +
                         "§a Y:§2" + location.getY() +
@@ -90,7 +90,7 @@ public class CatchListener
                 }
             }
         }
-        else if (pokemon.getIsShiny())
+        else if (pokemon.getPokemonData().getIsShiny())
         {
             if (logShinyCatches)
             {
@@ -98,7 +98,7 @@ public class CatchListener
                 printBasicMessage
                 (
                         "§5PBR §f// §bPlayer §3" + player.getName() +
-                        "§b caught a shiny §3" + pokemonName +
+                        "§b caught a shiny §3" + baseName +
                         "§b in world \"§3" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§b\", at X:§3" + location.getX() +
                         "§b Y:§3" + location.getY() +
@@ -130,7 +130,7 @@ public class CatchListener
                 printBasicMessage
                 (
                         "§5PBR §f// §fPlayer §7" + player.getName() +
-                        "§f caught a normal §7" + pokemonName +
+                        "§f caught a normal §7" + baseName +
                         "§f in world \"§7" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§f\", at X:§7" + location.getX() +
                         "§f Y:§7" + location.getY() +

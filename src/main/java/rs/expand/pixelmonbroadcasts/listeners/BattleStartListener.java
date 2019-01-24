@@ -8,10 +8,13 @@ import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipan
 import com.pixelmonmod.pixelmon.battles.controller.participants.TrainerParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.WildPixelmonParticipant;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
-import com.pixelmonmod.pixelmon.enums.EnumPokemon;
+import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 // Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
@@ -38,15 +41,21 @@ public class BattleStartListener
             // Did a PvP battle just start? (two players, one on either side)
             if (participant1 instanceof PlayerParticipant && participant2 instanceof PlayerParticipant)
             {
+                // Create a list of participants, and then sort them based on their display names.
+                // This ensures names and their associated stats are always in the same place.
+                ArrayList<BattleParticipant> participants = new ArrayList<>(Arrays.asList(participant1, participant2));
+                participants.sort(Comparator.comparing(t -> BattleParticipant.class.getName()));
+
                 if (logPVPChallenges)
                 {
+                    // Create another shorthand variable.
                     final BlockPos location = participant1.getEntity().getPosition();
 
                     // Print a PvP starting message to console.
                     printBasicMessage
                     (
-                            "§5PBR §f// §ePlayer §6" + participant1.getDisplayName() +
-                            "§e started battling player §6" + participant2.getDisplayName() +
+                            "§5PBR §f// §ePlayer §6" + participants.get(0).getName().getUnformattedText() +
+                            "§e started battling player §6" + participants.get(1).getName().getFormattedText() +
                             "§e in world \"§6" + participant1.getWorld().getWorldInfo().getWorldName() +
                             "§e\", at X:§6" + location.getX() +
                             "§e Y:§6" + location.getY() +
@@ -63,10 +72,10 @@ public class BattleStartListener
                     if (broadcast != null)
                     {
                         // Replace the placeholders for player 2's side, first. We'll grab the normal ones in the final sweep.
-                        broadcast = replacePlayer2Placeholders(broadcast, null, (EntityPlayer) participant2.getEntity());
+                        broadcast = replacePlayer2Placeholders(broadcast, null, (EntityPlayer) participants.get(0).getEntity());
 
                         // Swap player 1 placeholders, and then send.
-                        iterateAndSendBroadcast(broadcast, null, (EntityPlayer) participant1.getEntity(),
+                        iterateAndSendBroadcast(broadcast, null, (EntityPlayer) participants.get(1).getEntity(),
                                 false, true, false, "challenge.pvp", "showPVPChallenge");
                     }
                 }
@@ -174,7 +183,7 @@ public class BattleStartListener
                 // Set up even more common variables.
                 final EntityPlayer playerEntity = (EntityPlayer) player.getEntity();
                 final EntityPixelmon pokemonEntity = (EntityPixelmon) pokemon.getEntity();
-                final String pokemonName = pokemon.getDisplayName();
+                final String baseName = pokemonEntity.getPokemonName();
                 final BlockPos location = pokemon.getEntity().getPosition();
 
                 // Make sure our Pokémon participant has no owner -- it has to be wild.
@@ -190,7 +199,7 @@ public class BattleStartListener
                             printBasicMessage
                             (
                                     "§5PBR §f// §ePlayer §6" + player.getDisplayName() +
-                                    "§e engaged a boss §6" + pokemonName +
+                                    "§e engaged a boss §6" + baseName +
                                     "§e in world \"§6" + pokemon.getWorld().getWorldInfo().getWorldName() +
                                     "§e\", at X:§6" + location.getX() +
                                     "§e Y:§6" + location.getY() +
@@ -211,7 +220,7 @@ public class BattleStartListener
                             }
                         }
                     }
-                    else if (EnumPokemon.legendaries.contains(pokemonName) && pokemonEntity.getIsShiny())
+                    else if (EnumSpecies.legendaries.contains(baseName) && pokemonEntity.getPokemonData().getIsShiny())
                     {
                         if (logShinyLegendaryChallenges)
                         {
@@ -219,7 +228,7 @@ public class BattleStartListener
                             printBasicMessage
                             (
                                     "§5PBR §f// §aPlayer §2" + player.getDisplayName() +
-                                    "§a engaged a shiny legendary §2" + pokemonName +
+                                    "§a engaged a shiny legendary §2" + baseName +
                                     "§a in world \"§2" + pokemon.getWorld().getWorldInfo().getWorldName() +
                                     "§a\", at X:§2" + location.getX() +
                                     "§a Y:§2" + location.getY() +
@@ -240,7 +249,7 @@ public class BattleStartListener
                             }
                         }
                     }
-                    else if (EnumPokemon.legendaries.contains(pokemonName))
+                    else if (EnumSpecies.legendaries.contains(baseName))
                     {
                         if (logLegendaryChallenges)
                         {
@@ -248,7 +257,7 @@ public class BattleStartListener
                             printBasicMessage
                             (
                                     "§5PBR §f// §aPlayer §2" + player.getDisplayName() +
-                                    "§a engaged a legendary §2" + pokemonName +
+                                    "§a engaged a legendary §2" + baseName +
                                     "§a in world \"§2" + pokemon.getWorld().getWorldInfo().getWorldName() +
                                     "§a\", at X:§2" + location.getX() +
                                     "§a Y:§2" + location.getY() +
@@ -269,7 +278,7 @@ public class BattleStartListener
                             }
                         }
                     }
-                    else if (pokemonEntity.getIsShiny())
+                    else if (pokemonEntity.getPokemonData().getIsShiny())
                     {
                         if (logShinyChallenges)
                         {
@@ -277,7 +286,7 @@ public class BattleStartListener
                             printBasicMessage
                             (
                                     "§5PBR §f// §bPlayer §3" + player.getDisplayName() +
-                                    "§b engaged a shiny §3" + pokemonName +
+                                    "§b engaged a shiny §3" + baseName +
                                     "§b in world \"§3" + pokemon.getWorld().getWorldInfo().getWorldName() +
                                     "§b\", at X:§3" + location.getX() +
                                     "§b Y:§3" + location.getY() +

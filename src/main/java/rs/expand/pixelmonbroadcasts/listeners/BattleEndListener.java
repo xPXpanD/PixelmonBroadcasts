@@ -8,12 +8,13 @@ import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipan
 import com.pixelmonmod.pixelmon.battles.controller.participants.TrainerParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.WildPixelmonParticipant;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
-import com.pixelmonmod.pixelmon.enums.EnumPokemon;
+import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import com.pixelmonmod.pixelmon.enums.battle.BattleResults;
 import com.pixelmonmod.pixelmon.enums.battle.EnumBattleEndCause;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import java.util.*;
 
 // Local imports.
@@ -21,17 +22,17 @@ import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
+// TODO: %pokedollars% placeholder.
+// TODO: Double battle support, whenever.
+// TODO: See if tracking gym leaders is possible. Maybe look into marking placed leaders with trainer.isGymLeader.
+// FIXME: Keep name ordering (from battle start message) persistent regardless of outcome. Pre-sort alphabetically?
+// FIXME: In PvP, if both sides use a self-killing move or otherwise die it picks a winner. Make this a draw, somehow.
 public class BattleEndListener
 {
     @SubscribeEvent
     public void onBattleEndEvent(final BattleEndEvent event)
     {
-        // TODO: %pokedollars% placeholder.
-        // TODO: Double battle support, whenever.
-        // TODO: See if tracking gym leaders is possible. Maybe look into marking placed leaders with trainer.isGymLeader.
-        // FIXME: Keep name ordering (from battle start message) persistent regardless of outcome. Pre-sort alphabetically?
-        // FIXME: In PvP, if both sides use a self-killing move or otherwise die it picks a winner. Make this a draw.
-        // See who won, and who lost. We populate a list, but generally only use the first result. Seems reliable...
+        // See who won, and who lost. We populate a list, but often use only the first result. Seems reliable, so far...
         final List<BattleParticipant> winners = new ArrayList<>(), losers = new ArrayList<>(), neutrals = new ArrayList<>();
         for (Map.Entry<BattleParticipant, BattleResults> entry : event.results.entrySet())
         {
@@ -52,7 +53,7 @@ public class BattleEndListener
         final boolean battleForfeited = event.cause == EnumBattleEndCause.FORFEIT;
 
         // Set up two participants.
-        final BattleParticipant participant1, participant2;
+        BattleParticipant participant1, participant2;
 
         // Check if our battle result was a draw. Both participants should have been set to "DRAW", in this case.
         if (endedInDraw)
@@ -87,16 +88,12 @@ public class BattleEndListener
         // We didn't hit anything that was valid, stop execution.
         else return;
 
-        // If we're still going, set up some more commonly-used variables.
-        final String worldName = participant1.getWorld().getWorldInfo().getWorldName();
-        final BlockPos location = participant1.getEntity().getPosition();
-
-        // FIXME: Null checks are there for safety, as display names can apparently go null. Actually look into this.
+        // TODO: Null checks are there for safety, as display names can apparently go null. Actually look into this.
         if (participant1.getDisplayName() != null && participant2.getDisplayName() != null)
         {
-            // Set up more common variables.
-            final String participant1Name = participant1.getDisplayName();
-            final String participant2Name = participant2.getDisplayName();
+            // If we're still going, set up some more commonly-used variables. World stuff should be the same for both.
+            final String worldName = participant1.getWorld().getWorldInfo().getWorldName();
+            final BlockPos location = participant1.getEntity().getPosition();
 
             // Needed to prevent a weird issue where it would sometimes register a loss when catching a Pokémon.
             if (event.cause != EnumBattleEndCause.FORCE)
@@ -109,13 +106,18 @@ public class BattleEndListener
                 {
                     if (endedInDraw || battleForfeited)
                     {
+                        // Create a list of participants, and then sort them based on their display names.
+                        // This ensures names and their associated stats are always in the same place.
+                        ArrayList<BattleParticipant> participants = new ArrayList<>(Arrays.asList(participant1, participant2));
+                        participants.sort(Comparator.comparing(t -> BattleParticipant.class.getName()));
+
                         if (logPVPDraws)
                         {
                             // Print a PvP draw message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §7Players §f" + participant1Name +
-                                    "§7 and §f" + participant2Name +
+                                    "§5PBR §f// §7Players §f" + participants.get(0).getName().getFormattedText() +
+                                    "§7 and §f" + participants.get(1).getName().getUnformattedText() +
                                     "§7 ended their battle in a draw, in world \"§f" + worldName +
                                     "§7\", at X:§f" + location.getX() +
                                     "§7 Y:§f" + location.getY() +
@@ -132,10 +134,10 @@ public class BattleEndListener
                             if (broadcast != null)
                             {
                                 // Replace the placeholders for player 2's side, first. We'll grab the normal ones in the final sweep.
-                                broadcast = replacePlayer2Placeholders(broadcast, null, (EntityPlayer) participant2.getEntity());
+                                broadcast = replacePlayer2Placeholders(broadcast, null, (EntityPlayer) participants.get(0).getEntity());
 
                                 // Swap player 1 placeholders, and then send.
-                                iterateAndSendBroadcast(broadcast, null, (EntityPlayer) participant1.getEntity(),
+                                iterateAndSendBroadcast(broadcast, null, (EntityPlayer) participants.get(1).getEntity(),
                                         false, false, false, "draw.pvp", "showPVPDraw");
                             }
                         }
@@ -147,8 +149,8 @@ public class BattleEndListener
                             // Print a PvP victory message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §ePlayer §6" + participant1Name +
-                                    "§e defeated player §6" + participant2Name +
+                                    "§5PBR §f// §ePlayer §6" + participant1.getDisplayName() +
+                                    "§e defeated player §6" + participant2.getDisplayName() +
                                     "§e in world \"§6" + worldName +
                                     "§e\", at X:§6" + location.getX() +
                                     "§e Y:§6" + location.getY() +
@@ -192,7 +194,7 @@ public class BattleEndListener
                                 // Print a forfeit message to console.
                                 printBasicMessage
                                 (
-                                    "§5PBR §f// §6Player §e" + participant2Name +
+                                    "§5PBR §f// §6Player §e" + participant2.getDisplayName() +
                                     "§6 fled from a boss trainer in world \"§e" + worldName +
                                     "§6\", at X:§e" + location.getX() +
                                     "§6 Y:§e" + location.getY() +
@@ -220,7 +222,7 @@ public class BattleEndListener
                                 // Print a forfeit message to console.
                                 printBasicMessage
                                 (
-                                    "§5PBR §f// §6Player §e" + participant2Name +
+                                    "§5PBR §f// §6Player §e" + participant2.getDisplayName() +
                                     "§6 fled from a normal trainer in world \"§e" + worldName +
                                     "§6\", at X:§e" + location.getX() +
                                     "§6 Y:§e" + location.getY() +
@@ -252,7 +254,7 @@ public class BattleEndListener
                                 // Print a blackout message to console.
                                 printBasicMessage
                                 (
-                                        "§5PBR §f// §cPlayer §4" + participant2Name +
+                                        "§5PBR §f// §cPlayer §4" + participant2.getDisplayName() +
                                         "§c was knocked out by a boss trainer in world \"§4" + worldName +
                                         "§c\", at X:§4" + location.getX() +
                                         "§c Y:§4" + location.getY() +
@@ -280,7 +282,7 @@ public class BattleEndListener
                                 // Print a blackout message to console.
                                 printBasicMessage
                                 (
-                                        "§5PBR §f// §cPlayer §4" + participant2Name +
+                                        "§5PBR §f// §cPlayer §4" + participant2.getDisplayName() +
                                         "§c was knocked out by a normal trainer in world \"§4" + worldName +
                                         "§c\", at X:§4" + location.getX() +
                                         "§c Y:§4" + location.getY() +
@@ -318,7 +320,7 @@ public class BattleEndListener
                             // Print a victory message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §ePlayer §6" + participant1Name +
+                                    "§5PBR §f// §ePlayer §6" + participant1.getDisplayName() +
                                     "§e defeated a boss trainer in world \"§6" + worldName +
                                     "§e\", at X:§6" + location.getX() +
                                     "§e Y:§6" + location.getY() +
@@ -346,7 +348,7 @@ public class BattleEndListener
                             // Print a victory message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §ePlayer §6" + participant1Name +
+                                    "§5PBR §f// §ePlayer §6" + participant1.getDisplayName() +
                                     "§e defeated a normal trainer in world \"§6" + worldName +
                                     "§e\", at X:§6" + location.getX() +
                                     "§e Y:§6" + location.getY() +
@@ -374,7 +376,12 @@ public class BattleEndListener
                     // Create shorthand variables for convenience.
                     final EntityPlayer playerEntity = (EntityPlayer) participant2.getEntity();
                     final EntityPixelmon pokemon = (EntityPixelmon) participant1.getEntity();
-                    final String pokemonName = participant1.getDisplayName();
+                    final String baseName = pokemon.getPokemonName();
+                    final String localizedName = pokemon.getLocalizedName();
+
+                    // If we're in a localized setup, format a string for logging both names.
+                    final String nameString =
+                        baseName.equals(localizedName) ? baseName : baseName + " §c(§4" + localizedName + "§c)";
 
                     // Is the Pokémon a boss?
                     if (pokemon.isBossPokemon())
@@ -384,8 +391,8 @@ public class BattleEndListener
                             // Print a blackout message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §cPlayer §4" + participant2Name +
-                                    "§c was knocked out by a boss §4" + pokemonName +
+                                    "§5PBR §f// §cPlayer §4" + participant2.getDisplayName() +
+                                    "§c was knocked out by a boss §4" + nameString +
                                     "§c in world \"§4" + worldName +
                                     "§c\", at X:§4" + location.getX() +
                                     "§c Y:§4" + location.getY() +
@@ -406,15 +413,15 @@ public class BattleEndListener
                             }
                         }
                     }
-                    else if (EnumPokemon.legendaries.contains(pokemonName) && pokemon.getIsShiny())
+                    else if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().getIsShiny())
                     {
                         if (logShinyLegendaryBlackouts)
                         {
                             // Print a blackout message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §cPlayer §4" + participant2Name +
-                                    "§c was knocked out by a shiny legendary §4" + pokemonName +
+                                    "§5PBR §f// §cPlayer §4" + participant2.getDisplayName() +
+                                    "§c was knocked out by a shiny legendary §4" + nameString +
                                     "§c in world \"§4" + worldName +
                                     "§c\", at X:§4" + location.getX() +
                                     "§c Y:§4" + location.getY() +
@@ -435,15 +442,15 @@ public class BattleEndListener
                             }
                         }
                     }
-                    else if (EnumPokemon.legendaries.contains(pokemonName))
+                    else if (EnumSpecies.legendaries.contains(baseName))
                     {
                         if (logLegendaryBlackouts)
                         {
                             // Print a blackout message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §cPlayer §4" + participant2Name +
-                                    "§c was knocked out by a legendary §4" + pokemonName +
+                                    "§5PBR §f// §cPlayer §4" + participant2.getDisplayName() +
+                                    "§c was knocked out by a legendary §4" + nameString +
                                     "§c in world \"§4" + worldName +
                                     "§c\", at X:§4" + location.getX() +
                                     "§c Y:§4" + location.getY() +
@@ -464,15 +471,15 @@ public class BattleEndListener
                             }
                         }
                     }
-                    else if (pokemon.getIsShiny())
+                    else if (pokemon.getPokemonData().getIsShiny())
                     {
                         if (logShinyBlackouts)
                         {
                             // Print a blackout message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §cPlayer §4" + participant2Name +
-                                    "§c was knocked out by a shiny §4" + pokemonName +
+                                    "§5PBR §f// §cPlayer §4" + participant2.getDisplayName() +
+                                    "§c was knocked out by a shiny §4" + nameString +
                                     "§c in world \"§4" + worldName +
                                     "§c\", at X:§4" + location.getX() +
                                     "§c Y:§4" + location.getY() +
@@ -500,8 +507,8 @@ public class BattleEndListener
                             // Print a blackout message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §cPlayer §4" + participant2Name +
-                                    "§c was knocked out by a normal §4" + pokemonName +
+                                    "§5PBR §f// §cPlayer §4" + participant2.getDisplayName() +
+                                    "§c was knocked out by a normal §4" + nameString +
                                     "§c in world \"§4" + worldName +
                                     "§c\", at X:§4" + location.getX() +
                                     "§c Y:§4" + location.getY() +
@@ -529,7 +536,12 @@ public class BattleEndListener
                     // Create shorthand variables for convenience.
                     final EntityPlayer playerEntity = (EntityPlayer) participant2.getEntity();
                     final EntityPixelmon pokemon = (EntityPixelmon) participant1.getEntity();
-                    final String pokemonName = participant1.getDisplayName();
+                    final String baseName = pokemon.getPokemonName();
+                    final String localizedName = pokemon.getLocalizedName();
+
+                    // If we're in a localized setup, format a string for logging both names.
+                    final String nameString =
+                        baseName.equals(localizedName) ? baseName : baseName + " §6(§e" + localizedName + "§6)";
 
                     // Is the Pokémon a boss?
                     if (pokemon.isBossPokemon())
@@ -539,8 +551,8 @@ public class BattleEndListener
                             // Print a forfeit message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §6Player §e" + participant2Name +
-                                    "§6 fled from a boss §e" + pokemonName +
+                                    "§5PBR §f// §6Player §e" + participant2.getDisplayName() +
+                                    "§6 fled from a boss §e" + nameString +
                                     "§6 in world \"§e" + worldName +
                                     "§6\", at X:§e" + location.getX() +
                                     "§6 Y:§e" + location.getY() +
@@ -561,15 +573,15 @@ public class BattleEndListener
                             }
                         }
                     }
-                    else if (EnumPokemon.legendaries.contains(pokemonName) && pokemon.getIsShiny())
+                    else if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().getIsShiny())
                     {
                         if (logShinyLegendaryForfeits)
                         {
                             // Print a forfeit message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §6Player §e" + participant2Name +
-                                    "§6 fled from a shiny legendary §e" + pokemonName +
+                                    "§5PBR §f// §6Player §e" + participant2.getDisplayName() +
+                                    "§6 fled from a shiny legendary §e" + nameString +
                                     "§6 in world \"§e" + worldName +
                                     "§6\", at X:§e" + location.getX() +
                                     "§6 Y:§e" + location.getY() +
@@ -590,15 +602,15 @@ public class BattleEndListener
                             }
                         }
                     }
-                    else if (EnumPokemon.legendaries.contains(pokemonName))
+                    else if (EnumSpecies.legendaries.contains(baseName))
                     {
                         if (logLegendaryForfeits)
                         {
                             // Print a forfeit message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §6Player §e" + participant2Name +
-                                    "§6 fled from a legendary §e" + pokemonName +
+                                    "§5PBR §f// §6Player §e" + participant2.getDisplayName() +
+                                    "§6 fled from a legendary §e" + nameString +
                                     "§6 in world \"§e" + worldName +
                                     "§6\", at X:§e" + location.getX() +
                                     "§6 Y:§e" + location.getY() +
@@ -619,15 +631,15 @@ public class BattleEndListener
                             }
                         }
                     }
-                    else if (pokemon.getIsShiny())
+                    else if (pokemon.getPokemonData().getIsShiny())
                     {
                         if (logShinyForfeits)
                         {
                             // Print a forfeit message to console.
                             printBasicMessage
                             (
-                                    "§5PBR §f// §6Player §e" + participant2Name +
-                                    "§6 fled from a shiny §e" + pokemonName +
+                                    "§5PBR §f// §6Player §e" + participant2.getDisplayName() +
+                                    "§6 fled from a shiny §e" + nameString +
                                     "§6 in world \"§e" + worldName +
                                     "§6\", at X:§e" + location.getX() +
                                     "§6 Y:§e" + location.getY() +

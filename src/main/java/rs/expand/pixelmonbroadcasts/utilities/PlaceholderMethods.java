@@ -35,7 +35,7 @@ public class PlaceholderMethods
                 // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
                 // FIXME: Could do with an option, or a cleaner way to make this all work.
                 final String pokemonName =
-                        pokemon.isEgg ? getTranslation("placeholder.pokemon.is_egg") : pokemon.getLocalizedName();
+                        pokemon.getPokemonData().isEgg() ? getTranslation("placeholder.pokemon.is_egg") : pokemon.getLocalizedName();
 
                 // Proceed with insertion.
                 broadcast = broadcast.replaceAll("(?i)%pokemon%", pokemonName);
@@ -45,12 +45,12 @@ public class PlaceholderMethods
             if (broadcast.toLowerCase().contains("%ivpercent%"))
             {
                 // Grab the Pokémon's stats.
-                final int HPIV = pokemon.stats.ivs.HP;
-                final int attackIV = pokemon.stats.ivs.Attack;
-                final int defenseIV = pokemon.stats.ivs.Defence;
-                final int spAttIV = pokemon.stats.ivs.SpAtt;
-                final int spDefIV = pokemon.stats.ivs.SpDef;
-                final int speedIV = pokemon.stats.ivs.Speed;
+                final int HPIV = pokemon.getPokemonData().getStats().ivs.hp;
+                final int attackIV = pokemon.getPokemonData().getStats().ivs.attack;
+                final int defenseIV = pokemon.getPokemonData().getStats().ivs.defence;
+                final int spAttIV = pokemon.getPokemonData().getStats().ivs.specialAttack;
+                final int spDefIV = pokemon.getPokemonData().getStats().ivs.specialDefence;
+                final int speedIV = pokemon.getPokemonData().getStats().ivs.speed;
 
                 // Process them.
                 final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
@@ -60,7 +60,7 @@ public class PlaceholderMethods
                 // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the stats.
                 // FIXME: Could do with an option, or a cleaner way to make this all work.
                 final String pokemonIVs =
-                        pokemon.isEgg ? getTranslation("placeholder.ivpercent.is_egg") : percentIVs.toString() + '%';
+                        pokemon.getPokemonData().isEgg() ? getTranslation("placeholder.ivpercent.is_egg") : percentIVs.toString() + '%';
 
                 // Apply.
                 broadcast = broadcast.replaceAll("(?i)%ivpercent%", pokemonIVs);
@@ -119,8 +119,8 @@ public class PlaceholderMethods
         // Insert a world name.
         broadcast = broadcast.replaceAll("(?i)%world(\\d*?)%", world.getWorldInfo().getWorldName());
 
-        // Insert the "placeholder.shiny" String.
-        if (pokemon != null && pokemon.getIsShiny())
+        // Insert the "placeholder.shiny" String. Make sure the Pokémon isn't an egg.
+        if (pokemon != null && !pokemon.getPokemonData().isEgg() && pokemon.getPokemonData().getIsShiny())
             broadcast = broadcast.replaceAll("(?i)%shiny(\\d*?)%", getTranslation("placeholder.shiny"));
         else
             broadcast = broadcast.replaceAll("(?i)%shiny(\\d*?)%", "");
@@ -148,7 +148,7 @@ public class PlaceholderMethods
                         if (biome.charAt(iterator - 1) != ' ')
                         {
                             // Add a space at the desired location.
-                            biome = biome.substring(0, iterator) + ' ' + biome.substring(iterator, biome.length());
+                            biome = biome.substring(0, iterator) + ' ' + biome.substring(iterator);
 
                             // Up the main iterator so we do not repeat the check on the character we're at now.
                             iterator++;
@@ -181,7 +181,7 @@ public class PlaceholderMethods
                 // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
                 // FIXME: Could do with an option, or a cleaner way to make this all work.
                 final String pokemonName =
-                        pokemon.isEgg ? getTranslation("placeholder.pokemon.is_egg") : pokemon.getLocalizedName();
+                        pokemon.getPokemonData().isEgg() ? getTranslation("placeholder.pokemon.is_egg") : pokemon.getLocalizedName();
 
                 // Proceed with insertion.
                 broadcast = broadcast.replaceAll("(?i)%pokemon2%", pokemonName);
@@ -191,12 +191,12 @@ public class PlaceholderMethods
             if (broadcast.matches(".*%(?i)ivpercent2%.*"))
             {
                 // Grab the Pokémon's stats.
-                final int HPIV = pokemon.stats.ivs.HP;
-                final int attackIV = pokemon.stats.ivs.Attack;
-                final int defenseIV = pokemon.stats.ivs.Defence;
-                final int spAttIV = pokemon.stats.ivs.SpAtt;
-                final int spDefIV = pokemon.stats.ivs.SpDef;
-                final int speedIV = pokemon.stats.ivs.Speed;
+                final int HPIV = pokemon.getPokemonData().getStats().ivs.hp;
+                final int attackIV = pokemon.getPokemonData().getStats().ivs.attack;
+                final int defenseIV = pokemon.getPokemonData().getStats().ivs.defence;
+                final int spAttIV = pokemon.getPokemonData().getStats().ivs.specialAttack;
+                final int spDefIV = pokemon.getPokemonData().getStats().ivs.specialDefence;
+                final int speedIV = pokemon.getPokemonData().getStats().ivs.speed;
 
                 // Process them.
                 final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
@@ -206,7 +206,7 @@ public class PlaceholderMethods
                 // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the stats.
                 // FIXME: Could do with an option, or a cleaner way to make this all work.
                 final String pokemonIVs =
-                        pokemon.isEgg ? getTranslation("placeholder.ivpercent.is_egg") : percentIVs.toString() + '%';
+                        pokemon.getPokemonData().isEgg() ? getTranslation("placeholder.ivpercent.is_egg") : percentIVs.toString() + '%';
 
                 // Apply.
                 broadcast = broadcast.replaceAll("(?i)%ivpercent2%", pokemonIVs);
@@ -240,18 +240,18 @@ public class PlaceholderMethods
             final String broadcast, final EntityPixelmon pokemon, final boolean presentTense, final boolean showIVs)
     {
         // We have at least one Pokémon, so start setup for this first one.
-        final int HPIV = pokemon.stats.ivs.HP;
-        final int attackIV = pokemon.stats.ivs.Attack;
-        final int defenseIV = pokemon.stats.ivs.Defence;
-        final int spAttIV = pokemon.stats.ivs.SpAtt;
-        final int spDefIV = pokemon.stats.ivs.SpDef;
-        final int speedIV = pokemon.stats.ivs.Speed;
+        final int HPIV = pokemon.getPokemonData().getStats().ivs.hp;
+        final int attackIV = pokemon.getPokemonData().getStats().ivs.attack;
+        final int defenseIV = pokemon.getPokemonData().getStats().ivs.defence;
+        final int spAttIV = pokemon.getPokemonData().getStats().ivs.specialAttack;
+        final int spDefIV = pokemon.getPokemonData().getStats().ivs.specialDefence;
+        final int speedIV = pokemon.getPokemonData().getStats().ivs.speed;
         final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
         final BigDecimal percentIVs = totalIVs.multiply(
                 new BigDecimal("100")).divide(new BigDecimal("186"), 2, BigDecimal.ROUND_HALF_UP);
 
         // Grab a growth string.
-        final EnumGrowth growth = pokemon.getGrowth();
+        final EnumGrowth growth = pokemon.getPokemonData().getGrowth();
         final String sizeString = getTensedTranslation(presentTense, "hover.size." + growth.name().toLowerCase());
 
         // Get an IV composite StringBuilder.
@@ -311,7 +311,7 @@ public class PlaceholderMethods
 
         // Grab a gender string.
         final String genderString;
-        switch (pokemon.getGender())
+        switch (pokemon.getPokemonData().getGender())
         {
             case Male:
                 genderString = getTensedTranslation(presentTense, "hover.gender.male"); break;
@@ -322,7 +322,7 @@ public class PlaceholderMethods
         }
 
         // Get a nature and see which stats we get from it.
-        final EnumNature nature = pokemon.getNature();
+        final EnumNature nature = pokemon.getPokemonData().getNature();
         final String natureString = getTranslation("hover.nature." + nature.name().toLowerCase());
         final String boostedStat = getTranslatedNatureStat(EnumNature.getNatureFromIndex(nature.index).increasedStat);
         final String cutStat = getTranslatedNatureStat(EnumNature.getNatureFromIndex(nature.index).decreasedStat);

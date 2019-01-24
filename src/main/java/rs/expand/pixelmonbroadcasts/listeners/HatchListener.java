@@ -3,7 +3,6 @@ package rs.expand.pixelmonbroadcasts.listeners;
 
 // Remote imports.
 import com.pixelmonmod.pixelmon.api.events.EggHatchEvent;
-import com.pixelmonmod.pixelmon.config.PixelmonEntityList;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -15,6 +14,7 @@ import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
 
+// FIXME: Eggs don't show IV percentages, so they get an extra space.
 public class HatchListener
 {
     @SubscribeEvent
@@ -22,12 +22,15 @@ public class HatchListener
     {
         // Create shorthand variables for convenience.
         final String broadcast;
-        final EntityPlayer player = event.player;
+        final EntityPlayer player = event.pokemon.getOwnerPlayer();
         final BlockPos location = player.getPosition();
         final World world = player.getEntityWorld();
-        final EntityPixelmon pokemon = (EntityPixelmon) PixelmonEntityList.createEntityFromNBT(event.nbt, world);
 
-        if (pokemon.getIsShiny())
+        // Create an entity we can pass on for the egg. A bit awkward, but it should work.
+        final EntityPixelmon pokemon =
+                event.pokemon.getOrSpawnPixelmon(world, location.getX(), location.getY(), location.getZ());
+
+        if (pokemon.getPokemonData().getIsShiny())
         {
             if (logShinyHatches)
             {
@@ -35,7 +38,7 @@ public class HatchListener
                 printBasicMessage
                 (
                         "§5PBR §f// §dPlayer §5" + player.getName() +
-                        "§d's shiny §5" + pokemon.getLocalizedName() +
+                        "§d's shiny §5" + pokemon.getPokemonName() +
                         "§d egg hatched in world \"§5" + world.getWorldInfo().getWorldName() +
                         "§d\" at X:§5" + location.getX() +
                         "§d Y:§5" + location.getY() +
@@ -64,7 +67,7 @@ public class HatchListener
                 printBasicMessage
                 (
                         "§5PBR §f// §dPlayer §5" + player.getName() +
-                        "§d's normal §5" + pokemon.getLocalizedName() +
+                        "§d's normal §5" + pokemon.getPokemonName() +
                         "§d egg hatched in world \"§5" + world.getWorldInfo().getWorldName() +
                         "§d\" at X:§5" + location.getX() +
                         "§d Y:§5" + location.getY() +

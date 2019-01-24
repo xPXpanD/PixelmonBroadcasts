@@ -4,7 +4,7 @@ package rs.expand.pixelmonbroadcasts.listeners;
 // Remote imports.
 import com.pixelmonmod.pixelmon.api.events.BeatWildPixelmonEvent;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
-import com.pixelmonmod.pixelmon.enums.EnumPokemon;
+import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -26,7 +26,7 @@ public class WildDefeatListener
         final EntityPixelmon pokemon = (EntityPixelmon) event.wpp.getEntity();
         final EntityPlayer player = event.player;
         final BlockPos location = pokemon.getPosition();
-        final String pokemonName = pokemon.getLocalizedName();
+        final String pokemonName = pokemon.getPokemonName();
 
         if (pokemon.isBossPokemon())
         {
@@ -57,7 +57,7 @@ public class WildDefeatListener
                 }
             }
         }
-        else if (EnumPokemon.legendaries.contains(pokemonName) && pokemon.getIsShiny())
+        else if (EnumSpecies.legendaries.contains(pokemonName) && pokemon.getPokemonData().getIsShiny())
         {
             if (logShinyLegendaryVictories)
             {
@@ -86,7 +86,7 @@ public class WildDefeatListener
                 }
             }
         }
-        else if (EnumPokemon.legendaries.contains(pokemonName))
+        else if (EnumSpecies.legendaries.contains(pokemonName))
         {
             if (logLegendaryVictories)
             {
@@ -115,7 +115,7 @@ public class WildDefeatListener
                 }
             }
         }
-        else if (pokemon.getIsShiny())
+        else if (pokemon.getPokemonData().getIsShiny())
         {
             if (logShinyVictories)
             {
