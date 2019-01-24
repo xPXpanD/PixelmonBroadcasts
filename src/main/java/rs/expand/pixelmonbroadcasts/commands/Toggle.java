@@ -714,7 +714,7 @@ public class Toggle implements CommandExecutor
         EntityPlayer player = (EntityPlayer) src;
 
         // If the NBT "folder" we use does not exist, create it.
-        if (player.getEntityData().getCompoundTag("pbToggles").hasNoTags())
+        if (player.getEntityData().getCompoundTag("pbToggles").isEmpty())
             player.getEntityData().setTag("pbToggles", new NBTTagCompound());
 
         // Does the flag key not exist yet? Do this.

@@ -36,8 +36,8 @@ tasks.withType(JavaCompile)
 // Basic info for what we're compiling against and how we're doing it, I think?
 minecraft
 {
-    version = "1.12.2-14.23.4.2705"
-    mappings = "snapshot_20180515"
+    version = "1.12.2-14.23.5.2768"
+    mappings = "snapshot_20180814"
     useDepAts = true
     makeObfSourceJar = false
 }

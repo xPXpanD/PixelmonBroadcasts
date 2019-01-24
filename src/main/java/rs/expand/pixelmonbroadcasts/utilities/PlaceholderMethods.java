@@ -1,6 +1,7 @@
 package rs.expand.pixelmonbroadcasts.utilities;
 
 // Local imports.
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.StatsType;
 import com.pixelmonmod.pixelmon.enums.EnumGrowth;
@@ -23,19 +24,22 @@ public class PlaceholderMethods
     // Iterates through the online player list, and sends a broadcast to those with the right perms and toggle status.
     // This method also adds a hoverable IV spread if the "hover" option is set for this broadcast.
     public static void iterateAndSendBroadcast(
-            String broadcast, final EntityPixelmon pokemon, final EntityPlayer player, final boolean hasHover,
+            String broadcast, final EntityPixelmon pokemonEntity, final EntityPlayer player, final boolean hasHover,
             final boolean presentTense, final boolean showIVs, final String permission, final String... flags)
     {
         // Do we have a Pokémon entity? Replace Pokémon-specific placeholders.
-        if (pokemon != null)
+        if (pokemonEntity != null)
         {
+            // Create a single Pokemon object that we can repeatedly extract data from.
+            final Pokemon pokemon = pokemonEntity.getPokemonData();
+
             // Insert the Pokémon's name.
             if (broadcast.toLowerCase().contains("%pokemon%"))
             {
                 // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
                 // FIXME: Could do with an option, or a cleaner way to make this all work.
                 final String pokemonName =
-                        pokemon.getPokemonData().isEgg() ? getTranslation("placeholder.pokemon.is_egg") : pokemon.getLocalizedName();
+                        pokemon.isEgg() ? getTranslation("placeholder.pokemon.is_egg") : pokemonEntity.getLocalizedName();
 
                 // Proceed with insertion.
                 broadcast = broadcast.replaceAll("(?i)%pokemon%", pokemonName);
@@ -45,12 +49,12 @@ public class PlaceholderMethods
             if (broadcast.toLowerCase().contains("%ivpercent%"))
             {
                 // Grab the Pokémon's stats.
-                final int HPIV = pokemon.getPokemonData().getStats().ivs.hp;
-                final int attackIV = pokemon.getPokemonData().getStats().ivs.attack;
-                final int defenseIV = pokemon.getPokemonData().getStats().ivs.defence;
-                final int spAttIV = pokemon.getPokemonData().getStats().ivs.specialAttack;
-                final int spDefIV = pokemon.getPokemonData().getStats().ivs.specialDefence;
-                final int speedIV = pokemon.getPokemonData().getStats().ivs.speed;
+                final int HPIV = pokemon.getStats().ivs.hp;
+                final int attackIV = pokemon.getStats().ivs.attack;
+                final int defenseIV = pokemon.getStats().ivs.defence;
+                final int spAttIV = pokemon.getStats().ivs.specialAttack;
+                final int spDefIV = pokemon.getStats().ivs.specialDefence;
+                final int speedIV = pokemon.getStats().ivs.speed;
 
                 // Process them.
                 final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
@@ -60,14 +64,15 @@ public class PlaceholderMethods
                 // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the stats.
                 // FIXME: Could do with an option, or a cleaner way to make this all work.
                 final String pokemonIVs =
-                        pokemon.getPokemonData().isEgg() ? getTranslation("placeholder.ivpercent.is_egg") : percentIVs.toString() + '%';
+                        pokemon.isEgg() ? getTranslation("placeholder.ivpercent.is_egg") : percentIVs.toString() + '%';
 
                 // Apply.
                 broadcast = broadcast.replaceAll("(?i)%ivpercent%", pokemonIVs);
             }
 
             // Replace situation-specific placeholders via an external method. Pass data from the Pokémon.
-            broadcast = replaceNeutralPlaceholders(broadcast, pokemon, pokemon.getEntityWorld(), pokemon.getPosition());
+            broadcast =
+                    replaceNeutralPlaceholders(broadcast, pokemonEntity, pokemonEntity.getEntityWorld(), pokemonEntity.getPosition());
         }
 
         // Do we have a player entity? Replace player-specific placeholders.
@@ -77,7 +82,7 @@ public class PlaceholderMethods
             broadcast = broadcast.replaceAll("(?i)%player%", player.getName());
 
             // Did we not get sent a Pokémon? Try to get some data from the provided player, instead.
-            if (pokemon == null)
+            if (pokemonEntity == null)
             {
                 // Replace situation-specific placeholders via an external method. Pass data from the player entity.
                 broadcast = replaceNeutralPlaceholders(broadcast, null, player.getEntityWorld(), player.getPosition());
@@ -88,8 +93,8 @@ public class PlaceholderMethods
         final Text broadcastAsText;
 
         // If hovers are enabled, make the line hoverable.
-        if (pokemon != null && hasHover)
-            broadcastAsText = getHoverableLine(broadcast, pokemon, presentTense, showIVs);
+        if (pokemonEntity != null && hasHover)
+            broadcastAsText = getHoverableLine(broadcast, pokemonEntity, presentTense, showIVs);
         else
             broadcastAsText = Text.of(broadcast);
 
@@ -109,7 +114,7 @@ public class PlaceholderMethods
     // Replaces placeholders that can have multiple sources (players, Pokémon).
     // Can be used for both players, but it's a bit cheeky -- we'll assume that player 1's data is good enough.
     private static String replaceNeutralPlaceholders(
-            String broadcast, final EntityPixelmon pokemon, final World world, final BlockPos location)
+            String broadcast, final EntityPixelmon pokemonEntity, final World world, final BlockPos location)
     {
         // Insert coordinates.
         broadcast = broadcast.replaceAll("(?i)%xpos(\\d*?)%", String.valueOf(location.getX()));
@@ -120,7 +125,7 @@ public class PlaceholderMethods
         broadcast = broadcast.replaceAll("(?i)%world(\\d*?)%", world.getWorldInfo().getWorldName());
 
         // Insert the "placeholder.shiny" String. Make sure the Pokémon isn't an egg.
-        if (pokemon != null && !pokemon.getPokemonData().isEgg() && pokemon.getPokemonData().getIsShiny())
+        if (pokemonEntity != null && !pokemonEntity.getPokemonData().isEgg() && pokemonEntity.getPokemonData().getIsShiny())
             broadcast = broadcast.replaceAll("(?i)%shiny(\\d*?)%", getTranslation("placeholder.shiny"));
         else
             broadcast = broadcast.replaceAll("(?i)%shiny(\\d*?)%", "");
@@ -170,18 +175,21 @@ public class PlaceholderMethods
     // Takes a config String, and replaces any known placeholders with the proper replacements as many times as needed.
     // Note to self: (//d+) can be used to match a practically infinite amount of numbers, with at least one required.
     public static String replacePlayer2Placeholders(
-            String broadcast, final EntityPixelmon pokemon, final EntityPlayer player)
+            String broadcast, final EntityPixelmon pokemonEntity, final EntityPlayer player)
     {
         // Do we have a Pokémon entity? Replace Pokémon-specific placeholders.
-        if (pokemon != null)
+        if (pokemonEntity != null)
         {
+            // Create a single Pokemon object that we can repeatedly extract data from.
+            final Pokemon pokemon = pokemonEntity.getPokemonData();
+
             // Insert the Pokémon's name.
             if (broadcast.matches(".*%(?i)pokemon2%.*"))
             {
                 // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
                 // FIXME: Could do with an option, or a cleaner way to make this all work.
                 final String pokemonName =
-                        pokemon.getPokemonData().isEgg() ? getTranslation("placeholder.pokemon.is_egg") : pokemon.getLocalizedName();
+                        pokemon.isEgg() ? getTranslation("placeholder.pokemon.is_egg") : pokemonEntity.getLocalizedName();
 
                 // Proceed with insertion.
                 broadcast = broadcast.replaceAll("(?i)%pokemon2%", pokemonName);
@@ -191,12 +199,12 @@ public class PlaceholderMethods
             if (broadcast.matches(".*%(?i)ivpercent2%.*"))
             {
                 // Grab the Pokémon's stats.
-                final int HPIV = pokemon.getPokemonData().getStats().ivs.hp;
-                final int attackIV = pokemon.getPokemonData().getStats().ivs.attack;
-                final int defenseIV = pokemon.getPokemonData().getStats().ivs.defence;
-                final int spAttIV = pokemon.getPokemonData().getStats().ivs.specialAttack;
-                final int spDefIV = pokemon.getPokemonData().getStats().ivs.specialDefence;
-                final int speedIV = pokemon.getPokemonData().getStats().ivs.speed;
+                final int HPIV = pokemon.getStats().ivs.hp;
+                final int attackIV = pokemon.getStats().ivs.attack;
+                final int defenseIV = pokemon.getStats().ivs.defence;
+                final int spAttIV = pokemon.getStats().ivs.specialAttack;
+                final int spDefIV = pokemon.getStats().ivs.specialDefence;
+                final int speedIV = pokemon.getStats().ivs.speed;
 
                 // Process them.
                 final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
@@ -206,14 +214,15 @@ public class PlaceholderMethods
                 // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the stats.
                 // FIXME: Could do with an option, or a cleaner way to make this all work.
                 final String pokemonIVs =
-                        pokemon.getPokemonData().isEgg() ? getTranslation("placeholder.ivpercent.is_egg") : percentIVs.toString() + '%';
+                        pokemon.isEgg() ? getTranslation("placeholder.ivpercent.is_egg") : percentIVs.toString() + '%';
 
                 // Apply.
                 broadcast = broadcast.replaceAll("(?i)%ivpercent2%", pokemonIVs);
             }
 
             // Replace situation-specific placeholders via an external method. Pass data from the Pokémon.
-            broadcast = replaceNeutralPlaceholders(broadcast, pokemon, pokemon.getEntityWorld(), pokemon.getPosition());
+            broadcast =
+                    replaceNeutralPlaceholders(broadcast, pokemonEntity, pokemonEntity.getEntityWorld(), pokemonEntity.getPosition());
         }
 
         // Do we have a player entity? Replace player-specific placeholders.
@@ -223,7 +232,7 @@ public class PlaceholderMethods
             broadcast = broadcast.replaceAll("(?i)%player2%", player.getName());
 
             // Did we not get sent a Pokémon? Try to get some data from the provided player, instead.
-            if (pokemon == null)
+            if (pokemonEntity == null)
             {
                 // Replace situation-specific placeholders via an external method. Pass data from the player entity.
                 broadcast = replaceNeutralPlaceholders(broadcast, null, player.getEntityWorld(), player.getPosition());
@@ -237,21 +246,24 @@ public class PlaceholderMethods
     // Sets up a broadcast from the given info, with IV hovers thrown in in place of any placeholders.
     // FIXME: It may be a good idea to toggle off showIVs if we're showing off an egg. Need to think about this more.
     private static Text getHoverableLine(
-            final String broadcast, final EntityPixelmon pokemon, final boolean presentTense, final boolean showIVs)
+            final String broadcast, final EntityPixelmon pokemonEntity, final boolean presentTense, final boolean showIVs)
     {
+        // Create a single Pokemon object that we can repeatedly extract data from.
+        final Pokemon pokemon = pokemonEntity.getPokemonData();
+
         // We have at least one Pokémon, so start setup for this first one.
-        final int HPIV = pokemon.getPokemonData().getStats().ivs.hp;
-        final int attackIV = pokemon.getPokemonData().getStats().ivs.attack;
-        final int defenseIV = pokemon.getPokemonData().getStats().ivs.defence;
-        final int spAttIV = pokemon.getPokemonData().getStats().ivs.specialAttack;
-        final int spDefIV = pokemon.getPokemonData().getStats().ivs.specialDefence;
-        final int speedIV = pokemon.getPokemonData().getStats().ivs.speed;
+        final int HPIV = pokemon.getStats().ivs.hp;
+        final int attackIV = pokemon.getStats().ivs.attack;
+        final int defenseIV = pokemon.getStats().ivs.defence;
+        final int spAttIV = pokemon.getStats().ivs.specialAttack;
+        final int spDefIV = pokemon.getStats().ivs.specialDefence;
+        final int speedIV = pokemon.getStats().ivs.speed;
         final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
         final BigDecimal percentIVs = totalIVs.multiply(
                 new BigDecimal("100")).divide(new BigDecimal("186"), 2, BigDecimal.ROUND_HALF_UP);
 
         // Grab a growth string.
-        final EnumGrowth growth = pokemon.getPokemonData().getGrowth();
+        final EnumGrowth growth = pokemon.getGrowth();
         final String sizeString = getTensedTranslation(presentTense, "hover.size." + growth.name().toLowerCase());
 
         // Get an IV composite StringBuilder.
@@ -311,7 +323,7 @@ public class PlaceholderMethods
 
         // Grab a gender string.
         final String genderString;
-        switch (pokemon.getPokemonData().getGender())
+        switch (pokemon.getGender())
         {
             case Male:
                 genderString = getTensedTranslation(presentTense, "hover.gender.male"); break;
@@ -322,12 +334,10 @@ public class PlaceholderMethods
         }
 
         // Get a nature and see which stats we get from it.
-        final EnumNature nature = pokemon.getPokemonData().getNature();
+        final EnumNature nature = pokemon.getNature();
         final String natureString = getTranslation("hover.nature." + nature.name().toLowerCase());
         final String boostedStat = getTranslatedNatureStat(EnumNature.getNatureFromIndex(nature.index).increasedStat);
         final String cutStat = getTranslatedNatureStat(EnumNature.getNatureFromIndex(nature.index).decreasedStat);
-
-        // Actually create the nature String.
         final String natureCompositeString;
 
         // Grab the value of the increased stat (could use either). If it's "None", we have a neutral nature type.

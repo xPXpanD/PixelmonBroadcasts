@@ -14,7 +14,6 @@ import com.pixelmonmod.pixelmon.enums.battle.EnumBattleEndCause;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
 import java.util.*;
 
 // Local imports.

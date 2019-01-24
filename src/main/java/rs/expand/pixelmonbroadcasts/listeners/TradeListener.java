@@ -3,6 +3,7 @@ package rs.expand.pixelmonbroadcasts.listeners;
 
 // Remote imports.
 import com.pixelmonmod.pixelmon.api.events.PixelmonTradeEvent;
+import com.pixelmonmod.pixelmon.config.PixelmonEntityList;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -26,11 +27,11 @@ public class TradeListener
         final BlockPos player1pos = event.player1.getPosition();
         final BlockPos player2pos = event.player2.getPosition();
 
-        // Create entities to pass on from both players' Pokémon. A bit awkward, but it should work.
+        // Create entities to pass on from both players' Pokémon. Messy but functional.
         final EntityPixelmon pokemon1 =
-                event.pokemon1.getOrSpawnPixelmon(player1.getEntityWorld(), player1pos.getX(), player1pos.getY(), player1pos.getZ());
+                (EntityPixelmon) PixelmonEntityList.createEntityFromNBT(event.pokemon1.getPersistentData(), player1.getEntityWorld());
         final EntityPixelmon pokemon2 =
-                event.pokemon2.getOrSpawnPixelmon(player2.getEntityWorld(), player2pos.getX(), player2pos.getY(), player2pos.getZ());
+                (EntityPixelmon) PixelmonEntityList.createEntityFromNBT(event.pokemon2.getPersistentData(), player2.getEntityWorld());
 
         if (logTrades)
         {
