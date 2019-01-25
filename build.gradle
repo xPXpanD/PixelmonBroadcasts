@@ -39,7 +39,7 @@ minecraft
     version = "1.12.2-14.23.5.2768"
     mappings = "snapshot_20180814"
     useDepAts = true
-    makeObfSourceJar = false
+    //makeObfSourceJar = false
 }
 
 // Taken from the internet. vvv
