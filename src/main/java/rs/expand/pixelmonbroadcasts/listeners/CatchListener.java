@@ -21,19 +21,24 @@ public class CatchListener
     {
         // Create shorthand variables for convenience.
         final EntityPixelmon pokemon = event.getPokemon();
-        final EntityPlayer player = event.player;
-        final String baseName = pokemon.getPokemonName();
+        final String baseName = pokemon.getSpecies().getPokemonName();
+        final String localizedName = pokemon.getSpecies().getLocalizedName();
         final BlockPos location = event.pokeball.getPosition();
+        final EntityPlayer player = event.player;
 
         if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().getIsShiny())
         {
             if (logShinyLegendaryCatches)
             {
+                // If we're in a localized setup, log both names.
+                final String nameString =
+                        baseName.equals(localizedName) ? baseName : baseName + " §a(§2" + localizedName + "§a)";
+
                 // Print a catch message to console, with the above shiny String mixed in.
                 printBasicMessage
                 (
                         "§5PBR §f// §aPlayer §2" + player.getName() +
-                        "§a caught a shiny legendary §2" + baseName +
+                        "§a caught a shiny legendary §2" + nameString +
                         "§a in world \"§2" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§a\", at X:§2" + location.getX() +
                         "§a Y:§2" + location.getY() +
@@ -62,11 +67,15 @@ public class CatchListener
         {
             if (logLegendaryCatches)
             {
+                // If we're in a localized setup, log both names.
+                final String nameString =
+                        baseName.equals(localizedName) ? baseName : baseName + " §a(§2" + localizedName + "§a)";
+
                 // Print a catch message to console, with the above shiny String mixed in.
                 printBasicMessage
                 (
                         "§5PBR §f// §aPlayer §2" + player.getName() +
-                        "§a caught a legendary §2" + baseName +
+                        "§a caught a legendary §2" + nameString +
                         "§a in world \"§2" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§a\", at X:§2" + location.getX() +
                         "§a Y:§2" + location.getY() +
@@ -95,11 +104,15 @@ public class CatchListener
         {
             if (logShinyCatches)
             {
+                // If we're in a localized setup, log both names.
+                final String nameString =
+                        baseName.equals(localizedName) ? baseName : baseName + " §b(§3" + localizedName + "§b)";
+
                 // Print a catch message to console.
                 printBasicMessage
                 (
                         "§5PBR §f// §bPlayer §3" + player.getName() +
-                        "§b caught a shiny §3" + baseName +
+                        "§b caught a shiny §3" + nameString +
                         "§b in world \"§3" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§b\", at X:§3" + location.getX() +
                         "§b Y:§3" + location.getY() +
@@ -128,11 +141,15 @@ public class CatchListener
         {
             if (logNormalCatches)
             {
+                // If we're in a localized setup, log both names.
+                final String nameString =
+                        baseName.equals(localizedName) ? baseName : baseName + " §f(§7" + localizedName + "§f)";
+
                 // Print a catch message to console.
                 printBasicMessage
                 (
                         "§5PBR §f// §fPlayer §7" + player.getName() +
-                        "§f caught a normal §7" + baseName +
+                        "§f caught a normal §7" + nameString +
                         "§f in world \"§7" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§f\", at X:§7" + location.getX() +
                         "§f Y:§7" + location.getY() +

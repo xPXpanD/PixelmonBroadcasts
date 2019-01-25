@@ -1,18 +1,18 @@
 0.3 for 7.0
 Released January 25th, 2019.
 
-    Fixes:
-    * Fixed legendary-related messages not working if their names weren't English. Sorry for the delay!
-    * Updated Forge version to build against, from 2705 to 2768. Might fix some issues with flaky toggles.
-
     Broadcast file changes:
-    * Added a note on formatting codes to the "broadcasts.conf" file, too.
     * Corrected a small formatting issue on shiny eggs being hatched. (last part of line wasn't bold)
     * Fixed the trade event broadcast very rarely showing incorrect shiny status for one of the Pokémon.
     * Reworded many broadcasts to preserve consistency even when precursor events aren't announced.
 
+    Fixes:
+    * Fixed flee events occasionally reporting bad biomes/coordinates. How did this even work before?
+    * Hopefully fixed legendary-related messages not working with non-English names. Sorry for the delay!
+    * Updated Forge version to build against, from 2705 to 2768. Might fix some issues with flaky toggles.
+
     Tweaks:
-    * Made it so localized setups end up logging both the localized and English Pokémon names.
+    * Also hopefully made it so localized setups end up logging both the localized and English Pokémon names.
 
 0.2.2 for 6.3.4
 Released August 18th, 2018.

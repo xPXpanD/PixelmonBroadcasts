@@ -714,6 +714,7 @@ public class Toggle implements CommandExecutor
         EntityPlayer player = (EntityPlayer) src;
 
         // If the NBT "folder" we use does not exist, create it.
+        // Uses new Forge stuff. IntelliJ reports a "cannot resolve"a error, but it compiles fine? Dunno.
         if (player.getEntityData().getCompoundTag("pbToggles").isEmpty())
             player.getEntityData().setTag("pbToggles", new NBTTagCompound());
 

@@ -39,7 +39,6 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 // TODO: See if some of the BattleEnd stuff can be moved to separate and more specific events.
 // TODO: Maybe make events clickable? Staff node, teleport people to the source. Dunno.
 // TODO: Add a logger for individual player Pokémon being knocked out, for the Nuzlocke crowd.
-// TODO: Add a vanish check?
 // TODO: Listen to commands being used, fire the right event if we have a successful hatch/spawn/etc..
 // TODO: Add ability support to reveal-enabled hovers.
 // TODO: Cancel challenge messages for event legendaries or make a more comprehensive summon check.

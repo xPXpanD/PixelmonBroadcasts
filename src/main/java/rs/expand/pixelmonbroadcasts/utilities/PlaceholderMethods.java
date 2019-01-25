@@ -24,10 +24,13 @@ public class PlaceholderMethods
     // Iterates through the online player list, and sends a broadcast to those with the right perms and toggle status.
     // This method also adds a hoverable IV spread if the "hover" option is set for the received broadcast.
     public static void iterateAndSendBroadcast(
-            String broadcast, final Object pokemonObject, final Object pokemon2Object, final EntityPlayer player,
-            final EntityPlayer player2, final boolean hasHover, final boolean presentTense, final boolean showIVs,
+            String broadcast, final Object pokemonObject, final Object pokemon2Object, final EntityPlayer playerEntity,
+            final EntityPlayer player2Entity, final boolean hasHover, final boolean presentTense, final boolean showIVs,
             final String permission, final String flag)
     {
+        // Set up some variables that we want to be able to access later.
+        BlockPos position;
+
         // Do we have a Pokémon object? Replace Pokémon-specific placeholders.
         if (pokemonObject != null)
         {
@@ -41,18 +44,28 @@ public class PlaceholderMethods
                 // Extract a Pokemon object for later use.
                 pokemon = pokemonEntity.getPokemonData();
 
-                // Get the Pokémon's biome, nicely formatted (spaces!) and all. Replace placeholder.
-                final String biome = getFormattedBiome(pokemonEntity.getEntityWorld(), pokemonEntity.getPosition());
-                broadcast = broadcast.replaceAll("(?i)%biome%", biome);
+                // Get a position, and do a sanity check on it to work around possible entity removal issues.
+                // (if both are zero, something might have broken -- we'll try getting the info from the player instead)
+                position = pokemonEntity.getPosition();
+                if (!(position.getX() == 0 && position.getZ() == 0))
+                {
+                    // Get the Pokémon's biome, nicely formatted (spaces!) and all. Replace placeholder.
+                    final String biome = getFormattedBiome(pokemonEntity.getEntityWorld(), position);
+                    broadcast = broadcast.replaceAll("(?i)%biome%", biome);
 
-                // Insert a world name.
-                broadcast = broadcast.replaceAll("(?i)%world%", pokemonEntity.getEntityWorld().getWorldInfo().getWorldName());
+                    // Insert a world name.
+                    broadcast = broadcast.replaceAll("(?i)%world%", pokemonEntity.getEntityWorld().getWorldInfo().getWorldName());
 
-                // Insert coordinates.
-                BlockPos position = pokemonEntity.getPosition();
-                broadcast = broadcast.replaceAll("(?i)%xpos%", String.valueOf(position.getX()));
-                broadcast = broadcast.replaceAll("(?i)%ypos%", String.valueOf(position.getY()));
-                broadcast = broadcast.replaceAll("(?i)%zpos%", String.valueOf(position.getZ()));
+                    // Insert coordinates.
+                    broadcast = broadcast.replaceAll("(?i)%xpos%", String.valueOf(position.getX()));
+                    broadcast = broadcast.replaceAll("(?i)%ypos%", String.valueOf(position.getY()));
+                    broadcast = broadcast.replaceAll("(?i)%zpos%", String.valueOf(position.getZ()));
+                }
+                else
+                {
+                    printBasicError("§6The event's Pokémon entity was removed from the world early!");
+                    printBasicError("§6We'll try to get missing info from the player. World info may look weird.");
+                }
             }
             else
                 pokemon = (Pokemon) pokemonObject;
@@ -104,7 +117,7 @@ public class PlaceholderMethods
             // Rinse and repeat the above for a second Pokémon, if present.
             if (pokemon2Object != null)
             {
-                // We've got a second Pokémon, so make that accessible too.
+                // We've got a second Pokémon! See what type this one is.
                 final Pokemon pokemon2;
                 if (pokemon2Object instanceof EntityPixelmon)
                 {
@@ -114,18 +127,23 @@ public class PlaceholderMethods
                     // Extract a Pokemon object for later use.
                     pokemon2 = pokemon2Entity.getPokemonData();
 
-                    // Get the Pokémon's biome, nicely formatted (spaces!) and all. Replace placeholder.
-                    final String biome = getFormattedBiome(pokemon2Entity.getEntityWorld(), pokemon2Entity.getPosition());
-                    broadcast = broadcast.replaceAll("(?i)%biome2%", biome);
+                    // Get a position, and do a sanity check on it to work around possible entity removal issues.
+                    // (if both are zero, something might have broken -- we'll try getting the info from the player instead)
+                    position = pokemon2Entity.getPosition();
+                    if (!(position.getX() == 0 && position.getZ() == 0))
+                    {
+                        // Get the Pokémon's biome, nicely formatted (spaces!) and all. Replace placeholder.
+                        final String biome2 = getFormattedBiome(pokemon2Entity.getEntityWorld(), position);
+                        broadcast = broadcast.replaceAll("(?i)%biome%", biome2);
 
-                    // Insert a world name.
-                    broadcast = broadcast.replaceAll("(?i)%world2%", pokemon2Entity.getEntityWorld().getWorldInfo().getWorldName());
+                        // Insert a world name.
+                        broadcast = broadcast.replaceAll("(?i)%world%", pokemon2Entity.getEntityWorld().getWorldInfo().getWorldName());
 
-                    // Insert coordinates.
-                    BlockPos position = pokemon2Entity.getPosition();
-                    broadcast = broadcast.replaceAll("(?i)%xpos2%", String.valueOf(position.getX()));
-                    broadcast = broadcast.replaceAll("(?i)%ypos2%", String.valueOf(position.getY()));
-                    broadcast = broadcast.replaceAll("(?i)%zpos2%", String.valueOf(position.getZ()));
+                        // Insert coordinates.
+                        broadcast = broadcast.replaceAll("(?i)%xpos%", String.valueOf(position.getX()));
+                        broadcast = broadcast.replaceAll("(?i)%ypos%", String.valueOf(position.getY()));
+                        broadcast = broadcast.replaceAll("(?i)%zpos%", String.valueOf(position.getZ()));
+                    }
                 }
                 else
                     pokemon2 = (Pokemon) pokemon2Object;
@@ -176,34 +194,48 @@ public class PlaceholderMethods
             }
         }
 
-        // Do we have a player entity? Replace player-specific placeholders.
-        if (player != null)
+        // Do we have a player entity? Replace player-specific placeholders as well as some that we might not have yet.
+        if (playerEntity != null)
         {
             // Insert the player's name.
-            broadcast = broadcast.replaceAll("(?i)%player%", player.getName());
+            broadcast = broadcast.replaceAll("(?i)%player%", playerEntity.getName());
 
-            // Did we not get sent a Pokémon? Try to get some data from the provided player, instead.
-            if (pokemonObject == null)
-            {
-                // Replace situation-specific placeholders via an external method. Pass data from the player entity.
-                //broadcast = replaceNeutralPlaceholders(broadcast, null, player.getEntityWorld(), player.getPosition());
-                // TODO
-            }
+            // Get the player's position. We prefer using the Pokémon's position, but if that fails this should catch it.
+            position = playerEntity.getPosition();
+
+            // Get the player's biome, nicely formatted (spaces!) and all. Replace placeholder if it still exists.
+            final String biome = getFormattedBiome(playerEntity.getEntityWorld(), position);
+            broadcast = broadcast.replaceAll("(?i)%biome%", biome);
+
+            // Insert a world name if necessary, still.
+            broadcast = broadcast.replaceAll("(?i)%world%", playerEntity.getEntityWorld().getWorldInfo().getWorldName());
+
+            // Insert coordinates if necessary, still.
+            broadcast = broadcast.replaceAll("(?i)%xpos%", String.valueOf(position.getX()));
+            broadcast = broadcast.replaceAll("(?i)%ypos%", String.valueOf(position.getY()));
+            broadcast = broadcast.replaceAll("(?i)%zpos%", String.valueOf(position.getZ()));
         }
 
-        // Do we have a player entity? Replace player-specific placeholders.
-        if (player2 != null)
+        // Do we have a second player? Replace player-specific placeholders as well as some that we might not have yet.
+        if (player2Entity != null)
         {
             // Insert the player's name.
-            broadcast = broadcast.replaceAll("(?i)%player2%", player2.getName());
+            broadcast = broadcast.replaceAll("(?i)%player2%", player2Entity.getName());
 
-            // Did we not get sent a Pokémon? Try to get some data from the provided player, instead.
-            if (pokemonObject == null)
-            {
-                // Replace situation-specific placeholders via an external method. Pass data from the player entity.
-                //broadcast = replaceNeutralPlaceholders(broadcast, null, player.getEntityWorld(), player.getPosition());
-                // TODO
-            }
+            // Get the player's position. We prefer using the Pokémon's position, but if that fails this should catch it.
+            position = player2Entity.getPosition();
+
+            // Get the player's biome, nicely formatted (spaces!) and all. Replace placeholder if it still exists.
+            final String biome2 = getFormattedBiome(player2Entity.getEntityWorld(), position);
+            broadcast = broadcast.replaceAll("(?i)%biome2%", biome2);
+
+            // Insert a world name if necessary, still.
+            broadcast = broadcast.replaceAll("(?i)%world2%", player2Entity.getEntityWorld().getWorldInfo().getWorldName());
+
+            // Insert coordinates if necessary, still.
+            broadcast = broadcast.replaceAll("(?i)%xpos2%", String.valueOf(position.getX()));
+            broadcast = broadcast.replaceAll("(?i)%ypos2%", String.valueOf(position.getY()));
+            broadcast = broadcast.replaceAll("(?i)%zpos2%", String.valueOf(position.getZ()));
         }
 
         // Make a Text out of our broadcast, which we can either send directly or add a hover to, depending on options.
@@ -391,7 +423,7 @@ public class PlaceholderMethods
         // Populate a List. Every entry will be its own line. May be a bit hacky, but it's easy to work with.
         final List<String> hovers = new ArrayList<>();
 
-        // FIXME: Not shown on spawn/challenge. Shows bogus values on these events, Pixelmon bug. Enable when fixed.
+        // NOTE: Not shown on spawn/challenge. Shows bogus values on these events, Pixelmon issue, retest at some point.
         if (showIVs)
         {
             hovers.add(getTranslation("hover.current_ivs"));

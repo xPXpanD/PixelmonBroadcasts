@@ -7,7 +7,7 @@ http://pixelmonmod.com/wiki/index.php?title=Pixelmon_Broadcasts
 
 Latest sources will be here for the time being, most likely in a broken state. Check releases for runnable code.
 
-If you have any suggestions, shoot me a message on the Pixelmnon Discord. You can find an active invite below:
+If you have any suggestions, shoot me a message on the Pixelmon Discord. You can find an active invite below:
 
 https://pixelmonmod.com/
 

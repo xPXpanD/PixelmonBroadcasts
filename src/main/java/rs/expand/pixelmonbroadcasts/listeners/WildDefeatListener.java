@@ -24,19 +24,24 @@ public class WildDefeatListener
         // Create shorthand variables for convenience.
         final String broadcast;
         final EntityPixelmon pokemon = (EntityPixelmon) event.wpp.getEntity();
+        final String baseName = pokemon.getSpecies().getPokemonName();
+        final String localizedName = pokemon.getSpecies().getLocalizedName();
         final EntityPlayer player = event.player;
         final BlockPos location = pokemon.getPosition();
-        final String pokemonName = pokemon.getPokemonName();
 
         if (pokemon.isBossPokemon())
         {
             if (logBossVictories)
             {
+                // If we're in a localized setup, log both names.
+                final String nameString =
+                        baseName.equals(localizedName) ? baseName : baseName + " §e(§6" + localizedName + "§e)";
+
                 // Print a victory message to console.
                 printBasicMessage
                 (
                         "§5PBR §f// §ePlayer §6" + player.getName() +
-                        "§e defeated a boss §6" + pokemonName +
+                        "§e defeated a boss §6" + nameString +
                         "§e boss in world \"§6" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§e\", at X:§6" + location.getX() +
                         "§e Y:§6" + location.getY() +
@@ -58,15 +63,19 @@ public class WildDefeatListener
                 }
             }
         }
-        else if (EnumSpecies.legendaries.contains(pokemonName) && pokemon.getPokemonData().getIsShiny())
+        else if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().getIsShiny())
         {
             if (logShinyLegendaryVictories)
             {
+                // If we're in a localized setup, log both names.
+                final String nameString =
+                        baseName.equals(localizedName) ? baseName : baseName + " §c(§4" + localizedName + "§c)";
+
                 // Print a victory message to console, with the above shiny String mixed in.
                 printBasicMessage
                 (
                         "§5PBR §f// §cPlayer §4" + player.getName() +
-                        "§c defeated a shiny legendary §4" + pokemonName +
+                        "§c defeated a shiny legendary §4" + nameString +
                         "§c in world \"§4" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§c\", at X:§4" + location.getX() +
                         "§c Y:§4" + location.getY() +
@@ -88,15 +97,19 @@ public class WildDefeatListener
                 }
             }
         }
-        else if (EnumSpecies.legendaries.contains(pokemonName))
+        else if (EnumSpecies.legendaries.contains(baseName))
         {
             if (logLegendaryVictories)
             {
+                // If we're in a localized setup, log both names.
+                final String nameString =
+                        baseName.equals(localizedName) ? baseName : baseName + " §c(§4" + localizedName + "§c)";
+
                 // Print a victory message to console, with the above shiny String mixed in.
                 printBasicMessage
                 (
                         "§5PBR §f// §cPlayer §4" + player.getName() +
-                        "§c defeated a legendary §4" + pokemonName +
+                        "§c defeated a legendary §4" + nameString +
                         "§c in world \"§4" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§c\", at X:§4" + location.getX() +
                         "§c Y:§4" + location.getY() +
@@ -122,11 +135,15 @@ public class WildDefeatListener
         {
             if (logShinyVictories)
             {
+                // If we're in a localized setup, log both names.
+                final String nameString =
+                        baseName.equals(localizedName) ? baseName : baseName + " §c(§4" + localizedName + "§c)";
+
                 // Print a victory message to console.
                 printBasicMessage
                 (
                         "§5PBR §f// §cPlayer §4" + player.getName() +
-                        "§c defeated a shiny §4" + pokemonName +
+                        "§c defeated a shiny §4" + nameString +
                         "§c in world \"§4" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§c\", at X:§4" + location.getX() +
                         "§c Y:§4" + location.getY() +
