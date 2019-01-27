@@ -92,12 +92,12 @@ public class PlaceholderMethods
             else
             {
                 // Grab the Pokémon's stats.
-                final int HPIV = pokemon.getStats().ivs.hp;
-                final int attackIV = pokemon.getStats().ivs.attack;
-                final int defenseIV = pokemon.getStats().ivs.defence;
-                final int spAttIV = pokemon.getStats().ivs.specialAttack;
-                final int spDefIV = pokemon.getStats().ivs.specialDefence;
-                final int speedIV = pokemon.getStats().ivs.speed;
+                final int HPIV = pokemon.getStat(StatsType.HP);
+                final int attackIV = pokemon.getStat(StatsType.Attack);
+                final int defenseIV = pokemon.getStat(StatsType.Defence);
+                final int spAttIV = pokemon.getStat(StatsType.SpecialAttack);
+                final int spDefIV = pokemon.getStat(StatsType.SpecialDefence);
+                final int speedIV = pokemon.getStat(StatsType.Speed);
 
                 // Process them.
                 final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
@@ -109,7 +109,7 @@ public class PlaceholderMethods
             }
 
             // Insert the "placeholder.shiny" String, if applicable. Gotta be careful with eggs again.
-            if (!pokemon.isEgg() && pokemon.getIsShiny())
+            if (!pokemon.isEgg() && pokemon.isShiny())
                 broadcast = broadcast.replaceAll("(?i)%shiny%", getTranslation("placeholder.shiny"));
             else
                 broadcast = broadcast.replaceAll("(?i)%shiny%", "");
@@ -170,12 +170,12 @@ public class PlaceholderMethods
                 else
                 {
                     // Grab the Pokémon's stats.
-                    final int HPIV = pokemon2.getStats().ivs.hp;
-                    final int attackIV = pokemon2.getStats().ivs.attack;
-                    final int defenseIV = pokemon2.getStats().ivs.defence;
-                    final int spAttIV = pokemon2.getStats().ivs.specialAttack;
-                    final int spDefIV = pokemon2.getStats().ivs.specialDefence;
-                    final int speedIV = pokemon2.getStats().ivs.speed;
+                    final int HPIV = pokemon.getStat(StatsType.HP);
+                    final int attackIV = pokemon.getStat(StatsType.Attack);
+                    final int defenseIV = pokemon.getStat(StatsType.Defence);
+                    final int spAttIV = pokemon.getStat(StatsType.SpecialAttack);
+                    final int spDefIV = pokemon.getStat(StatsType.SpecialDefence);
+                    final int speedIV = pokemon.getStat(StatsType.Speed);
 
                     // Process them.
                     final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
@@ -187,7 +187,7 @@ public class PlaceholderMethods
                 }
 
                 // Insert the "placeholder.shiny" String, if applicable. Gotta be careful with eggs again.
-                if (!pokemon2.isEgg() && pokemon2.getIsShiny())
+                if (!pokemon2.isEgg() && pokemon2.isShiny())
                     broadcast = broadcast.replaceAll("(?i)%shiny2%", getTranslation("placeholder.shiny"));
                 else
                     broadcast = broadcast.replaceAll("(?i)%shiny2%", "");

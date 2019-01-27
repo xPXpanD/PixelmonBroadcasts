@@ -224,7 +224,7 @@ public class BattleStartListener
                             }
                         }
                     }
-                    else if (EnumSpecies.legendaries.contains(baseName) && pokemonEntity.getPokemonData().getIsShiny())
+                    else if (EnumSpecies.legendaries.contains(baseName) && pokemonEntity.getPokemonData().isShiny())
                     {
                         if (logShinyLegendaryChallenges)
                         {
@@ -292,7 +292,7 @@ public class BattleStartListener
                             }
                         }
                     }
-                    else if (pokemonEntity.getPokemonData().getIsShiny())
+                    else if (pokemonEntity.getPokemonData().isShiny())
                     {
                         if (logShinyChallenges)
                         {

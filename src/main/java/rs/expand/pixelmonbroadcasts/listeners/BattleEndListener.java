@@ -428,7 +428,7 @@ public class BattleEndListener
                             }
                         }
                     }
-                    else if (EnumSpecies.legendaries.contains(baseName) && pokemonEntity.getPokemonData().getIsShiny())
+                    else if (EnumSpecies.legendaries.contains(baseName) && pokemonEntity.getPokemonData().isShiny())
                     {
                         if (logShinyLegendaryBlackouts)
                         {
@@ -488,7 +488,7 @@ public class BattleEndListener
                             }
                         }
                     }
-                    else if (pokemonEntity.getPokemonData().getIsShiny())
+                    else if (pokemonEntity.getPokemonData().isShiny())
                     {
                         if (logShinyBlackouts)
                         {
@@ -593,7 +593,7 @@ public class BattleEndListener
                             }
                         }
                     }
-                    else if (EnumSpecies.legendaries.contains(baseName) && pokemonEntity.getPokemonData().getIsShiny())
+                    else if (EnumSpecies.legendaries.contains(baseName) && pokemonEntity.getPokemonData().isShiny())
                     {
                         if (logShinyLegendaryForfeits)
                         {
@@ -653,7 +653,7 @@ public class BattleEndListener
                             }
                         }
                     }
-                    else if (pokemonEntity.getPokemonData().getIsShiny())
+                    else if (pokemonEntity.getPokemonData().isShiny())
                     {
                         if (logShinyForfeits)
                         {

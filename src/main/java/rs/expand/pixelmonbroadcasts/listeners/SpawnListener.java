@@ -74,7 +74,7 @@ public class SpawnListener
                         }
                     }
                 }
-                else if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().getIsShiny())
+                else if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().isShiny())
                 {
                     if (logShinyLegendarySpawns)
                     {
@@ -146,7 +146,7 @@ public class SpawnListener
                         }
                     }
                 }
-                else if (pokemon.getPokemonData().getIsShiny())
+                else if (pokemon.getPokemonData().isShiny())
                 {
                     if (logShinySpawns)
                     {

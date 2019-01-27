@@ -118,7 +118,7 @@ public class PrintingMethods
     }
 
     // Inserts the correct tense into lang keys that might have multiple tenses. Returns the translation.
-    public static String getTensedTranslation(final boolean presentTense, final String key, final Object... params)
+    static String getTensedTranslation(final boolean presentTense, final String key, final Object... params)
     {
         // Set up a String to translate and then return.
         final String tensedKey;
@@ -134,7 +134,7 @@ public class PrintingMethods
     }
 
     // Get translated names for a given nature's positive and negative stats from the lang.
-    public static String getTranslatedNatureStat(StatsType stat)
+    static String getTranslatedNatureStat(StatsType stat)
     {
         switch(stat)
         {

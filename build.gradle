@@ -55,7 +55,7 @@ repositories {
 // Remember to add the Pixelmon .jar to the project! Couldn't get it to sort that automatically.
 dependencies
 {
-    compile 'org.spongepowered:spongeapi:7.0.0'
+    compile 'org.spongepowered:spongeapi:7.1.0'
 }
 
 // Sets up the access transformer needed to access biome names. I think.

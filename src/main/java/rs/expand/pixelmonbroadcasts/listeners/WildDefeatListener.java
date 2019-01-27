@@ -63,7 +63,7 @@ public class WildDefeatListener
                 }
             }
         }
-        else if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().getIsShiny())
+        else if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().isShiny())
         {
             if (logShinyLegendaryVictories)
             {
@@ -131,7 +131,7 @@ public class WildDefeatListener
                 }
             }
         }
-        else if (pokemon.getPokemonData().getIsShiny())
+        else if (pokemon.getPokemonData().isShiny())
         {
             if (logShinyVictories)
             {

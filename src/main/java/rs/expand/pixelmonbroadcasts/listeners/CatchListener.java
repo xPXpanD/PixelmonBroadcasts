@@ -26,7 +26,7 @@ public class CatchListener
         final BlockPos location = event.pokeball.getPosition();
         final EntityPlayer player = event.player;
 
-        if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().getIsShiny())
+        if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().isShiny())
         {
             if (logShinyLegendaryCatches)
             {
@@ -100,7 +100,7 @@ public class CatchListener
                 }
             }
         }
-        else if (pokemon.getPokemonData().getIsShiny())
+        else if (pokemon.getPokemonData().isShiny())
         {
             if (logShinyCatches)
             {

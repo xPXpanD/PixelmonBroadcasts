@@ -28,8 +28,8 @@ public class TradeListener
         if (logTrades)
         {
             // Set up some strings for showing shinyness.
-            final String pokemon1ShinynessString = pokemon1.getIsShiny() ? "shiny " : "normal ";
-            final String pokemon2ShinynessString = pokemon2.getIsShiny() ? "shiny " : "normal ";
+            final String pokemon1ShinynessString = pokemon1.isShiny() ? "shiny " : "normal ";
+            final String pokemon2ShinynessString = pokemon2.isShiny() ? "shiny " : "normal ";
 
             // Set up variables for cleanly checking whether we're in a localized setup.
             final String baseName1 = pokemon1.getSpecies().getPokemonName();

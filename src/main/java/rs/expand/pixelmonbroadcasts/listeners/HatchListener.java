@@ -28,7 +28,7 @@ public class HatchListener
         final BlockPos location = player.getPosition();
         final World world = player.getEntityWorld();
 
-        if (pokemon.getIsShiny())
+        if (pokemon.isShiny())
         {
             if (logShinyHatches)
             {
