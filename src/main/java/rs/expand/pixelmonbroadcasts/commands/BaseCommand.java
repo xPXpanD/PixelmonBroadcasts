@@ -28,10 +28,14 @@ public class BaseCommand implements CommandExecutor
             sendTranslation(src, "universal.header");
 
             // Show an error if the alias isn't set right. Continue after.
+            String checkedAlias = commandAlias;
             if (commandAlias == null)
             {
                 printBasicError("Could not read config node \"§4commandAlias§c\" while executing hub command.");
                 printBasicError("We'll continue with the command, but aliases will break. Check your config.");
+
+                // Insert a safe default.
+                checkedAlias = "pixelmonbroadcasts";
             }
 
             // Set up a flag to see where we're running from. Gets set to true if we weren't called by a player.
@@ -45,7 +49,7 @@ public class BaseCommand implements CommandExecutor
             {
                 hasPermissions = true;
 
-                final String finalMessage = getTranslation("hub.toggle_syntax", commandAlias);
+                final String finalMessage = getTranslation("hub.toggle_syntax", checkedAlias);
 
                 LiteralText clickableLine = Text.builder(finalMessage)
                         .onClick(TextActions.runCommand("/pixelmonbroadcasts toggle"))
@@ -66,7 +70,7 @@ public class BaseCommand implements CommandExecutor
             {
                 hasPermissions = true;
 
-                final String finalMessage = getTranslation("hub.reload_syntax", commandAlias, "test1", "test2");
+                final String finalMessage = getTranslation("hub.reload_syntax", checkedAlias, "test1", "test2");
 
                 LiteralText clickableLine = Text.builder(finalMessage)
                         .onClick(TextActions.runCommand("/pixelmonbroadcasts reload"))

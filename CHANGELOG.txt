@@ -7,6 +7,7 @@ Released January 28th, 2019.
     * Reworded many broadcasts to preserve consistency even when precursor events aren't announced.
 
     Fixes:
+    * Fixed /pixelmonbroadcasts not showing commands if something happened to the main command alias.
     * Fixed forfeit messages occasionally reporting bad biomes/coordinates. How did this even work before?
     * Hopefully fixed legendary-related messages not working with non-English names. Sorry for the delay!
     * Updated Forge version to build against, from 2705 to 2768. Might fix some issues with flaky toggles.
