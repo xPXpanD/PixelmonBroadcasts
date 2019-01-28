@@ -68,16 +68,12 @@ public class BattleEndListener
         // Check if we have a winner AND a loser amongst the participants. Unsure if this is still used.
         else if (!winners.isEmpty() && !losers.isEmpty())
         {
-            printBasicError("We have a winner and a loser.");
-
             participant1 = winners.get(0);
             participant2 = losers.get(0);
         }
         // Check if we have a winner and a neutral result amongst the participants. Usually trainer/PvP stuff.
         else if (!winners.isEmpty() && !neutrals.isEmpty())
         {
-            printBasicError("We have a winner and a neutral result.");
-
             participant1 = winners.get(0);
             participant2 = neutrals.get(0);
         }
