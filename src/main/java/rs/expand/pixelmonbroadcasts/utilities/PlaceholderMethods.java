@@ -170,12 +170,12 @@ public class PlaceholderMethods
                 else
                 {
                     // Grab the Pokémon's stats.
-                    final int HPIV = pokemon.getStat(StatsType.HP);
-                    final int attackIV = pokemon.getStat(StatsType.Attack);
-                    final int defenseIV = pokemon.getStat(StatsType.Defence);
-                    final int spAttIV = pokemon.getStat(StatsType.SpecialAttack);
-                    final int spDefIV = pokemon.getStat(StatsType.SpecialDefence);
-                    final int speedIV = pokemon.getStat(StatsType.Speed);
+                    final int HPIV = pokemon2.getStat(StatsType.HP);
+                    final int attackIV = pokemon2.getStat(StatsType.Attack);
+                    final int defenseIV = pokemon2.getStat(StatsType.Defence);
+                    final int spAttIV = pokemon2.getStat(StatsType.SpecialAttack);
+                    final int spDefIV = pokemon2.getStat(StatsType.SpecialDefence);
+                    final int speedIV = pokemon2.getStat(StatsType.Speed);
 
                     // Process them.
                     final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
@@ -320,12 +320,12 @@ public class PlaceholderMethods
                 pokemonObject instanceof EntityPixelmon ? ((EntityPixelmon) pokemonObject).getPokemonData() : (Pokemon) pokemonObject;
 
         // We have at least one Pokémon, so start setup for this first one.
-        final int HPIV = pokemon.getStats().ivs.hp;
-        final int attackIV = pokemon.getStats().ivs.attack;
-        final int defenseIV = pokemon.getStats().ivs.defence;
-        final int spAttIV = pokemon.getStats().ivs.specialAttack;
-        final int spDefIV = pokemon.getStats().ivs.specialDefence;
-        final int speedIV = pokemon.getStats().ivs.speed;
+        final int HPIV = pokemon.getStat(StatsType.HP);
+        final int attackIV = pokemon.getStat(StatsType.Attack);
+        final int defenseIV = pokemon.getStat(StatsType.Defence);
+        final int spAttIV = pokemon.getStat(StatsType.SpecialAttack);
+        final int spDefIV = pokemon.getStat(StatsType.SpecialDefence);
+        final int speedIV = pokemon.getStat(StatsType.Speed);
         final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
         final BigDecimal percentIVs = totalIVs.multiply(
                 new BigDecimal("100")).divide(new BigDecimal("186"), 2, BigDecimal.ROUND_HALF_UP);
