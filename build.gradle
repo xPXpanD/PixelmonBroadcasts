@@ -1,4 +1,4 @@
-// Stock setup mostly grabbed from the internet, modified to fit the project with Hiroku's help. Magic.
+// Stock setup partially grabbed from the internet, partially modified to fit with Hiroku and CraftSteamG's help. Magic.
 
 // Taken from the internet. vvv
 buildscript {
@@ -51,20 +51,14 @@ repositories {
     }
 }
 
-// Allows Sponge stuff to load up correctly.
-// Remember to add the Pixelmon .jar to the project! Couldn't get it to sort that automatically.
+// Allows Sponge and Pixelmon stuff to load up correctly.
 dependencies
 {
+    // Grab and include Sponge.
     compile 'org.spongepowered:spongeapi:7.1.0'
-}
 
-// Sets up the access transformer needed to access biome names. I think.
-jar
-{
-	manifest
-    {
-        attributes 'FMLAT': 'pixelmonbroadcasts_at.cfg'
-    }
+    // Automatically grabs libraries from the libs folder and adds them to the project. Thanks, CraftSteamG!
+    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 // Taken from the internet, with some slight edits. vvv

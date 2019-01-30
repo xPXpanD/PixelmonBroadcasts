@@ -23,7 +23,7 @@ public class Reload implements CommandExecutor
 
         // Load up all the configs and figure out the info alias. Start printing. Methods may insert errors as they go.
         printBasicMessage("");
-        printBasicMessage("================== P I X E L M O N   B R O A D C A S T S ==================");
+        printBasicMessage("=============== P I X E L M O N  B R O A D C A S T S ===============");
 
         // Load up all configuration files. Creates new configs/folders if necessary. Commit settings to memory.
         boolean loadedCorrectly = ConfigMethods.tryCreateAndLoadConfigs();
@@ -40,7 +40,7 @@ public class Reload implements CommandExecutor
             printBasicMessage("--> §cLoad aborted due to critical errors.");
 
         // We're done, one way or another. Add a footer, and a space to stay consistent.
-        printBasicMessage("===========================================================================");
+        printBasicMessage("====================================================================");
         printBasicMessage("");
 
         // Print a message to chat.

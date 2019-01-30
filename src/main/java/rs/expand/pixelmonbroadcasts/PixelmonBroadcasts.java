@@ -252,7 +252,7 @@ public class PixelmonBroadcasts
     {
         // Load up all the configs and figure out the info alias. Start printing. Methods may insert errors as they go.
         printBasicMessage("");
-        printBasicMessage("================== P I X E L M O N   B R O A D C A S T S ==================");
+        printBasicMessage("=============== P I X E L M O N  B R O A D C A S T S ===============");
 
         // Load up all configuration files. Creates new configs/folders if necessary. Commit settings to memory.
         // Store whether we actually loaded things up correctly in this bool, which we can check again later.
@@ -281,7 +281,7 @@ public class PixelmonBroadcasts
             printBasicMessage("--> §cLoad aborted due to critical errors.");
 
         // We're done, one way or another. Add a footer, and a space to avoid clutter with other marginal'd mods.
-        printBasicMessage("===========================================================================");
+        printBasicMessage("====================================================================");
         printBasicMessage("");
     }
 
@@ -298,11 +298,11 @@ public class PixelmonBroadcasts
             if (configStatus != null && configStatus)
             {
                 // Complaining, commence.
-                printBasicMessage("================== P I X E L M O N   B R O A D C A S T S ==================");
+                printBasicMessage("=============== P I X E L M O N  B R O A D C A S T S ===============");
                 printBasicMessage("--> §ePixelmon's \"§6displayLegendaryGlobalMessage§e\" setting is enabled.");
                 printBasicMessage("    §eThis setting will now be disabled, as it conflicts with this sidemod.");
                 printBasicMessage("    §eIf you remove this mod, revert this in Pixelmon's config!");
-                printBasicMessage("===========================================================================");
+                printBasicMessage("====================================================================");
 
                 // Flip the setting in Pixelmon's config.
                 PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").setValue(false);

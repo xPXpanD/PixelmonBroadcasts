@@ -1,19 +1,21 @@
 0.3 for 7.0
-Released January 28th, 2019.
+Released January 30th, 2019.
 
     Broadcast file changes:
     * Corrected a small formatting issue on shiny eggs being hatched. (last part of line wasn't bold)
     * Fixed the trade event broadcast very rarely showing incorrect shiny status for one of the Pokémon.
     * Reworded many broadcasts to preserve consistency even when precursor events aren't announced.
 
+    Tweaks:
+    * Brought a few console messages in line with Even More Pixelmon Commands.
+    * Hopefully made it so localized setups end up logging both the localized and English Pokémon names.
+    * Readied everything for gen 7!
+
     Fixes:
     * Fixed /pixelmonbroadcasts not showing commands if something happened to the main command alias.
     * Fixed forfeit messages occasionally reporting bad biomes/coordinates. How did this even work before?
     * Hopefully fixed legendary-related messages not working with non-English names. Sorry for the delay!
     * Updated Forge version to build against, from 2705 to 2768. Might fix some issues with flaky toggles.
-
-    Tweaks:
-    * Also hopefully made it so localized setups end up logging both the localized and English Pokémon names.
 
 0.2.2 for 6.3.4
 Released August 18th, 2018.
@@ -26,15 +28,15 @@ Released August 18th, 2018.
     Broadcast file changes:
     * Changed all default mentions of "boss trainer" to "leader" to mirror the above.
 
-    Fixes:
-    * Fixed hovers on certain challenge messages always being enabled.
-    * Fixed the Pixelmon legendary message check not reloading the config immediately after editing it.
-    * Hopefully worked around a rare error with battle participants going null when a battle ends.
-
     Tweaks:
     * Clarified toggles only applying to the person setting them, to avoid further confusion. See changes.
     * Moved the "shiny legend" toggle so it shows after "shiny" and "legend" if enabled. Bit cleaner.
     * Split the mod's start-up messages into two blocks, with one only showing up if something's wrong.
+
+    Fixes:
+    * Fixed hovers on certain challenge messages always being enabled.
+    * Fixed the Pixelmon legendary message check not reloading the config immediately after editing it.
+    * Hopefully worked around a rare error with battle participants going null when a battle ends.
 
 0.2.1 for 6.3
 Released June 10th, 2018.

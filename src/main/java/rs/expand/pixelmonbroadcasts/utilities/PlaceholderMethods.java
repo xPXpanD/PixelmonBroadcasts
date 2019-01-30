@@ -3,9 +3,11 @@ package rs.expand.pixelmonbroadcasts.utilities;
 // Remote imports.
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
+import com.pixelmonmod.pixelmon.entities.pixelmon.stats.IVStore;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.StatsType;
 import com.pixelmonmod.pixelmon.enums.EnumGrowth;
 import com.pixelmonmod.pixelmon.enums.EnumNature;
+import com.pixelmonmod.pixelmon.enums.forms.EnumAlolan;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -75,8 +77,13 @@ public class PlaceholderMethods
             {
                 // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
                 // FIXME: Could do with an option, or a cleaner way to make this all work.
-                final String pokemonName =
-                        pokemon.isEgg() ? getTranslation("placeholder.pokemon.is_egg") : pokemon.getSpecies().getLocalizedName();
+                final String pokemonName;
+                if (pokemon.isEgg())
+                    pokemonName = getTranslation("placeholder.pokemon.is_egg");
+                else if (pokemon.getFormEnum() == EnumAlolan.ALOLAN)
+                    pokemonName = "Alolan " + pokemon.getSpecies().getLocalizedName();
+                else
+                    pokemonName = pokemon.getSpecies().getLocalizedName();
 
                 // Proceed with insertion.
                 broadcast = broadcast.replaceAll("(?i)%pokemon%", pokemonName);
@@ -91,21 +98,15 @@ public class PlaceholderMethods
             }
             else
             {
-                // Grab the Pokémon's stats.
-                final int HPIV = pokemon.getStat(StatsType.HP);
-                final int attackIV = pokemon.getStat(StatsType.Attack);
-                final int defenseIV = pokemon.getStat(StatsType.Defence);
-                final int spAttIV = pokemon.getStat(StatsType.SpecialAttack);
-                final int spDefIV = pokemon.getStat(StatsType.SpecialDefence);
-                final int speedIV = pokemon.getStat(StatsType.Speed);
-
-                // Process them.
-                final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
-                final BigDecimal percentIVs = totalIVs.multiply(
-                        new BigDecimal("100")).divide(new BigDecimal("186"), 2, BigDecimal.ROUND_HALF_UP);
+                // Set up IVs and matching math. These are used everywhere.
+                final IVStore IVs = pokemon.getIVs();
+                final int totalIVs =
+                        IVs.get(StatsType.HP) + IVs.get(StatsType.Attack) + IVs.get(StatsType.Defence) +
+                        IVs.get(StatsType.SpecialAttack) + IVs.get(StatsType.SpecialDefence) + IVs.get(StatsType.Speed);
+                final int percentIVs = totalIVs * 100 / 186;
 
                 // Return the percentage.
-                broadcast = broadcast.replaceAll("(?i)%ivpercent%", percentIVs.toString() + '%');
+                broadcast = broadcast.replaceAll("(?i)%ivpercent%", String.valueOf(percentIVs) + '%');
             }
 
             // Insert the "placeholder.shiny" String, if applicable. Gotta be careful with eggs again.
@@ -153,8 +154,13 @@ public class PlaceholderMethods
                 {
                     // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
                     // FIXME: Could do with an option, or a cleaner way to make this all work.
-                    final String pokemon2Name =
-                            pokemon2.isEgg() ? getTranslation("placeholder.pokemon.is_egg") : pokemon2.getSpecies().getLocalizedName();
+                    final String pokemon2Name;
+                    if (pokemon2.isEgg())
+                        pokemon2Name = getTranslation("placeholder.pokemon.is_egg");
+                    else if (pokemon2.getFormEnum() == EnumAlolan.ALOLAN)
+                        pokemon2Name = "Alolan " + pokemon2.getSpecies().getLocalizedName();
+                    else
+                        pokemon2Name = pokemon2.getSpecies().getLocalizedName();
 
                     // Proceed with insertion.
                     broadcast = broadcast.replaceAll("(?i)%pokemon2%", pokemon2Name);
@@ -169,21 +175,15 @@ public class PlaceholderMethods
                 }
                 else
                 {
-                    // Grab the Pokémon's stats.
-                    final int HPIV = pokemon2.getStat(StatsType.HP);
-                    final int attackIV = pokemon2.getStat(StatsType.Attack);
-                    final int defenseIV = pokemon2.getStat(StatsType.Defence);
-                    final int spAttIV = pokemon2.getStat(StatsType.SpecialAttack);
-                    final int spDefIV = pokemon2.getStat(StatsType.SpecialDefence);
-                    final int speedIV = pokemon2.getStat(StatsType.Speed);
-
-                    // Process them.
-                    final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
-                    final BigDecimal percentIVs = totalIVs.multiply(
-                            new BigDecimal("100")).divide(new BigDecimal("186"), 2, BigDecimal.ROUND_HALF_UP);
+                    // Set up IVs and matching math. These are used everywhere.
+                    final IVStore IVs = pokemon.getIVs();
+                    final int totalIVs =
+                            IVs.get(StatsType.HP) + IVs.get(StatsType.Attack) + IVs.get(StatsType.Defence) +
+                            IVs.get(StatsType.SpecialAttack) + IVs.get(StatsType.SpecialDefence) + IVs.get(StatsType.Speed);
+                    final int percentIVs = totalIVs * 100 / 186;
 
                     // Return the percentage.
-                    broadcast = broadcast.replaceAll("(?i)%ivpercent2%", percentIVs.toString() + '%');
+                    broadcast = broadcast.replaceAll("(?i)%ivpercent2%", String.valueOf(percentIVs) + '%');
                 }
 
                 // Insert the "placeholder.shiny" String, if applicable. Gotta be careful with eggs again.
@@ -320,12 +320,13 @@ public class PlaceholderMethods
                 pokemonObject instanceof EntityPixelmon ? ((EntityPixelmon) pokemonObject).getPokemonData() : (Pokemon) pokemonObject;
 
         // We have at least one Pokémon, so start setup for this first one.
-        final int HPIV = pokemon.getStat(StatsType.HP);
-        final int attackIV = pokemon.getStat(StatsType.Attack);
-        final int defenseIV = pokemon.getStat(StatsType.Defence);
-        final int spAttIV = pokemon.getStat(StatsType.SpecialAttack);
-        final int spDefIV = pokemon.getStat(StatsType.SpecialDefence);
-        final int speedIV = pokemon.getStat(StatsType.Speed);
+        final IVStore IVs = pokemon.getIVs();
+        final int HPIV = IVs.get(StatsType.HP);
+        final int attackIV = IVs.get(StatsType.Attack);
+        final int defenseIV = IVs.get(StatsType.Defence);
+        final int spAttIV = IVs.get(StatsType.SpecialAttack);
+        final int spDefIV = IVs.get(StatsType.SpecialDefence);
+        final int speedIV = IVs.get(StatsType.Speed);
         final BigDecimal totalIVs = BigDecimal.valueOf(HPIV + attackIV + defenseIV + spAttIV + spDefIV + speedIV);
         final BigDecimal percentIVs = totalIVs.multiply(
                 new BigDecimal("100")).divide(new BigDecimal("186"), 2, BigDecimal.ROUND_HALF_UP);
