@@ -40,8 +40,8 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
 // TODO: Maybe make events clickable? Staff node, teleport people to the source. Dunno.
 // TODO: Add a logger for individual player Pokémon being knocked out, for the Nuzlocke crowd.
 // TODO: Listen to commands being used, fire the right event if we have a successful hatch/spawn/etc..
-// TODO: Add ability support to reveal-enabled hovers.
-// TODO: Cancel challenge messages for event legendaries or make a more comprehensive summon check.
+// TODO: Make a more comprehensive summon check.
+// TODO: Round up when close.
 // FIXME: Bad event listeners from other mods may cause events to hang (stuck loop), which causes insane spam from us. Fix?
 // FIXME: Biome names are always English. Maybe add to the lang, and use English biome names as keys.
 // FIXME: Roll over cleanly to a new line if more than 5 toggles are available in a single category?

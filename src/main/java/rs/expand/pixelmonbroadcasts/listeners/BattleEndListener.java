@@ -23,7 +23,7 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
 // TODO: %pokedollars% placeholder.
 // TODO: Double battle support, whenever.
-// TODO: See if tracking gym leaders is possible. Maybe look into marking placed leaders with trainer.isGymLeader.
+// TODO: See if tracking gym leaders is possible. Maybe look into tagging placed leaders with trainer.isGymLeader.
 // FIXME: Keep name ordering (from battle start message) persistent regardless of outcome. Pre-sort alphabetically?
 // FIXME: In PvP, if both sides use a self-killing move or otherwise die it picks a winner. Make this a draw, somehow.
 // FIXME: Similarly, using Explosion to kill something special occasionally prints no message.

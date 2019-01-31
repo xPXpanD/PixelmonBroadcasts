@@ -313,7 +313,7 @@ public class PlaceholderMethods
     // Sets up a broadcast from the given info, with IV hovers thrown in in place of any placeholders.
     // FIXME: It may be a good idea to toggle off showIVs if we're showing off an egg. Need to think about this more.
     private static Text getHoverableLine(
-            final String broadcast, final Object pokemonObject, final boolean presentTense, final boolean showIVs)
+            final String broadcast, final Object pokemonObject, final boolean isPresentTense, final boolean showIVs)
     {
         // Is our received object of the older EntityPixelmon type, or is it Pokemon?
         Pokemon pokemon =
@@ -333,7 +333,7 @@ public class PlaceholderMethods
 
         // Grab a growth string.
         final EnumGrowth growth = pokemon.getGrowth();
-        final String sizeString = getTensedTranslation(presentTense, "hover.size." + growth.name().toLowerCase());
+        final String sizeString = getTensedTranslation(isPresentTense, "hover.size." + growth.name().toLowerCase());
 
         // Get an IV composite StringBuilder.
         final StringBuilder ivsLine = new StringBuilder();
@@ -395,11 +395,11 @@ public class PlaceholderMethods
         switch (pokemon.getGender())
         {
             case Male:
-                genderString = getTensedTranslation(presentTense, "hover.gender.male"); break;
+                genderString = getTensedTranslation(isPresentTense, "hover.gender.male"); break;
             case Female:
-                genderString = getTensedTranslation(presentTense, "hover.gender.female"); break;
+                genderString = getTensedTranslation(isPresentTense, "hover.gender.female"); break;
             default:
-                genderString = getTensedTranslation(presentTense, "hover.gender.none"); break;
+                genderString = getTensedTranslation(isPresentTense, "hover.gender.none"); break;
         }
 
         // Get a nature and see which stats we get from it.
@@ -413,12 +413,12 @@ public class PlaceholderMethods
         if (nature.increasedStat.equals(StatsType.None))
         {
             natureCompositeString =
-                    getTensedTranslation(presentTense, "hover.nature.balanced", natureString, boostedStat, cutStat);
+                    getTensedTranslation(isPresentTense, "hover.nature.balanced", natureString, boostedStat, cutStat);
         }
         else
         {
             natureCompositeString =
-                    getTensedTranslation(presentTense, "hover.nature.special", natureString, boostedStat, cutStat);
+                    getTensedTranslation(isPresentTense, "hover.nature.special", natureString, boostedStat, cutStat);
         }
 
         // Populate a List. Every entry will be its own line. May be a bit hacky, but it's easy to work with.
@@ -437,6 +437,7 @@ public class PlaceholderMethods
         hovers.add(sizeString);
         hovers.add(genderString);
         hovers.add(natureCompositeString);
+        hovers.add(getTensedTranslation(isPresentTense, "hover.ability", pokemon.getAbility().getLocalizedName()));
 
         // Make a finalized broadcast that we can show, and add a hover. Return the whole thing.
         return Text.builder(broadcast)

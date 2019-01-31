@@ -1,21 +1,28 @@
 0.3 for 7.0
-Released January 30th, 2019.
+Released February 1st, 2019.
+
+    Message file changes:
+    * Added "hover.present_tense.ability", default message is "➡ &aIt has the \"&2{1}&a\" ability."
+    * Added "hover.past_tense.ability", default message is "➡ &aIt had the \"&2{1}&a\" ability."
 
     Broadcast file changes:
     * Corrected a small formatting issue on shiny eggs being hatched. (last part of line wasn't bold)
-    * Fixed the trade event broadcast very rarely showing incorrect shiny status for one of the Pokémon.
+    * Fixed the trade broadcast rarely showing incorrect shiny status for one of the Pokémon.
     * Reworded many broadcasts to preserve consistency even when precursor events aren't announced.
+
+    Additions:
+    * Added the showing of abilities to the hover stats!
 
     Tweaks:
     * Brought a few console messages in line with Even More Pixelmon Commands.
     * Hopefully made it so localized setups end up logging both the localized and English Pokémon names.
     * Readied everything for gen 7!
+    * Updated Forge version to build against, from 2705 to 2768. Might fix some issues with flaky toggles.
 
     Fixes:
     * Fixed /pixelmonbroadcasts not showing commands if something happened to the main command alias.
     * Fixed forfeit messages occasionally reporting bad biomes/coordinates. How did this even work before?
     * Hopefully fixed legendary-related messages not working with non-English names. Sorry for the delay!
-    * Updated Forge version to build against, from 2705 to 2768. Might fix some issues with flaky toggles.
 
 0.2.2 for 6.3.4
 Released August 18th, 2018.
