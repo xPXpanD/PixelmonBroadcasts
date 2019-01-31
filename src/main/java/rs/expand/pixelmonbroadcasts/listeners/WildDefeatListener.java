@@ -38,7 +38,7 @@ public class WildDefeatListener
                         baseName.equals(localizedName) ? baseName : baseName + " §e(§6" + localizedName + "§e)";
 
                 // Print a victory message to console.
-                printBasicMessage
+                printUnformattedMessage
                 (
                         "§5PBR §f// §ePlayer §6" + player.getName() +
                         "§e defeated a boss §6" + nameString +
@@ -72,7 +72,7 @@ public class WildDefeatListener
                         baseName.equals(localizedName) ? baseName : baseName + " §c(§4" + localizedName + "§c)";
 
                 // Print a victory message to console, with the above shiny String mixed in.
-                printBasicMessage
+                printUnformattedMessage
                 (
                         "§5PBR §f// §cPlayer §4" + player.getName() +
                         "§c defeated a shiny legendary §4" + nameString +
@@ -106,7 +106,7 @@ public class WildDefeatListener
                         baseName.equals(localizedName) ? baseName : baseName + " §c(§4" + localizedName + "§c)";
 
                 // Print a victory message to console, with the above shiny String mixed in.
-                printBasicMessage
+                printUnformattedMessage
                 (
                         "§5PBR §f// §cPlayer §4" + player.getName() +
                         "§c defeated a legendary §4" + nameString +
@@ -140,7 +140,7 @@ public class WildDefeatListener
                         baseName.equals(localizedName) ? baseName : baseName + " §c(§4" + localizedName + "§c)";
 
                 // Print a victory message to console.
-                printBasicMessage
+                printUnformattedMessage
                 (
                         "§5PBR §f// §cPlayer §4" + player.getName() +
                         "§c defeated a shiny §4" + nameString +

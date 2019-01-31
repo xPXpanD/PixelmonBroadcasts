@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 //import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.showBirdTrioSummons;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndSendBroadcast;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.getBroadcast;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicMessage;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
 
 // TODO: Check for the name bug.
 public class BirdSpawnListener
@@ -29,7 +29,7 @@ public class BirdSpawnListener
         if (logBirdTrioSummons)
         {
             // Print a summon message to console.
-            printBasicMessage
+            printUnformattedMessage
             (
                     "§5PBR §f// §ePlayer §6" + player.getName() +
                     "§e has summoned a §6" + pokemonName +

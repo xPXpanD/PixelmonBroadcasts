@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Local imports.
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.showAbilities;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
 public class PlaceholderMethods
@@ -437,7 +438,10 @@ public class PlaceholderMethods
         hovers.add(sizeString);
         hovers.add(genderString);
         hovers.add(natureCompositeString);
-        hovers.add(getTensedTranslation(isPresentTense, "hover.ability", pokemon.getAbility().getLocalizedName()));
+
+        // If ability showing is on, also do just that.
+        if (showAbilities)
+            hovers.add(getTensedTranslation(isPresentTense, "hover.ability", pokemon.getAbility().getLocalizedName()));
 
         // Make a finalized broadcast that we can show, and add a hover. Return the whole thing.
         return Text.builder(broadcast)

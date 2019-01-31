@@ -35,7 +35,7 @@ public class CatchListener
                         baseName.equals(localizedName) ? baseName : baseName + " §a(§2" + localizedName + "§a)";
 
                 // Print a catch message to console, with the above shiny String mixed in.
-                printBasicMessage
+                printUnformattedMessage
                 (
                         "§5PBR §f// §aPlayer §2" + player.getName() +
                         "§a caught a shiny legendary §2" + nameString +
@@ -72,7 +72,7 @@ public class CatchListener
                         baseName.equals(localizedName) ? baseName : baseName + " §a(§2" + localizedName + "§a)";
 
                 // Print a catch message to console, with the above shiny String mixed in.
-                printBasicMessage
+                printUnformattedMessage
                 (
                         "§5PBR §f// §aPlayer §2" + player.getName() +
                         "§a caught a legendary §2" + nameString +
@@ -109,7 +109,7 @@ public class CatchListener
                         baseName.equals(localizedName) ? baseName : baseName + " §b(§3" + localizedName + "§b)";
 
                 // Print a catch message to console.
-                printBasicMessage
+                printUnformattedMessage
                 (
                         "§5PBR §f// §bPlayer §3" + player.getName() +
                         "§b caught a shiny §3" + nameString +
@@ -146,7 +146,7 @@ public class CatchListener
                         baseName.equals(localizedName) ? baseName : baseName + " §f(§7" + localizedName + "§f)";
 
                 // Print a catch message to console.
-                printBasicMessage
+                printUnformattedMessage
                 (
                         "§5PBR §f// §fPlayer §7" + player.getName() +
                         "§f caught a normal §7" + nameString +

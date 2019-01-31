@@ -1,6 +1,9 @@
 0.3 for 7.0
 Released February 1st, 2019.
 
+    Settings file changes:
+    * Added "showAbilities" option for the new ability-showing feature. Add "showAbilities = true"!
+
     Message file changes:
     * Added "hover.present_tense.ability", default message is "➡ &aIt has the \"&2{1}&a\" ability."
     * Added "hover.past_tense.ability", default message is "➡ &aIt had the \"&2{1}&a\" ability."

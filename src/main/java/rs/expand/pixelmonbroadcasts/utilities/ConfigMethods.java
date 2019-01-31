@@ -14,11 +14,22 @@ import org.spongepowered.api.plugin.PluginContainer;
 
 // Local imports.
 import rs.expand.pixelmonbroadcasts.PixelmonBroadcasts;
+
+import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
 public class ConfigMethods
 {
+    // Make a little converter for safely handling Strings that might have an integer value inside.
+    private static Integer interpretInteger(final String input)
+    {
+        if (input != null && input.matches("-?[1-9]\\d*|0"))
+            return Integer.parseInt(input);
+        else
+            return null;
+    }
+
     // Unloads all known PixelmonBroadcasts commands and their aliases, and then re-registers them.
     public static boolean registerCommands()
     {
@@ -42,16 +53,16 @@ public class ConfigMethods
 
             // Print a message with what we did.
             if (commandAlias != null && !commandAlias.equals("pixelmonbroadcasts"))
-                printBasicMessage("    §aRegistered main command as §2/pixelmonbroadcasts§a, alias §2/" + commandAlias);
+                printUnformattedMessage("    §aRegistered main command as §2/pixelmonbroadcasts§a, alias §2/" + commandAlias);
             else
-                printBasicMessage("    §aRegistered main command as §2/pixelmonbroadcasts§a, no alias.");
+                printUnformattedMessage("    §aRegistered main command as §2/pixelmonbroadcasts§a, no alias.");
 
             return true;
         }
         else
         {
-            printBasicMessage("    §cCommand (re-)initialization failed. Please report, this is a bug.");
-            printBasicMessage("    §cSidemod commands are likely dead. A reboot may work.");
+            printUnformattedMessage("    §cCommand (re-)initialization failed. Please report, this is a bug.");
+            printUnformattedMessage("    §cSidemod commands are likely dead. A reboot may work.");
 
             return false;
         }
@@ -61,13 +72,13 @@ public class ConfigMethods
     public static boolean tryCreateAndLoadConfigs()
     {
         // Print a message to squeeze between the messages of whatever called the (re-)load.
-        printBasicMessage("--> §aLoading and validating Pixelmon Broadcasts settings...");
+        printUnformattedMessage("--> §aLoading and validating Pixelmon Broadcasts settings...");
 
         // Create a config directory if it doesn't exist. Silently swallow an error if it does. I/O is awkward.
         try
         {
             Files.createDirectory(Paths.get(configPathAsString));
-            printBasicMessage("--> §aPixelmon Broadcasts folder not found, making a new one for configs...");
+            printUnformattedMessage("--> §aPixelmon Broadcasts folder not found, making a new one for configs...");
         }
         catch (final IOException ignored)
         {}
@@ -79,7 +90,7 @@ public class ConfigMethods
             {
 
                 // Create a new config since the file wasn't found. Add spaces to match startup/reload message spacing.
-                printBasicMessage("    §eNo settings file found, creating...");
+                printUnformattedMessage("    §eNo settings file found, creating...");
                 Files.copy(ConfigMethods.class.getResourceAsStream("/assets/settings.conf"),
                         Paths.get(configPathAsString, "settings.conf"));
             }
@@ -87,7 +98,7 @@ public class ConfigMethods
             if (Files.notExists(broadcastsPath))
             {
                 // Create a new config since the file wasn't found. Add spaces to match startup/reload message spacing.
-                printBasicMessage("    §eNo broadcasts file found, creating...");
+                printUnformattedMessage("    §eNo broadcasts file found, creating...");
                 Files.copy(ConfigMethods.class.getResourceAsStream("/assets/broadcasts.conf"),
                         Paths.get(configPathAsString, "broadcasts.conf"));
             }
@@ -95,7 +106,7 @@ public class ConfigMethods
             if (Files.notExists(messagesPath))
             {
                 // Create a new config since the file wasn't found. Add spaces to match startup/reload message spacing.
-                printBasicMessage("    §eNo messages file found, creating...");
+                printUnformattedMessage("    §eNo messages file found, creating...");
                 Files.copy(ConfigMethods.class.getResourceAsStream("/assets/messages.conf"),
                         Paths.get(configPathAsString, "messages.conf"));
             }
@@ -108,8 +119,8 @@ public class ConfigMethods
         catch (final IOException F)
         {
             // Print errors and then throw a stack trace into the console. Ugly, but potentially helpful.
-            printBasicMessage("    §cOne or more configs could not be set up. Please report this.");
-            printBasicMessage("    §cAdd any useful info you may have (operating system?). Stack trace:");
+            printUnformattedMessage("    §cOne or more configs could not be set up. Please report this.");
+            printUnformattedMessage("    §cAdd any useful info you may have (operating system?). Stack trace:");
             F.printStackTrace();
 
             // Exit out of the method early, we can't continue.
@@ -126,16 +137,24 @@ public class ConfigMethods
         // To start, set up an error array. Check later, and print errors to the console if stuff broke.
         final List<String> optionsErrorArray = new ArrayList<>();
 
-        // Load in and validate the command alias and config version. (version is not yet implemented, not necessary)
+        // Load in and validate the config version, command alias and ability setting.
+        PixelmonBroadcasts.configVersion =
+                interpretInteger(settingsConfig.getNode("configVersion").getString());
         PixelmonBroadcasts.commandAlias =
                 settingsConfig.getNode("commandAlias").getString();
-
-        //PixelmonBroadcasts.configVersion =
-        //        interpretInteger(settingsConfig.getNode("configVersion").getString());
+        PixelmonBroadcasts.showAbilities =
+                toBooleanObject(settingsConfig.getNode("showAbilities").getString());
 
         // Show errors if any of these main variables are broken.
+        if (configVersion == null)
+            printUnformattedMessage("    §cCould not read config node \"§4configVersion§c\".");
         if (commandAlias == null)
-            printBasicMessage("    §cCould not read config node \"§4commandAlias§c\". Alias support disabled.");
+            printUnformattedMessage("    §cCould not read config node \"§4commandAlias§c\". Alias support disabled.");
+        if (showAbilities == null)
+        {
+            printUnformattedMessage("    §cCould not read config node \"§4showAbilities§c\". Falling back, enabling.");
+            showAbilities = true;
+        }
 
         /*                 *\
            normal settings

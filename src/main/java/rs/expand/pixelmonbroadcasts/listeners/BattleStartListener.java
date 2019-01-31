@@ -46,7 +46,7 @@ public class BattleStartListener
                     final BlockPos location = participant1.getEntity().getPosition();
 
                     // Print a PvP starting message to console.
-                    printBasicMessage
+                    printUnformattedMessage
                     (
                             "§5PBR §f// §ePlayer §6" + participant1.getName().getUnformattedText() +
                             "§e started battling player §6" + participant2.getName().getUnformattedText() +
@@ -105,7 +105,7 @@ public class BattleStartListener
                     if (logBossTrainerChallenges)
                     {
                         // Print a challenge message to console.
-                        printBasicMessage
+                        printUnformattedMessage
                         (
                                 "§5PBR §f// §ePlayer §6" + player.getName().getUnformattedText() +
                                 "§e challenged a boss trainer in world \"§6" + worldName +
@@ -134,7 +134,7 @@ public class BattleStartListener
                     if (logTrainerChallenges)
                     {
                         // Print a challenge message to console.
-                        printBasicMessage
+                        printUnformattedMessage
                         (
                                 "§5PBR §f// §ePlayer §6" + player.getName().getUnformattedText() +
                                 "§e challenged a normal trainer in world \"§6" + worldName +
@@ -199,7 +199,7 @@ public class BattleStartListener
                                     baseName.equals(localizedName) ? baseName : baseName + " §e(§6" + localizedName + "§e)";
 
                             // Print a challenge message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §ePlayer §6" + player.getName().getUnformattedText() +
                                     "§e engaged a boss §6" + nameString +
@@ -233,7 +233,7 @@ public class BattleStartListener
                                     baseName.equals(localizedName) ? baseName : baseName + " §a(§2" + localizedName + "§a)";
 
                             // Print a challenge message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §aPlayer §2" + player.getName().getUnformattedText() +
                                     "§a engaged a shiny legendary §2" + nameString +
@@ -267,7 +267,7 @@ public class BattleStartListener
                                     baseName.equals(localizedName) ? baseName : baseName + " §a(§2" + localizedName + "§a)";
 
                             // Print a challenge message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §aPlayer §2" + player.getName().getUnformattedText() +
                                     "§a engaged a legendary §2" + nameString +
@@ -301,7 +301,7 @@ public class BattleStartListener
                                     baseName.equals(localizedName) ? baseName : baseName + " §b(§3" + localizedName + "§b)";
 
                             // Print a challenge message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §bPlayer §3" + player.getName().getUnformattedText() +
                                     "§b engaged a shiny §3" + nameString +

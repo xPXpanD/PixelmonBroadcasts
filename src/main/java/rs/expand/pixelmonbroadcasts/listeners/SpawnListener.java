@@ -47,7 +47,7 @@ public class SpawnListener
                                 baseName.equals(localizedName) ? baseName : baseName + " §e(§6" + localizedName + "§e)";
 
                         // Print a spawn message to console.
-                        printBasicMessage
+                        printUnformattedMessage
                         (
                                 "§5PBR §f// §eA boss §6" + nameString +
                                 "§e has spawned in world \"§6" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
@@ -83,7 +83,7 @@ public class SpawnListener
                                 baseName.equals(localizedName) ? baseName : baseName + " §a(§2" + localizedName + "§a)";
 
                         // Print a spawn message to console.
-                        printBasicMessage
+                        printUnformattedMessage
                         (
                                 "§5PBR §f// §aA shiny legendary §2" + nameString +
                                 "§a has spawned in world \"§2" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
@@ -119,7 +119,7 @@ public class SpawnListener
                                 baseName.equals(localizedName) ? baseName : baseName + " §a(§2" + localizedName + "§a)";
 
                         // Print a spawn message to console.
-                        printBasicMessage
+                        printUnformattedMessage
                         (
                                 "§5PBR §f// §aA legendary §2" + nameString +
                                 "§a has spawned in world \"§2" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
@@ -155,7 +155,7 @@ public class SpawnListener
                                 baseName.equals(localizedName) ? baseName : baseName + " §b(§3" + localizedName + "§b)";
 
                         // Print a spawn message to console.
-                        printBasicMessage
+                        printUnformattedMessage
                         (
                                 "§5PBR §f// §bA shiny §3" + nameString +
                                 "§b has spawned in world \"§3" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +

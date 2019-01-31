@@ -36,7 +36,7 @@ public class BattleEndListener
         final List<BattleParticipant> winners = new ArrayList<>(), losers = new ArrayList<>(), neutrals = new ArrayList<>();
         for (Map.Entry<BattleParticipant, BattleResults> entry : event.results.entrySet())
         {
-            //printBasicMessage("Looping. Participant is " + entry.getValue().name() + ", result is " + entry.getKey().getName());
+            //printUnformattedMessage("Looping. Participant is " + entry.getValue().name() + ", result is " + entry.getKey().getName());
 
             switch (entry.getValue())
             {
@@ -122,7 +122,7 @@ public class BattleEndListener
                         if (logPVPDraws)
                         {
                             // Print a PvP draw message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §7Players §f" + player1Entity.getName() +
                                     "§7 and §f" + player2Entity.getName() +
@@ -153,7 +153,7 @@ public class BattleEndListener
                         if (logPVPVictories)
                         {
                             // Print a PvP victory message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §ePlayer §6" + participant1.getName().getUnformattedText() +
                                     "§e defeated player §6" + participant2.getName().getUnformattedText() +
@@ -196,7 +196,7 @@ public class BattleEndListener
                             if (logBossTrainerForfeits)
                             {
                                 // Print a forfeit message to console.
-                                printBasicMessage
+                                printUnformattedMessage
                                 (
                                     "§5PBR §f// §6Player §e" + participant2.getName().getUnformattedText() +
                                     "§6 fled from a boss trainer in world \"§e" + worldName +
@@ -225,7 +225,7 @@ public class BattleEndListener
                             if (logTrainerForfeits)
                             {
                                 // Print a forfeit message to console.
-                                printBasicMessage
+                                printUnformattedMessage
                                 (
                                     "§5PBR §f// §6Player §e" + participant2.getName().getUnformattedText() +
                                     "§6 fled from a normal trainer in world \"§e" + worldName +
@@ -258,7 +258,7 @@ public class BattleEndListener
                             if (logBossTrainerBlackouts)
                             {
                                 // Print a blackout message to console.
-                                printBasicMessage
+                                printUnformattedMessage
                                 (
                                         "§5PBR §f// §cPlayer §4" + participant2.getName().getUnformattedText() +
                                         "§c was knocked out by a boss trainer in world \"§4" + worldName +
@@ -287,7 +287,7 @@ public class BattleEndListener
                             if (logTrainerBlackouts)
                             {
                                 // Print a blackout message to console.
-                                printBasicMessage
+                                printUnformattedMessage
                                 (
                                         "§5PBR §f// §cPlayer §4" + participant2.getName().getUnformattedText() +
                                         "§c was knocked out by a normal trainer in world \"§4" + worldName +
@@ -326,7 +326,7 @@ public class BattleEndListener
                         if (logBossTrainerVictories)
                         {
                             // Print a victory message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §ePlayer §6" + participant1.getName().getUnformattedText() +
                                     "§e defeated a boss trainer in world \"§6" + worldName +
@@ -355,7 +355,7 @@ public class BattleEndListener
                         if (logTrainerVictories)
                         {
                             // Print a victory message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §ePlayer §6" + participant1.getName().getUnformattedText() +
                                     "§e defeated a normal trainer in world \"§6" + worldName +
@@ -399,7 +399,7 @@ public class BattleEndListener
                         if (logBossBlackouts)
                         {
                             // Print a blackout message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §cPlayer §4" + participant2.getName().getUnformattedText() +
                                     "§c was knocked out by a boss §4" + nameString +
@@ -429,7 +429,7 @@ public class BattleEndListener
                         if (logShinyLegendaryBlackouts)
                         {
                             // Print a blackout message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §cPlayer §4" + participant2.getName().getUnformattedText() +
                                     "§c was knocked out by a shiny legendary §4" + nameString +
@@ -459,7 +459,7 @@ public class BattleEndListener
                         if (logLegendaryBlackouts)
                         {
                             // Print a blackout message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §cPlayer §4" + participant2.getName().getUnformattedText() +
                                     "§c was knocked out by a legendary §4" + nameString +
@@ -489,7 +489,7 @@ public class BattleEndListener
                         if (logShinyBlackouts)
                         {
                             // Print a blackout message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §cPlayer §4" + participant2.getName().getUnformattedText() +
                                     "§c was knocked out by a shiny §4" + nameString +
@@ -519,7 +519,7 @@ public class BattleEndListener
                         if (logNormalBlackouts)
                         {
                             // Print a blackout message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §cPlayer §4" + participant2.getName().getUnformattedText() +
                                     "§c was knocked out by a normal §4" + nameString +
@@ -564,7 +564,7 @@ public class BattleEndListener
                         if (logBossForfeits)
                         {
                             // Print a forfeit message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §6Player §e" + participant2.getName().getUnformattedText() +
                                     "§6 fled from a boss §e" + nameString +
@@ -594,7 +594,7 @@ public class BattleEndListener
                         if (logShinyLegendaryForfeits)
                         {
                             // Print a forfeit message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §6Player §e" + participant2.getName().getUnformattedText() +
                                     "§6 fled from a shiny legendary §e" + nameString +
@@ -624,7 +624,7 @@ public class BattleEndListener
                         if (logLegendaryForfeits)
                         {
                             // Print a forfeit message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §6Player §e" + participant2.getName().getUnformattedText() +
                                     "§6 fled from a legendary §e" + nameString +
@@ -654,7 +654,7 @@ public class BattleEndListener
                         if (logShinyForfeits)
                         {
                             // Print a forfeit message to console.
-                            printBasicMessage
+                            printUnformattedMessage
                             (
                                     "§5PBR §f// §6Player §e" + participant2.getName().getUnformattedText() +
                                     "§6 fled from a shiny §e" + nameString +

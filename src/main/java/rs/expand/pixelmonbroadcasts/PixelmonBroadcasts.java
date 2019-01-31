@@ -25,7 +25,7 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 import rs.expand.pixelmonbroadcasts.commands.*;
 import rs.expand.pixelmonbroadcasts.listeners.*;
 import rs.expand.pixelmonbroadcasts.utilities.ConfigMethods;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicMessage;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
 
 /*                                                              *\
        THE WHO-KNOWS-WHEN LIST OF POTENTIALLY AWESOME IDEAS
@@ -63,15 +63,16 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicM
         \*                                                                                                         */
 )
 
-// Note: printBasicMessage is a static import for a method from PrintingMethods, for convenience. So are the listeners.
+// Note: printUnformattedMessage is a static import for a method from PrintingMethods, for convenience. So are the listeners.
 public class PixelmonBroadcasts
 {
     // Set up an internal variable so we can see if we loaded correctly.
     private boolean loadedCorrectly = false;
 
     // Start setting up some basic variables that we'll fill in remotely when we read the config.
-    //public static Integer configVersion;
+    public static Integer configVersion;
     public static String commandAlias;
+    public static Boolean showAbilities;
 
     // Set up logging settings.
     public static boolean logBossBlackouts;
@@ -251,8 +252,8 @@ public class PixelmonBroadcasts
     public void onGamePreInitEvent(final GamePreInitializationEvent event)
     {
         // Load up all the configs and figure out the info alias. Start printing. Methods may insert errors as they go.
-        printBasicMessage("");
-        printBasicMessage("=============== P I X E L M O N  B R O A D C A S T S ===============");
+        printUnformattedMessage("");
+        printUnformattedMessage("=============== P I X E L M O N  B R O A D C A S T S ===============");
 
         // Load up all configuration files. Creates new configs/folders if necessary. Commit settings to memory.
         // Store whether we actually loaded things up correctly in this bool, which we can check again later.
@@ -262,7 +263,7 @@ public class PixelmonBroadcasts
         if (loadedCorrectly)
         {
             // Register listeners with Pixelmon.
-            printBasicMessage("--> §aRegistering listeners with Pixelmon...");
+            printUnformattedMessage("--> §aRegistering listeners with Pixelmon...");
             Pixelmon.EVENT_BUS.register(new BattleEndListener());
             Pixelmon.EVENT_BUS.register(new BattleStartListener());
             //Pixelmon.EVENT_BUS.register(new BirdSpawnListener());
@@ -273,16 +274,16 @@ public class PixelmonBroadcasts
             Pixelmon.EVENT_BUS.register(new WildDefeatListener());
 
             // (re-)register the main command and alias. Use the result we get back to see if everything worked.
-            printBasicMessage("--> §aRegistering commands with Sponge...");
+            printUnformattedMessage("--> §aRegistering commands with Sponge...");
             if (ConfigMethods.registerCommands())
-                printBasicMessage("--> §aPre-init completed. All systems nominal.");
+                printUnformattedMessage("--> §aPre-init completed. All systems nominal.");
         }
         else
-            printBasicMessage("--> §cLoad aborted due to critical errors.");
+            printUnformattedMessage("--> §cLoad aborted due to critical errors.");
 
         // We're done, one way or another. Add a footer, and a space to avoid clutter with other marginal'd mods.
-        printBasicMessage("====================================================================");
-        printBasicMessage("");
+        printUnformattedMessage("====================================================================");
+        printUnformattedMessage("");
     }
 
     @Listener
@@ -298,11 +299,11 @@ public class PixelmonBroadcasts
             if (configStatus != null && configStatus)
             {
                 // Complaining, commence.
-                printBasicMessage("=============== P I X E L M O N  B R O A D C A S T S ===============");
-                printBasicMessage("--> §ePixelmon's \"§6displayLegendaryGlobalMessage§e\" setting is enabled.");
-                printBasicMessage("    §eThis setting will now be disabled, as it conflicts with this sidemod.");
-                printBasicMessage("    §eIf you remove this mod, revert this in Pixelmon's config!");
-                printBasicMessage("====================================================================");
+                printUnformattedMessage("=============== P I X E L M O N  B R O A D C A S T S ===============");
+                printUnformattedMessage("--> §ePixelmon's \"§6displayLegendaryGlobalMessage§e\" setting is enabled.");
+                printUnformattedMessage("    §eThis setting will now be disabled, as it conflicts with this sidemod.");
+                printUnformattedMessage("    §eIf you remove this mod, revert this in Pixelmon's config!");
+                printUnformattedMessage("====================================================================");
 
                 // Flip the setting in Pixelmon's config.
                 PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").setValue(false);
@@ -315,13 +316,40 @@ public class PixelmonBroadcasts
                 }
                 catch (IOException F)
                 {
-                    printBasicMessage("");
-                    printBasicMessage("§cSomething went wrong during Pixelmon config reload from disk! Trace:");
+                    printUnformattedMessage("");
+                    printUnformattedMessage("§cSomething went wrong during Pixelmon config reload from disk! Trace:");
                     F.printStackTrace();
                 }
+
+                if (configVersion != null && configVersion < 30)
+                    printUnformattedMessage("");
             }
 
-            // TODO: Do config version warning messages here, too, when we start needing them.
+            if (configVersion != null && configVersion < 30)
+            {
+                // More complaining, commence.
+                printUnformattedMessage("=============== P I X E L M O N  B R O A D C A S T S ===============");
+                printUnformattedMessage("--> §ePixelmon Broadcast has a new feature! We can now show abilities.");
+                printUnformattedMessage("    §ePlease open your \"§6settings.conf§e\" file and add the following:");
+                printUnformattedMessage("");
+                printUnformattedMessage("    showAbilities = true (or false, pick one)");
+                printUnformattedMessage("");
+                printUnformattedMessage("    §eAlso change the value of \"§6configVersion§e\" to \"§630§e\".");
+                printUnformattedMessage("====================================================================");
+
+                // TODO: Get this working without it squashing the whole config down.
+                /*// Set the config's version value to 30.
+                try
+                {
+                    settingsConfig.getNode("configVersion").setValue(30);
+                    settingsLoader.save(settingsLoader.load());
+                }
+                catch (IOException F)
+                {
+                    printBasicError("Something broke while updating config version! Please report. Stack trace:");
+                    F.printStackTrace();
+                }*/
+            }
         }
     }
 }

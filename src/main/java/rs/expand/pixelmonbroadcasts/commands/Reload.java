@@ -19,11 +19,11 @@ public class Reload implements CommandExecutor
     public CommandResult execute(final CommandSource src, final CommandContext args)
     {
         if (src instanceof Player)
-            printBasicMessage("§4PBR §f// §dPlayer §5" + src.getName() + "§d reloaded the Pixelmon Broadcasts configs!");
+            printUnformattedMessage("§4PBR §f// §dPlayer §5" + src.getName() + "§d reloaded the Pixelmon Broadcasts configs!");
 
         // Load up all the configs and figure out the info alias. Start printing. Methods may insert errors as they go.
-        printBasicMessage("");
-        printBasicMessage("=============== P I X E L M O N  B R O A D C A S T S ===============");
+        printUnformattedMessage("");
+        printUnformattedMessage("=============== P I X E L M O N  B R O A D C A S T S ===============");
 
         // Load up all configuration files. Creates new configs/folders if necessary. Commit settings to memory.
         boolean loadedCorrectly = ConfigMethods.tryCreateAndLoadConfigs();
@@ -32,16 +32,16 @@ public class Reload implements CommandExecutor
         if (loadedCorrectly)
         {
             // (re-)register the main command and alias. Use the result we get back to see if everything worked.
-            printBasicMessage("--> §aRe-registering commands with Sponge...");
+            printUnformattedMessage("--> §aRe-registering commands with Sponge...");
             if (ConfigMethods.registerCommands())
-                printBasicMessage("--> §aReload completed. All systems nominal.");
+                printUnformattedMessage("--> §aReload completed. All systems nominal.");
         }
         else
-            printBasicMessage("--> §cLoad aborted due to critical errors.");
+            printUnformattedMessage("--> §cLoad aborted due to critical errors.");
 
         // We're done, one way or another. Add a footer, and a space to stay consistent.
-        printBasicMessage("====================================================================");
-        printBasicMessage("");
+        printUnformattedMessage("====================================================================");
+        printUnformattedMessage("");
 
         // Print a message to chat.
         if (src instanceof Player)

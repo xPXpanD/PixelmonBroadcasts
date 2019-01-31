@@ -25,7 +25,7 @@ public class PrintingMethods
     }
 
     // If we need to print something without any major formatting, do it here. Good for console lists.
-    public static void printBasicMessage(final String inputString)
+    public static void printUnformattedMessage(final String inputString)
     {
         getConsole().ifPresent(console ->
                 console.sendMessage(Text.of("§f" + inputString)));
@@ -42,10 +42,10 @@ public class PrintingMethods
     static void printOptionsNodeError(final List<String> nodes)
     {
         for (final String node : nodes)
-            printBasicMessage("§cCould not read options node \"§4" + node + "§c\".");
+            printUnformattedMessage("§cCould not read options node \"§4" + node + "§c\".");
 
-        printBasicMessage("§cThe main config contains invalid options. Disabling these.");
-        printBasicMessage("§cCheck the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
+        printUnformattedMessage("§cThe main config contains invalid options. Disabling these.");
+        printUnformattedMessage("§cCheck the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
     }
 
     // Gets a key from messages.conf, formats it (ampersands to section characters), and then sends it.

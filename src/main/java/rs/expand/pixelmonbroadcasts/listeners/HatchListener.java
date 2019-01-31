@@ -37,7 +37,7 @@ public class HatchListener
                         baseName.equals(localizedName) ? baseName : baseName + " §d(§5" + localizedName + "§d)";
 
                 // Print a hatch message to console.
-                printBasicMessage
+                printUnformattedMessage
                 (
                         "§5PBR §f// §dPlayer §5" + player.getName() +
                         "§d's shiny §5" + nameString +
@@ -71,7 +71,7 @@ public class HatchListener
                         baseName.equals(localizedName) ? baseName : baseName + " §d(§5" + localizedName + "§d)";
 
                 // Print a hatch message to console.
-                printBasicMessage
+                printUnformattedMessage
                 (
                         "§5PBR §f// §dPlayer §5" + player.getName() +
                         "§d's normal §5" + nameString +

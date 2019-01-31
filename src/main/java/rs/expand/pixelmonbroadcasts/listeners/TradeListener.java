@@ -44,7 +44,7 @@ public class TradeListener
                     baseName2.equals(localizedName2) ? baseName2 : baseName2 + " §d(§5" + localizedName2 + "§d)";
 
             // Print a trade message to console.
-            printBasicMessage
+            printUnformattedMessage
             (
                     "§5PBR §f// §dPlayer §5" + player1.getName() +
                     "§d has traded a " + pokemon1ShinynessString +
