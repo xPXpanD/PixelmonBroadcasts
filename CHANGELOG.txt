@@ -1,12 +1,14 @@
 0.3 for 7.0
-Released February 1st, 2019.
+Released February 2nd, 2019.
 
-    Settings file changes:
-    * Added "showAbilities" option for the new ability-showing feature. Add "showAbilities = true"!
+    Settings file additions:
+    * Added "showAbilities" option for the new ability-showing feature. Add: "showAbilities = true"
 
-    Message file changes:
-    * Added "hover.present_tense.ability", default message is "➡ &aIt has the \"&2{1}&a\" ability."
-    * Added "hover.past_tense.ability", default message is "➡ &aIt had the \"&2{1}&a\" ability."
+    Message file additions:
+    * "hover.present_tense.ability"         ->  "➡ &aIt has the \"&2{1}&a\" ability."
+    * "hover.present_tense.hidden_ability"  ->  "➡ &aIt has the \"&2&l{1}&r&a\" hidden ability!"
+    * "hover.past_tense.ability"            ->  "➡ &aIt had the \"&2{1}&a\" ability."
+    * "hover.past_tense.hidden_ability"     ->  "➡ &aIt had the \"&2&l{1}&r&a\" hidden ability..."
 
     Broadcast file changes:
     * Corrected a small formatting issue on shiny eggs being hatched. (last part of line wasn't bold)
@@ -14,18 +16,17 @@ Released February 1st, 2019.
     * Reworded many broadcasts to preserve consistency even when precursor events aren't announced.
 
     Additions:
-    * Added the showing of abilities to the hover stats!
+    * Added the showing of abilities to the hover stats! (hidden abilities get extra fancy formatting)
 
     Tweaks:
     * Brought a few console messages in line with Even More Pixelmon Commands.
     * Hopefully made it so localized setups end up logging both the localized and English Pokémon names.
-    * Readied everything for gen 7!
     * Updated Forge version to build against, from 2705 to 2768. Might fix some issues with flaky toggles.
 
     Fixes:
     * Fixed /pixelmonbroadcasts not showing commands if something happened to the main command alias.
-    * Fixed forfeit messages occasionally reporting bad biomes/coordinates. How did this even work before?
-    * Hopefully fixed legendary-related messages not working with non-English names. Sorry for the delay!
+    * Fixed forfeit messages occasionally reporting bad biomes/coordinates. How'd this even work before?
+    * Hopefully fixed legendary-related messages breaking on non-English names. Sorry for the delay!
 
 0.2.2 for 6.3.4
 Released August 18th, 2018.

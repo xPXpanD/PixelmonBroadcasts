@@ -441,7 +441,12 @@ public class PlaceholderMethods
 
         // If ability showing is on, also do just that.
         if (showAbilities)
-            hovers.add(getTensedTranslation(isPresentTense, "hover.ability", pokemon.getAbility().getLocalizedName()));
+        {
+            if (pokemon.getAbility().getName().equals(pokemon.getBaseStats().abilities[2]))
+                hovers.add(getTensedTranslation(isPresentTense, "hover.hidden_ability", pokemon.getAbility().getLocalizedName()));
+            else
+                hovers.add(getTensedTranslation(isPresentTense, "hover.ability", pokemon.getAbility().getLocalizedName()));
+        }
 
         // Make a finalized broadcast that we can show, and add a hover. Return the whole thing.
         return Text.builder(broadcast)
