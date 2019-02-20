@@ -19,7 +19,7 @@ import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
 public class WildDefeatListener
 {
     @SubscribeEvent
-    public void onBeatWildLegendaryEvent(final BeatWildPixelmonEvent event)
+    public void onBeatWildPokemonEvent(final BeatWildPixelmonEvent event)
     {
         // Create shorthand variables for convenience.
         final String broadcast;
@@ -29,23 +29,23 @@ public class WildDefeatListener
         final EntityPlayer player = event.player;
         final BlockPos location = pokemon.getPosition();
 
+        // If we're in a localized setup, log both names.
+        final String nameString =
+                baseName.equals(localizedName) ? baseName : baseName + " §4(§c" + localizedName + "§4)";
+
         if (pokemon.isBossPokemon())
         {
             if (logBossVictories)
             {
-                // If we're in a localized setup, log both names.
-                final String nameString =
-                        baseName.equals(localizedName) ? baseName : baseName + " §e(§6" + localizedName + "§e)";
-
                 // Print a victory message to console.
                 printUnformattedMessage
                 (
-                        "§5PBR §f// §ePlayer §6" + player.getName() +
-                        "§e defeated a boss §6" + nameString +
-                        "§e boss in world \"§6" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                        "§e\", at X:§6" + location.getX() +
-                        "§e Y:§6" + location.getY() +
-                        "§e Z:§6" + location.getZ()
+                        "§5PBR §f// §4Player §c" + player.getName() +
+                        "§4 defeated a boss §c" + nameString +
+                        "§4 boss in world \"§c" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                        "§4\", at X:§c" + location.getX() +
+                        "§4 Y:§c" + location.getY() +
+                        "§4 Z:§c" + location.getZ()
                 );
             }
 
@@ -65,25 +65,21 @@ public class WildDefeatListener
         }
         else if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().isShiny())
         {
-            if (logShinyLegendaryVictories)
+            if (logLegendaryVictories || logShinyVictories)
             {
-                // If we're in a localized setup, log both names.
-                final String nameString =
-                        baseName.equals(localizedName) ? baseName : baseName + " §c(§4" + localizedName + "§c)";
-
                 // Print a victory message to console, with the above shiny String mixed in.
                 printUnformattedMessage
                 (
-                        "§5PBR §f// §cPlayer §4" + player.getName() +
-                        "§c defeated a shiny legendary §4" + nameString +
-                        "§c in world \"§4" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                        "§c\", at X:§4" + location.getX() +
-                        "§c Y:§4" + location.getY() +
-                        "§c Z:§4" + location.getZ()
+                        "§5PBR §f// §4Player §c" + player.getName() +
+                        "§4 defeated a shiny legendary §c" + nameString +
+                        "§4 in world \"§c" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                        "§4\", at X:§c" + location.getX() +
+                        "§4 Y:§c" + location.getY() +
+                        "§4 Z:§c" + location.getZ()
                 );
             }
 
-            if (showShinyLegendaryVictories)
+            if (showLegendaryVictories)
             {
                 // Get a broadcast from the broadcasts config file, if the key can be found.
                 broadcast = getBroadcast("broadcast.victory.shiny_legendary");
@@ -92,8 +88,21 @@ public class WildDefeatListener
                 if (broadcast != null)
                 {
                     iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
-                            hoverShinyLegendaryVictories, false, revealShinyLegendaryVictories,
-                            "victory.shinylegendary", "showShinyLegendaryVictory");
+                            hoverLegendaryVictories, false, revealLegendaryVictories,
+                            "victory.shinylegendary", "showLegendaryVictory", "showShinyVictory");
+                }
+            }
+            else if (showShinyVictories)
+            {
+                // Get a broadcast from the broadcasts config file, if the key can be found.
+                broadcast = getBroadcast("broadcast.victory.shiny_legendary");
+
+                // Did we find a message? Iterate all available players, and send to those who should receive!
+                if (broadcast != null)
+                {
+                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
+                            hoverShinyVictories, false, revealShinyVictories,
+                            "victory.shinylegendary", "showLegendaryVictory", "showShinyVictory");
                 }
             }
         }
@@ -101,19 +110,15 @@ public class WildDefeatListener
         {
             if (logLegendaryVictories)
             {
-                // If we're in a localized setup, log both names.
-                final String nameString =
-                        baseName.equals(localizedName) ? baseName : baseName + " §c(§4" + localizedName + "§c)";
-
                 // Print a victory message to console, with the above shiny String mixed in.
                 printUnformattedMessage
                 (
-                        "§5PBR §f// §cPlayer §4" + player.getName() +
-                        "§c defeated a legendary §4" + nameString +
-                        "§c in world \"§4" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                        "§c\", at X:§4" + location.getX() +
-                        "§c Y:§4" + location.getY() +
-                        "§c Z:§4" + location.getZ()
+                        "§5PBR §f// §4Player §c" + player.getName() +
+                        "§4 defeated a legendary §c" + nameString +
+                        "§4 in world \"§c" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                        "§4\", at X:§c" + location.getX() +
+                        "§4 Y:§c" + location.getY() +
+                        "§4 Z:§c" + location.getZ()
                 );
             }
 
@@ -135,19 +140,15 @@ public class WildDefeatListener
         {
             if (logShinyVictories)
             {
-                // If we're in a localized setup, log both names.
-                final String nameString =
-                        baseName.equals(localizedName) ? baseName : baseName + " §c(§4" + localizedName + "§c)";
-
                 // Print a victory message to console.
                 printUnformattedMessage
                 (
-                        "§5PBR §f// §cPlayer §4" + player.getName() +
-                        "§c defeated a shiny §4" + nameString +
-                        "§c in world \"§4" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                        "§c\", at X:§4" + location.getX() +
-                        "§c Y:§4" + location.getY() +
-                        "§c Z:§4" + location.getZ()
+                        "§5PBR §f// §4Player §c" + player.getName() +
+                        "§4 defeated a shiny §c" + nameString +
+                        "§4 in world \"§c" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                        "§4\", at X:§c" + location.getX() +
+                        "§4 Y:§c" + location.getY() +
+                        "§4 Z:§c" + location.getZ()
                 );
             }
 

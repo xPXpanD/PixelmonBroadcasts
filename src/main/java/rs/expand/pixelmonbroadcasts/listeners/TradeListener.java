@@ -39,19 +39,17 @@ public class TradeListener
 
             // If we're in a localized setup, log both names.
             final String name1String =
-                    baseName1.equals(localizedName1) ? baseName1 : baseName1 + " §d(§5" + localizedName1 + "§d)";
+                    baseName1.equals(localizedName1) ? baseName1 : baseName1 + " §7(§f" + localizedName1 + "§7)";
             final String name2String =
-                    baseName2.equals(localizedName2) ? baseName2 : baseName2 + " §d(§5" + localizedName2 + "§d)";
+                    baseName2.equals(localizedName2) ? baseName2 : baseName2 + " §7(§f" + localizedName2 + "§7)";
 
             // Print a trade message to console.
             printUnformattedMessage
             (
-                    "§5PBR §f// §dPlayer §5" + player1.getName() +
-                    "§d has traded a " + pokemon1ShinynessString +
-                    "§5" + name1String +
-                    "§d for §5" + player2.getName() +
-                    "§d's " + pokemon2ShinynessString +
-                    "§5" + name2String
+                    "§5PBR §f// §7Player §f" + player1.getName() +
+                    "§7 has traded a " + pokemon1ShinynessString + "§f" + name1String +
+                    "§7 for §f" + player2.getName() +
+                    "§7's " + pokemon2ShinynessString + "§f" + name2String
             );
         }
 

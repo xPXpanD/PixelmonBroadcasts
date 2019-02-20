@@ -48,12 +48,12 @@ public class BattleStartListener
                     // Print a PvP starting message to console.
                     printUnformattedMessage
                     (
-                            "§5PBR §f// §ePlayer §6" + participant1.getName().getUnformattedText() +
-                            "§e started battling player §6" + participant2.getName().getUnformattedText() +
-                            "§e in world \"§6" + participant1.getWorld().getWorldInfo().getWorldName() +
-                            "§e\", at X:§6" + location.getX() +
-                            "§e Y:§6" + location.getY() +
-                            "§e Z:§6" + location.getZ()
+                            "§5PBR §f// §3Player §b" + participant1.getName().getUnformattedText() +
+                            "§3 started battling player §b" + participant2.getName().getUnformattedText() +
+                            "§3 in world \"§b" + participant1.getWorld().getWorldInfo().getWorldName() +
+                            "§3\", at X:§b" + location.getX() +
+                            "§3 Y:§b" + location.getY() +
+                            "§3 Z:§b" + location.getZ()
                     );
                 }
 
@@ -107,11 +107,11 @@ public class BattleStartListener
                         // Print a challenge message to console.
                         printUnformattedMessage
                         (
-                                "§5PBR §f// §ePlayer §6" + player.getName().getUnformattedText() +
-                                "§e challenged a boss trainer in world \"§6" + worldName +
-                                "§e\", at X:§6" + location.getX() +
-                                "§e Y:§6" + location.getY() +
-                                "§e Z:§6" + location.getZ()
+                                "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
+                                "§3 challenged a boss trainer in world \"§b" + worldName +
+                                "§3\", at X:§b" + location.getX() +
+                                "§3 Y:§b" + location.getY() +
+                                "§3 Z:§b" + location.getZ()
                         );
                     }
 
@@ -136,11 +136,11 @@ public class BattleStartListener
                         // Print a challenge message to console.
                         printUnformattedMessage
                         (
-                                "§5PBR §f// §ePlayer §6" + player.getName().getUnformattedText() +
-                                "§e challenged a normal trainer in world \"§6" + worldName +
-                                "§e\", at X:§6" + location.getX() +
-                                "§e Y:§6" + location.getY() +
-                                "§e Z:§6" + location.getZ()
+                                "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
+                                "§3 challenged a normal trainer in world \"§b" + worldName +
+                                "§3\", at X:§b" + location.getX() +
+                                "§3 Y:§b" + location.getY() +
+                                "§3 Z:§b" + location.getZ()
                         );
                     }
 
@@ -189,24 +189,24 @@ public class BattleStartListener
                 // I put bosses under this check, as well. Who knows what servers cook up for player parties?
                 if (!pokemonEntity.hasOwner())
                 {
+                    // If we're in a localized setup, log both names.
+                    final String nameString =
+                            baseName.equals(localizedName) ? baseName : baseName + " §3(§b" + localizedName + "§3)";
+
                     // Is the Pokémon a boss?
                     if (pokemonEntity.isBossPokemon())
                     {
                         if (logBossChallenges)
                         {
-                            // If we're in a localized setup, log both names.
-                            final String nameString =
-                                    baseName.equals(localizedName) ? baseName : baseName + " §e(§6" + localizedName + "§e)";
-
                             // Print a challenge message to console.
                             printUnformattedMessage
                             (
-                                    "§5PBR §f// §ePlayer §6" + player.getName().getUnformattedText() +
-                                    "§e engaged a boss §6" + nameString +
-                                    "§e in world \"§6" + pokemon.getWorld().getWorldInfo().getWorldName() +
-                                    "§e\", at X:§6" + location.getX() +
-                                    "§e Y:§6" + location.getY() +
-                                    "§e Z:§6" + location.getZ()
+                                    "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
+                                    "§3 engaged a boss §b" + nameString +
+                                    "§3 in world \"§b" + pokemon.getWorld().getWorldInfo().getWorldName() +
+                                    "§3\", at X:§b" + location.getX() +
+                                    "§3 Y:§b" + location.getY() +
+                                    "§3 Z:§b" + location.getZ()
                             );
                         }
 
@@ -226,25 +226,21 @@ public class BattleStartListener
                     }
                     else if (EnumSpecies.legendaries.contains(baseName) && pokemonEntity.getPokemonData().isShiny())
                     {
-                        if (logShinyLegendaryChallenges)
+                        if (logLegendaryChallenges || logShinyChallenges)
                         {
-                            // If we're in a localized setup, log both names.
-                            final String nameString =
-                                    baseName.equals(localizedName) ? baseName : baseName + " §a(§2" + localizedName + "§a)";
-
                             // Print a challenge message to console.
                             printUnformattedMessage
                             (
-                                    "§5PBR §f// §aPlayer §2" + player.getName().getUnformattedText() +
-                                    "§a engaged a shiny legendary §2" + nameString +
-                                    "§a in world \"§2" + pokemon.getWorld().getWorldInfo().getWorldName() +
-                                    "§a\", at X:§2" + location.getX() +
-                                    "§a Y:§2" + location.getY() +
-                                    "§a Z:§2" + location.getZ()
+                                    "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
+                                    "§3 engaged a shiny legendary §b" + nameString +
+                                    "§3 in world \"§b" + pokemon.getWorld().getWorldInfo().getWorldName() +
+                                    "§3\", at X:§b" + location.getX() +
+                                    "§3 Y:§b" + location.getY() +
+                                    "§3 Z:§b" + location.getZ()
                             );
                         }
 
-                        if (showShinyLegendaryChallenges)
+                        if (showLegendaryChallenges)
                         {
                             // Get a broadcast from the broadcasts config file, if the key can be found.
                             final String broadcast = getBroadcast("broadcast.challenge.shiny_legendary");
@@ -253,8 +249,21 @@ public class BattleStartListener
                             if (broadcast != null)
                             {
                                 iterateAndSendBroadcast(broadcast, pokemonEntity, null, playerEntity,
-                                        null, hoverShinyLegendaryChallenges, true, false,
-                                        "challenge.shinylegendary", "showShinyLegendaryChallenge");
+                                        null, hoverLegendaryChallenges, true, false,
+                                        "challenge.shinylegendary", "showLegendaryChallenge", "showShinyChallenge");
+                            }
+                        }
+                        else if (showShinyChallenges)
+                        {
+                            // Get a broadcast from the broadcasts config file, if the key can be found.
+                            final String broadcast = getBroadcast("broadcast.challenge.shiny_legendary");
+
+                            // Did we find a message? Iterate all available players, and send to those who should receive!
+                            if (broadcast != null)
+                            {
+                                iterateAndSendBroadcast(broadcast, pokemonEntity, null, playerEntity,
+                                        null, hoverShinyChallenges, true, false,
+                                        "challenge.shinylegendary", "showLegendaryChallenge", "showShinyChallenge");
                             }
                         }
                     }
@@ -262,19 +271,15 @@ public class BattleStartListener
                     {
                         if (logLegendaryChallenges)
                         {
-                            // If we're in a localized setup, log both names.
-                            final String nameString =
-                                    baseName.equals(localizedName) ? baseName : baseName + " §a(§2" + localizedName + "§a)";
-
                             // Print a challenge message to console.
                             printUnformattedMessage
                             (
-                                    "§5PBR §f// §aPlayer §2" + player.getName().getUnformattedText() +
-                                    "§a engaged a legendary §2" + nameString +
-                                    "§a in world \"§2" + pokemon.getWorld().getWorldInfo().getWorldName() +
-                                    "§a\", at X:§2" + location.getX() +
-                                    "§a Y:§2" + location.getY() +
-                                    "§a Z:§2" + location.getZ()
+                                    "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
+                                    "§3 engaged a legendary §b" + nameString +
+                                    "§3 in world \"§b" + pokemon.getWorld().getWorldInfo().getWorldName() +
+                                    "§3\", at X:§b" + location.getX() +
+                                    "§3 Y:§b" + location.getY() +
+                                    "§3 Z:§b" + location.getZ()
                             );
                         }
 
@@ -296,19 +301,15 @@ public class BattleStartListener
                     {
                         if (logShinyChallenges)
                         {
-                            // If we're in a localized setup, log both names.
-                            final String nameString =
-                                    baseName.equals(localizedName) ? baseName : baseName + " §b(§3" + localizedName + "§b)";
-
                             // Print a challenge message to console.
                             printUnformattedMessage
                             (
-                                    "§5PBR §f// §bPlayer §3" + player.getName().getUnformattedText() +
-                                    "§b engaged a shiny §3" + nameString +
-                                    "§b in world \"§3" + pokemon.getWorld().getWorldInfo().getWorldName() +
-                                    "§b\", at X:§3" + location.getX() +
-                                    "§b Y:§3" + location.getY() +
-                                    "§b Z:§3" + location.getZ()
+                                    "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
+                                    "§3 engaged a shiny §b" + nameString +
+                                    "§3 in world \"§b" + pokemon.getWorld().getWorldInfo().getWorldName() +
+                                    "§3\", at X:§b" + location.getX() +
+                                    "§3 Y:§b" + location.getY() +
+                                    "§3 Z:§b" + location.getZ()
                             );
                         }
 

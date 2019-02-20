@@ -86,15 +86,6 @@ public class ConfigMethods
         // Let's try creating/loading all the configs. Break out with a return if something goes wrong.
         try
         {
-            if (Files.notExists(settingsPath))
-            {
-
-                // Create a new config since the file wasn't found. Add spaces to match startup/reload message spacing.
-                printUnformattedMessage("    §eNo settings file found, creating...");
-                Files.copy(ConfigMethods.class.getResourceAsStream("/assets/settings.conf"),
-                        Paths.get(configPathAsString, "settings.conf"));
-            }
-
             if (Files.notExists(broadcastsPath))
             {
                 // Create a new config since the file wasn't found. Add spaces to match startup/reload message spacing.
@@ -111,10 +102,19 @@ public class ConfigMethods
                         Paths.get(configPathAsString, "messages.conf"));
             }
 
+            if (Files.notExists(settingsPath))
+            {
+
+                // Create a new config since the file wasn't found. Add spaces to match startup/reload message spacing.
+                printUnformattedMessage("    §eNo settings file found, creating...");
+                Files.copy(ConfigMethods.class.getResourceAsStream("/assets/settings.conf"),
+                        Paths.get(configPathAsString, "settings.conf"));
+            }
+
             // Load configs to memory.
-            settingsConfig = PixelmonBroadcasts.settingsLoader.load();
             broadcastsConfig = PixelmonBroadcasts.broadcastsLoader.load();
             messagesConfig = PixelmonBroadcasts.messagesLoader.load();
+            settingsConfig = PixelmonBroadcasts.settingsLoader.load();
         }
         catch (final IOException F)
         {
@@ -258,81 +258,6 @@ public class ConfigMethods
             PixelmonBroadcasts.showLegendaryForfeits = legendaryForfeitOptions.contains("show");
             PixelmonBroadcasts.hoverLegendaryForfeits = legendaryForfeitOptions.contains("hover");
             PixelmonBroadcasts.revealLegendaryForfeits = legendaryForfeitOptions.contains("reveal");
-        }
-
-        /*                          *\
-           shiny legendary settings
-        \*                          */
-
-        // Get options. Extract and set them, if we managed to grab them successfully.
-        String shinyLegendarySpawnOptions = settingsConfig.getNode("shinyLegendarySpawnOptions").getString();
-        if (shinyLegendarySpawnOptions == null)
-            optionsErrorArray.add("shinyLegendarySpawnOptions");
-        else
-        {
-            shinyLegendarySpawnOptions = shinyLegendarySpawnOptions.toLowerCase();
-            PixelmonBroadcasts.logShinyLegendarySpawns = shinyLegendarySpawnOptions.contains("log");
-            PixelmonBroadcasts.showShinyLegendarySpawns = shinyLegendarySpawnOptions.contains("show");
-            PixelmonBroadcasts.hoverShinyLegendarySpawns = shinyLegendarySpawnOptions.contains("hover");
-        }
-
-        String shinyLegendaryChallengeOptions = settingsConfig.getNode("shinyLegendaryChallengeOptions").getString();
-        if (shinyLegendaryChallengeOptions == null)
-            optionsErrorArray.add("shinyLegendaryChallengeOptions");
-        else
-        {
-            shinyLegendaryChallengeOptions = shinyLegendaryChallengeOptions.toLowerCase();
-            PixelmonBroadcasts.logShinyLegendaryChallenges = shinyLegendaryChallengeOptions.contains("log");
-            PixelmonBroadcasts.showShinyLegendaryChallenges = shinyLegendaryChallengeOptions.contains("show");
-            PixelmonBroadcasts.hoverShinyLegendaryChallenges = shinyLegendaryChallengeOptions.contains("hover");
-        }
-
-        String shinyLegendaryCatchOptions = settingsConfig.getNode("shinyLegendaryCatchOptions").getString();
-        if (shinyLegendaryCatchOptions == null)
-            optionsErrorArray.add("shinyLegendaryCatchOptions");
-        else
-        {
-            shinyLegendaryCatchOptions = shinyLegendaryCatchOptions.toLowerCase();
-            PixelmonBroadcasts.logShinyLegendaryCatches = shinyLegendaryCatchOptions.contains("log");
-            PixelmonBroadcasts.showShinyLegendaryCatches = shinyLegendaryCatchOptions.contains("show");
-            PixelmonBroadcasts.hoverShinyLegendaryCatches = shinyLegendaryCatchOptions.contains("hover");
-            PixelmonBroadcasts.revealShinyLegendaryCatches = shinyLegendaryCatchOptions.contains("reveal");
-        }
-
-        String shinyLegendaryVictoryOptions = settingsConfig.getNode("shinyLegendaryVictoryOptions").getString();
-        if (shinyLegendaryVictoryOptions == null)
-            optionsErrorArray.add("shinyLegendaryVictoryOptions");
-        else
-        {
-            shinyLegendaryVictoryOptions = shinyLegendaryVictoryOptions.toLowerCase();
-            PixelmonBroadcasts.logShinyLegendaryVictories = shinyLegendaryVictoryOptions.contains("log");
-            PixelmonBroadcasts.showShinyLegendaryVictories = shinyLegendaryVictoryOptions.contains("show");
-            PixelmonBroadcasts.hoverShinyLegendaryVictories = shinyLegendaryVictoryOptions.contains("hover");
-            PixelmonBroadcasts.revealShinyLegendaryVictories = shinyLegendaryVictoryOptions.contains("reveal");
-        }
-
-        String shinyLegendaryBlackoutOptions = settingsConfig.getNode("shinyLegendaryBlackoutOptions").getString();
-        if (shinyLegendaryBlackoutOptions == null)
-            optionsErrorArray.add("shinyLegendaryBlackoutOptions");
-        else
-        {
-            shinyLegendaryBlackoutOptions = shinyLegendaryBlackoutOptions.toLowerCase();
-            PixelmonBroadcasts.logShinyLegendaryBlackouts = shinyLegendaryBlackoutOptions.contains("log");
-            PixelmonBroadcasts.showShinyLegendaryBlackouts = shinyLegendaryBlackoutOptions.contains("show");
-            PixelmonBroadcasts.hoverShinyLegendaryBlackouts = shinyLegendaryBlackoutOptions.contains("hover");
-            PixelmonBroadcasts.revealShinyLegendaryBlackouts = shinyLegendaryBlackoutOptions.contains("reveal");
-        }
-
-        String shinyLegendaryForfeitOptions = settingsConfig.getNode("shinyLegendaryForfeitOptions").getString();
-        if (shinyLegendaryForfeitOptions == null)
-            optionsErrorArray.add("shinyLegendaryForfeitOptions");
-        else
-        {
-            shinyLegendaryForfeitOptions = shinyLegendaryForfeitOptions.toLowerCase();
-            PixelmonBroadcasts.logShinyLegendaryForfeits = shinyLegendaryForfeitOptions.contains("log");
-            PixelmonBroadcasts.showShinyLegendaryForfeits = shinyLegendaryForfeitOptions.contains("show");
-            PixelmonBroadcasts.hoverShinyLegendaryForfeits = shinyLegendaryForfeitOptions.contains("hover");
-            PixelmonBroadcasts.revealShinyLegendaryForfeits = shinyLegendaryForfeitOptions.contains("reveal");
         }
 
         /*                *\

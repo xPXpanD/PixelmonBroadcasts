@@ -28,23 +28,23 @@ public class HatchListener
         final BlockPos location = player.getPosition();
         final World world = player.getEntityWorld();
 
+        // If we're in a localized setup, log both names.
+        final String nameString =
+                baseName.equals(localizedName) ? baseName : baseName + " §7(§f" + localizedName + "§7)";
+
         if (pokemon.isShiny())
         {
             if (logShinyHatches)
             {
-                // If we're in a localized setup, log both names.
-                final String nameString =
-                        baseName.equals(localizedName) ? baseName : baseName + " §d(§5" + localizedName + "§d)";
-
                 // Print a hatch message to console.
                 printUnformattedMessage
                 (
-                        "§5PBR §f// §dPlayer §5" + player.getName() +
-                        "§d's shiny §5" + nameString +
-                        "§d egg hatched in world \"§5" + world.getWorldInfo().getWorldName() +
-                        "§d\" at X:§5" + location.getX() +
-                        "§d Y:§5" + location.getY() +
-                        "§d Z:§5" + location.getZ()
+                        "§5PBR §f// §7Player §f" + player.getName() +
+                        "§7's shiny §f" + nameString +
+                        "§7 egg hatched in world \"§f" + world.getWorldInfo().getWorldName() +
+                        "§7\" at X:§f" + location.getX() +
+                        "§7 Y:§f" + location.getY() +
+                        "§7 Z:§f" + location.getZ()
                 );
             }
 
@@ -66,19 +66,15 @@ public class HatchListener
         {
             if (logNormalHatches)
             {
-                // If we're in a localized setup, log both names.
-                final String nameString =
-                        baseName.equals(localizedName) ? baseName : baseName + " §d(§5" + localizedName + "§d)";
-
                 // Print a hatch message to console.
                 printUnformattedMessage
                 (
-                        "§5PBR §f// §dPlayer §5" + player.getName() +
-                        "§d's normal §5" + nameString +
-                        "§d egg hatched in world \"§5" + world.getWorldInfo().getWorldName() +
-                        "§d\" at X:§5" + location.getX() +
-                        "§d Y:§5" + location.getY() +
-                        "§d Z:§5" + location.getZ()
+                        "§5PBR §f// §7Player §f" + player.getName() +
+                        "§7's normal §f" + nameString +
+                        "§7 egg hatched in world \"§f" + world.getWorldInfo().getWorldName() +
+                        "§7\" at X:§f" + location.getX() +
+                        "§7 Y:§f" + location.getY() +
+                        "§7 Z:§f" + location.getZ()
                 );
             }
 

@@ -6,11 +6,20 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import com.pixelmonmod.pixelmon.Pixelmon;
+import com.pixelmonmod.pixelmon.api.overlay.notice.NoticeOverlay;
 import com.pixelmonmod.pixelmon.config.PixelmonConfig;
+import net.minecraft.entity.player.EntityPlayerMP;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import org.spongepowered.api.Server;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
@@ -25,6 +34,8 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 import rs.expand.pixelmonbroadcasts.commands.*;
 import rs.expand.pixelmonbroadcasts.listeners.*;
 import rs.expand.pixelmonbroadcasts.utilities.ConfigMethods;
+
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicError;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
 
 /*                                                              *\
@@ -41,7 +52,7 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnform
 // TODO: Add a logger for individual player Pokémon being knocked out, for the Nuzlocke crowd.
 // TODO: Listen to commands being used, fire the right event if we have a successful hatch/spawn/etc..
 // TODO: Make a more comprehensive summon check.
-// TODO: Round up when close.
+// TODO: Round up when close on stuff like IVs. Currently rounds down, even if at .99.
 // FIXME: Bad event listeners from other mods may cause events to hang (stuck loop), which causes insane spam from us. Fix?
 // FIXME: Biome names are always English. Maybe add to the lang, and use English biome names as keys.
 // FIXME: Roll over cleanly to a new line if more than 5 toggles are available in a single category?
@@ -50,7 +61,7 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnform
 (
         id = "pixelmonbroadcasts",
         name = "PixelmonBroadcasts",
-        version = "0.3",
+        version = "0.4",
         dependencies = @Dependency(id = "pixelmon", version = "7.0"),
         description = "Adds fully custom legendary-like messages for tons of events, and optionally logs them, too.",
         authors = "XpanD"
@@ -74,6 +85,9 @@ public class PixelmonBroadcasts
     public static String commandAlias;
     public static Boolean showAbilities;
 
+    // Set up a hashmap for tracking shown notices and when they need to go.
+    public static HashMap<UUID, Long> noticeExpiryMap = new HashMap<>();
+
     // Set up logging settings.
     public static boolean logBossBlackouts;
     public static boolean logBossChallenges;
@@ -91,6 +105,12 @@ public class PixelmonBroadcasts
     public static boolean logLegendaryForfeits;
     public static boolean logLegendarySpawns;
     public static boolean logLegendaryVictories;
+    public static boolean logUltraBeastBlackouts;
+    public static boolean logUltraBeastCatches;
+    public static boolean logUltraBeastChallenges;
+    public static boolean logUltraBeastForfeits;
+    public static boolean logUltraBeastSpawns;
+    public static boolean logUltraBeastVictories;
     public static boolean logNormalBlackouts;
     public static boolean logNormalCatches;
     public static boolean logNormalHatches;
@@ -102,12 +122,6 @@ public class PixelmonBroadcasts
     public static boolean logShinyChallenges;
     public static boolean logShinyForfeits;
     public static boolean logShinyHatches;
-    public static boolean logShinyLegendaryBlackouts;
-    public static boolean logShinyLegendaryCatches;
-    public static boolean logShinyLegendaryChallenges;
-    public static boolean logShinyLegendaryForfeits;
-    public static boolean logShinyLegendarySpawns;
-    public static boolean logShinyLegendaryVictories;
     public static boolean logShinySpawns;
     public static boolean logShinyVictories;
     public static boolean logTrades;
@@ -133,6 +147,12 @@ public class PixelmonBroadcasts
     public static boolean showLegendaryForfeits;
     public static boolean showLegendarySpawns;
     public static boolean showLegendaryVictories;
+    public static boolean showUltraBeastBlackouts;
+    public static boolean showUltraBeastCatches;
+    public static boolean showUltraBeastChallenges;
+    public static boolean showUltraBeastForfeits;
+    public static boolean showUltraBeastSpawns;
+    public static boolean showUltraBeastVictories;
     public static boolean showNormalBlackouts;
     public static boolean showNormalCatches;
     public static boolean showNormalHatches;
@@ -144,12 +164,6 @@ public class PixelmonBroadcasts
     public static boolean showShinyChallenges;
     public static boolean showShinyForfeits;
     public static boolean showShinyHatches;
-    public static boolean showShinyLegendaryBlackouts;
-    public static boolean showShinyLegendaryCatches;
-    public static boolean showShinyLegendaryChallenges;
-    public static boolean showShinyLegendaryForfeits;
-    public static boolean showShinyLegendarySpawns;
-    public static boolean showShinyLegendaryVictories;
     public static boolean showShinySpawns;
     public static boolean showShinyVictories;
     public static boolean showTrades;
@@ -170,6 +184,12 @@ public class PixelmonBroadcasts
     public static boolean hoverLegendaryForfeits;
     public static boolean hoverLegendarySpawns;
     public static boolean hoverLegendaryVictories;
+    public static boolean hoverUltraBeastBlackouts;
+    public static boolean hoverUltraBeastCatches;
+    public static boolean hoverUltraBeastChallenges;
+    public static boolean hoverUltraBeastForfeits;
+    public static boolean hoverUltraBeastSpawns;
+    public static boolean hoverUltraBeastVictories;
     public static boolean hoverNormalBlackouts;
     public static boolean hoverNormalCatches;
     public static boolean hoverNormalHatches;
@@ -178,12 +198,6 @@ public class PixelmonBroadcasts
     public static boolean hoverShinyChallenges;
     public static boolean hoverShinyForfeits;
     public static boolean hoverShinyHatches;
-    public static boolean hoverShinyLegendaryBlackouts;
-    public static boolean hoverShinyLegendaryCatches;
-    public static boolean hoverShinyLegendaryChallenges;
-    public static boolean hoverShinyLegendaryForfeits;
-    public static boolean hoverShinyLegendarySpawns;
-    public static boolean hoverShinyLegendaryVictories;
     public static boolean hoverShinySpawns;
     public static boolean hoverShinyVictories;
 
@@ -195,6 +209,10 @@ public class PixelmonBroadcasts
     public static boolean revealLegendaryCatches;
     public static boolean revealLegendaryForfeits;
     public static boolean revealLegendaryVictories;
+    public static boolean revealUltraBeastBlackouts;
+    public static boolean revealUltraBeastCatches;
+    public static boolean revealUltraBeastForfeits;
+    public static boolean revealUltraBeastVictories;
     public static boolean revealNormalBlackouts;
     public static boolean revealNormalCatches;
     public static boolean revealNormalHatches;
@@ -202,31 +220,27 @@ public class PixelmonBroadcasts
     public static boolean revealShinyCatches;
     public static boolean revealShinyForfeits;
     public static boolean revealShinyHatches;
-    public static boolean revealShinyLegendaryBlackouts;
-    public static boolean revealShinyLegendaryCatches;
-    public static boolean revealShinyLegendaryForfeits;
-    public static boolean revealShinyLegendaryVictories;
     public static boolean revealShinyVictories;
 
     // Create and set up config paths, and grab an OS-specific file path separator. This will usually be a forward slash.
     private static String fileSystemSeparator = FileSystems.getDefault().getSeparator();
     public static String configPathAsString = "config" + fileSystemSeparator + "PixelmonBroadcasts" + fileSystemSeparator;
-    public static Path settingsPath = Paths.get(configPathAsString, "settings.conf");
-    public static Path messagesPath = Paths.get(configPathAsString, "messages.conf");
     public static Path broadcastsPath = Paths.get(configPathAsString, "broadcasts.conf");
+    public static Path messagesPath = Paths.get(configPathAsString, "messages.conf");
+    public static Path settingsPath = Paths.get(configPathAsString, "settings.conf");
 
     // Set up configuration loaders that we can call on later.
-    public static ConfigurationLoader<CommentedConfigurationNode> settingsLoader =
-            HoconConfigurationLoader.builder().setPath(settingsPath).build();
-    public static ConfigurationLoader<CommentedConfigurationNode> messagesLoader =
-            HoconConfigurationLoader.builder().setPath(messagesPath).build();
     public static ConfigurationLoader<CommentedConfigurationNode> broadcastsLoader =
             HoconConfigurationLoader.builder().setPath(broadcastsPath).build();
+    public static ConfigurationLoader<CommentedConfigurationNode> messagesLoader =
+            HoconConfigurationLoader.builder().setPath(messagesPath).build();
+    public static ConfigurationLoader<CommentedConfigurationNode> settingsLoader =
+            HoconConfigurationLoader.builder().setPath(settingsPath).build();
 
     // Set up a few places for us to load all our settings/messages/broadcasts into later.
-    public static CommentedConfigurationNode settingsConfig = null;
-    public static CommentedConfigurationNode messagesConfig = null;
     public static CommentedConfigurationNode broadcastsConfig = null;
+    public static CommentedConfigurationNode messagesConfig = null;
+    public static CommentedConfigurationNode settingsConfig = null;
 
     /*                       *\
          Utility commands.
@@ -291,6 +305,34 @@ public class PixelmonBroadcasts
     {
         if (loadedCorrectly)
         {
+            // Set up a repeating task. It checks if any players need their notices wiped. (happens every 10-15s)
+            // Won't do much if Pixelmon's notice board (the thing that shows messages at the top) isn't being sent to.
+            final ScheduledExecutorService noticeClearTimer = Executors.newSingleThreadScheduledExecutor();
+            final Server server = Sponge.getGame().getServer();
+            noticeClearTimer.scheduleWithFixedDelay(() ->
+            {
+                // Grab current time in milliseconds.
+                final long currentTime = System.currentTimeMillis();
+
+                // Iterate through all online players.
+                server.getOnlinePlayers().forEach(player ->
+                {
+                    // Check if our player is using any noticeboard-enabled broadcasts.
+                    if (noticeExpiryMap.containsKey(player.getUniqueId()))
+                    {
+                        // Are we 10 or more seconds ahead of the last time a notice was added? Hide it!
+                        if (currentTime - noticeExpiryMap.get(player.getUniqueId()) >= 10000)
+                        {
+                            // Hide the overlay for the targeted player.
+                            NoticeOverlay.hide((EntityPlayerMP) player);
+
+                            // Remove the player's UUID from the map. This prevents needless clears every 5 seconds.
+                            noticeExpiryMap.remove(player.getUniqueId());
+                        }
+                    }
+                });
+            }, 0, 5, TimeUnit.SECONDS);
+
             // Check Pixelmon's config and get whether the legendary spawning message is in.
             final Boolean configStatus = toBooleanObject(
                     PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").getString());

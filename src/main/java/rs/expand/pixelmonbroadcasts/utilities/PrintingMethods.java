@@ -98,7 +98,7 @@ public class PrintingMethods
 
     // Gets a key from broadcasts.conf, formats it (ampersands to section characters), and then returns it.
     // Also swaps any provided placeholders with String representations of the Objects given, if present.
-    public static String getBroadcast(String key)
+    public static String getBroadcast(final String key)
     {
         // This is slightly hacky, but split the incoming key up into separate nodes so we can read it.
         final String[] keySet = key.split("\\.");

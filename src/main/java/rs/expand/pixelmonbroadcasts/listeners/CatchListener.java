@@ -26,27 +26,27 @@ public class CatchListener
         final BlockPos location = event.pokeball.getPosition();
         final EntityPlayer player = event.player;
 
+        // If we're in a localized setup, log both names.
+        final String nameString =
+                baseName.equals(localizedName) ? baseName : baseName + " §2(§a" + localizedName + "§2)";
+
         if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().isShiny())
         {
-            if (logShinyLegendaryCatches)
+            if (logLegendaryCatches || logShinyCatches)
             {
-                // If we're in a localized setup, log both names.
-                final String nameString =
-                        baseName.equals(localizedName) ? baseName : baseName + " §a(§2" + localizedName + "§a)";
-
                 // Print a catch message to console, with the above shiny String mixed in.
                 printUnformattedMessage
                 (
-                        "§5PBR §f// §aPlayer §2" + player.getName() +
-                        "§a caught a shiny legendary §2" + nameString +
-                        "§a in world \"§2" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                        "§a\", at X:§2" + location.getX() +
-                        "§a Y:§2" + location.getY() +
-                        "§a Z:§2" + location.getZ()
+                        "§5PBR §f// §2Player §a" + player.getName() +
+                        "§2 caught a shiny legendary §a" + nameString +
+                        "§2 in world \"§a" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                        "§2\", at X:§a" + location.getX() +
+                        "§2 Y:§a" + location.getY() +
+                        "§2 Z:§a" + location.getZ()
                 );
             }
 
-            if (showShinyLegendaryCatches)
+            if (showLegendaryCatches)
             {
                 // Sets the position of the entity we created, as it's 0 on all coordinates by default.
                 pokemon.setPosition(location.getX(), location.getY(), location.getZ());
@@ -58,8 +58,24 @@ public class CatchListener
                 if (broadcast != null)
                 {
                     iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
-                            hoverShinyLegendaryCatches, true, revealShinyLegendaryCatches,
-                            "catch.shinylegendary", "showShinyLegendaryCatch");
+                            hoverLegendaryCatches, true, revealLegendaryCatches,
+                            "catch.shinylegendary", "showLegendaryCatch", "showShinyCatch");
+                }
+            }
+            else if (showShinyCatches)
+            {
+                // Sets the position of the entity we created, as it's 0 on all coordinates by default.
+                pokemon.setPosition(location.getX(), location.getY(), location.getZ());
+
+                // Get a broadcast from the broadcasts config file, if the key can be found.
+                final String broadcast = getBroadcast("broadcast.catch.shiny_legendary");
+
+                // Did we find a message? Iterate all available players, and send to those who should receive!
+                if (broadcast != null)
+                {
+                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
+                            hoverShinyCatches, true, revealShinyCatches,
+                            "catch.shinylegendary", "showLegendaryCatch", "showShinyCatch");
                 }
             }
         }
@@ -67,19 +83,15 @@ public class CatchListener
         {
             if (logLegendaryCatches)
             {
-                // If we're in a localized setup, log both names.
-                final String nameString =
-                        baseName.equals(localizedName) ? baseName : baseName + " §a(§2" + localizedName + "§a)";
-
                 // Print a catch message to console, with the above shiny String mixed in.
                 printUnformattedMessage
                 (
-                        "§5PBR §f// §aPlayer §2" + player.getName() +
-                        "§a caught a legendary §2" + nameString +
-                        "§a in world \"§2" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                        "§a\", at X:§2" + location.getX() +
-                        "§a Y:§2" + location.getY() +
-                        "§a Z:§2" + location.getZ()
+                        "§5PBR §f// §2Player §a" + player.getName() +
+                        "§2 caught a legendary §a" + nameString +
+                        "§2 in world \"§a" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                        "§2\", at X:§a" + location.getX() +
+                        "§2 Y:§a" + location.getY() +
+                        "§2 Z:§a" + location.getZ()
                 );
             }
 
@@ -104,10 +116,6 @@ public class CatchListener
         {
             if (logShinyCatches)
             {
-                // If we're in a localized setup, log both names.
-                final String nameString =
-                        baseName.equals(localizedName) ? baseName : baseName + " §b(§3" + localizedName + "§b)";
-
                 // Print a catch message to console.
                 printUnformattedMessage
                 (
@@ -141,10 +149,6 @@ public class CatchListener
         {
             if (logNormalCatches)
             {
-                // If we're in a localized setup, log both names.
-                final String nameString =
-                        baseName.equals(localizedName) ? baseName : baseName + " §f(§7" + localizedName + "§f)";
-
                 // Print a catch message to console.
                 printUnformattedMessage
                 (

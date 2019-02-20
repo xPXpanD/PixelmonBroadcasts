@@ -1,5 +1,31 @@
+0.4 for 7.0.2
+Released February 20th, 2019.
+
+    Additions:
+    * Added Ultra Beast and wormhole spawning support everywhere.
+    * Added Pixelmon noticeboard support. Shows stuff in a fancy box at the top, surrounded by sprites!
+
+    Settings file additions and changes:
+    * Renamed the "show" toggle to "chat" to avoid confusion with the new "notice". Needs a regen! Sorry.
+    * Added a portal spawn setting, "wormholeSpawnOptions".
+
+    Broadcasts file additions and changes:
+    * Split "broadcast.EVENT.TYPE" into "chat.EVENT.TYPE" and "notice.EVENT.TYPE". Needs a regen! Sorry.
+    * Added a portal spawn broadcast, "chat.spawn.wormhole". (and "notice.spawn.wormhole")
+    * Changed the default hatch and trade colors from pink to gray. Pink is now used for UBs.
+
+    Tweaks:
+    * Renamed several internal listeners to make more sense in errors/debug output.
+
+    Fixes:
+    * Fixed a missing space in the default trade broadcast.
+    * Fixed IVs, coordinates and world names in the trade broadcast always being from player 1's side.
+
 0.3 for 7.0
 Released February 2nd, 2019.
+
+    Additions:
+    * Added the showing of abilities to the hover stats! (hidden abilities get extra fancy formatting)
 
     Settings file additions:
     * Added "showAbilities" option for the new ability-showing feature. Add: "showAbilities = true"
@@ -14,9 +40,6 @@ Released February 2nd, 2019.
     * Corrected a small formatting issue on shiny eggs being hatched. (last part of line wasn't bold)
     * Fixed the trade broadcast rarely showing incorrect shiny status for one of the Pokémon.
     * Reworded many broadcasts to preserve consistency even when precursor events aren't announced.
-
-    Additions:
-    * Added the showing of abilities to the hover stats! (hidden abilities get extra fancy formatting)
 
     Tweaks:
     * Brought a few console messages in line with Even More Pixelmon Commands.

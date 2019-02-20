@@ -1,14 +1,18 @@
 package rs.expand.pixelmonbroadcasts.utilities;
 
 // Remote imports.
+import com.pixelmonmod.pixelmon.api.overlay.notice.EnumOverlayLayout;
+import com.pixelmonmod.pixelmon.api.overlay.notice.NoticeOverlay;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.IVStore;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.StatsType;
 import com.pixelmonmod.pixelmon.enums.EnumGrowth;
 import com.pixelmonmod.pixelmon.enums.EnumNature;
+import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import com.pixelmonmod.pixelmon.enums.forms.EnumAlolan;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.api.Sponge;
@@ -19,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Local imports.
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.noticeExpiryMap;
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.showAbilities;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
@@ -29,16 +34,16 @@ public class PlaceholderMethods
     public static void iterateAndSendBroadcast(
             String broadcast, final Object pokemonObject, final Object pokemon2Object, final EntityPlayer playerEntity,
             final EntityPlayer player2Entity, final boolean hasHover, final boolean presentTense, final boolean showIVs,
-            final String permission, final String flag)
+            final String permission, final String... flags)
     {
         // Set up some variables that we want to be able to access later.
         BlockPos position;
+        Pokemon pokemon = null;
 
         // Do we have a Pokémon object? Replace Pokémon-specific placeholders.
         if (pokemonObject != null)
         {
             // Is our received object of the older EntityPixelmon type, or is it Pokemon?
-            final Pokemon pokemon;
             if (pokemonObject instanceof EntityPixelmon)
             {
                 // Make the entity a bit easier to access. It probably has more info than a Pokemon object would -- use it!
@@ -136,15 +141,15 @@ public class PlaceholderMethods
                     {
                         // Get the Pokémon's biome, nicely formatted (spaces!) and all. Replace placeholder.
                         final String biome2 = getFormattedBiome(pokemon2Entity.getEntityWorld(), position);
-                        broadcast = broadcast.replaceAll("(?i)%biome%", biome2);
+                        broadcast = broadcast.replaceAll("(?i)%biome2%", biome2);
 
                         // Insert a world name.
-                        broadcast = broadcast.replaceAll("(?i)%world%", pokemon2Entity.getEntityWorld().getWorldInfo().getWorldName());
+                        broadcast = broadcast.replaceAll("(?i)%world2%", pokemon2Entity.getEntityWorld().getWorldInfo().getWorldName());
 
                         // Insert coordinates.
-                        broadcast = broadcast.replaceAll("(?i)%xpos%", String.valueOf(position.getX()));
-                        broadcast = broadcast.replaceAll("(?i)%ypos%", String.valueOf(position.getY()));
-                        broadcast = broadcast.replaceAll("(?i)%zpos%", String.valueOf(position.getZ()));
+                        broadcast = broadcast.replaceAll("(?i)%xpos2%", String.valueOf(position.getX()));
+                        broadcast = broadcast.replaceAll("(?i)%ypos2%", String.valueOf(position.getY()));
+                        broadcast = broadcast.replaceAll("(?i)%zpos2%", String.valueOf(position.getZ()));
                     }
                 }
                 else
@@ -177,7 +182,7 @@ public class PlaceholderMethods
                 else
                 {
                     // Set up IVs and matching math. These are used everywhere.
-                    final IVStore IVs = pokemon.getIVs();
+                    final IVStore IVs = pokemon2.getIVs();
                     final int totalIVs =
                             IVs.get(StatsType.HP) + IVs.get(StatsType.Attack) + IVs.get(StatsType.Defence) +
                             IVs.get(StatsType.SpecialAttack) + IVs.get(StatsType.SpecialDefence) + IVs.get(StatsType.Speed);
@@ -239,8 +244,12 @@ public class PlaceholderMethods
             broadcast = broadcast.replaceAll("(?i)%zpos2%", String.valueOf(position.getZ()));
         }
 
-        // Make a Text out of our broadcast, which we can either send directly or add a hover to, depending on options.
+        // Make some final clones of our broadcast message. We can add to these, or just send them directly.
         final Text broadcastText;
+        final String broadcastString = broadcast;
+
+        // Do the same for our Pokémon object.
+        final Pokemon finalPokemon = pokemon;
 
         // If hovers are enabled, make the line hoverable.
         if (pokemonObject != null && hasHover)
@@ -255,25 +264,53 @@ public class PlaceholderMethods
             if (recipient.hasPermission("pixelmonbroadcasts.notify." + permission))
             {
                 // Does the iterated player want our broadcast? Send it if we get "true" returned.
-                if (checkToggleStatus((EntityPlayer) recipient, flag))
-                    recipient.sendMessage(broadcastText);
+                if (checkToggleStatus((EntityPlayer) recipient, flags))
+                {
+                    //recipient.sendMessage(broadcastText);
+                    printToNoticeBoard((EntityPlayerMP) recipient, finalPokemon, broadcastString);
+
+                    // Put the player's UUID and the current time into a hashmap. Check this regularly to wipe notices.
+                    noticeExpiryMap.put(recipient.getUniqueId(), System.currentTimeMillis());
+                }
             }
         });
     }
 
+    // Checks whether the provided toggle flags are turned on. Only returns false if all toggles are set and turned off.
     public static boolean checkToggleStatus(final EntityPlayer recipient, final String... flags)
     {
-        // Does the player have a flag set for this notification?
-        if (recipient.getEntityData().getCompoundTag("pbToggles").hasKey(flags[0]))
+        // Loop through the provided set of flags.
+        for (String flag : flags)
         {
-            // Return the flag's status.
-            return recipient.getEntityData().getCompoundTag("pbToggles").getBoolean(flags[0]);
+            // Does the player have a flag set for this notification?
+            if (recipient.getEntityData().getCompoundTag("pbToggles").hasKey(flag))
+            {
+                // Did we find a flag that's present and true? Exit out, we can show stuff!
+                if (recipient.getEntityData().getCompoundTag("pbToggles").getBoolean(flag))
+                    return true;
+            }
+            else // Default state for flags is true!
+                return true;
         }
 
-        // If we hit this the payer does not have the flag, so return the default state ("true").
-        return true;
+        // We hit this only if all passed flags were present, but returned false. (everything relevant turned off)
+        return false;
     }
 
+    // Prints a message to Pixelmon's notice board (cool box at the top), if enabled for the calling event.
+    private static void printToNoticeBoard(final EntityPlayerMP recipient, final Pokemon pokemon, final String message)
+    {
+        NoticeOverlay.Builder builder = new NoticeOverlay.Builder(EnumOverlayLayout.LEFT_AND_RIGHT, message);
+
+        if (pokemon != null)
+            builder.setIconToPokemonSprite(EnumSpecies.Xerneas);
+        else
+            builder.setIconToPokemonSprite(EnumSpecies.Unown);
+
+        builder.sendTo(recipient);
+    }
+
+    // Gets a cleaned-up English name of the biome at the provided coordinates. Add spaces when there's multiple words.
     private static String getFormattedBiome(World world, BlockPos location)
     {
         // Grab the name. This compiles fine if the access transformer is loaded correctly, despite any errors.

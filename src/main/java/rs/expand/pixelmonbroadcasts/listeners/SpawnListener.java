@@ -3,6 +3,7 @@ package rs.expand.pixelmonbroadcasts.listeners;
 
 // Remote imports.
 import com.pixelmonmod.pixelmon.api.events.spawning.SpawnEvent;
+import com.pixelmonmod.pixelmon.entities.EntityWormhole;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.entity.Entity;
@@ -17,13 +18,18 @@ import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
 public class SpawnListener
 {
     @SubscribeEvent
-    public void onSpawnPokemonEvent(final SpawnEvent event)
+    public void onSpawnEntityEvent(final SpawnEvent event)
     {
         // Create an entity from the event info that we can check.
         final Entity spawnedEntity = event.action.getOrCreateEntity();
 
+        // Check if the entity is a wormhole.
+        if (spawnedEntity instanceof EntityWormhole)
+        {
+
+        }
         // Check if the entity is a Pokémon, not a trainer or the like.
-        if (spawnedEntity instanceof EntityPixelmon)
+        else if (spawnedEntity instanceof EntityPixelmon)
         {
             // Make an assumption. This is safe, now.
             final EntityPixelmon pokemon = (EntityPixelmon) spawnedEntity;
@@ -38,30 +44,30 @@ public class SpawnListener
                 final String localizedName = pokemon.getLocalizedName();
                 final BlockPos location = event.action.spawnLocation.location.pos;
 
+                // Sets the position of the entity we created, as it's 0 on all coordinates by default.
+                pokemon.setPosition(location.getX(), location.getY(), location.getZ());
+
+                // If we're in a localized setup, log both names.
+                final String nameString =
+                        baseName.equals(localizedName) ? baseName : baseName + " §5(§d" + localizedName + "§5)";
+
                 if (pokemon.isBossPokemon())
                 {
                     if (logBossSpawns)
                     {
-                        // If we're in a localized setup, log both names.
-                        final String nameString =
-                                baseName.equals(localizedName) ? baseName : baseName + " §e(§6" + localizedName + "§e)";
-
                         // Print a spawn message to console.
                         printUnformattedMessage
                         (
-                                "§5PBR §f// §eA boss §6" + nameString +
-                                "§e has spawned in world \"§6" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                                "§e\", at X:§6" + location.getX() +
-                                "§e Y:§6" + location.getY() +
-                                "§e Z:§6" + location.getZ()
+                                "§5PBR §f// §5A boss §d" + nameString +
+                                "§5 has spawned in world \"§d" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                                "§5\", at X:§d" + location.getX() +
+                                "§5 Y:§d" + location.getY() +
+                                "§5 Z:§d" + location.getZ()
                         );
                     }
 
                     if (showBossSpawns)
                     {
-                        // Sets the position of the entity we created, as it's 0 on all coordinates by default.
-                        pokemon.setPosition(location.getX(), location.getY(), location.getZ());
-
                         // Get a broadcast from the broadcasts config file, if the key can be found.
                         broadcast = getBroadcast("broadcast.spawn.boss");
 
@@ -76,37 +82,43 @@ public class SpawnListener
                 }
                 else if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().isShiny())
                 {
-                    if (logShinyLegendarySpawns)
+                    if (logLegendarySpawns || logShinySpawns)
                     {
-                        // If we're in a localized setup, log both names.
-                        final String nameString =
-                                baseName.equals(localizedName) ? baseName : baseName + " §a(§2" + localizedName + "§a)";
-
                         // Print a spawn message to console.
                         printUnformattedMessage
                         (
-                                "§5PBR §f// §aA shiny legendary §2" + nameString +
-                                "§a has spawned in world \"§2" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                                "§a\", at X:§2" + location.getX() +
-                                "§a Y:§2" + location.getY() +
-                                "§a Z:§2" + location.getZ()
+                                "§5PBR §f// §5A shiny legendary §d" + nameString +
+                                "§5 has spawned in world \"§d" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                                "§5\", at X:§d" + location.getX() +
+                                "§5 Y:§d" + location.getY() +
+                                "§5 Z:§d" + location.getZ()
                         );
                     }
 
-                    if (showShinyLegendarySpawns)
+                    if (showLegendarySpawns)
                     {
-                        // Sets the position of the entity we created, as it's 0 on all coordinates by default.
-                        pokemon.setPosition(location.getX(), location.getY(), location.getZ());
-
                         // Get a broadcast from the broadcasts config file, if the key can be found.
                         broadcast = getBroadcast("broadcast.spawn.shiny_legendary");
 
                         // Did we find a message? Iterate all available players, and send to those who should receive!
                         if (broadcast != null)
                         {
-                            iterateAndSendBroadcast(broadcast, pokemon, null, null,
-                                    null, hoverShinyLegendarySpawns, true, false,
-                                    "spawn.shinylegendary", "showShinyLegendarySpawn");
+                            iterateAndSendBroadcast(broadcast, pokemon, null, null, null,
+                                    hoverLegendarySpawns, true, false,
+                                    "spawn.shinylegendary", "showLegendarySpawn", "showShinySpawn");
+                        }
+                    }
+                    else if (showShinySpawns)
+                    {
+                        // Get a broadcast from the broadcasts config file, if the key can be found.
+                        broadcast = getBroadcast("broadcast.spawn.shiny_legendary");
+
+                        // Did we find a message? Iterate all available players, and send to those who should receive!
+                        if (broadcast != null)
+                        {
+                            iterateAndSendBroadcast(broadcast, pokemon, null, null, null,
+                                    hoverShinySpawns, true, false,
+                                    "spawn.shinylegendary", "showLegendarySpawn", "showShinySpawn");
                         }
                     }
                 }
@@ -114,26 +126,19 @@ public class SpawnListener
                 {
                     if (logLegendarySpawns)
                     {
-                        // If we're in a localized setup, log both names.
-                        final String nameString =
-                                baseName.equals(localizedName) ? baseName : baseName + " §a(§2" + localizedName + "§a)";
-
                         // Print a spawn message to console.
                         printUnformattedMessage
                         (
-                                "§5PBR §f// §aA legendary §2" + nameString +
-                                "§a has spawned in world \"§2" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                                "§a\", at X:§2" + location.getX() +
-                                "§a Y:§2" + location.getY() +
-                                "§a Z:§2" + location.getZ()
+                                "§5PBR §f// §5A legendary §d" + nameString +
+                                "§5 has spawned in world \"§d" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                                "§5\", at X:§d" + location.getX() +
+                                "§5 Y:§d" + location.getY() +
+                                "§5 Z:§d" + location.getZ()
                         );
                     }
 
                     if (showLegendarySpawns)
                     {
-                        // Sets the position of the entity we created, as it's 0 on all coordinates by default.
-                        pokemon.setPosition(location.getX(), location.getY(), location.getZ());
-
                         // Get a broadcast from the broadcasts config file, if the key can be found.
                         broadcast = getBroadcast("broadcast.spawn.legendary");
 
@@ -150,26 +155,19 @@ public class SpawnListener
                 {
                     if (logShinySpawns)
                     {
-                        // If we're in a localized setup, log both names.
-                        final String nameString =
-                                baseName.equals(localizedName) ? baseName : baseName + " §b(§3" + localizedName + "§b)";
-
                         // Print a spawn message to console.
                         printUnformattedMessage
                         (
-                                "§5PBR §f// §bA shiny §3" + nameString +
-                                "§b has spawned in world \"§3" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                                "§b\", at X:§3" + location.getX() +
-                                "§b Y:§3" + location.getY() +
-                                "§b Z:§3" + location.getZ()
+                                "§5PBR §f// §5A shiny §d" + nameString +
+                                "§5 has spawned in world \"§d" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                                "§5\", at X:§d" + location.getX() +
+                                "§5 Y:§d" + location.getY() +
+                                "§5 Z:§d" + location.getZ()
                         );
                     }
 
                     if (showShinySpawns)
                     {
-                        // Sets the position of the entity we created, as it's 0 on all coordinates by default.
-                        pokemon.setPosition(location.getX(), location.getY(), location.getZ());
-
                         // Get a broadcast from the broadcasts config file, if the key can be found.
                         broadcast = getBroadcast("broadcast.spawn.shiny");
 
