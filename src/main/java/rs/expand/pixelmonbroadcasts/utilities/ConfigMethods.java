@@ -168,7 +168,8 @@ public class ConfigMethods
         {
             normalCatchOptions = normalCatchOptions.toLowerCase();
             PixelmonBroadcasts.logNormalCatches = normalCatchOptions.contains("log");
-            PixelmonBroadcasts.showNormalCatches = normalCatchOptions.contains("show");
+            PixelmonBroadcasts.printNormalCatches = normalCatchOptions.contains("chat");
+            PixelmonBroadcasts.notifyNormalCatches = normalCatchOptions.contains("notice");
             PixelmonBroadcasts.hoverNormalCatches = normalCatchOptions.contains("hover");
             PixelmonBroadcasts.revealNormalCatches = normalCatchOptions.contains("reveal");
         }
@@ -180,84 +181,10 @@ public class ConfigMethods
         {
             normalBlackoutOptions = normalBlackoutOptions.toLowerCase();
             PixelmonBroadcasts.logNormalBlackouts = normalBlackoutOptions.contains("log");
-            PixelmonBroadcasts.showNormalBlackouts = normalBlackoutOptions.contains("show");
+            PixelmonBroadcasts.printNormalBlackouts = normalBlackoutOptions.contains("chat");
+            PixelmonBroadcasts.notifyNormalBlackouts = normalBlackoutOptions.contains("notice");
             PixelmonBroadcasts.hoverNormalBlackouts = normalBlackoutOptions.contains("hover");
             PixelmonBroadcasts.revealNormalBlackouts = normalBlackoutOptions.contains("reveal");
-        }
-
-        /*                    *\
-           legendary settings
-        \*                    */
-
-        // Get options. Extract and set them, if we managed to grab them successfully.
-        String legendarySpawnOptions = settingsConfig.getNode("legendarySpawnOptions").getString();
-        if (legendarySpawnOptions == null)
-            optionsErrorArray.add("legendarySpawnOptions");
-        else
-        {
-            legendarySpawnOptions = legendarySpawnOptions.toLowerCase();
-            PixelmonBroadcasts.logLegendarySpawns = legendarySpawnOptions.contains("log");
-            PixelmonBroadcasts.showLegendarySpawns = legendarySpawnOptions.contains("show");
-            PixelmonBroadcasts.hoverLegendarySpawns = legendarySpawnOptions.contains("hover");
-        }
-
-        String legendaryChallengeOptions = settingsConfig.getNode("legendaryChallengeOptions").getString();
-        if (legendaryChallengeOptions == null)
-            optionsErrorArray.add("legendaryChallengeOptions");
-        else
-        {
-            legendaryChallengeOptions = legendaryChallengeOptions.toLowerCase();
-            PixelmonBroadcasts.logLegendaryChallenges = legendaryChallengeOptions.contains("log");
-            PixelmonBroadcasts.showLegendaryChallenges = legendaryChallengeOptions.contains("show");
-            PixelmonBroadcasts.hoverLegendaryChallenges = legendaryChallengeOptions.contains("hover");
-        }
-
-        String legendaryCatchOptions = settingsConfig.getNode("legendaryCatchOptions").getString();
-        if (legendaryCatchOptions == null)
-            optionsErrorArray.add("legendaryCatchOptions");
-        else
-        {
-            legendaryCatchOptions = legendaryCatchOptions.toLowerCase();
-            PixelmonBroadcasts.logLegendaryCatches = legendaryCatchOptions.contains("log");
-            PixelmonBroadcasts.showLegendaryCatches = legendaryCatchOptions.contains("show");
-            PixelmonBroadcasts.hoverLegendaryCatches = legendaryCatchOptions.contains("hover");
-            PixelmonBroadcasts.revealLegendaryCatches = legendaryCatchOptions.contains("reveal");
-        }
-
-        String legendaryVictoryOptions = settingsConfig.getNode("legendaryVictoryOptions").getString();
-        if (legendaryVictoryOptions == null)
-            optionsErrorArray.add("legendaryVictoryOptions");
-        else
-        {
-            legendaryVictoryOptions = legendaryVictoryOptions.toLowerCase();
-            PixelmonBroadcasts.logLegendaryVictories = legendaryVictoryOptions.contains("log");
-            PixelmonBroadcasts.showLegendaryVictories = legendaryVictoryOptions.contains("show");
-            PixelmonBroadcasts.hoverLegendaryVictories = legendaryVictoryOptions.contains("hover");
-            PixelmonBroadcasts.revealLegendaryVictories = legendaryVictoryOptions.contains("reveal");
-        }
-
-        String legendaryBlackoutOptions = settingsConfig.getNode("legendaryBlackoutOptions").getString();
-        if (legendaryBlackoutOptions == null)
-            optionsErrorArray.add("legendaryBlackoutOptions");
-        else
-        {
-            legendaryBlackoutOptions = legendaryBlackoutOptions.toLowerCase();
-            PixelmonBroadcasts.logLegendaryBlackouts = legendaryBlackoutOptions.contains("log");
-            PixelmonBroadcasts.showLegendaryBlackouts = legendaryBlackoutOptions.contains("show");
-            PixelmonBroadcasts.hoverLegendaryBlackouts = legendaryBlackoutOptions.contains("hover");
-            PixelmonBroadcasts.revealLegendaryBlackouts = legendaryBlackoutOptions.contains("reveal");
-        }
-
-        String legendaryForfeitOptions = settingsConfig.getNode("legendaryForfeitOptions").getString();
-        if (legendaryForfeitOptions == null)
-            optionsErrorArray.add("legendaryForfeitOptions");
-        else
-        {
-            legendaryForfeitOptions = legendaryForfeitOptions.toLowerCase();
-            PixelmonBroadcasts.logLegendaryForfeits = legendaryForfeitOptions.contains("log");
-            PixelmonBroadcasts.showLegendaryForfeits = legendaryForfeitOptions.contains("show");
-            PixelmonBroadcasts.hoverLegendaryForfeits = legendaryForfeitOptions.contains("hover");
-            PixelmonBroadcasts.revealLegendaryForfeits = legendaryForfeitOptions.contains("reveal");
         }
 
         /*                *\
@@ -272,7 +199,8 @@ public class ConfigMethods
         {
             shinySpawnOptions = shinySpawnOptions.toLowerCase();
             PixelmonBroadcasts.logShinySpawns = shinySpawnOptions.contains("log");
-            PixelmonBroadcasts.showShinySpawns = shinySpawnOptions.contains("show");
+            PixelmonBroadcasts.printShinySpawns = shinySpawnOptions.contains("chat");
+            PixelmonBroadcasts.notifyShinySpawns = shinySpawnOptions.contains("notice");
             PixelmonBroadcasts.hoverShinySpawns = shinySpawnOptions.contains("hover");
         }
 
@@ -283,7 +211,8 @@ public class ConfigMethods
         {
             shinyChallengeOptions = shinyChallengeOptions.toLowerCase();
             PixelmonBroadcasts.logShinyChallenges = shinyChallengeOptions.contains("log");
-            PixelmonBroadcasts.showShinyChallenges = shinyChallengeOptions.contains("show");
+            PixelmonBroadcasts.printShinyChallenges = shinyChallengeOptions.contains("chat");
+            PixelmonBroadcasts.notifyShinyChallenges = shinyChallengeOptions.contains("notice");
             PixelmonBroadcasts.hoverShinyChallenges = shinyChallengeOptions.contains("hover");
         }
 
@@ -294,7 +223,8 @@ public class ConfigMethods
         {
             shinyCatchOptions = shinyCatchOptions.toLowerCase();
             PixelmonBroadcasts.logShinyCatches = shinyCatchOptions.contains("log");
-            PixelmonBroadcasts.showShinyCatches = shinyCatchOptions.contains("show");
+            PixelmonBroadcasts.printShinyCatches = shinyCatchOptions.contains("chat");
+            PixelmonBroadcasts.notifyShinyCatches = shinyCatchOptions.contains("notice");
             PixelmonBroadcasts.hoverShinyCatches = shinyCatchOptions.contains("hover");
             PixelmonBroadcasts.revealShinyCatches = shinyCatchOptions.contains("reveal");
         }
@@ -306,7 +236,8 @@ public class ConfigMethods
         {
             shinyVictoryOptions = shinyVictoryOptions.toLowerCase();
             PixelmonBroadcasts.logShinyVictories = shinyVictoryOptions.contains("log");
-            PixelmonBroadcasts.showShinyVictories = shinyVictoryOptions.contains("show");
+            PixelmonBroadcasts.printShinyVictories = shinyVictoryOptions.contains("chat");
+            PixelmonBroadcasts.notifyShinyVictories = shinyVictoryOptions.contains("notice");
             PixelmonBroadcasts.hoverShinyVictories = shinyVictoryOptions.contains("hover");
             PixelmonBroadcasts.revealShinyVictories = shinyVictoryOptions.contains("reveal");
         }
@@ -318,7 +249,8 @@ public class ConfigMethods
         {
             shinyBlackoutOptions = shinyBlackoutOptions.toLowerCase();
             PixelmonBroadcasts.logShinyBlackouts = shinyBlackoutOptions.contains("log");
-            PixelmonBroadcasts.showShinyBlackouts = shinyBlackoutOptions.contains("show");
+            PixelmonBroadcasts.printShinyBlackouts = shinyBlackoutOptions.contains("chat");
+            PixelmonBroadcasts.notifyShinyBlackouts = shinyBlackoutOptions.contains("notice");
             PixelmonBroadcasts.hoverShinyBlackouts = shinyBlackoutOptions.contains("hover");
             PixelmonBroadcasts.revealShinyBlackouts = shinyBlackoutOptions.contains("reveal");
         }
@@ -330,9 +262,172 @@ public class ConfigMethods
         {
             shinyForfeitOptions = shinyForfeitOptions.toLowerCase();
             PixelmonBroadcasts.logShinyForfeits = shinyForfeitOptions.contains("log");
-            PixelmonBroadcasts.showShinyForfeits = shinyForfeitOptions.contains("show");
+            PixelmonBroadcasts.printShinyForfeits = shinyForfeitOptions.contains("chat");
+            PixelmonBroadcasts.notifyShinyForfeits = shinyForfeitOptions.contains("notice");
             PixelmonBroadcasts.hoverShinyForfeits = shinyForfeitOptions.contains("hover");
             PixelmonBroadcasts.revealShinyForfeits = shinyForfeitOptions.contains("reveal");
+        }
+
+        /*                    *\
+           legendary settings
+        \*                    */
+
+        // Get options. Extract and set them, if we managed to grab them successfully.
+        String legendarySpawnOptions = settingsConfig.getNode("legendarySpawnOptions").getString();
+        if (legendarySpawnOptions == null)
+            optionsErrorArray.add("legendarySpawnOptions");
+        else
+        {
+            legendarySpawnOptions = legendarySpawnOptions.toLowerCase();
+            PixelmonBroadcasts.logLegendarySpawns = legendarySpawnOptions.contains("log");
+            PixelmonBroadcasts.printLegendarySpawns = legendarySpawnOptions.contains("chat");
+            PixelmonBroadcasts.notifyLegendarySpawns = legendarySpawnOptions.contains("notice");
+            PixelmonBroadcasts.hoverLegendarySpawns = legendarySpawnOptions.contains("hover");
+        }
+
+        String legendaryChallengeOptions = settingsConfig.getNode("legendaryChallengeOptions").getString();
+        if (legendaryChallengeOptions == null)
+            optionsErrorArray.add("legendaryChallengeOptions");
+        else
+        {
+            legendaryChallengeOptions = legendaryChallengeOptions.toLowerCase();
+            PixelmonBroadcasts.logLegendaryChallenges = legendaryChallengeOptions.contains("log");
+            PixelmonBroadcasts.printLegendaryChallenges = legendaryChallengeOptions.contains("chat");
+            PixelmonBroadcasts.notifyLegendaryChallenges = legendaryChallengeOptions.contains("notify");
+            PixelmonBroadcasts.hoverLegendaryChallenges = legendaryChallengeOptions.contains("hover");
+        }
+
+        String legendaryCatchOptions = settingsConfig.getNode("legendaryCatchOptions").getString();
+        if (legendaryCatchOptions == null)
+            optionsErrorArray.add("legendaryCatchOptions");
+        else
+        {
+            legendaryCatchOptions = legendaryCatchOptions.toLowerCase();
+            PixelmonBroadcasts.logLegendaryCatches = legendaryCatchOptions.contains("log");
+            PixelmonBroadcasts.printLegendaryCatches = legendaryCatchOptions.contains("chat");
+            PixelmonBroadcasts.notifyLegendaryCatches = legendaryCatchOptions.contains("notice");
+            PixelmonBroadcasts.hoverLegendaryCatches = legendaryCatchOptions.contains("hover");
+            PixelmonBroadcasts.revealLegendaryCatches = legendaryCatchOptions.contains("reveal");
+        }
+
+        String legendaryVictoryOptions = settingsConfig.getNode("legendaryVictoryOptions").getString();
+        if (legendaryVictoryOptions == null)
+            optionsErrorArray.add("legendaryVictoryOptions");
+        else
+        {
+            legendaryVictoryOptions = legendaryVictoryOptions.toLowerCase();
+            PixelmonBroadcasts.logLegendaryVictories = legendaryVictoryOptions.contains("log");
+            PixelmonBroadcasts.printLegendaryVictories = legendaryVictoryOptions.contains("chat");
+            PixelmonBroadcasts.notifyLegendaryVictories = legendaryVictoryOptions.contains("notice");
+            PixelmonBroadcasts.hoverLegendaryVictories = legendaryVictoryOptions.contains("hover");
+            PixelmonBroadcasts.revealLegendaryVictories = legendaryVictoryOptions.contains("reveal");
+        }
+
+        String legendaryBlackoutOptions = settingsConfig.getNode("legendaryBlackoutOptions").getString();
+        if (legendaryBlackoutOptions == null)
+            optionsErrorArray.add("legendaryBlackoutOptions");
+        else
+        {
+            legendaryBlackoutOptions = legendaryBlackoutOptions.toLowerCase();
+            PixelmonBroadcasts.logLegendaryBlackouts = legendaryBlackoutOptions.contains("log");
+            PixelmonBroadcasts.printLegendaryBlackouts = legendaryBlackoutOptions.contains("chat");
+            PixelmonBroadcasts.notifyLegendaryBlackouts = legendaryBlackoutOptions.contains("notice");
+            PixelmonBroadcasts.hoverLegendaryBlackouts = legendaryBlackoutOptions.contains("hover");
+            PixelmonBroadcasts.revealLegendaryBlackouts = legendaryBlackoutOptions.contains("reveal");
+        }
+
+        String legendaryForfeitOptions = settingsConfig.getNode("legendaryForfeitOptions").getString();
+        if (legendaryForfeitOptions == null)
+            optionsErrorArray.add("legendaryForfeitOptions");
+        else
+        {
+            legendaryForfeitOptions = legendaryForfeitOptions.toLowerCase();
+            PixelmonBroadcasts.logLegendaryForfeits = legendaryForfeitOptions.contains("log");
+            PixelmonBroadcasts.printLegendaryForfeits = legendaryForfeitOptions.contains("chat");
+            PixelmonBroadcasts.notifyLegendaryForfeits = legendaryForfeitOptions.contains("notice");
+            PixelmonBroadcasts.hoverLegendaryForfeits = legendaryForfeitOptions.contains("hover");
+            PixelmonBroadcasts.revealLegendaryForfeits = legendaryForfeitOptions.contains("reveal");
+        }
+
+        /*                    *\
+           ultra beast settings
+        \*                    */
+
+        // Get options. Extract and set them, if we managed to grab them successfully.
+        String ultraBeastSpawnOptions = settingsConfig.getNode("ultraBeastSpawnOptions").getString();
+        if (ultraBeastSpawnOptions == null)
+            optionsErrorArray.add("ultraBeastSpawnOptions");
+        else
+        {
+            ultraBeastSpawnOptions = ultraBeastSpawnOptions.toLowerCase();
+            PixelmonBroadcasts.logUltraBeastSpawns = ultraBeastSpawnOptions.contains("log");
+            PixelmonBroadcasts.printUltraBeastSpawns = ultraBeastSpawnOptions.contains("chat");
+            PixelmonBroadcasts.notifyUltraBeastSpawns = ultraBeastSpawnOptions.contains("notice");
+            PixelmonBroadcasts.hoverUltraBeastSpawns = ultraBeastSpawnOptions.contains("hover");
+        }
+
+        String ultraBeastChallengeOptions = settingsConfig.getNode("ultraBeastChallengeOptions").getString();
+        if (ultraBeastChallengeOptions == null)
+            optionsErrorArray.add("ultraBeastChallengeOptions");
+        else
+        {
+            ultraBeastChallengeOptions = ultraBeastChallengeOptions.toLowerCase();
+            PixelmonBroadcasts.logUltraBeastChallenges = ultraBeastChallengeOptions.contains("log");
+            PixelmonBroadcasts.printUltraBeastChallenges = ultraBeastChallengeOptions.contains("chat");
+            PixelmonBroadcasts.notifyUltraBeastChallenges = ultraBeastChallengeOptions.contains("notice");
+            PixelmonBroadcasts.hoverUltraBeastChallenges = ultraBeastChallengeOptions.contains("hover");
+        }
+
+        String ultraBeastCatchOptions = settingsConfig.getNode("ultraBeastCatchOptions").getString();
+        if (ultraBeastCatchOptions == null)
+            optionsErrorArray.add("ultraBeastCatchOptions");
+        else
+        {
+            ultraBeastCatchOptions = ultraBeastCatchOptions.toLowerCase();
+            PixelmonBroadcasts.logUltraBeastCatches = ultraBeastCatchOptions.contains("log");
+            PixelmonBroadcasts.printUltraBeastCatches = ultraBeastCatchOptions.contains("chat");
+            PixelmonBroadcasts.notifyUltraBeastCatches = ultraBeastCatchOptions.contains("notice");
+            PixelmonBroadcasts.hoverUltraBeastCatches = ultraBeastCatchOptions.contains("hover");
+            PixelmonBroadcasts.revealUltraBeastCatches = ultraBeastCatchOptions.contains("reveal");
+        }
+
+        String ultraBeastVictoryOptions = settingsConfig.getNode("ultraBeastVictoryOptions").getString();
+        if (ultraBeastVictoryOptions == null)
+            optionsErrorArray.add("ultraBeastVictoryOptions");
+        else
+        {
+            ultraBeastVictoryOptions = ultraBeastVictoryOptions.toLowerCase();
+            PixelmonBroadcasts.logUltraBeastVictories = ultraBeastVictoryOptions.contains("log");
+            PixelmonBroadcasts.printUltraBeastVictories = ultraBeastVictoryOptions.contains("chat");
+            PixelmonBroadcasts.notifyUltraBeastVictories = ultraBeastVictoryOptions.contains("notice");
+            PixelmonBroadcasts.hoverUltraBeastVictories = ultraBeastVictoryOptions.contains("hover");
+            PixelmonBroadcasts.revealUltraBeastVictories = ultraBeastVictoryOptions.contains("reveal");
+        }
+
+        String ultraBeastBlackoutOptions = settingsConfig.getNode("ultraBeastBlackoutOptions").getString();
+        if (ultraBeastBlackoutOptions == null)
+            optionsErrorArray.add("ultraBeastBlackoutOptions");
+        else
+        {
+            ultraBeastBlackoutOptions = ultraBeastBlackoutOptions.toLowerCase();
+            PixelmonBroadcasts.logUltraBeastBlackouts = ultraBeastBlackoutOptions.contains("log");
+            PixelmonBroadcasts.printUltraBeastBlackouts = ultraBeastBlackoutOptions.contains("chat");
+            PixelmonBroadcasts.notifyUltraBeastBlackouts = ultraBeastBlackoutOptions.contains("notice");
+            PixelmonBroadcasts.hoverUltraBeastBlackouts = ultraBeastBlackoutOptions.contains("hover");
+            PixelmonBroadcasts.revealUltraBeastBlackouts = ultraBeastBlackoutOptions.contains("reveal");
+        }
+
+        String ultraBeastForfeitOptions = settingsConfig.getNode("ultraBeastForfeitOptions").getString();
+        if (ultraBeastForfeitOptions == null)
+            optionsErrorArray.add("ultraBeastForfeitOptions");
+        else
+        {
+            ultraBeastForfeitOptions = ultraBeastForfeitOptions.toLowerCase();
+            PixelmonBroadcasts.logUltraBeastForfeits = ultraBeastForfeitOptions.contains("log");
+            PixelmonBroadcasts.printUltraBeastForfeits = ultraBeastForfeitOptions.contains("chat");
+            PixelmonBroadcasts.notifyUltraBeastForfeits = ultraBeastForfeitOptions.contains("notice");
+            PixelmonBroadcasts.hoverUltraBeastForfeits = ultraBeastForfeitOptions.contains("hover");
+            PixelmonBroadcasts.revealUltraBeastForfeits = ultraBeastForfeitOptions.contains("reveal");
         }
 
         /*               *\
@@ -347,7 +442,8 @@ public class ConfigMethods
         {
             bossSpawnOptions = bossSpawnOptions.toLowerCase();
             PixelmonBroadcasts.logBossSpawns = bossSpawnOptions.contains("log");
-            PixelmonBroadcasts.showBossSpawns = bossSpawnOptions.contains("show");
+            PixelmonBroadcasts.printBossSpawns = bossSpawnOptions.contains("chat");
+            PixelmonBroadcasts.notifyBossSpawns = bossSpawnOptions.contains("notice");
             PixelmonBroadcasts.hoverBossSpawns = bossSpawnOptions.contains("hover");
         }
 
@@ -358,7 +454,8 @@ public class ConfigMethods
         {
             bossChallengeOptions = bossChallengeOptions.toLowerCase();
             PixelmonBroadcasts.logBossChallenges = bossChallengeOptions.contains("log");
-            PixelmonBroadcasts.showBossChallenges = bossChallengeOptions.contains("show");
+            PixelmonBroadcasts.printBossChallenges = bossChallengeOptions.contains("chat");
+            PixelmonBroadcasts.notifyBossChallenges = bossChallengeOptions.contains("notice");
             PixelmonBroadcasts.hoverBossChallenges = bossChallengeOptions.contains("hover");
         }
 
@@ -369,7 +466,8 @@ public class ConfigMethods
         {
             bossVictoryOptions = bossVictoryOptions.toLowerCase();
             PixelmonBroadcasts.logBossVictories = bossVictoryOptions.contains("log");
-            PixelmonBroadcasts.showBossVictories = bossVictoryOptions.contains("show");
+            PixelmonBroadcasts.printBossVictories = bossVictoryOptions.contains("chat");
+            PixelmonBroadcasts.notifyBossVictories = bossVictoryOptions.contains("notice");
             PixelmonBroadcasts.hoverBossVictories = bossVictoryOptions.contains("hover");
             PixelmonBroadcasts.revealBossVictories = bossVictoryOptions.contains("reveal");
         }
@@ -381,7 +479,8 @@ public class ConfigMethods
         {
             bossBlackoutOptions = bossBlackoutOptions.toLowerCase();
             PixelmonBroadcasts.logBossBlackouts = bossBlackoutOptions.contains("log");
-            PixelmonBroadcasts.showBossBlackouts = bossBlackoutOptions.contains("show");
+            PixelmonBroadcasts.printBossBlackouts = bossBlackoutOptions.contains("chat");
+            PixelmonBroadcasts.notifyBossBlackouts = bossBlackoutOptions.contains("notice");
             PixelmonBroadcasts.hoverBossBlackouts = bossBlackoutOptions.contains("hover");
             PixelmonBroadcasts.revealBossBlackouts = bossBlackoutOptions.contains("reveal");
         }
@@ -393,7 +492,8 @@ public class ConfigMethods
         {
             bossForfeitOptions = bossForfeitOptions.toLowerCase();
             PixelmonBroadcasts.logBossForfeits = bossForfeitOptions.contains("log");
-            PixelmonBroadcasts.showBossForfeits = bossForfeitOptions.contains("show");
+            PixelmonBroadcasts.printBossForfeits = bossForfeitOptions.contains("chat");
+            PixelmonBroadcasts.notifyBossForfeits = bossForfeitOptions.contains("notice");
             PixelmonBroadcasts.hoverBossForfeits = bossForfeitOptions.contains("hover");
             PixelmonBroadcasts.revealBossForfeits = bossForfeitOptions.contains("reveal");
         }
@@ -410,7 +510,8 @@ public class ConfigMethods
         {
             bossTrainerChallengeOptions = bossTrainerChallengeOptions.toLowerCase();
             PixelmonBroadcasts.logBossTrainerChallenges = bossTrainerChallengeOptions.contains("log");
-            PixelmonBroadcasts.showBossTrainerChallenges = bossTrainerChallengeOptions.contains("show");
+            PixelmonBroadcasts.printBossTrainerChallenges = bossTrainerChallengeOptions.contains("chat");
+            PixelmonBroadcasts.notifyBossTrainerChallenges = bossTrainerChallengeOptions.contains("notice");
         }
 
         String bossTrainerVictoryOptions = settingsConfig.getNode("bossTrainerVictoryOptions").getString();
@@ -420,7 +521,8 @@ public class ConfigMethods
         {
             bossTrainerVictoryOptions = bossTrainerVictoryOptions.toLowerCase();
             PixelmonBroadcasts.logBossTrainerVictories = bossTrainerVictoryOptions.contains("log");
-            PixelmonBroadcasts.showBossTrainerVictories = bossTrainerVictoryOptions.contains("show");
+            PixelmonBroadcasts.printBossTrainerVictories = bossTrainerVictoryOptions.contains("chat");
+            PixelmonBroadcasts.notifyBossTrainerVictories = bossTrainerVictoryOptions.contains("notice");
         }
 
         String bossTrainerBlackoutOptions = settingsConfig.getNode("bossTrainerBlackoutOptions").getString();
@@ -430,7 +532,8 @@ public class ConfigMethods
         {
             bossTrainerBlackoutOptions = bossTrainerBlackoutOptions.toLowerCase();
             PixelmonBroadcasts.logBossTrainerBlackouts = bossTrainerBlackoutOptions.contains("log");
-            PixelmonBroadcasts.showBossTrainerBlackouts = bossTrainerBlackoutOptions.contains("show");
+            PixelmonBroadcasts.printBossTrainerBlackouts = bossTrainerBlackoutOptions.contains("chat");
+            PixelmonBroadcasts.notifyBossTrainerBlackouts = bossTrainerBlackoutOptions.contains("notice");
         }
 
         String bossTrainerForfeitOptions = settingsConfig.getNode("bossTrainerForfeitOptions").getString();
@@ -440,7 +543,8 @@ public class ConfigMethods
         {
             bossTrainerForfeitOptions = bossTrainerForfeitOptions.toLowerCase();
             PixelmonBroadcasts.logBossTrainerForfeits = bossTrainerForfeitOptions.contains("log");
-            PixelmonBroadcasts.showBossTrainerForfeits = bossTrainerForfeitOptions.contains("show");
+            PixelmonBroadcasts.printBossTrainerForfeits = bossTrainerForfeitOptions.contains("chat");
+            PixelmonBroadcasts.notifyBossTrainerForfeits = bossTrainerForfeitOptions.contains("notify");
         }
 
         /*                  *\
@@ -455,7 +559,8 @@ public class ConfigMethods
         {
             trainerChallengeOptions = trainerChallengeOptions.toLowerCase();
             PixelmonBroadcasts.logTrainerChallenges = trainerChallengeOptions.contains("log");
-            PixelmonBroadcasts.showTrainerChallenges = trainerChallengeOptions.contains("show");
+            PixelmonBroadcasts.printTrainerChallenges = trainerChallengeOptions.contains("chat");
+            PixelmonBroadcasts.notifyTrainerChallenges = trainerChallengeOptions.contains("notice");
         }
 
         String trainerVictoryOptions = settingsConfig.getNode("trainerVictoryOptions").getString();
@@ -465,7 +570,8 @@ public class ConfigMethods
         {
             trainerVictoryOptions = trainerVictoryOptions.toLowerCase();
             PixelmonBroadcasts.logTrainerVictories = trainerVictoryOptions.contains("log");
-            PixelmonBroadcasts.showTrainerVictories = trainerVictoryOptions.contains("show");
+            PixelmonBroadcasts.printTrainerVictories = trainerVictoryOptions.contains("chat");
+            PixelmonBroadcasts.notifyTrainerVictories = trainerVictoryOptions.contains("notice");
         }
 
         String trainerBlackoutOptions = settingsConfig.getNode("trainerBlackoutOptions").getString();
@@ -475,7 +581,8 @@ public class ConfigMethods
         {
             trainerBlackoutOptions = trainerBlackoutOptions.toLowerCase();
             PixelmonBroadcasts.logTrainerBlackouts = trainerBlackoutOptions.contains("log");
-            PixelmonBroadcasts.showTrainerBlackouts = trainerBlackoutOptions.contains("show");
+            PixelmonBroadcasts.printTrainerBlackouts = trainerBlackoutOptions.contains("chat");
+            PixelmonBroadcasts.notifyTrainerBlackouts = trainerBlackoutOptions.contains("notice");
         }
 
         String trainerForfeitOptions = settingsConfig.getNode("trainerForfeitOptions").getString();
@@ -485,7 +592,8 @@ public class ConfigMethods
         {
             trainerForfeitOptions = trainerForfeitOptions.toLowerCase();
             PixelmonBroadcasts.logTrainerForfeits = trainerForfeitOptions.contains("log");
-            PixelmonBroadcasts.showTrainerForfeits = trainerForfeitOptions.contains("show");
+            PixelmonBroadcasts.printTrainerForfeits = trainerForfeitOptions.contains("chat");
+            PixelmonBroadcasts.notifyTrainerForfeits = trainerForfeitOptions.contains("notice");
         }
 
         /*              *\
@@ -500,7 +608,8 @@ public class ConfigMethods
         {
             pvpChallengeOptions = pvpChallengeOptions.toLowerCase();
             PixelmonBroadcasts.logPVPChallenges = pvpChallengeOptions.contains("log");
-            PixelmonBroadcasts.showPVPChallenges = pvpChallengeOptions.contains("show");
+            PixelmonBroadcasts.printPVPChallenges = pvpChallengeOptions.contains("chat");
+            PixelmonBroadcasts.notifyPVPChallenges = pvpChallengeOptions.contains("notice");
         }
 
         String pvpVictoryOptions = settingsConfig.getNode("pvpVictoryOptions").getString();
@@ -510,7 +619,8 @@ public class ConfigMethods
         {
             pvpVictoryOptions = pvpVictoryOptions.toLowerCase();
             PixelmonBroadcasts.logPVPVictories = pvpVictoryOptions.contains("log");
-            PixelmonBroadcasts.showPVPVictories = pvpVictoryOptions.contains("show");
+            PixelmonBroadcasts.printPVPVictories = pvpVictoryOptions.contains("chat");
+            PixelmonBroadcasts.notifyPVPVictories = pvpVictoryOptions.contains("notice");
         }
 
         String pvpDrawOptions = settingsConfig.getNode("pvpDrawOptions").getString();
@@ -520,7 +630,8 @@ public class ConfigMethods
         {
             pvpDrawOptions = pvpDrawOptions.toLowerCase();
             PixelmonBroadcasts.logPVPDraws = pvpDrawOptions.contains("log");
-            PixelmonBroadcasts.showPVPDraws = pvpDrawOptions.contains("show");
+            PixelmonBroadcasts.printPVPDraws = pvpDrawOptions.contains("chat");
+            PixelmonBroadcasts.notifyPVPDraws = pvpDrawOptions.contains("notice");
         }
 
         /*                 *\
@@ -535,7 +646,8 @@ public class ConfigMethods
         {
             birdTrioSummonOptions = birdTrioSummonOptions.toLowerCase();
             PixelmonBroadcasts.logBirdTrioSummons = birdTrioSummonOptions.contains("log");
-            PixelmonBroadcasts.showBirdTrioSummons = birdTrioSummonOptions.contains("show");
+            PixelmonBroadcasts.printBirdTrioSummons = birdTrioSummonOptions.contains("chat");
+            PixelmonBroadcasts.notifyBirdTrioSummons = birdTrioSummonOptions.contains("notice");
         }*/
 
         /*                *\
@@ -550,7 +662,8 @@ public class ConfigMethods
         {
             normalHatchOptions = normalHatchOptions.toLowerCase();
             PixelmonBroadcasts.logNormalHatches = normalHatchOptions.contains("log");
-            PixelmonBroadcasts.showNormalHatches = normalHatchOptions.contains("show");
+            PixelmonBroadcasts.printNormalHatches = normalHatchOptions.contains("chat");
+            PixelmonBroadcasts.notifyNormalHatches = normalHatchOptions.contains("notice");
             PixelmonBroadcasts.hoverNormalHatches = normalHatchOptions.contains("hover");
             PixelmonBroadcasts.revealNormalHatches = normalHatchOptions.contains("reveal");
         }
@@ -562,7 +675,8 @@ public class ConfigMethods
         {
             shinyHatchOptions = shinyHatchOptions.toLowerCase();
             PixelmonBroadcasts.logShinyHatches = shinyHatchOptions.contains("log");
-            PixelmonBroadcasts.showShinyHatches = shinyHatchOptions.contains("show");
+            PixelmonBroadcasts.printShinyHatches = shinyHatchOptions.contains("chat");
+            PixelmonBroadcasts.notifyShinyHatches = shinyHatchOptions.contains("notice");
             PixelmonBroadcasts.hoverShinyHatches = shinyHatchOptions.contains("hover");
             PixelmonBroadcasts.revealShinyHatches = shinyHatchOptions.contains("reveal");
         }
@@ -580,7 +694,8 @@ public class ConfigMethods
             // TODO: No hover option in here, for now. Might be nice, eventually.
             tradeOptions = tradeOptions.toLowerCase();
             PixelmonBroadcasts.logTrades = tradeOptions.contains("log");
-            PixelmonBroadcasts.showTrades = tradeOptions.contains("show");
+            PixelmonBroadcasts.printTrades = tradeOptions.contains("chat");
+            PixelmonBroadcasts.notifyTrades = tradeOptions.contains("notice");
         }
 
         /*          *\

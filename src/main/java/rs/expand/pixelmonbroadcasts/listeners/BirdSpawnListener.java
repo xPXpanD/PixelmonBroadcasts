@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 // Local imports.
 //import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logBirdTrioSummons;
-//import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.showBirdTrioSummons;
+//import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.printBirdTrioSummons;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndSendBroadcast;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.getBroadcast;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;

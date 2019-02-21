@@ -34,8 +34,6 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 import rs.expand.pixelmonbroadcasts.commands.*;
 import rs.expand.pixelmonbroadcasts.listeners.*;
 import rs.expand.pixelmonbroadcasts.utilities.ConfigMethods;
-
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printBasicError;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
 
 /*                                                              *\
@@ -85,7 +83,7 @@ public class PixelmonBroadcasts
     public static String commandAlias;
     public static Boolean showAbilities;
 
-    // Set up a hashmap for tracking shown notices and when they need to go.
+    // Set up a hashmap for tracking shown Pixelmon notices. Allows us to kill them after a fixed amount of time.
     public static HashMap<UUID, Long> noticeExpiryMap = new HashMap<>();
 
     // Set up logging settings.
@@ -111,6 +109,7 @@ public class PixelmonBroadcasts
     public static boolean logUltraBeastForfeits;
     public static boolean logUltraBeastSpawns;
     public static boolean logUltraBeastVictories;
+    public static boolean logWormholeSpawns;
     public static boolean logNormalBlackouts;
     public static boolean logNormalCatches;
     public static boolean logNormalHatches;
@@ -130,47 +129,91 @@ public class PixelmonBroadcasts
     public static boolean logTrainerForfeits;
     public static boolean logTrainerVictories;
 
-    // Set up broadcast settings.
-    public static boolean showBossBlackouts;
-    public static boolean showBossChallenges;
-    public static boolean showBossForfeits;
-    public static boolean showBossSpawns;
-    public static boolean showBossTrainerBlackouts;
-    public static boolean showBossTrainerChallenges;
-    public static boolean showBossTrainerForfeits;
-    public static boolean showBossTrainerVictories;
-    public static boolean showBossVictories;
-    //public static boolean showBirdTrioSummons;
-    public static boolean showLegendaryBlackouts;
-    public static boolean showLegendaryCatches;
-    public static boolean showLegendaryChallenges;
-    public static boolean showLegendaryForfeits;
-    public static boolean showLegendarySpawns;
-    public static boolean showLegendaryVictories;
-    public static boolean showUltraBeastBlackouts;
-    public static boolean showUltraBeastCatches;
-    public static boolean showUltraBeastChallenges;
-    public static boolean showUltraBeastForfeits;
-    public static boolean showUltraBeastSpawns;
-    public static boolean showUltraBeastVictories;
-    public static boolean showNormalBlackouts;
-    public static boolean showNormalCatches;
-    public static boolean showNormalHatches;
-    public static boolean showPVPChallenges;
-    public static boolean showPVPDraws;
-    public static boolean showPVPVictories;
-    public static boolean showShinyBlackouts;
-    public static boolean showShinyCatches;
-    public static boolean showShinyChallenges;
-    public static boolean showShinyForfeits;
-    public static boolean showShinyHatches;
-    public static boolean showShinySpawns;
-    public static boolean showShinyVictories;
-    public static boolean showTrades;
-    public static boolean showTrainerBlackouts;
-    public static boolean showTrainerChallenges;
-    public static boolean showTrainerForfeits;
-    public static boolean showTrainerVictories;
+    // Set up chat broadcast settings.
+    public static boolean printBossBlackouts;
+    public static boolean printBossChallenges;
+    public static boolean printBossForfeits;
+    public static boolean printBossSpawns;
+    public static boolean printBossTrainerBlackouts;
+    public static boolean printBossTrainerChallenges;
+    public static boolean printBossTrainerForfeits;
+    public static boolean printBossTrainerVictories;
+    public static boolean printBossVictories;
+    //public static boolean printBirdTrioSummons;
+    public static boolean printLegendaryBlackouts;
+    public static boolean printLegendaryCatches;
+    public static boolean printLegendaryChallenges;
+    public static boolean printLegendaryForfeits;
+    public static boolean printLegendarySpawns;
+    public static boolean printLegendaryVictories;
+    public static boolean printUltraBeastBlackouts;
+    public static boolean printUltraBeastCatches;
+    public static boolean printUltraBeastChallenges;
+    public static boolean printUltraBeastForfeits;
+    public static boolean printUltraBeastSpawns;
+    public static boolean printUltraBeastVictories;
+    public static boolean printWormholeSpawns;
+    public static boolean printNormalBlackouts;
+    public static boolean printNormalCatches;
+    public static boolean printNormalHatches;
+    public static boolean printPVPChallenges;
+    public static boolean printPVPDraws;
+    public static boolean printPVPVictories;
+    public static boolean printShinyBlackouts;
+    public static boolean printShinyCatches;
+    public static boolean printShinyChallenges;
+    public static boolean printShinyForfeits;
+    public static boolean printShinyHatches;
+    public static boolean printShinySpawns;
+    public static boolean printShinyVictories;
+    public static boolean printTrades;
+    public static boolean printTrainerBlackouts;
+    public static boolean printTrainerChallenges;
+    public static boolean printTrainerForfeits;
+    public static boolean printTrainerVictories;
+
+    // Set up noticeboard broadcast settings.
+    public static boolean notifyBossBlackouts;
+    public static boolean notifyBossChallenges;
+    public static boolean notifyBossForfeits;
+    public static boolean notifyBossSpawns;
+    public static boolean notifyBossTrainerBlackouts;
+    public static boolean notifyBossTrainerChallenges;
+    public static boolean notifyBossTrainerForfeits;
+    public static boolean notifyBossTrainerVictories;
+    public static boolean notifyBossVictories;
+    //public static boolean notifyBirdTrioSummons;
+    public static boolean notifyLegendaryBlackouts;
+    public static boolean notifyLegendaryCatches;
+    public static boolean notifyLegendaryChallenges;
+    public static boolean notifyLegendaryForfeits;
+    public static boolean notifyLegendarySpawns;
+    public static boolean notifyLegendaryVictories;
+    public static boolean notifyUltraBeastBlackouts;
+    public static boolean notifyUltraBeastCatches;
+    public static boolean notifyUltraBeastChallenges;
+    public static boolean notifyUltraBeastForfeits;
+    public static boolean notifyUltraBeastSpawns;
+    public static boolean notifyUltraBeastVictories;
+    public static boolean notifyWormholeSpawns;
+    public static boolean notifyNormalBlackouts;
+    public static boolean notifyNormalCatches;
+    public static boolean notifyNormalHatches;
+    public static boolean notifyPVPChallenges;
+    public static boolean notifyPVPDraws;
+    public static boolean notifyPVPVictories;
+    public static boolean notifyShinyBlackouts;
+    public static boolean notifyShinyCatches;
+    public static boolean notifyShinyChallenges;
+    public static boolean notifyShinyForfeits;
+    public static boolean notifyShinyHatches;
+    public static boolean notifyShinySpawns;
+    public static boolean notifyShinyVictories;
+    public static boolean notifyTrades;
+    public static boolean notifyTrainerBlackouts;
+    public static boolean notifyTrainerChallenges;
+    public static boolean notifyTrainerForfeits;
+    public static boolean notifyTrainerVictories;
 
     // Set up hover settings.
     public static boolean hoverBossBlackouts;
@@ -305,7 +348,7 @@ public class PixelmonBroadcasts
     {
         if (loadedCorrectly)
         {
-            // Set up a repeating task. It checks if any players need their notices wiped. (happens every 10-15s)
+            // Set up a repeating task. It checks if any players need their notices wiped. (happens every 10-12s)
             // Won't do much if Pixelmon's notice board (the thing that shows messages at the top) isn't being sent to.
             final ScheduledExecutorService noticeClearTimer = Executors.newSingleThreadScheduledExecutor();
             final Server server = Sponge.getGame().getServer();
@@ -326,12 +369,12 @@ public class PixelmonBroadcasts
                             // Hide the overlay for the targeted player.
                             NoticeOverlay.hide((EntityPlayerMP) player);
 
-                            // Remove the player's UUID from the map. This prevents needless clears every 5 seconds.
+                            // Remove the player's UUID from the map. This prevents needless clears every iteration.
                             noticeExpiryMap.remove(player.getUniqueId());
                         }
                     }
                 });
-            }, 0, 5, TimeUnit.SECONDS);
+            }, 0, 2, TimeUnit.SECONDS);
 
             // Check Pixelmon's config and get whether the legendary spawning message is in.
             final Boolean configStatus = toBooleanObject(

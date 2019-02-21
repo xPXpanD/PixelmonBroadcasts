@@ -26,12 +26,35 @@ public class SpawnListener
         // Check if the entity is a wormhole.
         if (spawnedEntity instanceof EntityWormhole)
         {
+            // Grab a specific entity for re-use purposes. This is safe, now.
+            final EntityWormhole wormhole = (EntityWormhole) spawnedEntity;
 
+            if (logWormholeSpawns)
+            {
+                // Create shorthand variables for convenience.
+                final BlockPos location = event.action.spawnLocation.location.pos;
+                final String worldName = wormhole.getEntityWorld().getWorldInfo().getWorldName();
+
+                // Print a spawn message to console.
+                printUnformattedMessage
+                (
+                        "§5PBR §f// §5A §dwormhole §5has spawned in world \"§d" + worldName +
+                        "§5\", at X:§d" + location.getX() +
+                        "§5 Y:§d" + location.getY() +
+                        "§5 Z:§d" + location.getZ()
+                );
+            }
+
+            if (showWormholeSpawns)
+            {
+                iterateAndSendBroadcast("spawn.wormhole", wormhole, null, null, null,
+                        hoverBossSpawns, true, false, "spawn.boss", "showBossSpawn");
+            }
         }
         // Check if the entity is a Pokémon, not a trainer or the like.
         else if (spawnedEntity instanceof EntityPixelmon)
         {
-            // Make an assumption. This is safe, now.
+            // Grab a specific entity for re-use purposes. This is safe, now.
             final EntityPixelmon pokemon = (EntityPixelmon) spawnedEntity;
 
             // Make sure this Pokémon has no owner -- it has to be wild.
@@ -66,7 +89,7 @@ public class SpawnListener
                         );
                     }
 
-                    if (showBossSpawns)
+                    if (printBossSpawns || notifyBossSpawns)
                     {
                         // Get a broadcast from the broadcasts config file, if the key can be found.
                         broadcast = getBroadcast("broadcast.spawn.boss");
@@ -74,7 +97,7 @@ public class SpawnListener
                         // Did we find a message? Iterate all available players, and send to those who should receive!
                         if (broadcast != null)
                         {
-                            iterateAndSendBroadcast(broadcast, pokemon, null, null,
+                            sendChatBroadcasts(broadcast, pokemon, null, null,
                                     null, hoverBossSpawns, true, false,
                                     "spawn.boss", "showBossSpawn");
                         }

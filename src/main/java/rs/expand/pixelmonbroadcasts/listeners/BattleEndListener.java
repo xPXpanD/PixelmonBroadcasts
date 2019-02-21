@@ -244,7 +244,7 @@ public class BattleEndListener
                                 if (broadcast != null)
                                 {
                                     iterateAndSendBroadcast(broadcast, null, null,
-                                            playerEntity, null,false, false, false,
+                                            playerEntity, null, false, false, false,
                                             "forfeit.trainer", "showTrainerForfeit");
                                 }
                             }
