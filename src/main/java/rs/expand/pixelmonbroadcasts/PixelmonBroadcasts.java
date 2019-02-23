@@ -1,16 +1,6 @@
 // Written for Pixelmon Reforged. Running this on Gens is unsupported and ill-advised, just like Gens itself.
 package rs.expand.pixelmonbroadcasts;
 
-// Remote imports.
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.UUID;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.overlay.notice.NoticeOverlay;
 import com.pixelmonmod.pixelmon.config.PixelmonConfig;
@@ -23,17 +13,29 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
-import org.spongepowered.api.event.game.state.*;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
+import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
-import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
-
-// Local imports.
-import rs.expand.pixelmonbroadcasts.commands.*;
+import rs.expand.pixelmonbroadcasts.commands.BaseCommand;
+import rs.expand.pixelmonbroadcasts.commands.Reload;
+import rs.expand.pixelmonbroadcasts.commands.Toggle;
 import rs.expand.pixelmonbroadcasts.listeners.*;
 import rs.expand.pixelmonbroadcasts.utilities.ConfigMethods;
+
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
 
 /*                                                              *\
@@ -72,7 +74,6 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnform
         \*                                                                                                         */
 )
 
-// Note: printUnformattedMessage is a static import for a method from PrintingMethods, for convenience. So are the listeners.
 public class PixelmonBroadcasts
 {
     // Set up an internal variable so we can see if we loaded correctly.

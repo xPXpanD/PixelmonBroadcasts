@@ -1,18 +1,17 @@
 // Listens for Pokémon hatching from eggs.
 package rs.expand.pixelmonbroadcasts.listeners;
 
-// Remote imports.
 import com.pixelmonmod.pixelmon.api.events.EggHatchEvent;
-import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import rs.expand.pixelmonbroadcasts.enums.EnumBroadcastTypes;
+import rs.expand.pixelmonbroadcasts.enums.EnumEvents;
 
-// Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlaceholdersAndSend;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
 
 // FIXME: Eggs don't show IV percentages, so they get an extra space.
 public class HatchListener
@@ -21,10 +20,9 @@ public class HatchListener
     public void onHatchEvent(final EggHatchEvent event)
     {
         // Create shorthand variables for convenience.
-        final Pokemon pokemon = event.pokemon;
-        final String baseName = pokemon.getSpecies().getPokemonName();
-        final String localizedName = pokemon.getSpecies().getLocalizedName();
-        final EntityPlayer player = pokemon.getOwnerPlayer();
+        final String baseName = event.pokemon.getSpecies().getPokemonName();
+        final String localizedName = event.pokemon.getSpecies().getLocalizedName();
+        final EntityPlayer player = event.pokemon.getOwnerPlayer();
         final BlockPos location = player.getPosition();
         final World world = player.getEntityWorld();
 
@@ -32,7 +30,7 @@ public class HatchListener
         final String nameString =
                 baseName.equals(localizedName) ? baseName : baseName + " §7(§f" + localizedName + "§7)";
 
-        if (pokemon.isShiny())
+        if (event.pokemon.isShiny())
         {
             if (logShinyHatches)
             {
@@ -48,18 +46,18 @@ public class HatchListener
                 );
             }
 
-            if (showShinyHatches)
+            if (printShinyHatches)
             {
-                // Get a broadcast from the broadcasts config file, if the key can be found.
-                final String broadcast = getBroadcast("broadcast.hatch.shiny");
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Hatches.SHINY,
+                        event.pokemon, null, player, null);
+            }
 
-                // Did we find a message? Iterate all available players, and send to those who should receive!
-                if (broadcast != null)
-                {
-                    iterateAndSendBroadcast(broadcast, pokemon, null, player,
-                            null, hoverShinyHatches, true, revealShinyHatches,
-                            "hatch.shiny", "showShinyHatch");
-                }
+            if (notifyShinyHatches)
+            {
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Hatches.SHINY,
+                        event.pokemon, null, player, null);
             }
         }
         else
@@ -78,18 +76,18 @@ public class HatchListener
                 );
             }
 
-            if (showNormalHatches)
+            if (printNormalHatches)
             {
-                // Get a broadcast from the broadcasts config file, if the key can be found.
-                final String broadcast = getBroadcast("broadcast.hatch.normal");
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Hatches.NORMAL,
+                        event.pokemon, null, player, null);
+            }
 
-                // Did we find a message? Iterate all available players, and send to those who should receive!
-                if (broadcast != null)
-                {
-                    iterateAndSendBroadcast(broadcast, pokemon, null, player,
-                            null, hoverNormalHatches, true, revealNormalHatches,
-                            "hatch.normal", "showNormalHatch");
-                }
+            if (notifyNormalHatches)
+            {
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Hatches.NORMAL,
+                        event.pokemon, null, player, null);
             }
         }
     }

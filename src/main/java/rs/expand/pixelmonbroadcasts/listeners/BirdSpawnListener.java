@@ -1,18 +1,9 @@
 // Listens for people using bird shrines. Work in progress, currently commented out in production code.
 package rs.expand.pixelmonbroadcasts.listeners;
 
-// Remote imports.
-import com.pixelmonmod.pixelmon.api.events.PlayerActivateShrineEvent;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-// Local imports.
 //import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logBirdTrioSummons;
 //import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.printBirdTrioSummons;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndSendBroadcast;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.getBroadcast;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
 
 // TODO: Check for the name bug.
 public class BirdSpawnListener

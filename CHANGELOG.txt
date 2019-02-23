@@ -1,5 +1,5 @@
 0.4 for 7.0.2
-Released February 20th, 2019.
+Released February 22nd, 2019.
 
     Additions:
     * Added Ultra Beast and wormhole spawning support everywhere.
@@ -9,17 +9,30 @@ Released February 20th, 2019.
     * Renamed the "show" toggle to "chat" to avoid confusion with the new "notice". Needs a regen! Sorry.
     * Added a portal spawn setting, "wormholeSpawnOptions".
 
+    Message file additions:
+    * "toggle.ultra_beast.on"   ->  "&a&nultra beast"
+    * "toggle.ultra_beast.off"  ->  "&c&nultra beast"
+    * "toggle.wormhole.on"      ->  "&a&nwormhole"
+    * "toggle.wormhole.off"     ->  "&c&nwormhole"
+
+    Message file removals:
+    * Removed "toggle.shiny_legendary.on". See "Tweaks".
+    * Removed "toggle.shiny_legendary.off". See "Tweaks".
+
     Broadcasts file additions and changes:
     * Split "broadcast.EVENT.TYPE" into "chat.EVENT.TYPE" and "notice.EVENT.TYPE". Needs a regen! Sorry.
     * Added a portal spawn broadcast, "chat.spawn.wormhole". (and "notice.spawn.wormhole")
     * Changed the default hatch and trade colors from pink to gray. Pink is now used for UBs.
 
     Tweaks:
+    * Simplified shiny legendary settings. They now work if either legendaries or shinies are on.
     * Renamed several internal listeners to make more sense in errors/debug output.
 
     Fixes:
     * Fixed a missing space in the default trade broadcast.
     * Fixed IVs, coordinates and world names in the trade broadcast always being from player 1's side.
+    * Fixed the trade event permission being wrong. (we checked for "trade", listed as "trade.normal")
+    * Fixed shiny legendary forfeit logging not working right.
 
 0.3 for 7.0
 Released February 2nd, 2019.

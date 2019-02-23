@@ -1,18 +1,19 @@
 // Listens for Pokémon that get defeated by players.
 package rs.expand.pixelmonbroadcasts.listeners;
 
-// Remote imports.
+
 import com.pixelmonmod.pixelmon.api.events.BeatWildPixelmonEvent;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import rs.expand.pixelmonbroadcasts.enums.EnumBroadcastTypes;
+import rs.expand.pixelmonbroadcasts.enums.EnumEvents;
 
-// Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlaceholdersAndSend;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
 
 // TODO: Log/announce boss types? Mega vs normal.
 // FIXME: Self-sacrifice moves like Explosion do not seem to fire this.
@@ -22,11 +23,9 @@ public class WildDefeatListener
     public void onBeatWildPokemonEvent(final BeatWildPixelmonEvent event)
     {
         // Create shorthand variables for convenience.
-        final String broadcast;
         final EntityPixelmon pokemon = (EntityPixelmon) event.wpp.getEntity();
         final String baseName = pokemon.getSpecies().getPokemonName();
         final String localizedName = pokemon.getSpecies().getLocalizedName();
-        final EntityPlayer player = event.player;
         final BlockPos location = pokemon.getPosition();
 
         // If we're in a localized setup, log both names.
@@ -40,7 +39,7 @@ public class WildDefeatListener
                 // Print a victory message to console.
                 printUnformattedMessage
                 (
-                        "§5PBR §f// §4Player §c" + player.getName() +
+                        "§5PBR §f// §4Player §c" + event.player.getName() +
                         "§4 defeated a boss §c" + nameString +
                         "§4 boss in world \"§c" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§4\", at X:§c" + location.getX() +
@@ -49,18 +48,18 @@ public class WildDefeatListener
                 );
             }
 
-            if (showBossVictories)
+            if (printBossVictories)
             {
-                // Get a broadcast from the broadcasts config file, if the key can be found.
-                broadcast = getBroadcast("broadcast.victory.boss");
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Victories.BOSS,
+                        pokemon, null, event.player, null);
+            }
 
-                // Did we find a message? Iterate all available players, and send to those who should receive!
-                if (broadcast != null)
-                {
-                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
-                            hoverBossVictories, false, revealBossVictories,
-                            "victory.boss", "showBossVictory");
-                }
+            if (notifyBossVictories)
+            {
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Victories.BOSS,
+                        pokemon, null, event.player, null);
             }
         }
         else if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().isShiny())
@@ -70,7 +69,7 @@ public class WildDefeatListener
                 // Print a victory message to console, with the above shiny String mixed in.
                 printUnformattedMessage
                 (
-                        "§5PBR §f// §4Player §c" + player.getName() +
+                        "§5PBR §f// §4Player §c" + event.player.getName() +
                         "§4 defeated a shiny legendary §c" + nameString +
                         "§4 in world \"§c" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§4\", at X:§c" + location.getX() +
@@ -79,30 +78,40 @@ public class WildDefeatListener
                 );
             }
 
-            if (showLegendaryVictories)
+            if (printLegendaryVictories || notifyLegendaryVictories)
             {
-                // Get a broadcast from the broadcasts config file, if the key can be found.
-                broadcast = getBroadcast("broadcast.victory.shiny_legendary");
-
-                // Did we find a message? Iterate all available players, and send to those who should receive!
-                if (broadcast != null)
+                if (printLegendaryVictories)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
-                            hoverLegendaryVictories, false, revealLegendaryVictories,
-                            "victory.shinylegendary", "showLegendaryVictory", "showShinyVictory");
+                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                    replacePlaceholdersAndSend(
+                            EnumBroadcastTypes.PRINT, EnumEvents.Victories.SHINY_LEGENDARY_AS_LEGENDARY,
+                            pokemon, null, event.player, null);
+                }
+
+                if (notifyLegendaryVictories)
+                {
+                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                    replacePlaceholdersAndSend(
+                            EnumBroadcastTypes.NOTIFY, EnumEvents.Victories.SHINY_LEGENDARY_AS_LEGENDARY,
+                            pokemon, null, event.player, null);
                 }
             }
-            else if (showShinyVictories)
+            else if (printShinyVictories || notifyShinyVictories)
             {
-                // Get a broadcast from the broadcasts config file, if the key can be found.
-                broadcast = getBroadcast("broadcast.victory.shiny_legendary");
-
-                // Did we find a message? Iterate all available players, and send to those who should receive!
-                if (broadcast != null)
+                if (printShinyVictories)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
-                            hoverShinyVictories, false, revealShinyVictories,
-                            "victory.shinylegendary", "showLegendaryVictory", "showShinyVictory");
+                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                    replacePlaceholdersAndSend(
+                            EnumBroadcastTypes.PRINT, EnumEvents.Victories.SHINY_LEGENDARY_AS_SHINY,
+                            pokemon, null, event.player, null);
+                }
+
+                if (notifyShinyVictories)
+                {
+                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                    replacePlaceholdersAndSend(
+                            EnumBroadcastTypes.NOTIFY, EnumEvents.Victories.SHINY_LEGENDARY_AS_SHINY,
+                            pokemon, null, event.player, null);
                 }
             }
         }
@@ -113,7 +122,7 @@ public class WildDefeatListener
                 // Print a victory message to console, with the above shiny String mixed in.
                 printUnformattedMessage
                 (
-                        "§5PBR §f// §4Player §c" + player.getName() +
+                        "§5PBR §f// §4Player §c" + event.player.getName() +
                         "§4 defeated a legendary §c" + nameString +
                         "§4 in world \"§c" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§4\", at X:§c" + location.getX() +
@@ -122,18 +131,18 @@ public class WildDefeatListener
                 );
             }
 
-            if (showLegendaryVictories)
+            if (printLegendaryVictories)
             {
-                // Get a broadcast from the broadcasts config file, if the key can be found.
-                broadcast = getBroadcast("broadcast.victory.legendary");
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Victories.LEGENDARY,
+                        pokemon, null, event.player, null);
+            }
 
-                // Did we find a message? Iterate all available players, and send to those who should receive!
-                if (broadcast != null)
-                {
-                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
-                            hoverLegendaryVictories, false, revealLegendaryVictories,
-                            "victory.legendary", "showLegendaryVictory");
-                }
+            if (notifyLegendaryVictories)
+            {
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Victories.LEGENDARY,
+                        pokemon, null, event.player, null);
             }
         }
         else if (pokemon.getPokemonData().isShiny())
@@ -143,7 +152,7 @@ public class WildDefeatListener
                 // Print a victory message to console.
                 printUnformattedMessage
                 (
-                        "§5PBR §f// §4Player §c" + player.getName() +
+                        "§5PBR §f// §4Player §c" + event.player.getName() +
                         "§4 defeated a shiny §c" + nameString +
                         "§4 in world \"§c" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
                         "§4\", at X:§c" + location.getX() +
@@ -152,18 +161,18 @@ public class WildDefeatListener
                 );
             }
 
-            if (showShinyVictories)
+            if (printShinyVictories)
             {
-                // Get a broadcast from the broadcasts config file, if the key can be found.
-                broadcast = getBroadcast("broadcast.victory.shiny");
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Victories.SHINY,
+                        pokemon, null, event.player, null);
+            }
 
-                // Did we find a message? Iterate all available players, and send to those who should receive!
-                if (broadcast != null)
-                {
-                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
-                            hoverShinyVictories, false, revealShinyVictories,
-                            "victory.shiny", "showShinyVictory");
-                }
+            if (notifyShinyVictories)
+            {
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Victories.SHINY,
+                        pokemon, null, event.player, null);
             }
         }
     }

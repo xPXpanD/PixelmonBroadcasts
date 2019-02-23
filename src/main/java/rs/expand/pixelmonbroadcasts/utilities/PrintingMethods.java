@@ -1,6 +1,5 @@
 package rs.expand.pixelmonbroadcasts.utilities;
 
-// Remote imports.
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.StatsType;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
@@ -8,9 +7,11 @@ import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.broadcastsConfig;
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.messagesConfig;
 
 // A collection of methods that are commonly used. One changed word or color here, and half the mod changes. Sweet.
 public class PrintingMethods

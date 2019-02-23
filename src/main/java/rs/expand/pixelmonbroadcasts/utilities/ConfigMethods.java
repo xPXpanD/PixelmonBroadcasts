@@ -1,23 +1,22 @@
 // The probably-too-complicated config handler, mark whatever. A bit less messy, but still needs work.
 package rs.expand.pixelmonbroadcasts.utilities;
 
-// Remote imports.
+import org.spongepowered.api.Game;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.CommandManager;
+import org.spongepowered.api.plugin.PluginContainer;
+import rs.expand.pixelmonbroadcasts.PixelmonBroadcasts;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import org.spongepowered.api.Game;
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.CommandManager;
-import org.spongepowered.api.plugin.PluginContainer;
-
-// Local imports.
-import rs.expand.pixelmonbroadcasts.PixelmonBroadcasts;
 
 import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printOptionsNodeError;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
 
 public class ConfigMethods
 {

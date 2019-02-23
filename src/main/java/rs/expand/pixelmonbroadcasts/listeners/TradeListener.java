@@ -1,16 +1,14 @@
 // Listens for successful Pokémon trades.
 package rs.expand.pixelmonbroadcasts.listeners;
 
-// Remote imports.
 import com.pixelmonmod.pixelmon.api.events.PixelmonTradeEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import rs.expand.pixelmonbroadcasts.enums.EnumBroadcastTypes;
 import rs.expand.pixelmonbroadcasts.enums.EnumEvents;
 
-// Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlaceholdersAndSend;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
 
 // TODO: Eggs need better support. Hiding IVs and names for the time being.
 // TODO: Hoverable IVs would still be nice, but don't work with the current line-wide setup. Might not be worth it.
@@ -49,16 +47,16 @@ public class TradeListener
 
         if (printTrades)
         {
-            // Replace placeholders with our message, if it exists. Send to the chats of online-and-enabled players.
-            replacePlaceholdersAndSend(
-                    EnumBroadcastTypes.PRINT, EnumEvents.Trades.NORMAL, event.pokemon1, event.pokemon2, event.player1, event.player2);
+            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Others.TRADE,
+                    event.pokemon1, event.pokemon2, event.player1, event.player2);
         }
 
         if (notifyTrades)
         {
-            // Replace placeholders with our message, if it exists. Send to the chats of online-and-enabled players.
-            replacePlaceholdersAndSend(
-                    EnumBroadcastTypes.NOTIFY, EnumEvents.Trades.NORMAL, event.pokemon1, event.pokemon2, event.player1, event.player2);
+            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Others.TRADE,
+                    event.pokemon1, event.pokemon2, event.player1, event.player2);
         }
     }
 }

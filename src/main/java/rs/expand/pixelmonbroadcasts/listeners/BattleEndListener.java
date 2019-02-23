@@ -1,7 +1,6 @@
 // Listens for ended battles.
 package rs.expand.pixelmonbroadcasts.listeners;
 
-// Remote imports.
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
@@ -14,12 +13,16 @@ import com.pixelmonmod.pixelmon.enums.battle.EnumBattleEndCause;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import java.util.*;
+import rs.expand.pixelmonbroadcasts.enums.EnumBroadcastTypes;
+import rs.expand.pixelmonbroadcasts.enums.EnumEvents;
 
-// Local imports.
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlaceholdersAndSend;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
 
 // TODO: %pokedollars% placeholder.
 // TODO: Double battle support, whenever.
@@ -107,9 +110,6 @@ public class BattleEndListener
             // Needed to prevent a weird issue where it would sometimes register a loss when catching a Pokémon.
             if (event.cause != EnumBattleEndCause.FORCE)
             {
-                // Create a shorthand broadcast variable for convenience.
-                final String broadcast;
-
                 // Was our battle between two valid players?
                 if (participant1 instanceof PlayerParticipant && participant2 instanceof PlayerParticipant)
                 {
@@ -133,19 +133,18 @@ public class BattleEndListener
                             );
                         }
 
-                        if (showPVPDraws)
+                        if (printPVPDraws)
                         {
-                            // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.draw.pvp");
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Others.DRAW,
+                                    null, null, player1Entity, player2Entity);
+                        }
 
-                            // Did we find a message? Iterate all available players, and send to those who should receive!
-                            if (broadcast != null)
-                            {
-                                // Did we find a message? Iterate all available players, and send to those who should receive!
-                                iterateAndSendBroadcast(broadcast, null, null,
-                                        player1Entity, player2Entity, false, false, false,
-                                        "draw.pvp", "showPVPDraw");
-                            }
+                        if (notifyPVPDraws)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Others.DRAW,
+                                    null, null, player1Entity, player2Entity);
                         }
                     }
                     else
@@ -164,19 +163,18 @@ public class BattleEndListener
                             );
                         }
 
-                        if (showPVPVictories)
+                        if (printPVPVictories)
                         {
-                            // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.victory.pvp");
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Victories.PVP,
+                                    null, null, player1Entity, player2Entity);
+                        }
 
-                            // Did we find a message? Iterate all available players, and send to those who should receive!
-                            if (broadcast != null)
-                            {
-                                // Did we find a message? Iterate all available players, and send to those who should receive!
-                                iterateAndSendBroadcast(broadcast, null, null,
-                                        player1Entity, player2Entity, false, false, false,
-                                        "victory.pvp", "showPVPVictory");
-                            }
+                        if (notifyPVPVictories)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Victories.PVP,
+                                    null, null, player1Entity, player2Entity);
                         }
                     }
                 }
@@ -206,18 +204,18 @@ public class BattleEndListener
                                 );
                             }
 
-                            if (showBossTrainerForfeits)
+                            if (printBossTrainerForfeits)
                             {
-                                // Get a broadcast from the broadcasts config file, if the key can be found.
-                                broadcast = getBroadcast("broadcast.forfeit.boss_trainer");
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.BOSS_TRAINER,
+                                        null, null, playerEntity, null);
+                            }
 
-                                // Did we find a message? Iterate all available players, and send to those who should receive!
-                                if (broadcast != null)
-                                {
-                                    iterateAndSendBroadcast(broadcast, null, null,
-                                            playerEntity, null, false, false, false,
-                                            "forfeit.bosstrainer", "showBossTrainerForfeit");
-                                }
+                            if (notifyBossTrainerForfeits)
+                            {
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.BOSS_TRAINER,
+                                        null, null, playerEntity, null);
                             }
                         }
                         else
@@ -235,18 +233,18 @@ public class BattleEndListener
                                 );
                             }
 
-                            if (showTrainerForfeits)
+                            if (printTrainerForfeits)
                             {
-                                // Get a broadcast from the broadcasts config file, if the key can be found.
-                                broadcast = getBroadcast("broadcast.forfeit.trainer");
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.TRAINER,
+                                        null, null, playerEntity, null);
+                            }
 
-                                // Did we find a message? Iterate all available players, and send to those who should receive!
-                                if (broadcast != null)
-                                {
-                                    iterateAndSendBroadcast(broadcast, null, null,
-                                            playerEntity, null, false, false, false,
-                                            "forfeit.trainer", "showTrainerForfeit");
-                                }
+                            if (notifyTrainerForfeits)
+                            {
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.TRAINER,
+                                        null, null, playerEntity, null);
                             }
                         }
                     }
@@ -268,21 +266,21 @@ public class BattleEndListener
                                 );
                             }
 
-                            if (showBossTrainerBlackouts)
+                            if (printBossTrainerBlackouts)
                             {
-                                // Get a broadcast from the broadcasts config file, if the key can be found.
-                                broadcast = getBroadcast("broadcast.blackout.boss_trainer");
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.BOSS_TRAINER,
+                                        null, null, playerEntity, null);
+                            }
 
-                                // Did we find a message? Iterate all available players, and send to those who should receive!
-                                if (broadcast != null)
-                                {
-                                    iterateAndSendBroadcast(broadcast, null, null,
-                                            playerEntity, null, false, false, false,
-                                            "blackout.bosstrainer", "showBossTrainerBlackout");
-                                }
+                            if (notifyBossTrainerBlackouts)
+                            {
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.BOSS_TRAINER,
+                                        null, null, playerEntity, null);
                             }
                         }
-                        else if (showTrainerBlackouts)
+                        else if (printTrainerBlackouts || notifyTrainerBlackouts)
                         {
                             if (logTrainerBlackouts)
                             {
@@ -297,18 +295,18 @@ public class BattleEndListener
                                 );
                             }
 
-                            if (showTrainerBlackouts)
+                            if (printTrainerBlackouts)
                             {
-                                // Get a broadcast from the broadcasts config file, if the key can be found.
-                                broadcast = getBroadcast("broadcast.blackout.trainer");
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.TRAINER,
+                                        null, null, playerEntity, null);
+                            }
 
-                                // Did we find a message? Iterate all available players, and send to those who should receive!
-                                if (broadcast != null)
-                                {
-                                    iterateAndSendBroadcast(broadcast, null, null,
-                                            playerEntity, null, false, false, false,
-                                            "blackout.trainer", "showTrainerBlackout");
-                                }
+                            if (notifyTrainerBlackouts)
+                            {
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.TRAINER,
+                                        null, null, playerEntity, null);
                             }
                         }
                     }
@@ -336,18 +334,18 @@ public class BattleEndListener
                             );
                         }
 
-                        if (showBossTrainerVictories)
+                        if (printBossTrainerVictories)
                         {
-                            // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.victory.boss_trainer");
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Victories.BOSS_TRAINER,
+                                    null, null, playerEntity, null);
+                        }
 
-                            // Did we find a message? Iterate all available players, and send to those who should receive!
-                            if (broadcast != null)
-                            {
-                                iterateAndSendBroadcast(broadcast, null, null,
-                                        playerEntity, null, false, false, false,
-                                        "victory.bosstrainer", "showBossTrainerVictory");
-                            }
+                        if (notifyBossTrainerVictories)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Victories.BOSS_TRAINER,
+                                    null, null, playerEntity, null);
                         }
                     }
                     else
@@ -365,18 +363,18 @@ public class BattleEndListener
                             );
                         }
 
-                        if (showTrainerVictories)
+                        if (printTrainerVictories)
                         {
-                            // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.victory.trainer");
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Victories.TRAINER,
+                                    null, null, playerEntity, null);
+                        }
 
-                            // Did we find a message? Iterate all available players, and send to those who should receive!
-                            if (broadcast != null)
-                            {
-                                iterateAndSendBroadcast(broadcast, null, null,
-                                        playerEntity, null, false, false, false,
-                                        "victory.trainer", "showTrainerVictory");
-                            }
+                        if (notifyTrainerVictories)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Victories.TRAINER,
+                                    null, null, playerEntity, null);
                         }
                     }
                 }
@@ -410,18 +408,18 @@ public class BattleEndListener
                             );
                         }
 
-                        if (showBossBlackouts)
+                        if (printBossBlackouts)
                         {
-                            // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.blackout.boss");
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.BOSS,
+                                    pokemonEntity, null, playerEntity, null);
+                        }
 
-                            // Did we find a message? Iterate all available players, and send to those who should receive!
-                            if (broadcast != null)
-                            {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, null, playerEntity,
-                                        null, hoverBossBlackouts, false, revealBossBlackouts,
-                                        "blackout.boss", "showBossBlackout");
-                            }
+                        if (notifyBossBlackouts)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.BOSS,
+                                    pokemonEntity, null, playerEntity, null);
                         }
                     }
                     else if (EnumSpecies.legendaries.contains(baseName) && pokemonEntity.getPokemonData().isShiny())
@@ -440,30 +438,40 @@ public class BattleEndListener
                             );
                         }
 
-                        if (showLegendaryBlackouts)
+                        if (printLegendaryBlackouts || notifyLegendaryBlackouts)
                         {
-                            // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.blackout.shiny_legendary");
-
-                            // Did we find a message? Iterate all available players, and send to those who should receive!
-                            if (broadcast != null)
+                            if (printLegendaryBlackouts)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, null, playerEntity,
-                                        null, hoverLegendaryBlackouts, false, revealLegendaryBlackouts,
-                                        "blackout.shinylegendary", "showLegendaryBlackout", "showShinyBlackout");
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                                replacePlaceholdersAndSend(
+                                        EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.SHINY_LEGENDARY_AS_LEGENDARY,
+                                        pokemonEntity, null, playerEntity, null);
+                            }
+
+                            if (notifyLegendaryBlackouts)
+                            {
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                                replacePlaceholdersAndSend(
+                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.SHINY_LEGENDARY_AS_LEGENDARY,
+                                        pokemonEntity, null, playerEntity, null);
                             }
                         }
-                        else if (showShinyBlackouts)
+                        else if (printShinyBlackouts || notifyShinyBlackouts)
                         {
-                            // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.blackout.shiny_legendary");
-
-                            // Did we find a message? Iterate all available players, and send to those who should receive!
-                            if (broadcast != null)
+                            if (printShinyBlackouts)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, null, playerEntity,
-                                        null, hoverShinyBlackouts, false, revealShinyBlackouts,
-                                        "blackout.shinylegendary", "showLegendaryBlackout", "showShinyBlackout");
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                                replacePlaceholdersAndSend(
+                                        EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.SHINY_LEGENDARY_AS_SHINY,
+                                        pokemonEntity, null, playerEntity, null);
+                            }
+
+                            if (notifyShinyBlackouts)
+                            {
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                                replacePlaceholdersAndSend(
+                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.SHINY_LEGENDARY_AS_SHINY,
+                                        pokemonEntity, null, playerEntity, null);
                             }
                         }
                     }
@@ -483,18 +491,101 @@ public class BattleEndListener
                             );
                         }
 
-                        if (showLegendaryBlackouts)
+                        if (printLegendaryBlackouts)
                         {
-                            // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.blackout.legendary");
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.LEGENDARY,
+                                    pokemonEntity, null, playerEntity, null);
+                        }
 
-                            // Did we find a message? Iterate all available players, and send to those who should receive!
-                            if (broadcast != null)
+                        if (notifyLegendaryBlackouts)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.LEGENDARY,
+                                    pokemonEntity, null, playerEntity, null);
+                        }
+                    }
+                    else if (EnumSpecies.ultrabeasts.contains(baseName) && pokemonEntity.getPokemonData().isShiny())
+                    {
+                        if (logUltraBeastBlackouts || logShinyBlackouts)
+                        {
+                            // Print a blackout message to console.
+                            printUnformattedMessage
+                            (
+                                    "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
+                                    "§1 was knocked out by a shiny §9" + nameString +
+                                    "§1 Ultra Beast in world \"§9" + worldName +
+                                    "§1\", at X:§9" + location.getX() +
+                                    "§1 Y:§9" + location.getY() +
+                                    "§1 Z:§9" + location.getZ()
+                            );
+                        }
+
+                        if (printUltraBeastBlackouts || notifyUltraBeastBlackouts)
+                        {
+                            if (printUltraBeastBlackouts)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, null, playerEntity,
-                                        null, hoverLegendaryBlackouts, false, revealLegendaryBlackouts,
-                                        "blackout.legendary", "showLegendaryBlackout");
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                                replacePlaceholdersAndSend(
+                                        EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                                        pokemonEntity, null, playerEntity, null);
                             }
+
+                            if (notifyUltraBeastBlackouts)
+                            {
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                                replacePlaceholdersAndSend(
+                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                                        pokemonEntity, null, playerEntity, null);
+                            }
+                        }
+                        else if (printShinyBlackouts || notifyShinyBlackouts)
+                        {
+                            if (printShinyBlackouts)
+                            {
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                                replacePlaceholdersAndSend(
+                                        EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.SHINY_ULTRA_BEAST_AS_SHINY,
+                                        pokemonEntity, null, playerEntity, null);
+                            }
+
+                            if (notifyShinyBlackouts)
+                            {
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                                replacePlaceholdersAndSend(
+                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.SHINY_ULTRA_BEAST_AS_SHINY,
+                                        pokemonEntity, null, playerEntity, null);
+                            }
+                        }
+                    }
+                    else if (EnumSpecies.ultrabeasts.contains(baseName))
+                    {
+                        if (logUltraBeastBlackouts)
+                        {
+                            // Print a blackout message to console.
+                            printUnformattedMessage
+                            (
+                                    "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
+                                    "§1 was knocked out by a §9" + nameString +
+                                    "§1 Ultra Beast in world \"§9" + worldName +
+                                    "§1\", at X:§9" + location.getX() +
+                                    "§1 Y:§9" + location.getY() +
+                                    "§1 Z:§9" + location.getZ()
+                            );
+                        }
+
+                        if (printUltraBeastBlackouts)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.ULTRA_BEAST,
+                                    pokemonEntity, null, playerEntity, null);
+                        }
+
+                        if (notifyUltraBeastBlackouts)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.ULTRA_BEAST,
+                                    pokemonEntity, null, playerEntity, null);
                         }
                     }
                     else if (pokemonEntity.getPokemonData().isShiny())
@@ -513,18 +604,18 @@ public class BattleEndListener
                             );
                         }
 
-                        if (showShinyBlackouts)
+                        if (printShinyBlackouts)
                         {
-                            // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.blackout.shiny");
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.SHINY,
+                                    pokemonEntity, null, playerEntity, null);
+                        }
 
-                            // Did we find a message? Iterate all available players, and send to those who should receive!
-                            if (broadcast != null)
-                            {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, null, playerEntity,
-                                        null, hoverShinyBlackouts, false, revealShinyBlackouts,
-                                        "blackout.shiny", "showShinyBlackout");
-                            }
+                        if (notifyShinyBlackouts)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.SHINY,
+                                    pokemonEntity, null, playerEntity, null);
                         }
                     }
                     else
@@ -543,18 +634,18 @@ public class BattleEndListener
                             );
                         }
 
-                        if (showNormalBlackouts)
+                        if (printNormalBlackouts)
                         {
-                            // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.blackout.normal");
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.NORMAL,
+                                    pokemonEntity, null, playerEntity, null);
+                        }
 
-                            // Did we find a message? Iterate all available players, and send to those who should receive!
-                            if (broadcast != null)
-                            {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, null, playerEntity,
-                                        null, hoverNormalBlackouts, false, revealNormalBlackouts,
-                                        "blackout.normal", "showNormalBlackout");
-                            }
+                        if (notifyNormalBlackouts)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.NORMAL,
+                                    pokemonEntity, null, playerEntity, null);
                         }
                     }
                 }
@@ -588,23 +679,23 @@ public class BattleEndListener
                             );
                         }
 
-                        if (showBossForfeits)
+                        if (printBossForfeits)
                         {
-                            // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.forfeit.boss");
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.BOSS,
+                                    pokemonEntity, null, playerEntity, null);
+                        }
 
-                            // Did we find a message? Iterate all available players, and send to those who should receive!
-                            if (broadcast != null)
-                            {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, null, playerEntity,
-                                        null, hoverBossForfeits, false, revealBossForfeits,
-                                        "forfeit.boss", "showBossForfeit");
-                            }
+                        if (notifyBossForfeits)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.BOSS,
+                                    pokemonEntity, null, playerEntity, null);
                         }
                     }
                     else if (EnumSpecies.legendaries.contains(baseName) && pokemonEntity.getPokemonData().isShiny())
                     {
-                        if (logLegendaryForfeits || showShinyForfeits)
+                        if (logLegendaryForfeits || logShinyForfeits)
                         {
                             // Print a forfeit message to console.
                             printUnformattedMessage
@@ -618,30 +709,40 @@ public class BattleEndListener
                             );
                         }
 
-                        if (showLegendaryForfeits)
+                        if (printLegendaryForfeits || notifyLegendaryForfeits)
                         {
-                            // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.forfeit.shiny_legendary");
-
-                            // Did we find a message? Iterate all available players, and send to those who should receive!
-                            if (broadcast != null)
+                            if (printLegendaryForfeits)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, null, playerEntity,
-                                        null, hoverLegendaryForfeits, false, revealLegendaryForfeits,
-                                        "forfeit.shinylegendary", "showLegendaryForfeit", "showShinyForfeit");
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                                replacePlaceholdersAndSend(
+                                        EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.SHINY_LEGENDARY_AS_LEGENDARY,
+                                        pokemonEntity, null, playerEntity, null);
+                            }
+
+                            if (notifyLegendaryForfeits)
+                            {
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                                replacePlaceholdersAndSend(
+                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.SHINY_LEGENDARY_AS_LEGENDARY,
+                                        pokemonEntity, null, playerEntity, null);
                             }
                         }
-                        else if (showShinyForfeits)
+                        else if (printShinyForfeits || notifyShinyForfeits)
                         {
-                            // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.forfeit.shiny_legendary");
-
-                            // Did we find a message? Iterate all available players, and send to those who should receive!
-                            if (broadcast != null)
+                            if (printShinyForfeits)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, null, playerEntity,
-                                        null, hoverShinyForfeits, false, revealShinyForfeits,
-                                        "forfeit.shinylegendary", "showLegendaryForfeit", "showShinyForfeit");
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                                replacePlaceholdersAndSend(
+                                        EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.SHINY_LEGENDARY_AS_SHINY,
+                                        pokemonEntity, null, playerEntity, null);
+                            }
+
+                            if (notifyShinyForfeits)
+                            {
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                                replacePlaceholdersAndSend(
+                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.SHINY_LEGENDARY_AS_SHINY,
+                                        pokemonEntity, null, playerEntity, null);
                             }
                         }
                     }
@@ -661,18 +762,101 @@ public class BattleEndListener
                             );
                         }
 
-                        if (showLegendaryForfeits)
+                        if (printLegendaryForfeits)
                         {
-                            // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.forfeit.legendary");
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.LEGENDARY,
+                                    pokemonEntity, null, playerEntity, null);
+                        }
 
-                            // Did we find a message? Iterate all available players, and send to those who should receive!
-                            if (broadcast != null)
+                        if (notifyLegendaryForfeits)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.LEGENDARY,
+                                    pokemonEntity, null, playerEntity, null);
+                        }
+                    }
+                    else if (EnumSpecies.ultrabeasts.contains(baseName) && pokemonEntity.getPokemonData().isShiny())
+                    {
+                        if (logUltraBeastForfeits || logShinyForfeits)
+                        {
+                            // Print a forfeit message to console.
+                            printUnformattedMessage
+                            (
+                                    "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
+                                    "§1 fled from a shiny §9" + nameString +
+                                    "§1 Ultra Beast in world \"§9" + worldName +
+                                    "§1\", at X:§9" + location.getX() +
+                                    "§1 Y:§9" + location.getY() +
+                                    "§1 Z:§9" + location.getZ()
+                            );
+                        }
+
+                        if (printUltraBeastForfeits || notifyUltraBeastForfeits)
+                        {
+                            if (printUltraBeastForfeits)
                             {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity, null, playerEntity,
-                                        null, hoverLegendaryForfeits, false, revealLegendaryForfeits,
-                                        "forfeit.legendary", "showLegendaryForfeit");
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                                replacePlaceholdersAndSend(
+                                        EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                                        pokemonEntity, null, playerEntity, null);
                             }
+
+                            if (notifyUltraBeastForfeits)
+                            {
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                                replacePlaceholdersAndSend(
+                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                                        pokemonEntity, null, playerEntity, null);
+                            }
+                        }
+                        else if (printShinyForfeits || notifyShinyForfeits)
+                        {
+                            if (printShinyForfeits)
+                            {
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                                replacePlaceholdersAndSend(
+                                        EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.SHINY_ULTRA_BEAST_AS_SHINY,
+                                        pokemonEntity, null, playerEntity, null);
+                            }
+
+                            if (notifyShinyForfeits)
+                            {
+                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                                replacePlaceholdersAndSend(
+                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.SHINY_ULTRA_BEAST_AS_SHINY,
+                                        pokemonEntity, null, playerEntity, null);
+                            }
+                        }
+                    }
+                    else if (EnumSpecies.ultrabeasts.contains(baseName))
+                    {
+                        if (logUltraBeastForfeits)
+                        {
+                            // Print a forfeit message to console.
+                            printUnformattedMessage
+                            (
+                                    "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
+                                    "§1 fled from a §9" + nameString +
+                                    "§1 Ultra Beast in world \"§9" + worldName +
+                                    "§1\", at X:§9" + location.getX() +
+                                    "§1 Y:§9" + location.getY() +
+                                    "§1 Z:§9" + location.getZ()
+                            );
+                        }
+
+                        if (printUltraBeastForfeits)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.ULTRA_BEAST,
+                                    pokemonEntity, null, playerEntity, null);
+                        }
+
+                        if (notifyUltraBeastForfeits)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.ULTRA_BEAST,
+                                    pokemonEntity, null, playerEntity, null);
                         }
                     }
                     else if (pokemonEntity.getPokemonData().isShiny())
@@ -691,18 +875,18 @@ public class BattleEndListener
                             );
                         }
 
-                        if (showShinyForfeits)
+                        if (printShinyForfeits)
                         {
-                            // Get a broadcast from the broadcasts config file, if the key can be found.
-                            broadcast = getBroadcast("broadcast.forfeit.shiny");
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.SHINY,
+                                    pokemonEntity, null, playerEntity, null);
+                        }
 
-                            // Did we find a message? Iterate all available players, and send to those who should receive!
-                            if (broadcast != null)
-                            {
-                                iterateAndSendBroadcast(broadcast, pokemonEntity,null, playerEntity,
-                                        null, hoverShinyForfeits, false, revealShinyForfeits,
-                                        "forfeit.shiny", "showShinyForfeit");
-                            }
+                        if (notifyShinyForfeits)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.SHINY,
+                                    pokemonEntity, null, playerEntity, null);
                         }
                     }
                 }

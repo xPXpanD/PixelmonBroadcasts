@@ -1,6 +1,5 @@
 package rs.expand.pixelmonbroadcasts.enums;
 
-// Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.getBroadcast;
 
@@ -13,56 +12,9 @@ public interface EnumEvents
     String key();
     String[] flags();
 
-    // Forfeits
-    enum Forfeits implements EnumEvents
-    {
-        SHINY(hoverShinyForfeits, revealShinyForfeits,
-            "forfeit.shiny", "showShinyForfeit"),
-        LEGENDARY(hoverLegendaryForfeits, revealLegendaryForfeits,
-            "forfeit.legendary", "showLegendaryForfeit"),
-        SHINY_LEGENDARY_AS_LEGENDARY(hoverLegendaryForfeits, revealLegendaryForfeits,
-            "forfeit.shinylegendary", "showLegendaryForfeit", "showShinyForfeit"),
-        SHINY_LEGENDARY_AS_SHINY(hoverShinyForfeits, revealShinyForfeits,
-            "forfeit.shinylegendary", "showLegendaryForfeit", "showShinyForfeit"),
-        ULTRA_BEAST(hoverUltraBeastForfeits, revealUltraBeastForfeits,
-            "forfeit.ultrabeast", "showUltraBeastForfeit"),
-        SHINY_ULTRA_BEAST_AS_ULTRA_BEAST(hoverUltraBeastForfeits, revealUltraBeastForfeits,
-            "forfeit.shinyultrabeast", "showUltraBeastForfeit", "showShinyForfeit"),
-        SHINY_ULTRA_BEAST_AS_SHINY(hoverShinyForfeits, revealShinyForfeits,
-            "forfeit.shinyultrabeast", "showUltraBeastForfeit", "showShinyForfeit"),
-        TRAINER(false, false,
-            "forfeit.trainer", "showTrainerForfeit"),
-        BOSS_TRAINER(false, false,
-            "forfeit.bosstrainer", "showBossTrainerForfeit"),
-        BOSS(hoverBossForfeits, revealBossForfeits,
-            "forfeit.boss", "showBossForfeit");
-
-        // Set up some variables for accessing the Enum's data through.
-        public boolean hasHover, showIVs;
-        public String key;
-        public String[] flags;
-
-        // Point to where we're grabbing from.
-        Forfeits(boolean hasHover, final boolean showIVs, final String key, final String... flags)
-        {
-            this.hasHover = hasHover;
-            this.showIVs = showIVs;
-            this.key = key;
-            this.flags = flags;
-        }
-
-        // Return values to the main interface so we can access them without needing to access this specific Enum.
-        @Override
-        public boolean hasHover() { return this.hasHover; }
-        public boolean presentTense() { return false; } // Forfeits always use past tense.
-        public boolean showIVs() { return this.showIVs; }
-        public String key() { return this.key; }
-        public String[] flags() { return this.flags; }
-    }
-
     enum Blackouts implements EnumEvents
     {
-        // Blackouts
+        // Blackouts.
         NORMAL(hoverNormalBlackouts, revealNormalBlackouts,
                 "blackout.normal", "showNormalBlackout"),
         SHINY(hoverShinyBlackouts, revealShinyBlackouts,
@@ -79,12 +31,12 @@ public interface EnumEvents
                 "blackout.shinyultrabeast", "showUltraBeastBlackout", "showShinyBlackout"),
         SHINY_ULTRA_BEAST_AS_SHINY(hoverShinyBlackouts, revealShinyBlackouts,
                 "blackout.shinyultrabeast", "showUltraBeastBlackout", "showShinyBlackout"),
+        BOSS(hoverBossBlackouts, revealBossBlackouts,
+                "blackout.boss", "showBossBlackout"),
         TRAINER(false, false,
                 "blackout.trainer", "showTrainerBlackout"),
         BOSS_TRAINER(false, false,
-                "blackout.bosstrainer", "showBossTrainerBlackout"),
-        BOSS(hoverBossBlackouts, revealBossBlackouts,
-                "blackout.boss", "showBossBlackout");
+                "blackout.bosstrainer", "showBossTrainerBlackout");
 
         // Set up some variables for accessing the Enum's data through.
         public boolean hasHover, showIVs;
@@ -109,57 +61,9 @@ public interface EnumEvents
         public String[] flags() { return this.flags; }
     }
 
-    enum Challenges implements EnumEvents
-    {
-        // Challenges
-        SHINY(hoverShinyChallenges,
-                "challenge.shiny", "showShinyChallenge"),
-        LEGENDARY(hoverLegendaryChallenges,
-                "challenge.legendary", "showLegendaryChallenge"),
-        SHINY_LEGENDARY_AS_LEGENDARY(hoverLegendaryChallenges,
-                "challenge.shinylegendary", "showLegendaryChallenge", "showShinyChallenge"),
-        SHINY_LEGENDARY_AS_SHINY(hoverShinyChallenges,
-                "challenge.shinylegendary", "showLegendaryChallenge", "showShinyChallenge"),
-        ULTRA_BEAST(hoverUltraBeastChallenges,
-                "challenge.ultrabeast", "showUltraBeastChallenge"),
-        SHINY_ULTRA_BEAST_AS_ULTRA_BEAST(hoverUltraBeastChallenges,
-                "challenge.shinyultrabeast", "showUltraBeastChallenge", "showShinyChallenge"),
-        SHINY_ULTRA_BEAST_AS_SHINY(hoverShinyChallenges,
-                "challenge.shinyultrabeast", "showUltraBeastChallenge", "showShinyChallenge"),
-        TRAINER(false,
-                "challenge.trainer", "showTrainerChallenge"),
-        BOSS_TRAINER(false,
-                "challenge.bosstrainer", "showBossTrainerChallenge"),
-        BOSS(hoverBossChallenges,
-                "challenge.boss", "showBossChallenge"),
-        PVP(false,
-                "challenge.pvp", "showPVPChallenge");
-
-        // Set up some variables for accessing the Enum's data through.
-        public boolean hasHover;
-        public String key;
-        public String[] flags;
-
-        // Point to where we're grabbing from.
-        Challenges(final boolean hasHover, final String key, final String... flags)
-        {
-            this.hasHover = hasHover;
-            this.key = key;
-            this.flags = flags;
-        }
-
-        // Return values to the main interface so we can access them without needing to access this specific Enum.
-        @Override
-        public boolean hasHover() { return this.hasHover; }
-        public boolean presentTense() { return true; } // Challenges always use present tense.
-        public boolean showIVs() { return false; } // Challenges never reveal IVs due to Pixelmon issues with grabbing them.
-        public String key() { return this.key; }
-        public String[] flags() { return this.flags; }
-    }
-
     enum Catches implements EnumEvents
     {
-        // Catches
+        // Catches.
         NORMAL(hoverNormalCatches, revealNormalCatches,
                 "catch.normal", "showNormalCatch"),
         SHINY(hoverShinyCatches, revealShinyCatches,
@@ -200,13 +104,77 @@ public interface EnumEvents
         public String[] flags() { return this.flags; }
     }
 
-    enum Hatches implements EnumEvents
+    enum Challenges implements EnumEvents
     {
-        // Hatches
-        NORMAL(hoverNormalHatches, revealNormalHatches,
-                "hatch.normal", "showNormalHatch"),
-        SHINY(hoverShinyHatches, revealShinyHatches,
-                "hatch.shiny", "showShinyHatch");
+        // Challenges.
+        SHINY(hoverShinyChallenges,
+                "challenge.shiny", "showShinyChallenge"),
+        LEGENDARY(hoverLegendaryChallenges,
+                "challenge.legendary", "showLegendaryChallenge"),
+        SHINY_LEGENDARY_AS_LEGENDARY(hoverLegendaryChallenges,
+                "challenge.shinylegendary", "showLegendaryChallenge", "showShinyChallenge"),
+        SHINY_LEGENDARY_AS_SHINY(hoverShinyChallenges,
+                "challenge.shinylegendary", "showLegendaryChallenge", "showShinyChallenge"),
+        ULTRA_BEAST(hoverUltraBeastChallenges,
+                "challenge.ultrabeast", "showUltraBeastChallenge"),
+        SHINY_ULTRA_BEAST_AS_ULTRA_BEAST(hoverUltraBeastChallenges,
+                "challenge.shinyultrabeast", "showUltraBeastChallenge", "showShinyChallenge"),
+        SHINY_ULTRA_BEAST_AS_SHINY(hoverShinyChallenges,
+                "challenge.shinyultrabeast", "showUltraBeastChallenge", "showShinyChallenge"),
+        BOSS(hoverBossChallenges,
+                "challenge.boss", "showBossChallenge"),
+        TRAINER(false,
+                "challenge.trainer", "showTrainerChallenge"),
+        BOSS_TRAINER(false,
+                "challenge.bosstrainer", "showBossTrainerChallenge"),
+        PVP(false,
+                "challenge.pvp", "showPVPChallenge");
+
+        // Set up some variables for accessing the Enum's data through.
+        public boolean hasHover;
+        public String key;
+        public String[] flags;
+
+        // Point to where we're grabbing from.
+        Challenges(final boolean hasHover, final String key, final String... flags)
+        {
+            this.hasHover = hasHover;
+            this.key = key;
+            this.flags = flags;
+        }
+
+        // Return values to the main interface so we can access them without needing to access this specific Enum.
+        @Override
+        public boolean hasHover() { return this.hasHover; }
+        public boolean presentTense() { return true; } // Challenges always use present tense.
+        public boolean showIVs() { return false; } // Challenges never reveal IVs due to Pixelmon issues with grabbing them.
+        public String key() { return this.key; }
+        public String[] flags() { return this.flags; }
+    }
+
+    enum Forfeits implements EnumEvents
+    {
+        // Forfeits.
+        SHINY(hoverShinyForfeits, revealShinyForfeits,
+            "forfeit.shiny", "showShinyForfeit"),
+        LEGENDARY(hoverLegendaryForfeits, revealLegendaryForfeits,
+            "forfeit.legendary", "showLegendaryForfeit"),
+        SHINY_LEGENDARY_AS_LEGENDARY(hoverLegendaryForfeits, revealLegendaryForfeits,
+            "forfeit.shinylegendary", "showLegendaryForfeit", "showShinyForfeit"),
+        SHINY_LEGENDARY_AS_SHINY(hoverShinyForfeits, revealShinyForfeits,
+            "forfeit.shinylegendary", "showLegendaryForfeit", "showShinyForfeit"),
+        ULTRA_BEAST(hoverUltraBeastForfeits, revealUltraBeastForfeits,
+            "forfeit.ultrabeast", "showUltraBeastForfeit"),
+        SHINY_ULTRA_BEAST_AS_ULTRA_BEAST(hoverUltraBeastForfeits, revealUltraBeastForfeits,
+            "forfeit.shinyultrabeast", "showUltraBeastForfeit", "showShinyForfeit"),
+        SHINY_ULTRA_BEAST_AS_SHINY(hoverShinyForfeits, revealShinyForfeits,
+            "forfeit.shinyultrabeast", "showUltraBeastForfeit", "showShinyForfeit"),
+        BOSS(hoverBossForfeits, revealBossForfeits,
+            "forfeit.boss", "showBossForfeit"),
+        TRAINER(false, false,
+            "forfeit.trainer", "showTrainerForfeit"),
+        BOSS_TRAINER(false, false,
+            "forfeit.bosstrainer", "showBossTrainerForfeit");
 
         // Set up some variables for accessing the Enum's data through.
         public boolean hasHover, showIVs;
@@ -214,7 +182,7 @@ public interface EnumEvents
         public String[] flags;
 
         // Point to where we're grabbing from.
-        Hatches(final boolean hasHover, final boolean showIVs, final String key, final String... flags)
+        Forfeits(boolean hasHover, final boolean showIVs, final String key, final String... flags)
         {
             this.hasHover = hasHover;
             this.showIVs = showIVs;
@@ -225,7 +193,7 @@ public interface EnumEvents
         // Return values to the main interface so we can access them without needing to access this specific Enum.
         @Override
         public boolean hasHover() { return this.hasHover; }
-        public boolean presentTense() { return true; } // Hatches always use present tense.
+        public boolean presentTense() { return false; } // Forfeits always use past tense.
         public boolean showIVs() { return this.showIVs; }
         public String key() { return this.key; }
         public String[] flags() { return this.flags; }
@@ -233,7 +201,7 @@ public interface EnumEvents
 
     enum Spawns implements EnumEvents
     {
-        // Spawns
+        // Spawns.
         SHINY(hoverShinySpawns,
                 "spawn.shiny", "showShinySpawn"),
         LEGENDARY(hoverLegendarySpawns,
@@ -275,34 +243,9 @@ public interface EnumEvents
         public String[] flags() { return this.flags; }
     }
 
-    enum Trades implements EnumEvents
-    {
-        // Trades
-        NORMAL("blackout.normal", "showNormalBlackout");
-
-        // Set up some variables for accessing the Enum's data through.
-        public String key;
-        public String[] flags;
-
-        // Point to where we're grabbing from.
-        Trades(final String key, final String... flags)
-        {
-            this.key = key;
-            this.flags = flags;
-        }
-
-        // Return values to the main interface so we can access them without needing to access this specific Enum.
-        @Override
-        public boolean hasHover() { return false; } // Trades do not support hovers... yet?
-        public boolean presentTense() { return true; } // Trades always use present tense.
-        public boolean showIVs() { return false; } // Trades do not reveal IVs... yet?
-        public String key() { return this.key; }
-        public String[] flags() { return this.flags; }
-    }
-
     enum Victories implements EnumEvents
     {
-        // Victories
+        // Victories.
         SHINY(hoverShinyVictories, revealShinyVictories,
                 "victory.shiny", "showShinyVictory"),
         LEGENDARY(hoverLegendaryVictories, revealLegendaryVictories,
@@ -318,7 +261,13 @@ public interface EnumEvents
         SHINY_ULTRA_BEAST_AS_SHINY(hoverShinyVictories, revealShinyVictories,
                 "victory.shinyultrabeast", "showUltraBeastVictory", "showShinyVictory"),
         BOSS(hoverBossVictories, revealBossVictories,
-                "victory.boss", "showBossVictory");
+                "victory.boss", "showBossVictory"),
+        TRAINER(false, false,
+                "victory.trainer", "showTrainerVictory"),
+        BOSS_TRAINER(false, false,
+                "victory.bosstrainer", "showBossTrainerVictory"),
+        PVP(false, false,
+                "victory.pvp", "showPVPVictory");
 
         // Set up some variables for accessing the Enum's data through.
         public boolean hasHover, showIVs;
@@ -339,6 +288,65 @@ public interface EnumEvents
         public boolean hasHover() { return this.hasHover; }
         public boolean presentTense() { return false; } // Victories always use past tense.
         public boolean showIVs() { return this.showIVs; }
+        public String key() { return this.key; }
+        public String[] flags() { return this.flags; }
+    }
+
+    enum Hatches implements EnumEvents
+    {
+        // Hatches.
+        NORMAL(hoverNormalHatches, revealNormalHatches,
+                "hatch.normal", "showNormalHatch"),
+        SHINY(hoverShinyHatches, revealShinyHatches,
+                "hatch.shiny", "showShinyHatch");
+
+        // Set up some variables for accessing the Enum's data through.
+        public boolean hasHover, showIVs;
+        public String key;
+        public String[] flags;
+
+        // Point to where we're grabbing from.
+        Hatches(final boolean hasHover, final boolean showIVs, final String key, final String... flags)
+        {
+            this.hasHover = hasHover;
+            this.showIVs = showIVs;
+            this.key = key;
+            this.flags = flags;
+        }
+
+        // Return values to the main interface so we can access them without needing to access this specific Enum.
+        @Override
+        public boolean hasHover() { return this.hasHover; }
+        public boolean presentTense() { return true; } // Hatches always use present tense.
+        public boolean showIVs() { return this.showIVs; }
+        public String key() { return this.key; }
+        public String[] flags() { return this.flags; }
+    }
+
+    enum Others implements EnumEvents
+    {
+        // Miscellaneous events.
+        TRADE(true, "trade.normal", "showTrade"),
+        DRAW(false, "draw.pvp", "showPVPDraw");
+
+        // Set up some variables for accessing the Enum's data through.
+        public boolean presentTense;
+        public String key;
+        public String[] flags;
+
+        // Point to where we're grabbing from.
+        Others(final boolean presentTense, final String key, final String... flags)
+        {
+            this.presentTense = presentTense;
+            this.key = key;
+            this.flags = flags;
+        }
+
+        // Return values to the main interface so we can access them without needing to access this specific Enum.
+        @Override
+        public boolean hasHover() { return false; } // None of the miscellaneous events support hovers... yet?
+        public boolean presentTense() { return this.presentTense; }
+        public boolean showIVs() { return false; } // None of the miscellaneous events support revealing IVs... yet?
         public String key() { return this.key; }
         public String[] flags() { return this.flags; }
     }

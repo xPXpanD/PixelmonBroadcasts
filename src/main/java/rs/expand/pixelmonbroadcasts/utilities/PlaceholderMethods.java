@@ -1,6 +1,5 @@
 package rs.expand.pixelmonbroadcasts.utilities;
 
-// Remote imports.
 import com.pixelmonmod.pixelmon.api.overlay.notice.EnumOverlayLayout;
 import com.pixelmonmod.pixelmon.api.overlay.notice.NoticeOverlay;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
@@ -18,13 +17,13 @@ import net.minecraft.world.World;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
+import rs.expand.pixelmonbroadcasts.enums.EnumBroadcastTypes;
+import rs.expand.pixelmonbroadcasts.enums.EnumEvents;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-// Local imports.
-import rs.expand.pixelmonbroadcasts.enums.EnumBroadcastTypes;
-import rs.expand.pixelmonbroadcasts.enums.EnumEvents;
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.noticeExpiryMap;
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.showAbilities;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
@@ -45,6 +44,8 @@ public class PlaceholderMethods
             // Set up some variables that we want to be able to access later.
             BlockPos position;
             Pokemon pokemon = null;
+
+            pokemon.setAbilitySlot(2);
 
             // Do we have a Pokémon object? Replace Pokémon-specific placeholders.
             if (pokemonObject != null)

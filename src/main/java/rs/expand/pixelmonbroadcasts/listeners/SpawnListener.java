@@ -1,7 +1,7 @@
 // Listens for Pokémon spawns on the Better Spawner.
 package rs.expand.pixelmonbroadcasts.listeners;
 
-// Remote imports.
+
 import com.pixelmonmod.pixelmon.api.events.spawning.SpawnEvent;
 import com.pixelmonmod.pixelmon.entities.EntityWormhole;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
@@ -9,11 +9,12 @@ import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import rs.expand.pixelmonbroadcasts.enums.EnumBroadcastTypes;
+import rs.expand.pixelmonbroadcasts.enums.EnumEvents;
 
-// Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlaceholdersAndSend;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
 
 public class SpawnListener
 {
@@ -45,10 +46,18 @@ public class SpawnListener
                 );
             }
 
-            if (showWormholeSpawns)
+            if (printWormholeSpawns)
             {
-                iterateAndSendBroadcast("spawn.wormhole", wormhole, null, null, null,
-                        hoverBossSpawns, true, false, "spawn.boss", "showBossSpawn");
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Spawns.WORMHOLE,
+                        wormhole, null, null, null);
+            }
+
+            if (notifyWormholeSpawns)
+            {
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Spawns.WORMHOLE,
+                        wormhole, null, null, null);
             }
         }
         // Check if the entity is a Pokémon, not a trainer or the like.
@@ -62,7 +71,6 @@ public class SpawnListener
             if (!pokemon.hasOwner())
             {
                 // Create shorthand variables for convenience.
-                final String broadcast;
                 final String baseName = pokemon.getPokemonName();
                 final String localizedName = pokemon.getLocalizedName();
                 final BlockPos location = event.action.spawnLocation.location.pos;
@@ -89,18 +97,18 @@ public class SpawnListener
                         );
                     }
 
-                    if (printBossSpawns || notifyBossSpawns)
+                    if (printBossSpawns)
                     {
-                        // Get a broadcast from the broadcasts config file, if the key can be found.
-                        broadcast = getBroadcast("broadcast.spawn.boss");
+                        // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                        replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Spawns.BOSS,
+                                pokemon, null, null, null);
+                    }
 
-                        // Did we find a message? Iterate all available players, and send to those who should receive!
-                        if (broadcast != null)
-                        {
-                            sendChatBroadcasts(broadcast, pokemon, null, null,
-                                    null, hoverBossSpawns, true, false,
-                                    "spawn.boss", "showBossSpawn");
-                        }
+                    if (notifyBossSpawns)
+                    {
+                        // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                        replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Spawns.BOSS,
+                                pokemon, null, null, null);
                     }
                 }
                 else if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().isShiny())
@@ -118,36 +126,42 @@ public class SpawnListener
                         );
                     }
 
-                    if (showLegendarySpawns)
+                    if (printLegendarySpawns || notifyLegendarySpawns)
                     {
-                        // Get a broadcast from the broadcasts config file, if the key can be found.
-                        broadcast = getBroadcast("broadcast.spawn.shiny_legendary");
-
-                        // Did we find a message? Iterate all available players, and send to those who should receive!
-                        if (broadcast != null)
+                        if (printLegendarySpawns)
                         {
-                            iterateAndSendBroadcast(broadcast, pokemon, null, null, null,
-                                    hoverLegendarySpawns, true, false,
-                                    "spawn.shinylegendary", "showLegendarySpawn", "showShinySpawn");
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Spawns.SHINY_LEGENDARY_AS_LEGENDARY,
+                                    pokemon, null, null, null);
+                        }
+
+                        if (notifyLegendarySpawns)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Spawns.SHINY_LEGENDARY_AS_LEGENDARY,
+                                    pokemon, null, null, null);
                         }
                     }
-                    else if (showShinySpawns)
+                    else if (printShinySpawns || notifyShinySpawns)
                     {
-                        // Get a broadcast from the broadcasts config file, if the key can be found.
-                        broadcast = getBroadcast("broadcast.spawn.shiny_legendary");
-
-                        // Did we find a message? Iterate all available players, and send to those who should receive!
-                        if (broadcast != null)
+                        if (printShinySpawns)
                         {
-                            iterateAndSendBroadcast(broadcast, pokemon, null, null, null,
-                                    hoverShinySpawns, true, false,
-                                    "spawn.shinylegendary", "showLegendarySpawn", "showShinySpawn");
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Spawns.SHINY_LEGENDARY_AS_SHINY,
+                                    pokemon, null, null, null);
+                        }
+
+                        if (notifyShinySpawns)
+                        {
+                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Spawns.SHINY_LEGENDARY_AS_SHINY,
+                                    pokemon, null, null, null);
                         }
                     }
                 }
                 else if (EnumSpecies.legendaries.contains(baseName))
                 {
-                    if (logLegendarySpawns)
+                    if (logShinySpawns)
                     {
                         // Print a spawn message to console.
                         printUnformattedMessage
@@ -160,18 +174,18 @@ public class SpawnListener
                         );
                     }
 
-                    if (showLegendarySpawns)
+                    if (printLegendarySpawns)
                     {
-                        // Get a broadcast from the broadcasts config file, if the key can be found.
-                        broadcast = getBroadcast("broadcast.spawn.legendary");
+                        // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                        replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Spawns.LEGENDARY,
+                                pokemon, null, null, null);
+                    }
 
-                        // Did we find a message? Iterate all available players, and send to those who should receive!
-                        if (broadcast != null)
-                        {
-                            iterateAndSendBroadcast(broadcast, pokemon, null, null,
-                                    null, hoverLegendarySpawns, true, false,
-                                    "spawn.legendary", "showLegendarySpawn");
-                        }
+                    if (notifyLegendarySpawns)
+                    {
+                        // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                        replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Spawns.LEGENDARY,
+                                pokemon, null, null, null);
                     }
                 }
                 else if (pokemon.getPokemonData().isShiny())
@@ -189,18 +203,18 @@ public class SpawnListener
                         );
                     }
 
-                    if (showShinySpawns)
+                    if (printShinySpawns)
                     {
-                        // Get a broadcast from the broadcasts config file, if the key can be found.
-                        broadcast = getBroadcast("broadcast.spawn.shiny");
+                        // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                        replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Spawns.SHINY,
+                                pokemon, null, null, null);
+                    }
 
-                        // Did we find a message? Iterate all available players, and send to those who should receive!
-                        if (broadcast != null)
-                        {
-                            iterateAndSendBroadcast(broadcast, pokemon, null, null, null,
-                                    hoverShinySpawns, true, false,
-                                    "spawn.shiny", "showShinySpawn");
-                        }
+                    if (notifyShinySpawns)
+                    {
+                        // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                        replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Spawns.SHINY,
+                                pokemon, null, null, null);
                     }
                 }
             }

@@ -1,18 +1,18 @@
 // Listens for Pokémon captures with balls.
 package rs.expand.pixelmonbroadcasts.listeners;
 
-// Remote imports.
 import com.pixelmonmod.pixelmon.api.events.CaptureEvent;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import rs.expand.pixelmonbroadcasts.enums.EnumBroadcastTypes;
+import rs.expand.pixelmonbroadcasts.enums.EnumEvents;
 
-// Local imports.
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.*;
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlaceholdersAndSend;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
 
 public class CatchListener
 {
@@ -20,11 +20,14 @@ public class CatchListener
     public void onCatchPokemonEvent(final CaptureEvent.SuccessfulCapture event)
     {
         // Create shorthand variables for convenience.
+        final EntityPlayer player = event.player;
         final EntityPixelmon pokemon = event.getPokemon();
         final String baseName = pokemon.getSpecies().getPokemonName();
         final String localizedName = pokemon.getSpecies().getLocalizedName();
         final BlockPos location = event.pokeball.getPosition();
-        final EntityPlayer player = event.player;
+
+        // Sets the position of the entity we created, as it's 0 on all coordinates by default.
+        pokemon.setPosition(location.getX(), location.getY(), location.getZ());
 
         // If we're in a localized setup, log both names.
         final String nameString =
@@ -46,36 +49,40 @@ public class CatchListener
                 );
             }
 
-            if (showLegendaryCatches)
+            if (printLegendaryCatches || notifyLegendaryCatches)
             {
-                // Sets the position of the entity we created, as it's 0 on all coordinates by default.
-                pokemon.setPosition(location.getX(), location.getY(), location.getZ());
-
-                // Get a broadcast from the broadcasts config file, if the key can be found.
-                final String broadcast = getBroadcast("broadcast.catch.shiny_legendary");
-
-                // Did we find a message? Iterate all available players, and send to those who should receive!
-                if (broadcast != null)
+                if (printLegendaryCatches)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
-                            hoverLegendaryCatches, true, revealLegendaryCatches,
-                            "catch.shinylegendary", "showLegendaryCatch", "showShinyCatch");
+                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                    replacePlaceholdersAndSend(
+                            EnumBroadcastTypes.PRINT, EnumEvents.Catches.SHINY_LEGENDARY_AS_LEGENDARY,
+                            pokemon, null, player, null);
+                }
+
+                if (notifyLegendaryCatches)
+                {
+                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                    replacePlaceholdersAndSend(
+                            EnumBroadcastTypes.NOTIFY, EnumEvents.Catches.SHINY_LEGENDARY_AS_LEGENDARY,
+                            pokemon, null, player, null);
                 }
             }
-            else if (showShinyCatches)
+            else if (printShinyCatches || notifyShinyCatches)
             {
-                // Sets the position of the entity we created, as it's 0 on all coordinates by default.
-                pokemon.setPosition(location.getX(), location.getY(), location.getZ());
-
-                // Get a broadcast from the broadcasts config file, if the key can be found.
-                final String broadcast = getBroadcast("broadcast.catch.shiny_legendary");
-
-                // Did we find a message? Iterate all available players, and send to those who should receive!
-                if (broadcast != null)
+                if (printShinyCatches)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
-                            hoverShinyCatches, true, revealShinyCatches,
-                            "catch.shinylegendary", "showLegendaryCatch", "showShinyCatch");
+                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                    replacePlaceholdersAndSend(
+                            EnumBroadcastTypes.PRINT, EnumEvents.Catches.SHINY_LEGENDARY_AS_SHINY,
+                            pokemon, null, player, null);
+                }
+
+                if (notifyShinyCatches)
+                {
+                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                    replacePlaceholdersAndSend(
+                            EnumBroadcastTypes.NOTIFY, EnumEvents.Catches.SHINY_LEGENDARY_AS_SHINY,
+                            pokemon, null, player, null);
                 }
             }
         }
@@ -95,21 +102,101 @@ public class CatchListener
                 );
             }
 
-            if (showLegendaryCatches)
+            if (printLegendaryCatches)
             {
-                // Sets the position of the entity we created, as it's 0 on all coordinates by default.
-                pokemon.setPosition(location.getX(), location.getY(), location.getZ());
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Catches.LEGENDARY,
+                        pokemon, null, player, null);
+            }
 
-                // Get a broadcast from the broadcasts config file, if the key can be found.
-                final String broadcast = getBroadcast("broadcast.catch.legendary");
+            if (notifyLegendaryCatches)
+            {
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Catches.LEGENDARY,
+                        pokemon, null, player, null);
+            }
+        }
+        else if (EnumSpecies.ultrabeasts.contains(baseName) && pokemon.getPokemonData().isShiny())
+        {
+            if (logUltraBeastCatches || logShinyCatches)
+            {
+                // Print a catch message to console, with the above shiny String mixed in.
+                printUnformattedMessage
+                (
+                        "§5PBR §f// §2Player §a" + player.getName() +
+                        "§2 caught a shiny §a" + nameString +
+                        "§2 Ultra Beast in world \"§a" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                        "§2\", at X:§a" + location.getX() +
+                        "§2 Y:§a" + location.getY() +
+                        "§2 Z:§a" + location.getZ()
+                );
+            }
 
-                // Did we find a message? Iterate all available players, and send to those who should receive!
-                if (broadcast != null)
+            if (printUltraBeastCatches || notifyUltraBeastCatches)
+            {
+                if (printUltraBeastCatches)
                 {
-                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
-                            hoverLegendaryCatches, true, revealLegendaryCatches,
-                            "catch.legendary", "showLegendaryCatch");
+                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                    replacePlaceholdersAndSend(
+                            EnumBroadcastTypes.PRINT, EnumEvents.Catches.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                            pokemon, null, player, null);
                 }
+
+                if (notifyUltraBeastCatches)
+                {
+                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                    replacePlaceholdersAndSend(
+                            EnumBroadcastTypes.NOTIFY, EnumEvents.Catches.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                            pokemon, null, player, null);
+                }
+            }
+            else if (printShinyCatches || notifyShinyCatches)
+            {
+                if (printShinyCatches)
+                {
+                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                    replacePlaceholdersAndSend(
+                            EnumBroadcastTypes.PRINT, EnumEvents.Catches.SHINY_ULTRA_BEAST_AS_SHINY,
+                            pokemon, null, player, null);
+                }
+
+                if (notifyShinyCatches)
+                {
+                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                    replacePlaceholdersAndSend(
+                            EnumBroadcastTypes.NOTIFY, EnumEvents.Catches.SHINY_ULTRA_BEAST_AS_SHINY,
+                            pokemon, null, player, null);
+                }
+            }
+        }
+        else if (EnumSpecies.ultrabeasts.contains(baseName))
+        {
+            if (logUltraBeastCatches)
+            {
+                // Print a catch message to console, with the above shiny String mixed in.
+                printUnformattedMessage
+                (
+                        "§5PBR §f// §2Player §a" + player.getName() +
+                        "§2 caught a §a" + nameString +
+                        "§2 Ultra Beast in world \"§a" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
+                        "§2\", at X:§a" + location.getX() +
+                        "§2 Y:§a" + location.getY() +
+                        "§2 Z:§a" + location.getZ()
+                );
+            }
+
+            if (printUltraBeastCatches)
+            {
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Catches.ULTRA_BEAST,
+                        pokemon, null, player, null);
+            }
+
+            if (notifyUltraBeastCatches)
+            {
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Catches.ULTRA_BEAST,
+                        pokemon, null, player, null);
             }
         }
         else if (pokemon.getPokemonData().isShiny())
@@ -128,21 +215,18 @@ public class CatchListener
                 );
             }
 
-            if (showShinyCatches)
+            if (printShinyCatches)
             {
-                // Sets the position of the entity we created, as it's 0 on all coordinates by default.
-                pokemon.setPosition(location.getX(), location.getY(), location.getZ());
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Catches.SHINY,
+                        pokemon, null, player, null);
+            }
 
-                // Get a broadcast from the broadcasts config file, if the key can be found.
-                final String broadcast = getBroadcast("broadcast.catch.shiny");
-
-                // Did we find a message? Iterate all available players, and send to those who should receive!
-                if (broadcast != null)
-                {
-                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
-                            hoverShinyCatches, true, revealShinyCatches,
-                            "catch.shiny", "showShinyCatch");
-                }
+            if (notifyShinyCatches)
+            {
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Catches.SHINY,
+                        pokemon, null, player, null);
             }
         }
         else
@@ -161,21 +245,18 @@ public class CatchListener
                 );
             }
 
-            if (showNormalCatches)
+            if (printNormalCatches)
             {
-                // Sets the position of the entity we created, as it's 0 on all coordinates by default.
-                pokemon.setPosition(location.getX(), location.getY(), location.getZ());
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Catches.NORMAL,
+                        pokemon, null, player, null);
+            }
 
-                // Get a broadcast from the broadcasts config file, if the key can be found.
-                final String broadcast = getBroadcast("broadcast.catch.normal");
-
-                // Did we find a message? Iterate all available players, and send to those who should receive!
-                if (broadcast != null)
-                {
-                    iterateAndSendBroadcast(broadcast, pokemon, null, player, null,
-                            hoverNormalCatches, true, revealNormalCatches,
-                            "catch.normal", "showNormalCatch");
-                }
+            if (notifyNormalCatches)
+            {
+                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
+                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Catches.NORMAL,
+                        pokemon, null, player, null);
             }
         }
     }

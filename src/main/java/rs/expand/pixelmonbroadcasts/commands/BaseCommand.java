@@ -1,19 +1,17 @@
 // The one and only. Accept no imitations.
 package rs.expand.pixelmonbroadcasts.commands;
 
-// Remote imports.
 import org.spongepowered.api.block.tileentity.CommandBlock;
-import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.LiteralText;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 
-// Local imports.
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.commandAlias;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
 public class BaseCommand implements CommandExecutor
