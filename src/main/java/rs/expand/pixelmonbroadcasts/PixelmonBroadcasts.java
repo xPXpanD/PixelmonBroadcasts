@@ -8,6 +8,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandCallable;
@@ -36,7 +38,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
 
 /*                                                              *\
        THE WHO-KNOWS-WHEN LIST OF POTENTIALLY AWESOME IDEAS
@@ -79,6 +80,9 @@ public class PixelmonBroadcasts
     // Set up an internal variable so we can see if we loaded correctly.
     private boolean loadedCorrectly = false;
 
+    // Set up a logger for logging stuff. Yup.
+    public static final Logger logger = LogManager.getLogger("Pixelmon Broadcasts");
+
     // Start setting up some basic variables that we'll fill in remotely when we read the config.
     public static Integer configVersion;
     public static String commandAlias;
@@ -86,185 +90,6 @@ public class PixelmonBroadcasts
 
     // Set up a hashmap for tracking shown Pixelmon notices. Allows us to kill them after a fixed amount of time.
     public static HashMap<UUID, Long> noticeExpiryMap = new HashMap<>();
-
-    // Set up logging settings.
-    public static boolean logBossBlackouts;
-    public static boolean logBossChallenges;
-    public static boolean logBossForfeits;
-    public static boolean logBossSpawns;
-    public static boolean logBossTrainerBlackouts;
-    public static boolean logBossTrainerChallenges;
-    public static boolean logBossTrainerForfeits;
-    public static boolean logBossTrainerVictories;
-    public static boolean logBossVictories;
-    //public static boolean logBirdTrioSummons;
-    public static boolean logLegendaryBlackouts;
-    public static boolean logLegendaryCatches;
-    public static boolean logLegendaryChallenges;
-    public static boolean logLegendaryForfeits;
-    public static boolean logLegendarySpawns;
-    public static boolean logLegendaryVictories;
-    public static boolean logUltraBeastBlackouts;
-    public static boolean logUltraBeastCatches;
-    public static boolean logUltraBeastChallenges;
-    public static boolean logUltraBeastForfeits;
-    public static boolean logUltraBeastSpawns;
-    public static boolean logUltraBeastVictories;
-    public static boolean logWormholeSpawns;
-    public static boolean logNormalBlackouts;
-    public static boolean logNormalCatches;
-    public static boolean logNormalHatches;
-    public static boolean logPVPChallenges;
-    public static boolean logPVPDraws;
-    public static boolean logPVPVictories;
-    public static boolean logShinyBlackouts;
-    public static boolean logShinyCatches;
-    public static boolean logShinyChallenges;
-    public static boolean logShinyForfeits;
-    public static boolean logShinyHatches;
-    public static boolean logShinySpawns;
-    public static boolean logShinyVictories;
-    public static boolean logTrades;
-    public static boolean logTrainerBlackouts;
-    public static boolean logTrainerChallenges;
-    public static boolean logTrainerForfeits;
-    public static boolean logTrainerVictories;
-
-    // Set up chat broadcast settings.
-    public static boolean printBossBlackouts;
-    public static boolean printBossChallenges;
-    public static boolean printBossForfeits;
-    public static boolean printBossSpawns;
-    public static boolean printBossTrainerBlackouts;
-    public static boolean printBossTrainerChallenges;
-    public static boolean printBossTrainerForfeits;
-    public static boolean printBossTrainerVictories;
-    public static boolean printBossVictories;
-    //public static boolean printBirdTrioSummons;
-    public static boolean printLegendaryBlackouts;
-    public static boolean printLegendaryCatches;
-    public static boolean printLegendaryChallenges;
-    public static boolean printLegendaryForfeits;
-    public static boolean printLegendarySpawns;
-    public static boolean printLegendaryVictories;
-    public static boolean printUltraBeastBlackouts;
-    public static boolean printUltraBeastCatches;
-    public static boolean printUltraBeastChallenges;
-    public static boolean printUltraBeastForfeits;
-    public static boolean printUltraBeastSpawns;
-    public static boolean printUltraBeastVictories;
-    public static boolean printWormholeSpawns;
-    public static boolean printNormalBlackouts;
-    public static boolean printNormalCatches;
-    public static boolean printNormalHatches;
-    public static boolean printPVPChallenges;
-    public static boolean printPVPDraws;
-    public static boolean printPVPVictories;
-    public static boolean printShinyBlackouts;
-    public static boolean printShinyCatches;
-    public static boolean printShinyChallenges;
-    public static boolean printShinyForfeits;
-    public static boolean printShinyHatches;
-    public static boolean printShinySpawns;
-    public static boolean printShinyVictories;
-    public static boolean printTrades;
-    public static boolean printTrainerBlackouts;
-    public static boolean printTrainerChallenges;
-    public static boolean printTrainerForfeits;
-    public static boolean printTrainerVictories;
-
-    // Set up noticeboard broadcast settings.
-    public static boolean notifyBossBlackouts;
-    public static boolean notifyBossChallenges;
-    public static boolean notifyBossForfeits;
-    public static boolean notifyBossSpawns;
-    public static boolean notifyBossTrainerBlackouts;
-    public static boolean notifyBossTrainerChallenges;
-    public static boolean notifyBossTrainerForfeits;
-    public static boolean notifyBossTrainerVictories;
-    public static boolean notifyBossVictories;
-    //public static boolean notifyBirdTrioSummons;
-    public static boolean notifyLegendaryBlackouts;
-    public static boolean notifyLegendaryCatches;
-    public static boolean notifyLegendaryChallenges;
-    public static boolean notifyLegendaryForfeits;
-    public static boolean notifyLegendarySpawns;
-    public static boolean notifyLegendaryVictories;
-    public static boolean notifyUltraBeastBlackouts;
-    public static boolean notifyUltraBeastCatches;
-    public static boolean notifyUltraBeastChallenges;
-    public static boolean notifyUltraBeastForfeits;
-    public static boolean notifyUltraBeastSpawns;
-    public static boolean notifyUltraBeastVictories;
-    public static boolean notifyWormholeSpawns;
-    public static boolean notifyNormalBlackouts;
-    public static boolean notifyNormalCatches;
-    public static boolean notifyNormalHatches;
-    public static boolean notifyPVPChallenges;
-    public static boolean notifyPVPDraws;
-    public static boolean notifyPVPVictories;
-    public static boolean notifyShinyBlackouts;
-    public static boolean notifyShinyCatches;
-    public static boolean notifyShinyChallenges;
-    public static boolean notifyShinyForfeits;
-    public static boolean notifyShinyHatches;
-    public static boolean notifyShinySpawns;
-    public static boolean notifyShinyVictories;
-    public static boolean notifyTrades;
-    public static boolean notifyTrainerBlackouts;
-    public static boolean notifyTrainerChallenges;
-    public static boolean notifyTrainerForfeits;
-    public static boolean notifyTrainerVictories;
-
-    // Set up hover settings.
-    public static boolean hoverBossBlackouts;
-    public static boolean hoverBossChallenges;
-    public static boolean hoverBossForfeits;
-    public static boolean hoverBossSpawns;
-    public static boolean hoverBossVictories;
-    public static boolean hoverLegendaryBlackouts;
-    public static boolean hoverLegendaryCatches;
-    public static boolean hoverLegendaryChallenges;
-    public static boolean hoverLegendaryForfeits;
-    public static boolean hoverLegendarySpawns;
-    public static boolean hoverLegendaryVictories;
-    public static boolean hoverUltraBeastBlackouts;
-    public static boolean hoverUltraBeastCatches;
-    public static boolean hoverUltraBeastChallenges;
-    public static boolean hoverUltraBeastForfeits;
-    public static boolean hoverUltraBeastSpawns;
-    public static boolean hoverUltraBeastVictories;
-    public static boolean hoverNormalBlackouts;
-    public static boolean hoverNormalCatches;
-    public static boolean hoverNormalHatches;
-    public static boolean hoverShinyBlackouts;
-    public static boolean hoverShinyCatches;
-    public static boolean hoverShinyChallenges;
-    public static boolean hoverShinyForfeits;
-    public static boolean hoverShinyHatches;
-    public static boolean hoverShinySpawns;
-    public static boolean hoverShinyVictories;
-
-    // Set up reveal settings.
-    public static boolean revealBossBlackouts;
-    public static boolean revealBossForfeits;
-    public static boolean revealBossVictories;
-    public static boolean revealLegendaryBlackouts;
-    public static boolean revealLegendaryCatches;
-    public static boolean revealLegendaryForfeits;
-    public static boolean revealLegendaryVictories;
-    public static boolean revealUltraBeastBlackouts;
-    public static boolean revealUltraBeastCatches;
-    public static boolean revealUltraBeastForfeits;
-    public static boolean revealUltraBeastVictories;
-    public static boolean revealNormalBlackouts;
-    public static boolean revealNormalCatches;
-    public static boolean revealNormalHatches;
-    public static boolean revealShinyBlackouts;
-    public static boolean revealShinyCatches;
-    public static boolean revealShinyForfeits;
-    public static boolean revealShinyHatches;
-    public static boolean revealShinyVictories;
 
     // Create and set up config paths, and grab an OS-specific file path separator. This will usually be a forward slash.
     private static String fileSystemSeparator = FileSystems.getDefault().getSeparator();
@@ -310,8 +135,8 @@ public class PixelmonBroadcasts
     public void onGamePreInitEvent(final GamePreInitializationEvent event)
     {
         // Load up all the configs and figure out the info alias. Start printing. Methods may insert errors as they go.
-        printUnformattedMessage("");
-        printUnformattedMessage("=============== P I X E L M O N  B R O A D C A S T S ===============");
+        logger.info("");
+        logger.info("=============== P I X E L M O N  B R O A D C A S T S ===============");
 
         // Load up all configuration files. Creates new configs/folders if necessary. Commit settings to memory.
         // Store whether we actually loaded things up correctly in this bool, which we can check again later.
@@ -321,7 +146,7 @@ public class PixelmonBroadcasts
         if (loadedCorrectly)
         {
             // Register listeners with Pixelmon.
-            printUnformattedMessage("--> §aRegistering listeners with Pixelmon...");
+            logger.info("--> §aRegistering listeners with Pixelmon...");
             Pixelmon.EVENT_BUS.register(new BattleEndListener());
             Pixelmon.EVENT_BUS.register(new BattleStartListener());
             //Pixelmon.EVENT_BUS.register(new BirdSpawnListener());
@@ -332,16 +157,16 @@ public class PixelmonBroadcasts
             Pixelmon.EVENT_BUS.register(new WildDefeatListener());
 
             // (re-)register the main command and alias. Use the result we get back to see if everything worked.
-            printUnformattedMessage("--> §aRegistering commands with Sponge...");
+            logger.info("--> §aRegistering commands with Sponge...");
             if (ConfigMethods.registerCommands())
-                printUnformattedMessage("--> §aPre-init completed. All systems nominal.");
+                logger.info("--> §aPre-init completed. All systems nominal.");
         }
         else
-            printUnformattedMessage("--> §cLoad aborted due to critical errors.");
+            logger.info("--> §cLoad aborted due to critical errors.");
 
         // We're done, one way or another. Add a footer, and a space to avoid clutter with other marginal'd mods.
-        printUnformattedMessage("====================================================================");
-        printUnformattedMessage("");
+        logger.info("====================================================================");
+        logger.info("");
     }
 
     @Listener
@@ -385,11 +210,11 @@ public class PixelmonBroadcasts
             if (configStatus != null && configStatus)
             {
                 // Complaining, commence.
-                printUnformattedMessage("=============== P I X E L M O N  B R O A D C A S T S ===============");
-                printUnformattedMessage("--> §ePixelmon's \"§6displayLegendaryGlobalMessage§e\" setting is enabled.");
-                printUnformattedMessage("    §eThis setting will now be disabled, as it conflicts with this sidemod.");
-                printUnformattedMessage("    §eIf you remove this mod, revert this in Pixelmon's config!");
-                printUnformattedMessage("====================================================================");
+                logger.info("=============== P I X E L M O N  B R O A D C A S T S ===============");
+                logger.info("--> §ePixelmon's \"§6displayLegendaryGlobalMessage§e\" setting is enabled.");
+                logger.info("    §eThis setting will now be disabled, as it conflicts with this sidemod.");
+                logger.info("    §eIf you remove this mod, revert this in Pixelmon's config!");
+                logger.info("====================================================================");
 
                 // Flip the setting in Pixelmon's config.
                 PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").setValue(false);
@@ -402,26 +227,26 @@ public class PixelmonBroadcasts
                 }
                 catch (IOException F)
                 {
-                    printUnformattedMessage("");
-                    printUnformattedMessage("§cSomething went wrong during Pixelmon config reload from disk! Trace:");
+                    logger.info("");
+                    logger.info("§cSomething went wrong during Pixelmon config reload from disk! Trace:");
                     F.printStackTrace();
                 }
 
                 if (configVersion != null && configVersion < 30)
-                    printUnformattedMessage("");
+                    logger.info("");
             }
 
             if (configVersion != null && configVersion < 30)
             {
                 // More complaining, commence.
-                printUnformattedMessage("=============== P I X E L M O N  B R O A D C A S T S ===============");
-                printUnformattedMessage("--> §ePixelmon Broadcast has a new feature! We can now show abilities.");
-                printUnformattedMessage("    §ePlease open your \"§6settings.conf§e\" file and add the following:");
-                printUnformattedMessage("");
-                printUnformattedMessage("    showAbilities = true (or false, pick one)");
-                printUnformattedMessage("");
-                printUnformattedMessage("    §eAlso change the value of \"§6configVersion§e\" to \"§630§e\".");
-                printUnformattedMessage("====================================================================");
+                logger.info("=============== P I X E L M O N  B R O A D C A S T S ===============");
+                logger.info("--> §ePixelmon Broadcast has a new feature! We can now show abilities.");
+                logger.info("    §ePlease open your \"§6settings.conf§e\" file and add the following:");
+                logger.info("");
+                logger.info("    showAbilities = true (or false, pick one)");
+                logger.info("");
+                logger.info("    §eAlso change the value of \"§6configVersion§e\" to \"§630§e\".");
+                logger.info("====================================================================");
 
                 // TODO: Get this working without it squashing the whole config down.
                 /*// Set the config's version value to 30.

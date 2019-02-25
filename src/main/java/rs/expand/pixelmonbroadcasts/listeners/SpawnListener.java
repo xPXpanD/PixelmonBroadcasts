@@ -9,12 +9,7 @@ import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import rs.expand.pixelmonbroadcasts.enums.EnumBroadcastTypes;
-import rs.expand.pixelmonbroadcasts.enums.EnumEvents;
-
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlaceholdersAndSend;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
+import rs.expand.pixelmonbroadcasts.enums.Events;
 
 public class SpawnListener
 {
@@ -36,8 +31,8 @@ public class SpawnListener
                 final BlockPos location = event.action.spawnLocation.location.pos;
                 final String worldName = wormhole.getEntityWorld().getWorldInfo().getWorldName();
 
-                // Print a spawn message to console.
-                printUnformattedMessage
+                // Print a spawn message to console, if enabled.
+                logger.info
                 (
                         "§5PBR §f// §5A §dwormhole §5has spawned in world \"§d" + worldName +
                         "§5\", at X:§d" + location.getX() +
@@ -49,14 +44,14 @@ public class SpawnListener
             if (printWormholeSpawns)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Spawns.WORMHOLE,
+                doBroadcast(EnumBroadcastTypes.PRINT, Events.Spawns.WORMHOLE,
                         wormhole, null, null, null);
             }
 
             if (notifyWormholeSpawns)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Spawns.WORMHOLE,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Spawns.WORMHOLE,
                         wormhole, null, null, null);
             }
         }
@@ -86,8 +81,8 @@ public class SpawnListener
                 {
                     if (logBossSpawns)
                     {
-                        // Print a spawn message to console.
-                        printUnformattedMessage
+                        // Print a spawn message to console, if enabled.
+                        logger.info
                         (
                                 "§5PBR §f// §5A boss §d" + nameString +
                                 "§5 has spawned in world \"§d" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
@@ -100,14 +95,14 @@ public class SpawnListener
                     if (printBossSpawns)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                        replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Spawns.BOSS,
+                        doBroadcast(EnumBroadcastTypes.PRINT, Events.Spawns.BOSS,
                                 pokemon, null, null, null);
                     }
 
                     if (notifyBossSpawns)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                        replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Spawns.BOSS,
+                        doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Spawns.BOSS,
                                 pokemon, null, null, null);
                     }
                 }
@@ -115,8 +110,8 @@ public class SpawnListener
                 {
                     if (logLegendarySpawns || logShinySpawns)
                     {
-                        // Print a spawn message to console.
-                        printUnformattedMessage
+                        // Print a spawn message to console, if enabled.
+                        logger.info
                         (
                                 "§5PBR §f// §5A shiny legendary §d" + nameString +
                                 "§5 has spawned in world \"§d" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
@@ -131,14 +126,14 @@ public class SpawnListener
                         if (printLegendarySpawns)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Spawns.SHINY_LEGENDARY_AS_LEGENDARY,
+                            doBroadcast(EnumBroadcastTypes.PRINT, Events.Spawns.SHINY_LEGENDARY_AS_LEGENDARY,
                                     pokemon, null, null, null);
                         }
 
                         if (notifyLegendarySpawns)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Spawns.SHINY_LEGENDARY_AS_LEGENDARY,
+                            doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Spawns.SHINY_LEGENDARY_AS_LEGENDARY,
                                     pokemon, null, null, null);
                         }
                     }
@@ -147,14 +142,14 @@ public class SpawnListener
                         if (printShinySpawns)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Spawns.SHINY_LEGENDARY_AS_SHINY,
+                            doBroadcast(EnumBroadcastTypes.PRINT, Events.Spawns.SHINY_LEGENDARY_AS_SHINY,
                                     pokemon, null, null, null);
                         }
 
                         if (notifyShinySpawns)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Spawns.SHINY_LEGENDARY_AS_SHINY,
+                            doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Spawns.SHINY_LEGENDARY_AS_SHINY,
                                     pokemon, null, null, null);
                         }
                     }
@@ -163,8 +158,8 @@ public class SpawnListener
                 {
                     if (logShinySpawns)
                     {
-                        // Print a spawn message to console.
-                        printUnformattedMessage
+                        // Print a spawn message to console, if enabled.
+                        logger.info
                         (
                                 "§5PBR §f// §5A legendary §d" + nameString +
                                 "§5 has spawned in world \"§d" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
@@ -177,14 +172,14 @@ public class SpawnListener
                     if (printLegendarySpawns)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                        replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Spawns.LEGENDARY,
+                        doBroadcast(EnumBroadcastTypes.PRINT, Events.Spawns.LEGENDARY,
                                 pokemon, null, null, null);
                     }
 
                     if (notifyLegendarySpawns)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                        replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Spawns.LEGENDARY,
+                        doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Spawns.LEGENDARY,
                                 pokemon, null, null, null);
                     }
                 }
@@ -192,8 +187,8 @@ public class SpawnListener
                 {
                     if (logShinySpawns)
                     {
-                        // Print a spawn message to console.
-                        printUnformattedMessage
+                        // Print a spawn message to console, if enabled.
+                        logger.info
                         (
                                 "§5PBR §f// §5A shiny §d" + nameString +
                                 "§5 has spawned in world \"§d" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
@@ -206,14 +201,14 @@ public class SpawnListener
                     if (printShinySpawns)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                        replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Spawns.SHINY,
+                        doBroadcast(EnumBroadcastTypes.PRINT, Events.Spawns.SHINY,
                                 pokemon, null, null, null);
                     }
 
                     if (notifyShinySpawns)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                        replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Spawns.SHINY,
+                        doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Spawns.SHINY,
                                 pokemon, null, null, null);
                     }
                 }

@@ -13,16 +13,16 @@ import com.pixelmonmod.pixelmon.enums.battle.EnumBattleEndCause;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import rs.expand.pixelmonbroadcasts.enums.EnumBroadcastTypes;
-import rs.expand.pixelmonbroadcasts.enums.EnumEvents;
+import rs.expand.pixelmonbroadcasts.enums.Events;
+import rs.expand.pixelmonbroadcasts.enums.EnumLogStrings;
+import rs.expand.pixelmonbroadcasts.enums.LogStrings;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlaceholdersAndSend;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndBroadcast;
 
 // TODO: %pokedollars% placeholder.
 // TODO: Double battle support, whenever.
@@ -39,7 +39,7 @@ public class BattleEndListener
         final List<BattleParticipant> winners = new ArrayList<>(), losers = new ArrayList<>(), neutrals = new ArrayList<>();
         for (Map.Entry<BattleParticipant, BattleResults> entry : event.results.entrySet())
         {
-            //printUnformattedMessage("Looping. Participant is " + entry.getValue().name() + ", result is " + entry.getKey().getName());
+            //logger.info("Looping. Participant is " + entry.getValue().name() + ", result is " + entry.getKey().getName());
 
             switch (entry.getValue())
             {
@@ -119,10 +119,10 @@ public class BattleEndListener
 
                     if (endedInDraw || battleForfeited)
                     {
-                        if (logPVPDraws)
+                        if (Events.Others.DRAW.settings.toLowerCase().contains("log"))
                         {
-                            // Print a PvP draw message to console.
-                            printUnformattedMessage
+                            // Print a PvP draw message to console, if enabled.
+                            logger.info
                             (
                                     "§5PBR §f// §7Players §f" + player1Entity.getName() +
                                     "§7 and §f" + player2Entity.getName() +
@@ -133,26 +133,16 @@ public class BattleEndListener
                             );
                         }
 
-                        if (printPVPDraws)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Others.DRAW,
-                                    null, null, player1Entity, player2Entity);
-                        }
-
-                        if (notifyPVPDraws)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Others.DRAW,
-                                    null, null, player1Entity, player2Entity);
-                        }
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Others.DRAW, null, null, player1Entity, player2Entity);
                     }
                     else
                     {
-                        if (logPVPVictories)
+                        if (Events.Victories.PVP.settings.toLowerCase().contains("log"))
                         {
-                            // Print a PvP victory message to console.
-                            printUnformattedMessage
+                            // Print a PvP victory message to console, if enabled.
+                            logger.info
                             (
                                     "§5PBR §f// §7Player §f" + participant1.getName().getUnformattedText() +
                                     "§7 defeated player §f" + participant2.getName().getUnformattedText() +
@@ -163,27 +153,18 @@ public class BattleEndListener
                             );
                         }
 
-                        if (printPVPVictories)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Victories.PVP,
-                                    null, null, player1Entity, player2Entity);
-                        }
-
-                        if (notifyPVPVictories)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Victories.PVP,
-                                    null, null, player1Entity, player2Entity);
-                        }
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Victories.PVP, null, null, player1Entity, player2Entity);
                     }
                 }
                 // Did a trainer win from a player? Participant orders got figured out earlier, if a winner and loser were present.
                 else if (participant1 instanceof TrainerParticipant && participant2 instanceof PlayerParticipant)
                 {
-                    // We have a trainer, so create some convenient variables to avoid repeated casts.
+                    // We have a trainer, so create some convenient variables to avoid repetition.
                     final TrainerParticipant trainer = (TrainerParticipant) participant1;
                     final EntityPlayer playerEntity = (EntityPlayer) participant2.getEntity();
+                    final String playerName = participant2.getName().getUnformattedText();
 
                     // Was the battle forfeited? I thiiink only the player can do this, right now.
                     if (battleForfeited)
@@ -191,61 +172,22 @@ public class BattleEndListener
                         // Is our trainer a boss trainer?
                         if (trainer.trainer.getBossMode().isBossPokemon())
                         {
-                            if (logBossTrainerForfeits)
-                            {
-                                // Print a forfeit message to console.
-                                printUnformattedMessage
-                                (
-                                    "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
-                                    "§1 fled from a boss trainer in world \"§9" + worldName +
-                                    "§1\", at X:§9" + location.getX() +
-                                    "§1 Y:§9" + location.getY() +
-                                    "§1 Z:§9" + location.getZ()
-                                );
-                            }
+                            // Print a forfeit message to console, if enabled.
+                            if (Events.Forfeits.BOSS_TRAINER.settings.toLowerCase().contains("log"))
+                                printForfeitMessage(playerName, "boss trainer", worldName, location);
 
-                            if (printBossTrainerForfeits)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.BOSS_TRAINER,
-                                        null, null, playerEntity, null);
-                            }
-
-                            if (notifyBossTrainerForfeits)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.BOSS_TRAINER,
-                                        null, null, playerEntity, null);
-                            }
+                            // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                            iterateAndBroadcast(
+                                    Events.Forfeits.BOSS_TRAINER, null, null, playerEntity, null);
                         }
                         else
                         {
-                            if (logTrainerForfeits)
-                            {
-                                // Print a forfeit message to console.
-                                printUnformattedMessage
-                                (
-                                    "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
-                                    "§1 fled from a normal trainer in world \"§9" + worldName +
-                                    "§1\", at X:§9" + location.getX() +
-                                    "§1 Y:§9" + location.getY() +
-                                    "§1 Z:§9" + location.getZ()
-                                );
-                            }
+                            if (Events.Forfeits.TRAINER.settings.toLowerCase().contains("log"))
+                                printForfeitMessage(playerName, "normal trainer", worldName, location);
 
-                            if (printTrainerForfeits)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.TRAINER,
-                                        null, null, playerEntity, null);
-                            }
-
-                            if (notifyTrainerForfeits)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.TRAINER,
-                                        null, null, playerEntity, null);
-                            }
+                            // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                            iterateAndBroadcast(
+                                    Events.Forfeits.TRAINER, null, null, playerEntity, null);
                         }
                     }
                     else
@@ -253,61 +195,22 @@ public class BattleEndListener
                         // Is our trainer a boss trainer?
                         if (trainer.trainer.getBossMode().isBossPokemon())
                         {
-                            if (logBossTrainerBlackouts)
-                            {
-                                // Print a blackout message to console.
-                                printUnformattedMessage
-                                (
-                                        "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
-                                        "§1 was knocked out by a boss trainer in world \"§9" + worldName +
-                                        "§1\", at X:§9" + location.getX() +
-                                        "§1 Y:§9" + location.getY() +
-                                        "§1 Z:§9" + location.getZ()
-                                );
-                            }
+                            // Print a blackout message to console, if enabled.
+                            if (Events.Blackouts.BOSS_TRAINER.settings.toLowerCase().contains("log"))
+                                printBlackoutMessage(playerName, "boss trainer", worldName, location);
 
-                            if (printBossTrainerBlackouts)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.BOSS_TRAINER,
-                                        null, null, playerEntity, null);
-                            }
-
-                            if (notifyBossTrainerBlackouts)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.BOSS_TRAINER,
-                                        null, null, playerEntity, null);
-                            }
+                            // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                            iterateAndBroadcast(
+                                    Events.Blackouts.BOSS_TRAINER, null, null, playerEntity, null);
                         }
-                        else if (printTrainerBlackouts || notifyTrainerBlackouts)
+                        else
                         {
-                            if (logTrainerBlackouts)
-                            {
-                                // Print a blackout message to console.
-                                printUnformattedMessage
-                                (
-                                        "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
-                                        "§1 was knocked out by a normal trainer in world \"§9" + worldName +
-                                        "§1\", at X:§9" + location.getX() +
-                                        "§1 Y:§9" + location.getY() +
-                                        "§1 Z:§9" + location.getZ()
-                                );
-                            }
+                            if (Events.Blackouts.TRAINER.settings.toLowerCase().contains("log"))
+                                printBlackoutMessage(playerName, "normal trainer", worldName, location);
 
-                            if (printTrainerBlackouts)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.TRAINER,
-                                        null, null, playerEntity, null);
-                            }
-
-                            if (notifyTrainerBlackouts)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.TRAINER,
-                                        null, null, playerEntity, null);
-                            }
+                            // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                            iterateAndBroadcast(
+                                    Events.Blackouts.TRAINER, null, null, playerEntity, null);
                         }
                     }
                 }
@@ -317,65 +220,28 @@ public class BattleEndListener
                     // We have a trainer, so create some convenient variables to avoid repeated casts.
                     final TrainerParticipant trainer2 = (TrainerParticipant) participant2;
                     final EntityPlayer playerEntity = (EntityPlayer) participant1.getEntity();
+                    final String playerName = participant1.getName().getUnformattedText();
 
                     // Is our trainer a boss trainer?
                     if ((trainer2.trainer.getBossMode().isBossPokemon()))
                     {
-                        if (logBossTrainerVictories)
-                        {
-                            // Print a victory message to console.
-                            printUnformattedMessage
-                            (
-                                    "§5PBR §f// §1Player §9" + participant1.getName().getUnformattedText() +
-                                    "§1 defeated a boss trainer in world \"§9" + worldName +
-                                    "§1\", at X:§9" + location.getX() +
-                                    "§1 Y:§9" + location.getY() +
-                                    "§1 Z:§9" + location.getZ()
-                            );
-                        }
+                        // Print a victory message to console, if enabled.
+                        if (Events.Victories.BOSS_TRAINER.settings.toLowerCase().contains("log"))
+                            printVictoryMessage(playerName, "boss trainer", worldName, location);
 
-                        if (printBossTrainerVictories)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Victories.BOSS_TRAINER,
-                                    null, null, playerEntity, null);
-                        }
-
-                        if (notifyBossTrainerVictories)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Victories.BOSS_TRAINER,
-                                    null, null, playerEntity, null);
-                        }
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Victories.BOSS_TRAINER, null, null, playerEntity, null);
                     }
                     else
                     {
-                        if (logTrainerVictories)
-                        {
-                            // Print a victory message to console.
-                            printUnformattedMessage
-                            (
-                                    "§5PBR §f// §1Player §9" + participant1.getName().getUnformattedText() +
-                                    "§1 defeated a normal trainer in world \"§9" + worldName +
-                                    "§1\", at X:§9" + location.getX() +
-                                    "§1 Y:§9" + location.getY() +
-                                    "§1 Z:§9" + location.getZ()
-                            );
-                        }
+                        // Print a victory message to console, if enabled.
+                        if (Events.Victories.TRAINER.settings.toLowerCase().contains("log"))
+                            printVictoryMessage(playerName, "normal trainer", worldName, location);
 
-                        if (printTrainerVictories)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Victories.TRAINER,
-                                    null, null, playerEntity, null);
-                        }
-
-                        if (notifyTrainerVictories)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Victories.TRAINER,
-                                    null, null, playerEntity, null);
-                        }
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Victories.TRAINER, null, null, playerEntity, null);
                     }
                 }
                 // Did a player lose to a wild Pokémon? Participant orders got figured out earlier, if a winner and loser were present.
@@ -386,267 +252,81 @@ public class BattleEndListener
                     final EntityPixelmon pokemonEntity = (EntityPixelmon) participant1.getEntity();
                     final String baseName = pokemonEntity.getPokemonName();
                     final String localizedName = pokemonEntity.getLocalizedName();
+                    final String playerName = participant2.getName().getUnformattedText();
 
                     // If we're in a localized setup, format a string for logging both names.
                     final String nameString =
-                        baseName.equals(localizedName) ? baseName : baseName + " §c(§4" + localizedName + "§c)";
+                        baseName.equals(localizedName) ? " §4" + baseName + "§c" : " §4" + baseName + " §c(§4" + localizedName + "§c)";
 
                     // Is the Pokémon a boss?
                     if (pokemonEntity.isBossPokemon())
                     {
-                        if (logBossBlackouts)
-                        {
-                            // Print a blackout message to console.
-                            printUnformattedMessage
-                            (
-                                    "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
-                                    "§1 was knocked out by a boss §9" + nameString +
-                                    "§1 in world \"§9" + worldName +
-                                    "§1\", at X:§9" + location.getX() +
-                                    "§1 Y:§9" + location.getY() +
-                                    "§1 Z:§9" + location.getZ()
-                            );
-                        }
+                        // Print a blackout message to console, if enabled.
+                        if (Events.Blackouts.BOSS.settings.toLowerCase().contains("log"))
+                            printBlackoutMessage(playerName, "boss" + nameString, worldName, location);
 
-                        if (printBossBlackouts)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.BOSS,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
-
-                        if (notifyBossBlackouts)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.BOSS,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Blackouts.BOSS, pokemonEntity, null, playerEntity, null);
                     }
                     else if (EnumSpecies.legendaries.contains(baseName) && pokemonEntity.getPokemonData().isShiny())
                     {
-                        if (logLegendaryBlackouts || logShinyBlackouts)
-                        {
-                            // Print a blackout message to console.
-                            printUnformattedMessage
-                            (
-                                    "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
-                                    "§1 was knocked out by a shiny legendary §9" + nameString +
-                                    "§1 in world \"§9" + worldName +
-                                    "§1\", at X:§9" + location.getX() +
-                                    "§1 Y:§9" + location.getY() +
-                                    "§1 Z:§9" + location.getZ()
-                            );
-                        }
+                        // Print a blackout message to console, if enabled.
+                        if (Events.Blackouts.SHINY_LEGENDARY.settings.toLowerCase().contains("log"))
+                            printBlackoutMessage(playerName, "shiny legendary" + nameString, worldName, location);
 
-                        if (printLegendaryBlackouts || notifyLegendaryBlackouts)
-                        {
-                            if (printLegendaryBlackouts)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.SHINY_LEGENDARY_AS_LEGENDARY,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
-
-                            if (notifyLegendaryBlackouts)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.SHINY_LEGENDARY_AS_LEGENDARY,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
-                        }
-                        else if (printShinyBlackouts || notifyShinyBlackouts)
-                        {
-                            if (printShinyBlackouts)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.SHINY_LEGENDARY_AS_SHINY,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
-
-                            if (notifyShinyBlackouts)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.SHINY_LEGENDARY_AS_SHINY,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
-                        }
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Blackouts.SHINY_LEGENDARY, pokemonEntity, null, playerEntity, null);
                     }
                     else if (EnumSpecies.legendaries.contains(baseName))
                     {
-                        if (logLegendaryBlackouts)
-                        {
-                            // Print a blackout message to console.
-                            printUnformattedMessage
-                            (
-                                    "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
-                                    "§1 was knocked out by a legendary §9" + nameString +
-                                    "§1 in world \"§9" + worldName +
-                                    "§1\", at X:§9" + location.getX() +
-                                    "§1 Y:§9" + location.getY() +
-                                    "§1 Z:§9" + location.getZ()
-                            );
-                        }
+                        // Print a blackout message to console, if enabled.
+                        if (Events.Blackouts.LEGENDARY.settings.toLowerCase().contains("log"))
+                            printBlackoutMessage(playerName, "legendary" + nameString, worldName, location);
 
-                        if (printLegendaryBlackouts)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.LEGENDARY,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
-
-                        if (notifyLegendaryBlackouts)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.LEGENDARY,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Blackouts.LEGENDARY, pokemonEntity, null, playerEntity, null);
                     }
                     else if (EnumSpecies.ultrabeasts.contains(baseName) && pokemonEntity.getPokemonData().isShiny())
                     {
-                        if (logUltraBeastBlackouts || logShinyBlackouts)
-                        {
-                            // Print a blackout message to console.
-                            printUnformattedMessage
-                            (
-                                    "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
-                                    "§1 was knocked out by a shiny §9" + nameString +
-                                    "§1 Ultra Beast in world \"§9" + worldName +
-                                    "§1\", at X:§9" + location.getX() +
-                                    "§1 Y:§9" + location.getY() +
-                                    "§1 Z:§9" + location.getZ()
-                            );
-                        }
+                        // Print a blackout message to console, if enabled.
+                        if (Events.Blackouts.SHINY_ULTRA_BEAST.settings.toLowerCase().contains("log"))
+                            printBlackoutMessage(playerName, "shiny" + nameString + " Ultra Beast", worldName, location);
 
-                        if (printUltraBeastBlackouts || notifyUltraBeastBlackouts)
-                        {
-                            if (printUltraBeastBlackouts)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
-
-                            if (notifyUltraBeastBlackouts)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
-                        }
-                        else if (printShinyBlackouts || notifyShinyBlackouts)
-                        {
-                            if (printShinyBlackouts)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.SHINY_ULTRA_BEAST_AS_SHINY,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
-
-                            if (notifyShinyBlackouts)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.SHINY_ULTRA_BEAST_AS_SHINY,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
-                        }
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Blackouts.SHINY_ULTRA_BEAST, pokemonEntity, null, playerEntity, null);
                     }
                     else if (EnumSpecies.ultrabeasts.contains(baseName))
                     {
-                        if (logUltraBeastBlackouts)
-                        {
-                            // Print a blackout message to console.
-                            printUnformattedMessage
-                            (
-                                    "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
-                                    "§1 was knocked out by a §9" + nameString +
-                                    "§1 Ultra Beast in world \"§9" + worldName +
-                                    "§1\", at X:§9" + location.getX() +
-                                    "§1 Y:§9" + location.getY() +
-                                    "§1 Z:§9" + location.getZ()
-                            );
-                        }
-
-                        if (printUltraBeastBlackouts)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.ULTRA_BEAST,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
-
-                        if (notifyUltraBeastBlackouts)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.ULTRA_BEAST,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
+                        // Print a blackout message to console, if enabled.
+                        if (Events.Blackouts.ULTRA_BEAST.settings.toLowerCase().contains("log"))
+                            printBlackoutMessage(playerName, nameString + " Ultra Beast", worldName, location);
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Blackouts.ULTRA_BEAST, pokemonEntity, null, playerEntity, null);
                     }
                     else if (pokemonEntity.getPokemonData().isShiny())
                     {
-                        if (logShinyBlackouts)
-                        {
-                            // Print a blackout message to console.
-                            printUnformattedMessage
-                            (
-                                    "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
-                                    "§1 was knocked out by a shiny §9" + nameString +
-                                    "§1 in world \"§9" + worldName +
-                                    "§1\", at X:§9" + location.getX() +
-                                    "§1 Y:§9" + location.getY() +
-                                    "§1 Z:§9" + location.getZ()
-                            );
-                        }
+                        // Print a blackout message to console, if enabled.
+                        if (Events.Blackouts.SHINY.settings.toLowerCase().contains("log"))
+                            printBlackoutMessage(playerName, "shiny" + nameString, worldName, location);
 
-                        if (printShinyBlackouts)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.SHINY,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
-
-                        if (notifyShinyBlackouts)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.SHINY,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Blackouts.SHINY, pokemonEntity, null, playerEntity, null);
                     }
                     else
                     {
-                        if (logNormalBlackouts)
-                        {
-                            // Print a blackout message to console.
-                            printUnformattedMessage
-                            (
-                                    "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
-                                    "§1 was knocked out by a normal §9" + nameString +
-                                    "§1 in world \"§9" + worldName +
-                                    "§1\", at X:§9" + location.getX() +
-                                    "§1 Y:§9" + location.getY() +
-                                    "§1 Z:§9" + location.getZ()
-                            );
-                        }
+                        // Print a blackout message to console, if enabled.
+                        if (Events.Blackouts.NORMAL.settings.toLowerCase().contains("log"))
+                            printBlackoutMessage(playerName, "shiny legendary" + nameString, worldName, location);
 
-                        if (printNormalBlackouts)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Blackouts.NORMAL,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
-
-                        if (notifyNormalBlackouts)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Blackouts.NORMAL,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Blackouts.NORMAL, pokemonEntity, null, playerEntity, null);
                     }
                 }
                 // Did a player flee from battle?
@@ -657,6 +337,7 @@ public class BattleEndListener
                     final EntityPixelmon pokemonEntity = (EntityPixelmon) participant1.getEntity();
                     final String baseName = pokemonEntity.getPokemonName();
                     final String localizedName = pokemonEntity.getLocalizedName();
+                    final String playerName = participant2.getName().getUnformattedText();
 
                     // If we're in a localized setup, format a string for logging both names.
                     final String nameString =
@@ -665,40 +346,20 @@ public class BattleEndListener
                     // Is the Pokémon a boss?
                     if (pokemonEntity.isBossPokemon())
                     {
-                        if (logBossForfeits)
-                        {
-                            // Print a forfeit message to console.
-                            printUnformattedMessage
-                            (
-                                    "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
-                                    "§1 fled from a boss §9" + nameString +
-                                    "§1 in world \"§9" + worldName +
-                                    "§1\", at X:§9" + location.getX() +
-                                    "§1 Y:§9" + location.getY() +
-                                    "§1 Z:§9" + location.getZ()
-                            );
-                        }
+                        // Print a forfeit message to console, if enabled.
+                        if (Events.Forfeits.BOSS.settings.toLowerCase().contains("log"))
+                            printForfeitMessage(playerName, "boss" + nameString, worldName, location);
 
-                        if (printBossForfeits)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.BOSS,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
-
-                        if (notifyBossForfeits)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.BOSS,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Forfeits.BOSS, pokemonEntity, null, playerEntity, null);
                     }
                     else if (EnumSpecies.legendaries.contains(baseName) && pokemonEntity.getPokemonData().isShiny())
                     {
                         if (logLegendaryForfeits || logShinyForfeits)
                         {
-                            // Print a forfeit message to console.
-                            printUnformattedMessage
+                            // Print a forfeit message to console, if enabled.
+                            logger.info
                             (
                                     "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
                                     "§1 fled from a shiny legendary §9" + nameString +
@@ -709,21 +370,25 @@ public class BattleEndListener
                             );
                         }
 
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Forfeits.SHINY_LEGENDARY, pokemonEntity, null, playerEntity, null);
+
                         if (printLegendaryForfeits || notifyLegendaryForfeits)
                         {
                             if (printLegendaryForfeits)
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.SHINY_LEGENDARY_AS_LEGENDARY,
+                                doBroadcast(
+                                        EnumBroadcastTypes.PRINT, Events.Forfeits.SHINY_LEGENDARY_AS_LEGENDARY,
                                         pokemonEntity, null, playerEntity, null);
                             }
 
                             if (notifyLegendaryForfeits)
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.SHINY_LEGENDARY_AS_LEGENDARY,
+                                doBroadcast(
+                                        EnumBroadcastTypes.NOTIFY, Events.Forfeits.SHINY_LEGENDARY_AS_LEGENDARY,
                                         pokemonEntity, null, playerEntity, null);
                             }
                         }
@@ -732,26 +397,26 @@ public class BattleEndListener
                             if (printShinyForfeits)
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.SHINY_LEGENDARY_AS_SHINY,
+                                doBroadcast(
+                                        EnumBroadcastTypes.PRINT, Events.Forfeits.SHINY_LEGENDARY_AS_SHINY,
                                         pokemonEntity, null, playerEntity, null);
                             }
 
                             if (notifyShinyForfeits)
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.SHINY_LEGENDARY_AS_SHINY,
+                                doBroadcast(
+                                        EnumBroadcastTypes.NOTIFY, Events.Forfeits.SHINY_LEGENDARY_AS_SHINY,
                                         pokemonEntity, null, playerEntity, null);
                             }
                         }
                     }
                     else if (EnumSpecies.legendaries.contains(baseName))
                     {
-                        if (logLegendaryForfeits)
+                        if (Events.Hatches.SHINY.settings.toLowerCase().contains("log"))
                         {
-                            // Print a forfeit message to console.
-                            printUnformattedMessage
+                            // Print a forfeit message to console, if enabled.
+                            logger.info
                             (
                                     "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
                                     "§1 fled from a legendary §9" + nameString +
@@ -762,17 +427,21 @@ public class BattleEndListener
                             );
                         }
 
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Blackouts.BOSS_TRAINER, null, null, playerEntity, null);
+
                         if (printLegendaryForfeits)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.LEGENDARY,
+                            doBroadcast(EnumBroadcastTypes.PRINT, Events.Forfeits.LEGENDARY,
                                     pokemonEntity, null, playerEntity, null);
                         }
 
                         if (notifyLegendaryForfeits)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.LEGENDARY,
+                            doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Forfeits.LEGENDARY,
                                     pokemonEntity, null, playerEntity, null);
                         }
                     }
@@ -780,8 +449,8 @@ public class BattleEndListener
                     {
                         if (logUltraBeastForfeits || logShinyForfeits)
                         {
-                            // Print a forfeit message to console.
-                            printUnformattedMessage
+                            // Print a forfeit message to console, if enabled.
+                            logger.info
                             (
                                     "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
                                     "§1 fled from a shiny §9" + nameString +
@@ -792,21 +461,25 @@ public class BattleEndListener
                             );
                         }
 
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Blackouts.BOSS_TRAINER, null, null, playerEntity, null);
+
                         if (printUltraBeastForfeits || notifyUltraBeastForfeits)
                         {
                             if (printUltraBeastForfeits)
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                                doBroadcast(
+                                        EnumBroadcastTypes.PRINT, Events.Forfeits.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
                                         pokemonEntity, null, playerEntity, null);
                             }
 
                             if (notifyUltraBeastForfeits)
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                                doBroadcast(
+                                        EnumBroadcastTypes.NOTIFY, Events.Forfeits.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
                                         pokemonEntity, null, playerEntity, null);
                             }
                         }
@@ -815,26 +488,26 @@ public class BattleEndListener
                             if (printShinyForfeits)
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.SHINY_ULTRA_BEAST_AS_SHINY,
+                                doBroadcast(
+                                        EnumBroadcastTypes.PRINT, Events.Forfeits.SHINY_ULTRA_BEAST_AS_SHINY,
                                         pokemonEntity, null, playerEntity, null);
                             }
 
                             if (notifyShinyForfeits)
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.SHINY_ULTRA_BEAST_AS_SHINY,
+                                doBroadcast(
+                                        EnumBroadcastTypes.NOTIFY, Events.Forfeits.SHINY_ULTRA_BEAST_AS_SHINY,
                                         pokemonEntity, null, playerEntity, null);
                             }
                         }
                     }
                     else if (EnumSpecies.ultrabeasts.contains(baseName))
                     {
-                        if (logUltraBeastForfeits)
+                        if (Events.Hatches.SHINY.settings.toLowerCase().contains("log"))
                         {
-                            // Print a forfeit message to console.
-                            printUnformattedMessage
+                            // Print a forfeit message to console, if enabled.
+                            logger.info
                             (
                                     "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
                                     "§1 fled from a §9" + nameString +
@@ -845,26 +518,30 @@ public class BattleEndListener
                             );
                         }
 
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Blackouts.BOSS_TRAINER, null, null, playerEntity, null);
+
                         if (printUltraBeastForfeits)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.ULTRA_BEAST,
+                            doBroadcast(EnumBroadcastTypes.PRINT, Events.Forfeits.ULTRA_BEAST,
                                     pokemonEntity, null, playerEntity, null);
                         }
 
                         if (notifyUltraBeastForfeits)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.ULTRA_BEAST,
+                            doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Forfeits.ULTRA_BEAST,
                                     pokemonEntity, null, playerEntity, null);
                         }
                     }
                     else if (pokemonEntity.getPokemonData().isShiny())
                     {
-                        if (logShinyForfeits)
+                        if (Events.Hatches.SHINY.settings.toLowerCase().contains("log"))
                         {
-                            // Print a forfeit message to console.
-                            printUnformattedMessage
+                            // Print a forfeit message to console, if enabled.
+                            logger.info
                             (
                                     "§5PBR §f// §1Player §9" + participant2.getName().getUnformattedText() +
                                     "§1 fled from a shiny §9" + nameString +
@@ -875,22 +552,72 @@ public class BattleEndListener
                             );
                         }
 
+                        // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                        iterateAndBroadcast(
+                                Events.Blackouts.BOSS_TRAINER, null, null, playerEntity, null);
+
                         if (printShinyForfeits)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Forfeits.SHINY,
+                            doBroadcast(EnumBroadcastTypes.PRINT, Events.Forfeits.SHINY,
                                     pokemonEntity, null, playerEntity, null);
                         }
 
                         if (notifyShinyForfeits)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Forfeits.SHINY,
+                            doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Forfeits.SHINY,
                                     pokemonEntity, null, playerEntity, null);
                         }
                     }
                 }
             }
+        }
+    }
+
+    // Prints an event message to console, if enabled. One size fits all, with the help of the LogType enum.
+    private void logEvent(final LogStrings logType, final String worldName, final BlockPos location, final String... inputs)
+    {
+        if (logType == LogStrings.SPAWN) // Spawn logging needs some special logic.
+        {
+            logger.info
+            (
+                    "§5PBR §f// §1A wild " + inputs[0] +
+                    " has spawned in world \"" + worldName +
+                    "\", at X" + location.getX() +
+                    " Y" + location.getY() +
+                    " Z" + location.getZ()
+            );
+        }
+        else if (logType.message.length == 3)
+        {
+            // An example of the Trade event follows.
+            logger.info
+            (
+                    "§5PBR §f// §1Player " +
+            //      player 1    traded their         pokémon 1   for
+                    inputs[0] + logType.message[0] + inputs[1] + logType.message[1] +
+            //      player 2    's                   pokémon 2
+                    inputs[2] + logType.message[2] + inputs[3] +
+                    " in world \"" + worldName +
+                    "\", at X" + location.getX() +
+                    " Y" + location.getY() +
+                    " Z" + location.getZ()
+            );
+        }
+        else
+        {
+            // An example of the Forfeit event follows.
+            logger.info
+            (
+                    "§5PBR §f// §1Player " +
+            //      player      fled from a          pokémon/trainer
+                    inputs[0] + logType.message[0] + inputs[1] +
+                    " in world \"" + worldName +
+                    "\", at X" + location.getX() +
+                    " Y" + location.getY() +
+                    " Z" + location.getZ()
+            );
         }
     }
 }

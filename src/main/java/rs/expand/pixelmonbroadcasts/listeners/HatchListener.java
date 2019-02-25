@@ -6,14 +6,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import rs.expand.pixelmonbroadcasts.enums.EnumBroadcastTypes;
-import rs.expand.pixelmonbroadcasts.enums.EnumEvents;
+import rs.expand.pixelmonbroadcasts.enums.Events;
 
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlaceholdersAndSend;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
 
 // FIXME: Eggs don't show IV percentages, so they get an extra space.
+// TODO: Add UB/legendary hatches.
 public class HatchListener
 {
     @SubscribeEvent
@@ -32,10 +30,10 @@ public class HatchListener
 
         if (event.pokemon.isShiny())
         {
-            if (logShinyHatches)
+            if (Events.Hatches.SHINY.settings.toLowerCase().contains("log"))
             {
-                // Print a hatch message to console.
-                printUnformattedMessage
+                // Print a hatch message to console, if enabled.
+                logger.info
                 (
                         "§5PBR §f// §7Player §f" + player.getName() +
                         "§7's shiny §f" + nameString +
@@ -49,14 +47,14 @@ public class HatchListener
             if (printShinyHatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Hatches.SHINY,
+                doBroadcast(EnumBroadcastTypes.PRINT, Events.Hatches.SHINY,
                         event.pokemon, null, player, null);
             }
 
             if (notifyShinyHatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Hatches.SHINY,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Hatches.SHINY,
                         event.pokemon, null, player, null);
             }
         }
@@ -64,8 +62,8 @@ public class HatchListener
         {
             if (logNormalHatches)
             {
-                // Print a hatch message to console.
-                printUnformattedMessage
+                // Print a hatch message to console, if enabled.
+                logger.info
                 (
                         "§5PBR §f// §7Player §f" + player.getName() +
                         "§7's normal §f" + nameString +
@@ -79,14 +77,14 @@ public class HatchListener
             if (printNormalHatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Hatches.NORMAL,
+                doBroadcast(EnumBroadcastTypes.PRINT, Events.Hatches.NORMAL,
                         event.pokemon, null, player, null);
             }
 
             if (notifyNormalHatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Hatches.NORMAL,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Hatches.NORMAL,
                         event.pokemon, null, player, null);
             }
         }

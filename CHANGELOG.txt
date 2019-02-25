@@ -2,7 +2,9 @@
 Released February 22nd, 2019.
 
     Additions:
-    * Added Ultra Beast and wormhole spawning support everywhere.
+    * Added Ultra Beast broadcasts everywhere.
+    * Added Ultra Space wormhole spawn broadcasts.
+    * Added legendary/Ultra Beast hatch broadcasts.
     * Added Pixelmon noticeboard support. Shows stuff in a fancy box at the top, surrounded by sprites!
 
     Settings file additions and changes:
@@ -26,6 +28,7 @@ Released February 22nd, 2019.
 
     Tweaks:
     * Simplified shiny legendary settings. They now work if either legendaries or shinies are on.
+    * Streamlined logging to be a lot simpler. Messages are now single colors, depending on the event type.
     * Renamed several internal listeners to make more sense in errors/debug output.
 
     Fixes:

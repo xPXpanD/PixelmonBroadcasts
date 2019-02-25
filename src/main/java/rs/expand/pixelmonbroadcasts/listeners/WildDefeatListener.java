@@ -5,15 +5,9 @@ package rs.expand.pixelmonbroadcasts.listeners;
 import com.pixelmonmod.pixelmon.api.events.BeatWildPixelmonEvent;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import rs.expand.pixelmonbroadcasts.enums.EnumBroadcastTypes;
-import rs.expand.pixelmonbroadcasts.enums.EnumEvents;
-
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlaceholdersAndSend;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
+import rs.expand.pixelmonbroadcasts.enums.Events;
 
 // TODO: Log/announce boss types? Mega vs normal.
 // FIXME: Self-sacrifice moves like Explosion do not seem to fire this.
@@ -36,8 +30,8 @@ public class WildDefeatListener
         {
             if (logBossVictories)
             {
-                // Print a victory message to console.
-                printUnformattedMessage
+                // Print a victory message to console, if enabled.
+                logger.info
                 (
                         "§5PBR §f// §4Player §c" + event.player.getName() +
                         "§4 defeated a boss §c" + nameString +
@@ -51,14 +45,14 @@ public class WildDefeatListener
             if (printBossVictories)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Victories.BOSS,
+                doBroadcast(EnumBroadcastTypes.PRINT, Events.Victories.BOSS,
                         pokemon, null, event.player, null);
             }
 
             if (notifyBossVictories)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Victories.BOSS,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Victories.BOSS,
                         pokemon, null, event.player, null);
             }
         }
@@ -67,7 +61,7 @@ public class WildDefeatListener
             if (logLegendaryVictories || logShinyVictories)
             {
                 // Print a victory message to console, with the above shiny String mixed in.
-                printUnformattedMessage
+                logger.info
                 (
                         "§5PBR §f// §4Player §c" + event.player.getName() +
                         "§4 defeated a shiny legendary §c" + nameString +
@@ -83,16 +77,16 @@ public class WildDefeatListener
                 if (printLegendaryVictories)
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                    replacePlaceholdersAndSend(
-                            EnumBroadcastTypes.PRINT, EnumEvents.Victories.SHINY_LEGENDARY_AS_LEGENDARY,
+                    doBroadcast(
+                            EnumBroadcastTypes.PRINT, Events.Victories.SHINY_LEGENDARY_AS_LEGENDARY,
                             pokemon, null, event.player, null);
                 }
 
                 if (notifyLegendaryVictories)
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                    replacePlaceholdersAndSend(
-                            EnumBroadcastTypes.NOTIFY, EnumEvents.Victories.SHINY_LEGENDARY_AS_LEGENDARY,
+                    doBroadcast(
+                            EnumBroadcastTypes.NOTIFY, Events.Victories.SHINY_LEGENDARY_AS_LEGENDARY,
                             pokemon, null, event.player, null);
                 }
             }
@@ -101,16 +95,16 @@ public class WildDefeatListener
                 if (printShinyVictories)
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                    replacePlaceholdersAndSend(
-                            EnumBroadcastTypes.PRINT, EnumEvents.Victories.SHINY_LEGENDARY_AS_SHINY,
+                    doBroadcast(
+                            EnumBroadcastTypes.PRINT, Events.Victories.SHINY_LEGENDARY_AS_SHINY,
                             pokemon, null, event.player, null);
                 }
 
                 if (notifyShinyVictories)
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                    replacePlaceholdersAndSend(
-                            EnumBroadcastTypes.NOTIFY, EnumEvents.Victories.SHINY_LEGENDARY_AS_SHINY,
+                    doBroadcast(
+                            EnumBroadcastTypes.NOTIFY, Events.Victories.SHINY_LEGENDARY_AS_SHINY,
                             pokemon, null, event.player, null);
                 }
             }
@@ -120,7 +114,7 @@ public class WildDefeatListener
             if (logLegendaryVictories)
             {
                 // Print a victory message to console, with the above shiny String mixed in.
-                printUnformattedMessage
+                logger.info
                 (
                         "§5PBR §f// §4Player §c" + event.player.getName() +
                         "§4 defeated a legendary §c" + nameString +
@@ -134,14 +128,14 @@ public class WildDefeatListener
             if (printLegendaryVictories)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Victories.LEGENDARY,
+                doBroadcast(EnumBroadcastTypes.PRINT, Events.Victories.LEGENDARY,
                         pokemon, null, event.player, null);
             }
 
             if (notifyLegendaryVictories)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Victories.LEGENDARY,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Victories.LEGENDARY,
                         pokemon, null, event.player, null);
             }
         }
@@ -149,8 +143,8 @@ public class WildDefeatListener
         {
             if (logShinyVictories)
             {
-                // Print a victory message to console.
-                printUnformattedMessage
+                // Print a victory message to console, if enabled.
+                logger.info
                 (
                         "§5PBR §f// §4Player §c" + event.player.getName() +
                         "§4 defeated a shiny §c" + nameString +
@@ -164,14 +158,14 @@ public class WildDefeatListener
             if (printShinyVictories)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Victories.SHINY,
+                doBroadcast(EnumBroadcastTypes.PRINT, Events.Victories.SHINY,
                         pokemon, null, event.player, null);
             }
 
             if (notifyShinyVictories)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Victories.SHINY,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Victories.SHINY,
                         pokemon, null, event.player, null);
             }
         }

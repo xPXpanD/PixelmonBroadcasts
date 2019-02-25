@@ -9,7 +9,6 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import rs.expand.pixelmonbroadcasts.utilities.ConfigMethods;
 
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.sendTranslation;
 
 public class Reload implements CommandExecutor
@@ -18,11 +17,11 @@ public class Reload implements CommandExecutor
     public CommandResult execute(final CommandSource src, final CommandContext args)
     {
         if (src instanceof Player)
-            printUnformattedMessage("§4PBR §f// §dPlayer §5" + src.getName() + "§d reloaded the Pixelmon Broadcasts configs!");
+            logger.info("§4PBR §f// §dPlayer §5" + src.getName() + "§d reloaded the Pixelmon Broadcasts configs!");
 
         // Load up all the configs and figure out the info alias. Start printing. Methods may insert errors as they go.
-        printUnformattedMessage("");
-        printUnformattedMessage("=============== P I X E L M O N  B R O A D C A S T S ===============");
+        logger.info("");
+        logger.info("=============== P I X E L M O N  B R O A D C A S T S ===============");
 
         // Load up all configuration files. Creates new configs/folders if necessary. Commit settings to memory.
         boolean loadedCorrectly = ConfigMethods.tryCreateAndLoadConfigs();
@@ -31,16 +30,16 @@ public class Reload implements CommandExecutor
         if (loadedCorrectly)
         {
             // (re-)register the main command and alias. Use the result we get back to see if everything worked.
-            printUnformattedMessage("--> §aRe-registering commands with Sponge...");
+            logger.info("--> §aRe-registering commands with Sponge...");
             if (ConfigMethods.registerCommands())
-                printUnformattedMessage("--> §aReload completed. All systems nominal.");
+                logger.info("--> §aReload completed. All systems nominal.");
         }
         else
-            printUnformattedMessage("--> §cLoad aborted due to critical errors.");
+            logger.info("--> §cLoad aborted due to critical errors.");
 
         // We're done, one way or another. Add a footer, and a space to stay consistent.
-        printUnformattedMessage("====================================================================");
-        printUnformattedMessage("");
+        logger.info("====================================================================");
+        logger.info("");
 
         // Print a message to chat.
         if (src instanceof Player)

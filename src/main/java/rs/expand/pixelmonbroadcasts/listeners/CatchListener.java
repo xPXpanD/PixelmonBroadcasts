@@ -7,12 +7,7 @@ import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import rs.expand.pixelmonbroadcasts.enums.EnumBroadcastTypes;
-import rs.expand.pixelmonbroadcasts.enums.EnumEvents;
-
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlaceholdersAndSend;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
+import rs.expand.pixelmonbroadcasts.enums.Events;
 
 public class CatchListener
 {
@@ -38,7 +33,7 @@ public class CatchListener
             if (logLegendaryCatches || logShinyCatches)
             {
                 // Print a catch message to console, with the above shiny String mixed in.
-                printUnformattedMessage
+                logger.info
                 (
                         "§5PBR §f// §2Player §a" + player.getName() +
                         "§2 caught a shiny legendary §a" + nameString +
@@ -54,16 +49,16 @@ public class CatchListener
                 if (printLegendaryCatches)
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                    replacePlaceholdersAndSend(
-                            EnumBroadcastTypes.PRINT, EnumEvents.Catches.SHINY_LEGENDARY_AS_LEGENDARY,
+                    doBroadcast(
+                            EnumBroadcastTypes.PRINT, Events.Catches.SHINY_LEGENDARY_AS_LEGENDARY,
                             pokemon, null, player, null);
                 }
 
                 if (notifyLegendaryCatches)
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                    replacePlaceholdersAndSend(
-                            EnumBroadcastTypes.NOTIFY, EnumEvents.Catches.SHINY_LEGENDARY_AS_LEGENDARY,
+                    doBroadcast(
+                            EnumBroadcastTypes.NOTIFY, Events.Catches.SHINY_LEGENDARY_AS_LEGENDARY,
                             pokemon, null, player, null);
                 }
             }
@@ -72,16 +67,16 @@ public class CatchListener
                 if (printShinyCatches)
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                    replacePlaceholdersAndSend(
-                            EnumBroadcastTypes.PRINT, EnumEvents.Catches.SHINY_LEGENDARY_AS_SHINY,
+                    doBroadcast(
+                            EnumBroadcastTypes.PRINT, Events.Catches.SHINY_LEGENDARY_AS_SHINY,
                             pokemon, null, player, null);
                 }
 
                 if (notifyShinyCatches)
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                    replacePlaceholdersAndSend(
-                            EnumBroadcastTypes.NOTIFY, EnumEvents.Catches.SHINY_LEGENDARY_AS_SHINY,
+                    doBroadcast(
+                            EnumBroadcastTypes.NOTIFY, Events.Catches.SHINY_LEGENDARY_AS_SHINY,
                             pokemon, null, player, null);
                 }
             }
@@ -91,7 +86,7 @@ public class CatchListener
             if (logLegendaryCatches)
             {
                 // Print a catch message to console, with the above shiny String mixed in.
-                printUnformattedMessage
+                logger.info
                 (
                         "§5PBR §f// §2Player §a" + player.getName() +
                         "§2 caught a legendary §a" + nameString +
@@ -105,14 +100,14 @@ public class CatchListener
             if (printLegendaryCatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Catches.LEGENDARY,
+                doBroadcast(EnumBroadcastTypes.PRINT, Events.Catches.LEGENDARY,
                         pokemon, null, player, null);
             }
 
             if (notifyLegendaryCatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Catches.LEGENDARY,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Catches.LEGENDARY,
                         pokemon, null, player, null);
             }
         }
@@ -121,7 +116,7 @@ public class CatchListener
             if (logUltraBeastCatches || logShinyCatches)
             {
                 // Print a catch message to console, with the above shiny String mixed in.
-                printUnformattedMessage
+                logger.info
                 (
                         "§5PBR §f// §2Player §a" + player.getName() +
                         "§2 caught a shiny §a" + nameString +
@@ -137,16 +132,16 @@ public class CatchListener
                 if (printUltraBeastCatches)
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                    replacePlaceholdersAndSend(
-                            EnumBroadcastTypes.PRINT, EnumEvents.Catches.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                    doBroadcast(
+                            EnumBroadcastTypes.PRINT, Events.Catches.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
                             pokemon, null, player, null);
                 }
 
                 if (notifyUltraBeastCatches)
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                    replacePlaceholdersAndSend(
-                            EnumBroadcastTypes.NOTIFY, EnumEvents.Catches.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                    doBroadcast(
+                            EnumBroadcastTypes.NOTIFY, Events.Catches.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
                             pokemon, null, player, null);
                 }
             }
@@ -155,16 +150,16 @@ public class CatchListener
                 if (printShinyCatches)
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                    replacePlaceholdersAndSend(
-                            EnumBroadcastTypes.PRINT, EnumEvents.Catches.SHINY_ULTRA_BEAST_AS_SHINY,
+                    doBroadcast(
+                            EnumBroadcastTypes.PRINT, Events.Catches.SHINY_ULTRA_BEAST_AS_SHINY,
                             pokemon, null, player, null);
                 }
 
                 if (notifyShinyCatches)
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                    replacePlaceholdersAndSend(
-                            EnumBroadcastTypes.NOTIFY, EnumEvents.Catches.SHINY_ULTRA_BEAST_AS_SHINY,
+                    doBroadcast(
+                            EnumBroadcastTypes.NOTIFY, Events.Catches.SHINY_ULTRA_BEAST_AS_SHINY,
                             pokemon, null, player, null);
                 }
             }
@@ -174,7 +169,7 @@ public class CatchListener
             if (logUltraBeastCatches)
             {
                 // Print a catch message to console, with the above shiny String mixed in.
-                printUnformattedMessage
+                logger.info
                 (
                         "§5PBR §f// §2Player §a" + player.getName() +
                         "§2 caught a §a" + nameString +
@@ -188,14 +183,14 @@ public class CatchListener
             if (printUltraBeastCatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Catches.ULTRA_BEAST,
+                doBroadcast(EnumBroadcastTypes.PRINT, Events.Catches.ULTRA_BEAST,
                         pokemon, null, player, null);
             }
 
             if (notifyUltraBeastCatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Catches.ULTRA_BEAST,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Catches.ULTRA_BEAST,
                         pokemon, null, player, null);
             }
         }
@@ -203,8 +198,8 @@ public class CatchListener
         {
             if (logShinyCatches)
             {
-                // Print a catch message to console.
-                printUnformattedMessage
+                // Print a catch message to console, if enabled.
+                logger.info
                 (
                         "§5PBR §f// §bPlayer §3" + player.getName() +
                         "§b caught a shiny §3" + nameString +
@@ -218,14 +213,14 @@ public class CatchListener
             if (printShinyCatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Catches.SHINY,
+                doBroadcast(EnumBroadcastTypes.PRINT, Events.Catches.SHINY,
                         pokemon, null, player, null);
             }
 
             if (notifyShinyCatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Catches.SHINY,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Catches.SHINY,
                         pokemon, null, player, null);
             }
         }
@@ -233,8 +228,8 @@ public class CatchListener
         {
             if (logNormalCatches)
             {
-                // Print a catch message to console.
-                printUnformattedMessage
+                // Print a catch message to console, if enabled.
+                logger.info
                 (
                         "§5PBR §f// §fPlayer §7" + player.getName() +
                         "§f caught a normal §7" + nameString +
@@ -248,14 +243,14 @@ public class CatchListener
             if (printNormalCatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Catches.NORMAL,
+                doBroadcast(EnumBroadcastTypes.PRINT, Events.Catches.NORMAL,
                         pokemon, null, player, null);
             }
 
             if (notifyNormalCatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Catches.NORMAL,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Catches.NORMAL,
                         pokemon, null, player, null);
             }
         }

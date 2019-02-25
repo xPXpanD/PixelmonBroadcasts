@@ -19,8 +19,8 @@ public class BirdSpawnListener
 
         if (logBirdTrioSummons)
         {
-            // Print a summon message to console.
-            printUnformattedMessage
+            // Print a summon message to console, if enabled.
+            logger.info
             (
                     "§5PBR §f// §ePlayer §6" + player.getName() +
                     "§e has summoned a §6" + pokemonName +

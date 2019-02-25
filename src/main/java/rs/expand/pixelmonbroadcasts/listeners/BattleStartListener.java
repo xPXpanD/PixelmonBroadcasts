@@ -11,12 +11,7 @@ import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import rs.expand.pixelmonbroadcasts.enums.EnumBroadcastTypes;
-import rs.expand.pixelmonbroadcasts.enums.EnumEvents;
-
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
-import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.replacePlaceholdersAndSend;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printUnformattedMessage;
+import rs.expand.pixelmonbroadcasts.enums.Events;
 
 // FIXME: Pokémon using moves like Teleport to warp away from you show up as YOU having fled.
 public class BattleStartListener
@@ -45,8 +40,8 @@ public class BattleStartListener
                     // Create another shorthand variable.
                     final BlockPos location = participant1.getEntity().getPosition();
 
-                    // Print a PvP starting message to console.
-                    printUnformattedMessage
+                    // Print a PvP starting message to console, if enabled.
+                    logger.info
                     (
                             "§5PBR §f// §3Player §b" + participant1.getName().getUnformattedText() +
                             "§3 started battling player §b" + participant2.getName().getUnformattedText() +
@@ -66,14 +61,14 @@ public class BattleStartListener
                     if (printPVPChallenges)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                        replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Challenges.BOSS,
+                        doBroadcast(EnumBroadcastTypes.PRINT, Events.Challenges.BOSS,
                                 null, null, player1Entity, player2Entity);
                     }
 
                     if (notifyPVPChallenges)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                        replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Challenges.BOSS,
+                        doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Challenges.BOSS,
                                 null, null, player1Entity, player2Entity);
                     }
                 }
@@ -106,8 +101,8 @@ public class BattleStartListener
                 {
                     if (logBossTrainerChallenges)
                     {
-                        // Print a challenge message to console.
-                        printUnformattedMessage
+                        // Print a challenge message to console, if enabled.
+                        logger.info
                         (
                                 "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
                                 "§3 challenged a boss trainer in world \"§b" + worldName +
@@ -120,14 +115,14 @@ public class BattleStartListener
                     if (printBossTrainerChallenges)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                        replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Challenges.BOSS_TRAINER,
+                        doBroadcast(EnumBroadcastTypes.PRINT, Events.Challenges.BOSS_TRAINER,
                                 null, null, playerEntity, null);
                     }
 
                     if (notifyBossTrainerChallenges)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                        replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Challenges.BOSS_TRAINER,
+                        doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Challenges.BOSS_TRAINER,
                                 null, null, playerEntity, null);
                     }
                 }
@@ -135,8 +130,8 @@ public class BattleStartListener
                 {
                     if (logTrainerChallenges)
                     {
-                        // Print a challenge message to console.
-                        printUnformattedMessage
+                        // Print a challenge message to console, if enabled.
+                        logger.info
                         (
                                 "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
                                 "§3 challenged a normal trainer in world \"§b" + worldName +
@@ -149,14 +144,14 @@ public class BattleStartListener
                     if (printTrainerChallenges)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                        replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Challenges.TRAINER,
+                        doBroadcast(EnumBroadcastTypes.PRINT, Events.Challenges.TRAINER,
                                 null, null, playerEntity, null);
                     }
 
                     if (notifyTrainerChallenges)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                        replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Challenges.TRAINER,
+                        doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Challenges.TRAINER,
                                 null, null, playerEntity, null);
                     }
                 }
@@ -200,8 +195,8 @@ public class BattleStartListener
                     {
                         if (logBossChallenges)
                         {
-                            // Print a challenge message to console.
-                            printUnformattedMessage
+                            // Print a challenge message to console, if enabled.
+                            logger.info
                             (
                                     "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
                                     "§3 engaged a boss §b" + nameString +
@@ -215,14 +210,14 @@ public class BattleStartListener
                         if (printBossChallenges)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Challenges.BOSS,
+                            doBroadcast(EnumBroadcastTypes.PRINT, Events.Challenges.BOSS,
                                     pokemonEntity, null, playerEntity, null);
                         }
 
                         if (notifyBossChallenges)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Challenges.BOSS,
+                            doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Challenges.BOSS,
                                     pokemonEntity, null, playerEntity, null);
                         }
                     }
@@ -230,8 +225,8 @@ public class BattleStartListener
                     {
                         if (logLegendaryChallenges || logShinyChallenges)
                         {
-                            // Print a challenge message to console.
-                            printUnformattedMessage
+                            // Print a challenge message to console, if enabled.
+                            logger.info
                             (
                                     "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
                                     "§3 engaged a shiny legendary §b" + nameString +
@@ -247,16 +242,16 @@ public class BattleStartListener
                             if (printLegendaryChallenges)
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.PRINT, EnumEvents.Challenges.SHINY_LEGENDARY_AS_LEGENDARY,
+                                doBroadcast(
+                                        EnumBroadcastTypes.PRINT, Events.Challenges.SHINY_LEGENDARY_AS_LEGENDARY,
                                         pokemonEntity, null, playerEntity, null);
                             }
 
                             if (notifyLegendaryChallenges)
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Challenges.SHINY_LEGENDARY_AS_LEGENDARY,
+                                doBroadcast(
+                                        EnumBroadcastTypes.NOTIFY, Events.Challenges.SHINY_LEGENDARY_AS_LEGENDARY,
                                         pokemonEntity, null, playerEntity, null);
                             }
                         }
@@ -265,16 +260,16 @@ public class BattleStartListener
                             if (printShinyChallenges)
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.PRINT, EnumEvents.Challenges.SHINY_LEGENDARY_AS_SHINY,
+                                doBroadcast(
+                                        EnumBroadcastTypes.PRINT, Events.Challenges.SHINY_LEGENDARY_AS_SHINY,
                                         pokemonEntity, null, playerEntity, null);
                             }
 
                             if (notifyShinyChallenges)
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Challenges.SHINY_LEGENDARY_AS_SHINY,
+                                doBroadcast(
+                                        EnumBroadcastTypes.NOTIFY, Events.Challenges.SHINY_LEGENDARY_AS_SHINY,
                                         pokemonEntity, null, playerEntity, null);
                             }
                         }
@@ -283,8 +278,8 @@ public class BattleStartListener
                     {
                         if (logLegendaryChallenges)
                         {
-                            // Print a challenge message to console.
-                            printUnformattedMessage
+                            // Print a challenge message to console, if enabled.
+                            logger.info
                             (
                                     "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
                                     "§3 engaged a legendary §b" + nameString +
@@ -298,14 +293,14 @@ public class BattleStartListener
                         if (printLegendaryChallenges)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Challenges.LEGENDARY,
+                            doBroadcast(EnumBroadcastTypes.PRINT, Events.Challenges.LEGENDARY,
                                     pokemonEntity, null, playerEntity, null);
                         }
 
                         if (notifyLegendaryChallenges)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Challenges.LEGENDARY,
+                            doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Challenges.LEGENDARY,
                                     pokemonEntity, null, playerEntity, null);
                         }
                     }
@@ -313,8 +308,8 @@ public class BattleStartListener
                     {
                         if (logUltraBeastChallenges || logShinyChallenges)
                         {
-                            // Print a challenge message to console.
-                            printUnformattedMessage
+                            // Print a challenge message to console, if enabled.
+                            logger.info
                             (
                                     "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
                                     "§3 engaged a shiny §b" + nameString +
@@ -330,16 +325,16 @@ public class BattleStartListener
                             if (printUltraBeastChallenges)
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.PRINT, EnumEvents.Challenges.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                                doBroadcast(
+                                        EnumBroadcastTypes.PRINT, Events.Challenges.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
                                         pokemonEntity, null, playerEntity, null);
                             }
 
                             if (notifyUltraBeastChallenges)
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Challenges.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                                doBroadcast(
+                                        EnumBroadcastTypes.NOTIFY, Events.Challenges.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
                                         pokemonEntity, null, playerEntity, null);
                             }
                         }
@@ -348,16 +343,16 @@ public class BattleStartListener
                             if (printShinyChallenges)
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.PRINT, EnumEvents.Challenges.SHINY_ULTRA_BEAST_AS_SHINY,
+                                doBroadcast(
+                                        EnumBroadcastTypes.PRINT, Events.Challenges.SHINY_ULTRA_BEAST_AS_SHINY,
                                         pokemonEntity, null, playerEntity, null);
                             }
 
                             if (notifyShinyChallenges)
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                replacePlaceholdersAndSend(
-                                        EnumBroadcastTypes.NOTIFY, EnumEvents.Challenges.SHINY_ULTRA_BEAST_AS_SHINY,
+                                doBroadcast(
+                                        EnumBroadcastTypes.NOTIFY, Events.Challenges.SHINY_ULTRA_BEAST_AS_SHINY,
                                         pokemonEntity, null, playerEntity, null);
                             }
                         }
@@ -366,8 +361,8 @@ public class BattleStartListener
                     {
                         if (logUltraBeastChallenges)
                         {
-                            // Print a challenge message to console.
-                            printUnformattedMessage
+                            // Print a challenge message to console, if enabled.
+                            logger.info
                             (
                                     "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
                                     "§3 engaged a legendary §b" + nameString +
@@ -381,14 +376,14 @@ public class BattleStartListener
                         if (printUltraBeastChallenges)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Challenges.ULTRA_BEAST,
+                            doBroadcast(EnumBroadcastTypes.PRINT, Events.Challenges.ULTRA_BEAST,
                                     pokemonEntity, null, playerEntity, null);
                         }
 
                         if (notifyUltraBeastChallenges)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Challenges.ULTRA_BEAST,
+                            doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Challenges.ULTRA_BEAST,
                                     pokemonEntity, null, playerEntity, null);
                         }
                     }
@@ -396,8 +391,8 @@ public class BattleStartListener
                     {
                         if (logShinyChallenges)
                         {
-                            // Print a challenge message to console.
-                            printUnformattedMessage
+                            // Print a challenge message to console, if enabled.
+                            logger.info
                             (
                                     "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
                                     "§3 engaged a shiny §b" + nameString +
@@ -411,14 +406,14 @@ public class BattleStartListener
                         if (printBossChallenges)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.PRINT, EnumEvents.Challenges.BOSS,
+                            doBroadcast(EnumBroadcastTypes.PRINT, Events.Challenges.BOSS,
                                     pokemonEntity, null, playerEntity, null);
                         }
 
                         if (notifyBossChallenges)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            replacePlaceholdersAndSend(EnumBroadcastTypes.NOTIFY, EnumEvents.Challenges.BOSS,
+                            doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Challenges.BOSS,
                                     pokemonEntity, null, playerEntity, null);
                         }
                     }
