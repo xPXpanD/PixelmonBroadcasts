@@ -1,25 +1,85 @@
 package rs.expand.pixelmonbroadcasts.utilities;
 
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.StatsType;
+import net.minecraft.util.math.BlockPos;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
+import rs.expand.pixelmonbroadcasts.enums.EventData;
 
 import java.util.List;
 
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.messagesConfig;
 
 // A collection of methods that are commonly used. One changed word or color here, and half the mod changes. Sweet.
+// TODO: Maybe get the current event from LogMessages instead of requiring it up-front. Same info in two places, now.
 public class PrintingMethods
 {
-    // If we can't read a main config options bundle (really just a String), format and throw this error.
+    // Prints an event message to console, if it is enabled. One size fits all, with the help of the LogType enum.
+    public static void logEvent(final EventData event, final String worldName, final BlockPos location, final String... inputs)
+    {
+        if (event.options().toLowerCase().contains("log"))
+        {
+            if (event instanceof EventData.Spawns) // Spawn logging needs some special logic.
+            {
+                logger.info
+                (
+                        "§5PBR §f// §1A " + inputs[0] +
+                        " has spawned in world \"" + worldName +
+                        "\", at X" + location.getX() +
+                        " Y" + location.getY() +
+                        " Z" + location.getZ()
+                );
+            }
+            else if (event.messages().length == 2) // Generally used for events that have two players.
+            {
+                // An example from the battle draw event follows.
+                logger.info
+                (
+                        "§5PBR §f// §" + event.color() +
+                //                  player 1    's battle with        player 2    ended in a draw
+                        "Player " + inputs[0] + event.messages()[0] + inputs[1] + event.messages()[1] +
+                        " in world \"" + worldName +
+                        "\", at X" + location.getX() +
+                        " Y" + location.getY() +
+                        " Z" + location.getZ()
+                );
+            }
+            else
+            {
+                // An example from the forfeit event follows.
+                logger.info
+                (
+                        "§5PBR §f// §" + event.color() +
+                //                  player      fled from a           pokémon/trainer
+                        "Player " + inputs[0] + event.messages()[0] + inputs[1] +
+                        " in world \"" + worldName +
+                        "\", at X" + location.getX() +
+                        " Y" + location.getY() +
+                        " Z" + location.getZ()
+                );
+            }
+        }
+        else
+            logger.error("Log flag not found for event " + event);
+    }
+
+    // If we can't read a main config options bundle (really just a String), throw this error. Called during reloads.
     static void printOptionsNodeError(final List<String> nodes)
     {
         for (final String node : nodes)
-            logger.info("§cCould not read options node \"§4" + node + "§c\".");
+            logger.error("Could not read settings.conf node \"§4" + node + "§c\"!");
 
-        logger.info("§cThe settings.conf file contains invalid options!");
-        logger.info("§cCheck the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
+        logger.error("The main configuration file contains one or more invalid options.");
+        logger.error("Check the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
+    }
+
+    // If we can't read a main config options bundle (really just a String), throw this error. Called during execution.
+    public static void printOptionsNodeError(final String node)
+    {
+        logger.error("Could not read settings.conf node \"§4" + node + "§c\"! Messages swallowed.");
+        logger.error("Check the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
     }
 
     // Gets a key from messages.conf, formats it (ampersands to section characters), and then sends it.

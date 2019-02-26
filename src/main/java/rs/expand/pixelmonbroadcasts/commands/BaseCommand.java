@@ -29,8 +29,8 @@ public class BaseCommand implements CommandExecutor
             String checkedAlias = commandAlias;
             if (commandAlias == null)
             {
-                printBasicError("Could not read config node \"§4commandAlias§c\" while executing hub command.");
-                printBasicError("We'll continue with the command, but aliases will break. Check your config.");
+                logger.error("Could not read config node \"§4commandAlias§c\" while executing hub command.");
+                logger.error("We'll continue with the command, but aliases will break. Check your config.");
 
                 // Insert a safe default.
                 checkedAlias = "pixelmonbroadcasts";

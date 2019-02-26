@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import rs.expand.pixelmonbroadcasts.enums.Events;
+import rs.expand.pixelmonbroadcasts.enums.EventData;
 
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
 
@@ -30,7 +30,7 @@ public class HatchListener
 
         if (event.pokemon.isShiny())
         {
-            if (Events.Hatches.SHINY.settings.toLowerCase().contains("log"))
+            if (EventData.Hatches.SHINY.options.toLowerCase().contains("log"))
             {
                 // Print a hatch message to console, if enabled.
                 logger.info
@@ -47,14 +47,14 @@ public class HatchListener
             if (printShinyHatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                doBroadcast(EnumBroadcastTypes.PRINT, Events.Hatches.SHINY,
+                doBroadcast(EnumBroadcastTypes.PRINT, EventData.Hatches.SHINY,
                         event.pokemon, null, player, null);
             }
 
             if (notifyShinyHatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Hatches.SHINY,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Hatches.SHINY,
                         event.pokemon, null, player, null);
             }
         }
@@ -77,14 +77,14 @@ public class HatchListener
             if (printNormalHatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                doBroadcast(EnumBroadcastTypes.PRINT, Events.Hatches.NORMAL,
+                doBroadcast(EnumBroadcastTypes.PRINT, EventData.Hatches.NORMAL,
                         event.pokemon, null, player, null);
             }
 
             if (notifyNormalHatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Hatches.NORMAL,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Hatches.NORMAL,
                         event.pokemon, null, player, null);
             }
         }

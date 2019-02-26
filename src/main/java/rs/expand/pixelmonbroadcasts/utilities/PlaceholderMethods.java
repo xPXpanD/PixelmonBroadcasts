@@ -3,12 +3,14 @@ package rs.expand.pixelmonbroadcasts.utilities;
 import com.pixelmonmod.pixelmon.api.overlay.notice.NoticeOverlay;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.PokemonSpec;
+import com.pixelmonmod.pixelmon.entities.EntityWormhole;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.IVStore;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.StatsType;
 import com.pixelmonmod.pixelmon.enums.EnumGrowth;
 import com.pixelmonmod.pixelmon.enums.EnumNature;
 import com.pixelmonmod.pixelmon.enums.forms.EnumAlolan;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
@@ -17,7 +19,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.serializer.TextSerializers;
-import rs.expand.pixelmonbroadcasts.enums.Events;
+import rs.expand.pixelmonbroadcasts.enums.EventData;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,10 +31,10 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 public class PlaceholderMethods
 {
     public static void iterateAndBroadcast(
-            final Events event, final Object pokemonObject, final Object pokemon2Object,
+            final EventData event, final Object pokemonObject, final Object pokemon2Object,
             final EntityPlayer playerEntity, final EntityPlayer player2Entity)
     {
-        if (event.settings().toLowerCase().contains("chat"))
+        if (event.options().toLowerCase().contains("chat"))
         {
             // Combine the passed broadcast type's prefix with the broadcast/permission key to make a full broadcast key.
             final String broadcast =
@@ -63,7 +65,7 @@ public class PlaceholderMethods
             });
         }
 
-        if (event.settings().toLowerCase().contains("notice"))
+        if (event.options().toLowerCase().contains("notice"))
         {
             if (pokemonObject != null)
             {
@@ -107,84 +109,84 @@ public class PlaceholderMethods
     }
 
     // Checks if a given flag is set for the given event. Has some hardcoded values on stuff that's off-limits.
-    private static boolean getUnsafeFlag(Events event, String flag)
+    private static boolean getUnsafeFlag(EventData event, String flag)
     {
-        if (event == Events.Blackouts.TRAINER && (flag.equals("hover") || flag.equals("reveal")))
+        if (event == EventData.Blackouts.TRAINER && (flag.equals("hover") || flag.equals("reveal")))
         {
-            printBasicError("Exit path 1.");
+            logger.error("Exit path 1.");
             return false;
         }
-        else if (event == Events.Blackouts.BOSS_TRAINER && (flag.equals("hover") || flag.equals("reveal")))
+        else if (event == EventData.Blackouts.BOSS_TRAINER && (flag.equals("hover") || flag.equals("reveal")))
         {
-            printBasicError("Exit path 2.");
+            logger.error("Exit path 2.");
             return false;
         }
-        else if (event instanceof Events.Challenges && flag.equals("reveal")) // TODO: TEST!
+        else if (event instanceof EventData.Challenges && flag.equals("reveal")) // TODO: TEST!
         {
-            printBasicError("Exit path 3!!");
+            logger.error("Exit path 3!!");
             return false;
         }
-        else if (event == Events.Challenges.TRAINER && flag.equals("hover"))
+        else if (event == EventData.Challenges.TRAINER && flag.equals("hover"))
         {
-            printBasicError("Exit path 4.");
+            logger.error("Exit path 4.");
             return false;
         }
-        else if (event == Events.Challenges.BOSS_TRAINER && flag.equals("hover"))
+        else if (event == EventData.Challenges.BOSS_TRAINER && flag.equals("hover"))
         {
-            printBasicError("Exit path 5.");
+            logger.error("Exit path 5.");
             return false;
         }
-        else if (event == Events.Challenges.PVP && flag.equals("hover"))
+        else if (event == EventData.Challenges.PVP && flag.equals("hover"))
         {
-            printBasicError("Exit path 6.");
+            logger.error("Exit path 6.");
             return false;
         }
-        else if (event == Events.Forfeits.TRAINER && (flag.equals("hover") || flag.equals("reveal")))
+        else if (event == EventData.Forfeits.TRAINER && (flag.equals("hover") || flag.equals("reveal")))
         {
-            printBasicError("Exit path 7.");
+            logger.error("Exit path 7.");
             return false;
         }
-        else if (event == Events.Forfeits.BOSS_TRAINER && (flag.equals("hover") || flag.equals("reveal")))
+        else if (event == EventData.Forfeits.BOSS_TRAINER && (flag.equals("hover") || flag.equals("reveal")))
         {
-            printBasicError("Exit path 8.");
+            logger.error("Exit path 8.");
             return false;
         }
-        else if (event instanceof Events.Spawns && flag.equals("reveal")) // TODO: TEST!
+        else if (event instanceof EventData.Spawns && flag.equals("reveal")) // TODO: TEST!
         {
-            printBasicError("Exit path 9!!");
+            logger.error("Exit path 9!!");
             return false;
         }
-        else if (event == Events.Spawns.WORMHOLE && flag.equals("hover"))
+        else if (event == EventData.Spawns.WORMHOLE && flag.equals("hover"))
         {
-            printBasicError("Exit path 10.");
+            logger.error("Exit path 10.");
             return false;
         }
-        else if (event == Events.Victories.TRAINER && (flag.equals("hover") || flag.equals("reveal")))
+        else if (event == EventData.Victories.TRAINER && (flag.equals("hover") || flag.equals("reveal")))
         {
-            printBasicError("Exit path 11.");
+            logger.error("Exit path 11.");
             return false;
         }
-        else if (event == Events.Victories.BOSS_TRAINER && (flag.equals("hover") || flag.equals("reveal")))
+        else if (event == EventData.Victories.BOSS_TRAINER && (flag.equals("hover") || flag.equals("reveal")))
         {
-            printBasicError("Exit path 12.");
+            logger.error("Exit path 12.");
             return false;
         }
-        else if (event == Events.Victories.PVP && (flag.equals("hover") || flag.equals("reveal")))
+        else if (event == EventData.Victories.PVP && (flag.equals("hover") || flag.equals("reveal")))
         {
-            printBasicError("Exit path 13.");
+            logger.error("Exit path 13.");
             return false;
         }
-        else if (event instanceof Events.Others && (flag.equals("hover") || flag.equals("reveal"))) // TODO: TEST!
+        else if (event instanceof EventData.Others && (flag.equals("hover") || flag.equals("reveal"))) // TODO: TEST!
         {
-            printBasicError("Exit path 14!!");
+            logger.error("Exit path 14!!");
             return false;
         }
 
-        printBasicError("Exit path is fallthrough.");
-        return event.settings().toLowerCase().contains(flag);
+        logger.error("Exit path is fallthrough.");
+        return event.options().toLowerCase().contains(flag);
     }
 
-    // Replaces all placeholders in a provide message.
+    // Replaces all placeholders in a provided message.
     private static String getBroadcast(
             final String key, final Object pokemonObject, final Object pokemon2Object, final EntityPlayer playerEntity,
             final EntityPlayer player2Entity)
@@ -201,7 +203,7 @@ public class PlaceholderMethods
         // We did not get a broadcast, return the provided key and make sure it's unformatted.
         else
         {
-            printBasicError("The following broadcast could not be found: §4" + key);
+            logger.error("The following broadcast could not be found: §4" + key);
             return key;
         }
 
@@ -212,26 +214,23 @@ public class PlaceholderMethods
         // Do we have a Pokémon object? Replace Pokémon-specific placeholders.
         if (pokemonObject != null)
         {
-            // Is our received object of the older EntityPixelmon type, or is it Pokemon?
-            if (pokemonObject instanceof EntityPixelmon)
+            // Figure out what our received object is, exactly.
+            if (pokemonObject instanceof EntityPixelmon || pokemonObject instanceof EntityWormhole)
             {
                 // Make the entity a bit easier to access. It probably has more info than a Pokemon object would -- use it!
-                EntityPixelmon pokemonEntity = (EntityPixelmon) pokemonObject;
-
-                // Extract a Pokemon object for later use.
-                pokemon = pokemonEntity.getPokemonData();
+                Entity entity = (Entity) pokemonObject;
 
                 // Get a position, and do a sanity check on it to work around possible entity removal issues.
                 // (if both are zero, something might have broken -- we'll try getting the info from the player instead)
-                position = pokemonEntity.getPosition();
+                position = entity.getPosition();
                 if (!(position.getX() == 0 && position.getZ() == 0))
                 {
                     // Get the Pokémon's biome, nicely formatted (spaces!) and all. Replace placeholder.
-                    final String biome = getFormattedBiome(pokemonEntity.getEntityWorld(), position);
+                    final String biome = getFormattedBiome(entity.getEntityWorld(), position);
                     broadcast = broadcast.replaceAll("(?i)%biome%", biome);
 
                     // Insert a world name.
-                    broadcast = broadcast.replaceAll("(?i)%world%", pokemonEntity.getEntityWorld().getWorldInfo().getWorldName());
+                    broadcast = broadcast.replaceAll("(?i)%world%", entity.getEntityWorld().getWorldInfo().getWorldName());
 
                     // Insert coordinates.
                     broadcast = broadcast.replaceAll("(?i)%xpos%", String.valueOf(position.getX()));
@@ -240,9 +239,15 @@ public class PlaceholderMethods
                 }
                 else
                 {
-                    printBasicError("§6The event's Pokémon entity was removed from the world early!");
-                    printBasicError("§6We'll try to get missing info from the player. World info may look weird.");
+                    logger.error("§6The event's Pokémon entity was removed from the world early!");
+                    logger.error("§6We'll try to get missing info from the player. World info may look weird.");
                 }
+
+                // Extract a Pokemon object for later use, if possible.
+                if (pokemonObject instanceof EntityPixelmon)
+                    pokemon = ((EntityPixelmon) entity).getPokemonData();
+                else // No more info to extract, here.
+                    return broadcast;
             }
             else
                 pokemon = (Pokemon) pokemonObject;

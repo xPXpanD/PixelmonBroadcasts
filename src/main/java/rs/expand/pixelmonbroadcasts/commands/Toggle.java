@@ -30,8 +30,8 @@ public class Toggle implements CommandExecutor
         {
             if (commandAlias == null)
             {
-                printBasicError("Could not read config node \"§4commandAlias§c\" while executing toggle command.");
-                printBasicError("We'll continue with the command, but aliases will break. Check your config.");
+                logger.error("Could not read config node \"§4commandAlias§c\" while executing toggle command.");
+                logger.error("We'll continue with the command, but aliases will break. Check your config.");
             }
 
             // Do we have an argument in the first slot? If valid, use it to toggle the matching setting and then show.
@@ -720,7 +720,7 @@ public class Toggle implements CommandExecutor
             sendTranslation(src, "universal.footer");
         }
         else
-            printBasicError("This command can only be run by players.");
+            logger.error("This command can only be run by players.");
 
         return CommandResult.success();
     }

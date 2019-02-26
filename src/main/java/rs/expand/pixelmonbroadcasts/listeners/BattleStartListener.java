@@ -11,7 +11,7 @@ import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import rs.expand.pixelmonbroadcasts.enums.Events;
+import rs.expand.pixelmonbroadcasts.enums.EventData;
 
 // FIXME: Pokémon using moves like Teleport to warp away from you show up as YOU having fled.
 public class BattleStartListener
@@ -61,14 +61,14 @@ public class BattleStartListener
                     if (printPVPChallenges)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                        doBroadcast(EnumBroadcastTypes.PRINT, Events.Challenges.BOSS,
+                        doBroadcast(EnumBroadcastTypes.PRINT, EventData.Challenges.BOSS,
                                 null, null, player1Entity, player2Entity);
                     }
 
                     if (notifyPVPChallenges)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                        doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Challenges.BOSS,
+                        doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Challenges.BOSS,
                                 null, null, player1Entity, player2Entity);
                     }
                 }
@@ -115,14 +115,14 @@ public class BattleStartListener
                     if (printBossTrainerChallenges)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                        doBroadcast(EnumBroadcastTypes.PRINT, Events.Challenges.BOSS_TRAINER,
+                        doBroadcast(EnumBroadcastTypes.PRINT, EventData.Challenges.BOSS_TRAINER,
                                 null, null, playerEntity, null);
                     }
 
                     if (notifyBossTrainerChallenges)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                        doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Challenges.BOSS_TRAINER,
+                        doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Challenges.BOSS_TRAINER,
                                 null, null, playerEntity, null);
                     }
                 }
@@ -144,14 +144,14 @@ public class BattleStartListener
                     if (printTrainerChallenges)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                        doBroadcast(EnumBroadcastTypes.PRINT, Events.Challenges.TRAINER,
+                        doBroadcast(EnumBroadcastTypes.PRINT, EventData.Challenges.TRAINER,
                                 null, null, playerEntity, null);
                     }
 
                     if (notifyTrainerChallenges)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                        doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Challenges.TRAINER,
+                        doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Challenges.TRAINER,
                                 null, null, playerEntity, null);
                     }
                 }
@@ -210,14 +210,14 @@ public class BattleStartListener
                         if (printBossChallenges)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            doBroadcast(EnumBroadcastTypes.PRINT, Events.Challenges.BOSS,
+                            doBroadcast(EnumBroadcastTypes.PRINT, EventData.Challenges.BOSS,
                                     pokemonEntity, null, playerEntity, null);
                         }
 
                         if (notifyBossChallenges)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Challenges.BOSS,
+                            doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Challenges.BOSS,
                                     pokemonEntity, null, playerEntity, null);
                         }
                     }
@@ -243,7 +243,7 @@ public class BattleStartListener
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
                                 doBroadcast(
-                                        EnumBroadcastTypes.PRINT, Events.Challenges.SHINY_LEGENDARY_AS_LEGENDARY,
+                                        EnumBroadcastTypes.PRINT, EventData.Challenges.SHINY_LEGENDARY_AS_LEGENDARY,
                                         pokemonEntity, null, playerEntity, null);
                             }
 
@@ -251,7 +251,7 @@ public class BattleStartListener
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
                                 doBroadcast(
-                                        EnumBroadcastTypes.NOTIFY, Events.Challenges.SHINY_LEGENDARY_AS_LEGENDARY,
+                                        EnumBroadcastTypes.NOTIFY, EventData.Challenges.SHINY_LEGENDARY_AS_LEGENDARY,
                                         pokemonEntity, null, playerEntity, null);
                             }
                         }
@@ -261,7 +261,7 @@ public class BattleStartListener
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
                                 doBroadcast(
-                                        EnumBroadcastTypes.PRINT, Events.Challenges.SHINY_LEGENDARY_AS_SHINY,
+                                        EnumBroadcastTypes.PRINT, EventData.Challenges.SHINY_LEGENDARY_AS_SHINY,
                                         pokemonEntity, null, playerEntity, null);
                             }
 
@@ -269,7 +269,7 @@ public class BattleStartListener
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
                                 doBroadcast(
-                                        EnumBroadcastTypes.NOTIFY, Events.Challenges.SHINY_LEGENDARY_AS_SHINY,
+                                        EnumBroadcastTypes.NOTIFY, EventData.Challenges.SHINY_LEGENDARY_AS_SHINY,
                                         pokemonEntity, null, playerEntity, null);
                             }
                         }
@@ -293,14 +293,14 @@ public class BattleStartListener
                         if (printLegendaryChallenges)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            doBroadcast(EnumBroadcastTypes.PRINT, Events.Challenges.LEGENDARY,
+                            doBroadcast(EnumBroadcastTypes.PRINT, EventData.Challenges.LEGENDARY,
                                     pokemonEntity, null, playerEntity, null);
                         }
 
                         if (notifyLegendaryChallenges)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Challenges.LEGENDARY,
+                            doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Challenges.LEGENDARY,
                                     pokemonEntity, null, playerEntity, null);
                         }
                     }
@@ -326,7 +326,7 @@ public class BattleStartListener
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
                                 doBroadcast(
-                                        EnumBroadcastTypes.PRINT, Events.Challenges.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                                        EnumBroadcastTypes.PRINT, EventData.Challenges.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
                                         pokemonEntity, null, playerEntity, null);
                             }
 
@@ -334,7 +334,7 @@ public class BattleStartListener
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
                                 doBroadcast(
-                                        EnumBroadcastTypes.NOTIFY, Events.Challenges.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                                        EnumBroadcastTypes.NOTIFY, EventData.Challenges.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
                                         pokemonEntity, null, playerEntity, null);
                             }
                         }
@@ -344,7 +344,7 @@ public class BattleStartListener
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
                                 doBroadcast(
-                                        EnumBroadcastTypes.PRINT, Events.Challenges.SHINY_ULTRA_BEAST_AS_SHINY,
+                                        EnumBroadcastTypes.PRINT, EventData.Challenges.SHINY_ULTRA_BEAST_AS_SHINY,
                                         pokemonEntity, null, playerEntity, null);
                             }
 
@@ -352,7 +352,7 @@ public class BattleStartListener
                             {
                                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
                                 doBroadcast(
-                                        EnumBroadcastTypes.NOTIFY, Events.Challenges.SHINY_ULTRA_BEAST_AS_SHINY,
+                                        EnumBroadcastTypes.NOTIFY, EventData.Challenges.SHINY_ULTRA_BEAST_AS_SHINY,
                                         pokemonEntity, null, playerEntity, null);
                             }
                         }
@@ -376,14 +376,14 @@ public class BattleStartListener
                         if (printUltraBeastChallenges)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            doBroadcast(EnumBroadcastTypes.PRINT, Events.Challenges.ULTRA_BEAST,
+                            doBroadcast(EnumBroadcastTypes.PRINT, EventData.Challenges.ULTRA_BEAST,
                                     pokemonEntity, null, playerEntity, null);
                         }
 
                         if (notifyUltraBeastChallenges)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Challenges.ULTRA_BEAST,
+                            doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Challenges.ULTRA_BEAST,
                                     pokemonEntity, null, playerEntity, null);
                         }
                     }
@@ -406,14 +406,14 @@ public class BattleStartListener
                         if (printBossChallenges)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            doBroadcast(EnumBroadcastTypes.PRINT, Events.Challenges.BOSS,
+                            doBroadcast(EnumBroadcastTypes.PRINT, EventData.Challenges.BOSS,
                                     pokemonEntity, null, playerEntity, null);
                         }
 
                         if (notifyBossChallenges)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Challenges.BOSS,
+                            doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Challenges.BOSS,
                                     pokemonEntity, null, playerEntity, null);
                         }
                     }

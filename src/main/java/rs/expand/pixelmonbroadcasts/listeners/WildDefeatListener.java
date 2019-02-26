@@ -7,7 +7,7 @@ import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import rs.expand.pixelmonbroadcasts.enums.Events;
+import rs.expand.pixelmonbroadcasts.enums.EventData;
 
 // TODO: Log/announce boss types? Mega vs normal.
 // FIXME: Self-sacrifice moves like Explosion do not seem to fire this.
@@ -45,14 +45,14 @@ public class WildDefeatListener
             if (printBossVictories)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                doBroadcast(EnumBroadcastTypes.PRINT, Events.Victories.BOSS,
+                doBroadcast(EnumBroadcastTypes.PRINT, EventData.Victories.BOSS,
                         pokemon, null, event.player, null);
             }
 
             if (notifyBossVictories)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Victories.BOSS,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Victories.BOSS,
                         pokemon, null, event.player, null);
             }
         }
@@ -78,7 +78,7 @@ public class WildDefeatListener
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
                     doBroadcast(
-                            EnumBroadcastTypes.PRINT, Events.Victories.SHINY_LEGENDARY_AS_LEGENDARY,
+                            EnumBroadcastTypes.PRINT, EventData.Victories.SHINY_LEGENDARY_AS_LEGENDARY,
                             pokemon, null, event.player, null);
                 }
 
@@ -86,7 +86,7 @@ public class WildDefeatListener
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
                     doBroadcast(
-                            EnumBroadcastTypes.NOTIFY, Events.Victories.SHINY_LEGENDARY_AS_LEGENDARY,
+                            EnumBroadcastTypes.NOTIFY, EventData.Victories.SHINY_LEGENDARY_AS_LEGENDARY,
                             pokemon, null, event.player, null);
                 }
             }
@@ -96,7 +96,7 @@ public class WildDefeatListener
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
                     doBroadcast(
-                            EnumBroadcastTypes.PRINT, Events.Victories.SHINY_LEGENDARY_AS_SHINY,
+                            EnumBroadcastTypes.PRINT, EventData.Victories.SHINY_LEGENDARY_AS_SHINY,
                             pokemon, null, event.player, null);
                 }
 
@@ -104,7 +104,7 @@ public class WildDefeatListener
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
                     doBroadcast(
-                            EnumBroadcastTypes.NOTIFY, Events.Victories.SHINY_LEGENDARY_AS_SHINY,
+                            EnumBroadcastTypes.NOTIFY, EventData.Victories.SHINY_LEGENDARY_AS_SHINY,
                             pokemon, null, event.player, null);
                 }
             }
@@ -128,14 +128,14 @@ public class WildDefeatListener
             if (printLegendaryVictories)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                doBroadcast(EnumBroadcastTypes.PRINT, Events.Victories.LEGENDARY,
+                doBroadcast(EnumBroadcastTypes.PRINT, EventData.Victories.LEGENDARY,
                         pokemon, null, event.player, null);
             }
 
             if (notifyLegendaryVictories)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Victories.LEGENDARY,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Victories.LEGENDARY,
                         pokemon, null, event.player, null);
             }
         }
@@ -158,14 +158,14 @@ public class WildDefeatListener
             if (printShinyVictories)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                doBroadcast(EnumBroadcastTypes.PRINT, Events.Victories.SHINY,
+                doBroadcast(EnumBroadcastTypes.PRINT, EventData.Victories.SHINY,
                         pokemon, null, event.player, null);
             }
 
             if (notifyShinyVictories)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Victories.SHINY,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Victories.SHINY,
                         pokemon, null, event.player, null);
             }
         }

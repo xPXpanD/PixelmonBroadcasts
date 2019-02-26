@@ -7,7 +7,7 @@ import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import rs.expand.pixelmonbroadcasts.enums.Events;
+import rs.expand.pixelmonbroadcasts.enums.EventData;
 
 public class CatchListener
 {
@@ -50,7 +50,7 @@ public class CatchListener
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
                     doBroadcast(
-                            EnumBroadcastTypes.PRINT, Events.Catches.SHINY_LEGENDARY_AS_LEGENDARY,
+                            EnumBroadcastTypes.PRINT, EventData.Catches.SHINY_LEGENDARY_AS_LEGENDARY,
                             pokemon, null, player, null);
                 }
 
@@ -58,7 +58,7 @@ public class CatchListener
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
                     doBroadcast(
-                            EnumBroadcastTypes.NOTIFY, Events.Catches.SHINY_LEGENDARY_AS_LEGENDARY,
+                            EnumBroadcastTypes.NOTIFY, EventData.Catches.SHINY_LEGENDARY_AS_LEGENDARY,
                             pokemon, null, player, null);
                 }
             }
@@ -68,7 +68,7 @@ public class CatchListener
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
                     doBroadcast(
-                            EnumBroadcastTypes.PRINT, Events.Catches.SHINY_LEGENDARY_AS_SHINY,
+                            EnumBroadcastTypes.PRINT, EventData.Catches.SHINY_LEGENDARY_AS_SHINY,
                             pokemon, null, player, null);
                 }
 
@@ -76,7 +76,7 @@ public class CatchListener
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
                     doBroadcast(
-                            EnumBroadcastTypes.NOTIFY, Events.Catches.SHINY_LEGENDARY_AS_SHINY,
+                            EnumBroadcastTypes.NOTIFY, EventData.Catches.SHINY_LEGENDARY_AS_SHINY,
                             pokemon, null, player, null);
                 }
             }
@@ -100,14 +100,14 @@ public class CatchListener
             if (printLegendaryCatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                doBroadcast(EnumBroadcastTypes.PRINT, Events.Catches.LEGENDARY,
+                doBroadcast(EnumBroadcastTypes.PRINT, EventData.Catches.LEGENDARY,
                         pokemon, null, player, null);
             }
 
             if (notifyLegendaryCatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Catches.LEGENDARY,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Catches.LEGENDARY,
                         pokemon, null, player, null);
             }
         }
@@ -133,7 +133,7 @@ public class CatchListener
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
                     doBroadcast(
-                            EnumBroadcastTypes.PRINT, Events.Catches.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                            EnumBroadcastTypes.PRINT, EventData.Catches.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
                             pokemon, null, player, null);
                 }
 
@@ -141,7 +141,7 @@ public class CatchListener
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
                     doBroadcast(
-                            EnumBroadcastTypes.NOTIFY, Events.Catches.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                            EnumBroadcastTypes.NOTIFY, EventData.Catches.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
                             pokemon, null, player, null);
                 }
             }
@@ -151,7 +151,7 @@ public class CatchListener
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
                     doBroadcast(
-                            EnumBroadcastTypes.PRINT, Events.Catches.SHINY_ULTRA_BEAST_AS_SHINY,
+                            EnumBroadcastTypes.PRINT, EventData.Catches.SHINY_ULTRA_BEAST_AS_SHINY,
                             pokemon, null, player, null);
                 }
 
@@ -159,7 +159,7 @@ public class CatchListener
                 {
                     // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
                     doBroadcast(
-                            EnumBroadcastTypes.NOTIFY, Events.Catches.SHINY_ULTRA_BEAST_AS_SHINY,
+                            EnumBroadcastTypes.NOTIFY, EventData.Catches.SHINY_ULTRA_BEAST_AS_SHINY,
                             pokemon, null, player, null);
                 }
             }
@@ -183,14 +183,14 @@ public class CatchListener
             if (printUltraBeastCatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                doBroadcast(EnumBroadcastTypes.PRINT, Events.Catches.ULTRA_BEAST,
+                doBroadcast(EnumBroadcastTypes.PRINT, EventData.Catches.ULTRA_BEAST,
                         pokemon, null, player, null);
             }
 
             if (notifyUltraBeastCatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Catches.ULTRA_BEAST,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Catches.ULTRA_BEAST,
                         pokemon, null, player, null);
             }
         }
@@ -213,14 +213,14 @@ public class CatchListener
             if (printShinyCatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                doBroadcast(EnumBroadcastTypes.PRINT, Events.Catches.SHINY,
+                doBroadcast(EnumBroadcastTypes.PRINT, EventData.Catches.SHINY,
                         pokemon, null, player, null);
             }
 
             if (notifyShinyCatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Catches.SHINY,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Catches.SHINY,
                         pokemon, null, player, null);
             }
         }
@@ -243,14 +243,14 @@ public class CatchListener
             if (printNormalCatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                doBroadcast(EnumBroadcastTypes.PRINT, Events.Catches.NORMAL,
+                doBroadcast(EnumBroadcastTypes.PRINT, EventData.Catches.NORMAL,
                         pokemon, null, player, null);
             }
 
             if (notifyNormalCatches)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Catches.NORMAL,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Catches.NORMAL,
                         pokemon, null, player, null);
             }
         }

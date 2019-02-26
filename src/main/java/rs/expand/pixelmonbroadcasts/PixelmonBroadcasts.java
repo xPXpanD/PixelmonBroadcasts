@@ -257,7 +257,7 @@ public class PixelmonBroadcasts
                 }
                 catch (IOException F)
                 {
-                    printBasicError("Something broke while updating config version! Please report. Stack trace:");
+                    logger.error("Something broke while updating config version! Please report. Stack trace:");
                     F.printStackTrace();
                 }*/
             }

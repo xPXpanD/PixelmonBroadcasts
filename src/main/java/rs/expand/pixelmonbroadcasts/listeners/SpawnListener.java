@@ -9,7 +9,7 @@ import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import rs.expand.pixelmonbroadcasts.enums.Events;
+import rs.expand.pixelmonbroadcasts.enums.EventData;
 
 public class SpawnListener
 {
@@ -44,14 +44,14 @@ public class SpawnListener
             if (printWormholeSpawns)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                doBroadcast(EnumBroadcastTypes.PRINT, Events.Spawns.WORMHOLE,
+                doBroadcast(EnumBroadcastTypes.PRINT, EventData.Spawns.WORMHOLE,
                         wormhole, null, null, null);
             }
 
             if (notifyWormholeSpawns)
             {
                 // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Spawns.WORMHOLE,
+                doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Spawns.WORMHOLE,
                         wormhole, null, null, null);
             }
         }
@@ -95,14 +95,14 @@ public class SpawnListener
                     if (printBossSpawns)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                        doBroadcast(EnumBroadcastTypes.PRINT, Events.Spawns.BOSS,
+                        doBroadcast(EnumBroadcastTypes.PRINT, EventData.Spawns.BOSS,
                                 pokemon, null, null, null);
                     }
 
                     if (notifyBossSpawns)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                        doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Spawns.BOSS,
+                        doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Spawns.BOSS,
                                 pokemon, null, null, null);
                     }
                 }
@@ -126,14 +126,14 @@ public class SpawnListener
                         if (printLegendarySpawns)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            doBroadcast(EnumBroadcastTypes.PRINT, Events.Spawns.SHINY_LEGENDARY_AS_LEGENDARY,
+                            doBroadcast(EnumBroadcastTypes.PRINT, EventData.Spawns.SHINY_LEGENDARY_AS_LEGENDARY,
                                     pokemon, null, null, null);
                         }
 
                         if (notifyLegendarySpawns)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Spawns.SHINY_LEGENDARY_AS_LEGENDARY,
+                            doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Spawns.SHINY_LEGENDARY_AS_LEGENDARY,
                                     pokemon, null, null, null);
                         }
                     }
@@ -142,14 +142,14 @@ public class SpawnListener
                         if (printShinySpawns)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            doBroadcast(EnumBroadcastTypes.PRINT, Events.Spawns.SHINY_LEGENDARY_AS_SHINY,
+                            doBroadcast(EnumBroadcastTypes.PRINT, EventData.Spawns.SHINY_LEGENDARY_AS_SHINY,
                                     pokemon, null, null, null);
                         }
 
                         if (notifyShinySpawns)
                         {
                             // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Spawns.SHINY_LEGENDARY_AS_SHINY,
+                            doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Spawns.SHINY_LEGENDARY_AS_SHINY,
                                     pokemon, null, null, null);
                         }
                     }
@@ -172,14 +172,14 @@ public class SpawnListener
                     if (printLegendarySpawns)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                        doBroadcast(EnumBroadcastTypes.PRINT, Events.Spawns.LEGENDARY,
+                        doBroadcast(EnumBroadcastTypes.PRINT, EventData.Spawns.LEGENDARY,
                                 pokemon, null, null, null);
                     }
 
                     if (notifyLegendarySpawns)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                        doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Spawns.LEGENDARY,
+                        doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Spawns.LEGENDARY,
                                 pokemon, null, null, null);
                     }
                 }
@@ -201,14 +201,14 @@ public class SpawnListener
                     if (printShinySpawns)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                        doBroadcast(EnumBroadcastTypes.PRINT, Events.Spawns.SHINY,
+                        doBroadcast(EnumBroadcastTypes.PRINT, EventData.Spawns.SHINY,
                                 pokemon, null, null, null);
                     }
 
                     if (notifyShinySpawns)
                     {
                         // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                        doBroadcast(EnumBroadcastTypes.NOTIFY, Events.Spawns.SHINY,
+                        doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Spawns.SHINY,
                                 pokemon, null, null, null);
                     }
                 }
