@@ -2,89 +2,113 @@
 package rs.expand.pixelmonbroadcasts.listeners;
 
 import com.pixelmonmod.pixelmon.api.events.EggHatchEvent;
+import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import rs.expand.pixelmonbroadcasts.enums.EventData;
 
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndBroadcast;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.logEvent;
 
 // FIXME: Eggs don't show IV percentages, so they get an extra space.
-// TODO: Add UB/legendary hatches.
 public class HatchListener
 {
     @SubscribeEvent
     public void onHatchEvent(final EggHatchEvent event)
     {
         // Create shorthand variables for convenience.
-        final String baseName = event.pokemon.getSpecies().getPokemonName();
-        final String localizedName = event.pokemon.getSpecies().getLocalizedName();
         final EntityPlayer player = event.pokemon.getOwnerPlayer();
         final BlockPos location = player.getPosition();
-        final World world = player.getEntityWorld();
+        final String baseName = event.pokemon.getSpecies().getPokemonName();
+        final String localizedName = event.pokemon.getSpecies().getLocalizedName();
+        final String worldName = player.getEntityWorld().getWorldInfo().getWorldName();
 
         // If we're in a localized setup, log both names.
         final String nameString =
-                baseName.equals(localizedName) ? baseName : baseName + " §7(§f" + localizedName + "§7)";
+                baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
 
-        if (event.pokemon.isShiny())
+        if (EnumSpecies.legendaries.contains(baseName))
         {
-            if (EventData.Hatches.SHINY.options.toLowerCase().contains("log"))
+            if (event.pokemon.isShiny())
             {
-                // Print a hatch message to console, if enabled.
-                logger.info
-                (
-                        "§5PBR §f// §7Player §f" + player.getName() +
-                        "§7's shiny §f" + nameString +
-                        "§7 egg hatched in world \"§f" + world.getWorldInfo().getWorldName() +
-                        "§7\" at X:§f" + location.getX() +
-                        "§7 Y:§f" + location.getY() +
-                        "§7 Z:§f" + location.getZ()
-                );
-            }
+                if (EventData.Hatches.SHINY_LEGENDARY.checkSettingsOrError("legendaryHatchOptions", "shinyHatchOptions"))
+                {
+                    // Send a log message if we're set up to do logging for this event.
+                    logEvent(EventData.Hatches.SHINY_LEGENDARY,
+                            worldName, location, player.getName(), "shiny legendary " + nameString + " egg");
 
-            if (printShinyHatches)
-            {
-                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                doBroadcast(EnumBroadcastTypes.PRINT, EventData.Hatches.SHINY,
-                        event.pokemon, null, player, null);
+                    // Send enabled broadcasts to people who should receive them.
+                    iterateAndBroadcast(EventData.Hatches.SHINY_LEGENDARY,
+                            event.pokemon, null, player, null);
+                }
             }
-
-            if (notifyShinyHatches)
+            else
             {
-                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Hatches.SHINY,
+                if (EventData.Hatches.LEGENDARY.checkSettingsOrError("legendaryHatchOptions"))
+                {
+                    // Send a log message if we're set up to do logging for this event.
+                    logEvent(EventData.Hatches.LEGENDARY,
+                            worldName, location, player.getName(), "legendary " + nameString + " egg");
+
+                    // Send enabled broadcasts to people who should receive them.
+                    iterateAndBroadcast(EventData.Hatches.LEGENDARY,
+                            event.pokemon, null, player, null);
+                }
+            }
+        }
+        else if (EnumSpecies.ultrabeasts.contains(baseName))
+        {
+            if (event.pokemon.isShiny())
+            {
+                if (EventData.Hatches.SHINY_ULTRA_BEAST.checkSettingsOrError("ultraBeastHatchOptions", "shinyHatchOptions"))
+                {
+                    // Send a log message if we're set up to do logging for this event.
+                    logEvent(EventData.Hatches.SHINY_ULTRA_BEAST,
+                            worldName, location, player.getName(), "shiny " + nameString + " Ultra Beast egg");
+
+                    // Send enabled broadcasts to people who should receive them.
+                    iterateAndBroadcast(EventData.Hatches.SHINY_ULTRA_BEAST,
+                            event.pokemon, null, player, null);
+                }
+            }
+            else
+            {
+                if (EventData.Hatches.ULTRA_BEAST.checkSettingsOrError("ultraBeastHatchOptions"))
+                {
+                    // Send a log message if we're set up to do logging for this event.
+                    logEvent(EventData.Hatches.ULTRA_BEAST,
+                            worldName, location, player.getName(), "normal " + nameString + " Ultra Beast egg");
+
+                    // Send enabled broadcasts to people who should receive them.
+                    iterateAndBroadcast(EventData.Hatches.ULTRA_BEAST,
+                            event.pokemon, null, player, null);
+                }
+            }
+        }
+        else if (event.pokemon.isShiny())
+        {
+            if (EventData.Hatches.SHINY.checkSettingsOrError("shinyHatchOptions"))
+            {
+                // Send a log message if we're set up to do logging for this event.
+                logEvent(EventData.Hatches.SHINY,
+                        worldName, location, player.getName(), "shiny " + nameString + " egg");
+
+                // Send enabled broadcasts to people who should receive them.
+                iterateAndBroadcast(EventData.Hatches.SHINY,
                         event.pokemon, null, player, null);
             }
         }
         else
         {
-            if (logNormalHatches)
+            if (EventData.Hatches.NORMAL.checkSettingsOrError("normalHatchOptions"))
             {
-                // Print a hatch message to console, if enabled.
-                logger.info
-                (
-                        "§5PBR §f// §7Player §f" + player.getName() +
-                        "§7's normal §f" + nameString +
-                        "§7 egg hatched in world \"§f" + world.getWorldInfo().getWorldName() +
-                        "§7\" at X:§f" + location.getX() +
-                        "§7 Y:§f" + location.getY() +
-                        "§7 Z:§f" + location.getZ()
-                );
-            }
+                // Send a log message if we're set up to do logging for this event.
+                logEvent(EventData.Hatches.NORMAL,
+                        worldName, location, player.getName(), "normal " + nameString + " egg");
 
-            if (printNormalHatches)
-            {
-                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                doBroadcast(EnumBroadcastTypes.PRINT, EventData.Hatches.NORMAL,
-                        event.pokemon, null, player, null);
-            }
-
-            if (notifyNormalHatches)
-            {
-                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Hatches.NORMAL,
+                // Send enabled broadcasts to people who should receive them.
+                iterateAndBroadcast(EventData.Hatches.NORMAL,
                         event.pokemon, null, player, null);
             }
         }

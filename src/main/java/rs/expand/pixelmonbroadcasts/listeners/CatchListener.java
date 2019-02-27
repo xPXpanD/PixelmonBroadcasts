@@ -2,12 +2,15 @@
 package rs.expand.pixelmonbroadcasts.listeners;
 
 import com.pixelmonmod.pixelmon.api.events.CaptureEvent;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import rs.expand.pixelmonbroadcasts.enums.EventData;
+
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndBroadcast;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.logEvent;
 
 public class CatchListener
 {
@@ -15,243 +18,104 @@ public class CatchListener
     public void onCatchPokemonEvent(final CaptureEvent.SuccessfulCapture event)
     {
         // Create shorthand variables for convenience.
-        final EntityPlayer player = event.player;
-        final EntityPixelmon pokemon = event.getPokemon();
-        final String baseName = pokemon.getSpecies().getPokemonName();
-        final String localizedName = pokemon.getSpecies().getLocalizedName();
-        final BlockPos location = event.pokeball.getPosition();
+        final EntityPixelmon pokemonEntity = event.getPokemon();
+        final Pokemon pokemon = pokemonEntity.getPokemonData();
+        final BlockPos location = pokemonEntity.getPosition();
+        final String baseName = pokemonEntity.getSpecies().getPokemonName();
+        final String localizedName = pokemonEntity.getSpecies().getLocalizedName();
+        final String worldName = event.player.world.getWorldInfo().getWorldName();
 
         // Sets the position of the entity we created, as it's 0 on all coordinates by default.
-        pokemon.setPosition(location.getX(), location.getY(), location.getZ());
+        pokemonEntity.setPosition(location.getX(), location.getY(), location.getZ());
 
         // If we're in a localized setup, log both names.
         final String nameString =
-                baseName.equals(localizedName) ? baseName : baseName + " §2(§a" + localizedName + "§2)";
+                baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
 
-        if (EnumSpecies.legendaries.contains(baseName) && pokemon.getPokemonData().isShiny())
+        if (EnumSpecies.legendaries.contains(baseName))
         {
-            if (logLegendaryCatches || logShinyCatches)
+            if (pokemon.isShiny())
             {
-                // Print a catch message to console, with the above shiny String mixed in.
-                logger.info
-                (
-                        "§5PBR §f// §2Player §a" + player.getName() +
-                        "§2 caught a shiny legendary §a" + nameString +
-                        "§2 in world \"§a" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                        "§2\", at X:§a" + location.getX() +
-                        "§2 Y:§a" + location.getY() +
-                        "§2 Z:§a" + location.getZ()
-                );
-            }
-
-            if (printLegendaryCatches || notifyLegendaryCatches)
-            {
-                if (printLegendaryCatches)
+                if (EventData.Catches.SHINY_LEGENDARY.checkSettingsOrError(
+                        "legendaryCatchOptions", "shinyCatchOptions"))
                 {
-                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                    doBroadcast(
-                            EnumBroadcastTypes.PRINT, EventData.Catches.SHINY_LEGENDARY_AS_LEGENDARY,
-                            pokemon, null, player, null);
-                }
+                    // Send a log message if we're set up to do logging for this event.
+                    logEvent(EventData.Catches.SHINY_LEGENDARY,
+                            worldName, location, event.player.getName(), "shiny legendary " + nameString);
 
-                if (notifyLegendaryCatches)
-                {
-                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                    doBroadcast(
-                            EnumBroadcastTypes.NOTIFY, EventData.Catches.SHINY_LEGENDARY_AS_LEGENDARY,
-                            pokemon, null, player, null);
+                    // Send enabled broadcasts to people who should receive them.
+                    iterateAndBroadcast(EventData.Catches.SHINY_LEGENDARY,
+                            pokemon, null, event.player, null);
                 }
             }
-            else if (printShinyCatches || notifyShinyCatches)
+            else
             {
-                if (printShinyCatches)
+                if (EventData.Catches.LEGENDARY.checkSettingsOrError("legendaryCatchOptions"))
                 {
-                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                    doBroadcast(
-                            EnumBroadcastTypes.PRINT, EventData.Catches.SHINY_LEGENDARY_AS_SHINY,
-                            pokemon, null, player, null);
-                }
+                    // Send a log message if we're set up to do logging for this event.
+                    logEvent(EventData.Catches.LEGENDARY,
+                            worldName, location, event.player.getName(), "legendary " + nameString);
 
-                if (notifyShinyCatches)
-                {
-                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                    doBroadcast(
-                            EnumBroadcastTypes.NOTIFY, EventData.Catches.SHINY_LEGENDARY_AS_SHINY,
-                            pokemon, null, player, null);
-                }
-            }
-        }
-        else if (EnumSpecies.legendaries.contains(baseName))
-        {
-            if (logLegendaryCatches)
-            {
-                // Print a catch message to console, with the above shiny String mixed in.
-                logger.info
-                (
-                        "§5PBR §f// §2Player §a" + player.getName() +
-                        "§2 caught a legendary §a" + nameString +
-                        "§2 in world \"§a" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                        "§2\", at X:§a" + location.getX() +
-                        "§2 Y:§a" + location.getY() +
-                        "§2 Z:§a" + location.getZ()
-                );
-            }
-
-            if (printLegendaryCatches)
-            {
-                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                doBroadcast(EnumBroadcastTypes.PRINT, EventData.Catches.LEGENDARY,
-                        pokemon, null, player, null);
-            }
-
-            if (notifyLegendaryCatches)
-            {
-                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Catches.LEGENDARY,
-                        pokemon, null, player, null);
-            }
-        }
-        else if (EnumSpecies.ultrabeasts.contains(baseName) && pokemon.getPokemonData().isShiny())
-        {
-            if (logUltraBeastCatches || logShinyCatches)
-            {
-                // Print a catch message to console, with the above shiny String mixed in.
-                logger.info
-                (
-                        "§5PBR §f// §2Player §a" + player.getName() +
-                        "§2 caught a shiny §a" + nameString +
-                        "§2 Ultra Beast in world \"§a" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                        "§2\", at X:§a" + location.getX() +
-                        "§2 Y:§a" + location.getY() +
-                        "§2 Z:§a" + location.getZ()
-                );
-            }
-
-            if (printUltraBeastCatches || notifyUltraBeastCatches)
-            {
-                if (printUltraBeastCatches)
-                {
-                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                    doBroadcast(
-                            EnumBroadcastTypes.PRINT, EventData.Catches.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
-                            pokemon, null, player, null);
-                }
-
-                if (notifyUltraBeastCatches)
-                {
-                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                    doBroadcast(
-                            EnumBroadcastTypes.NOTIFY, EventData.Catches.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
-                            pokemon, null, player, null);
-                }
-            }
-            else if (printShinyCatches || notifyShinyCatches)
-            {
-                if (printShinyCatches)
-                {
-                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                    doBroadcast(
-                            EnumBroadcastTypes.PRINT, EventData.Catches.SHINY_ULTRA_BEAST_AS_SHINY,
-                            pokemon, null, player, null);
-                }
-
-                if (notifyShinyCatches)
-                {
-                    // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                    doBroadcast(
-                            EnumBroadcastTypes.NOTIFY, EventData.Catches.SHINY_ULTRA_BEAST_AS_SHINY,
-                            pokemon, null, player, null);
+                    // Send enabled broadcasts to people who should receive them.
+                    iterateAndBroadcast(EventData.Catches.LEGENDARY,
+                            pokemon, null, event.player, null);
                 }
             }
         }
         else if (EnumSpecies.ultrabeasts.contains(baseName))
         {
-            if (logUltraBeastCatches)
+            if (pokemon.isShiny())
             {
-                // Print a catch message to console, with the above shiny String mixed in.
-                logger.info
-                (
-                        "§5PBR §f// §2Player §a" + player.getName() +
-                        "§2 caught a §a" + nameString +
-                        "§2 Ultra Beast in world \"§a" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                        "§2\", at X:§a" + location.getX() +
-                        "§2 Y:§a" + location.getY() +
-                        "§2 Z:§a" + location.getZ()
-                );
-            }
+                if (EventData.Catches.SHINY_ULTRA_BEAST.checkSettingsOrError(
+                        "ultraBeastCatchOptions", "shinyCatchOptions"))
+                {
+                    // Send a log message if we're set up to do logging for this event.
+                    logEvent(EventData.Catches.SHINY_ULTRA_BEAST,
+                            worldName, location, event.player.getName(), "shiny " + nameString + " Ultra Beast");
 
-            if (printUltraBeastCatches)
-            {
-                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                doBroadcast(EnumBroadcastTypes.PRINT, EventData.Catches.ULTRA_BEAST,
-                        pokemon, null, player, null);
+                    // Send enabled broadcasts to people who should receive them.
+                    iterateAndBroadcast(EventData.Catches.SHINY_ULTRA_BEAST,
+                            pokemon, null, event.player, null);
+                }
             }
-
-            if (notifyUltraBeastCatches)
+            else
             {
-                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Catches.ULTRA_BEAST,
-                        pokemon, null, player, null);
+                if (EventData.Catches.ULTRA_BEAST.checkSettingsOrError("ultraBeastCatchOptions"))
+                {
+                    // Send a log message if we're set up to do logging for this event.
+                    logEvent(EventData.Catches.ULTRA_BEAST,
+                            worldName, location, event.player.getName(), "normal " + nameString + " Ultra Beast");
+
+                    // Send enabled broadcasts to people who should receive them.
+                    iterateAndBroadcast(EventData.Catches.ULTRA_BEAST,
+                            pokemon, null, event.player, null);
+                }
             }
         }
-        else if (pokemon.getPokemonData().isShiny())
+        else if (pokemon.isShiny())
         {
-            if (logShinyCatches)
+            if (EventData.Catches.SHINY.checkSettingsOrError("shinyCatchOptions"))
             {
-                // Print a catch message to console, if enabled.
-                logger.info
-                (
-                        "§5PBR §f// §bPlayer §3" + player.getName() +
-                        "§b caught a shiny §3" + nameString +
-                        "§b in world \"§3" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                        "§b\", at X:§3" + location.getX() +
-                        "§b Y:§3" + location.getY() +
-                        "§b Z:§3" + location.getZ()
-                );
-            }
+                // Send a log message if we're set up to do logging for this event.
+                logEvent(EventData.Catches.SHINY,
+                        worldName, location, event.player.getName(), "shiny " + nameString);
 
-            if (printShinyCatches)
-            {
-                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                doBroadcast(EnumBroadcastTypes.PRINT, EventData.Catches.SHINY,
-                        pokemon, null, player, null);
-            }
-
-            if (notifyShinyCatches)
-            {
-                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Catches.SHINY,
-                        pokemon, null, player, null);
+                // Send enabled broadcasts to people who should receive them.
+                iterateAndBroadcast(EventData.Catches.SHINY,
+                        pokemon, null, event.player, null);
             }
         }
         else
         {
-            if (logNormalCatches)
+            if (EventData.Catches.NORMAL.checkSettingsOrError("normalCatchOptions"))
             {
-                // Print a catch message to console, if enabled.
-                logger.info
-                (
-                        "§5PBR §f// §fPlayer §7" + player.getName() +
-                        "§f caught a normal §7" + nameString +
-                        "§f in world \"§7" + pokemon.getEntityWorld().getWorldInfo().getWorldName() +
-                        "§f\", at X:§7" + location.getX() +
-                        "§f Y:§7" + location.getY() +
-                        "§f Z:§7" + location.getZ()
-                );
-            }
+                // Send a log message if we're set up to do logging for this event.
+                logEvent(EventData.Catches.NORMAL,
+                        worldName, location, event.player.getName(), "normal " + nameString);
 
-            if (printNormalCatches)
-            {
-                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                doBroadcast(EnumBroadcastTypes.PRINT, EventData.Catches.NORMAL,
-                        pokemon, null, player, null);
-            }
-
-            if (notifyNormalCatches)
-            {
-                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Catches.NORMAL,
-                        pokemon, null, player, null);
+                // Send enabled broadcasts to people who should receive them.
+                iterateAndBroadcast(EventData.Catches.NORMAL,
+                        pokemon, null, event.player, null);
             }
         }
     }

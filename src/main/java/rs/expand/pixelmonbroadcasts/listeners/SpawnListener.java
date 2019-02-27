@@ -75,7 +75,7 @@ public class SpawnListener
 
                 // If we're in a localized setup, log both names.
                 final String nameString =
-                        baseName.equals(localizedName) ? baseName : baseName + " §5(§d" + localizedName + "§5)";
+                        baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
 
                 if (pokemon.isBossPokemon())
                 {

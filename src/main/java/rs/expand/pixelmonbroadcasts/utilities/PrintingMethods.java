@@ -65,20 +65,20 @@ public class PrintingMethods
             logger.error("Log flag not found for event " + event);
     }
 
-    // If we can't read a main config options bundle (really just a String), throw this error. Called during reloads.
-    static void printOptionsNodeError(final List<String> nodes)
+    // If we can't read a main config options bundle (really just a String), throw this error. Called during execution.
+    public static void printOptionsNodeError(final String node)
+    {
+        logger.error("Could not read settings.conf node \"§4" + node + "§c\"! Messages swallowed.");
+        logger.error("Check the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
+    }
+
+    // If we can't read a main config options bundle, throw this error. Called during reloads and hybrid checks.
+    public static void printOptionsNodeError(final List<String> nodes)
     {
         for (final String node : nodes)
             logger.error("Could not read settings.conf node \"§4" + node + "§c\"!");
 
         logger.error("The main configuration file contains one or more invalid options.");
-        logger.error("Check the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
-    }
-
-    // If we can't read a main config options bundle (really just a String), throw this error. Called during execution.
-    public static void printOptionsNodeError(final String node)
-    {
-        logger.error("Could not read settings.conf node \"§4" + node + "§c\"! Messages swallowed.");
         logger.error("Check the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
     }
 

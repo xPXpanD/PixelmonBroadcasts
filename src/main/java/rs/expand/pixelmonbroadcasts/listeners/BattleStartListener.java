@@ -13,7 +13,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import rs.expand.pixelmonbroadcasts.enums.EventData;
 
-// FIXME: Pokémon using moves like Teleport to warp away from you show up as YOU having fled.
+import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndBroadcast;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.logEvent;
+
 public class BattleStartListener
 {
     @SubscribeEvent
@@ -35,42 +37,19 @@ public class BattleStartListener
                 //ArrayList<BattleParticipant> participants = new ArrayList<>(Arrays.asList(participant1, participant2));
                 //participants.sort(Comparator.comparing(t -> BattleParticipant.class.getName()));
 
-                if (logPVPChallenges)
+                if (EventData.Challenges.PVP.checkSettingsOrError("pvpChallengeOptions"))
                 {
-                    // Create another shorthand variable.
-                    final BlockPos location = participant1.getEntity().getPosition();
-
-                    // Print a PvP starting message to console, if enabled.
-                    logger.info
-                    (
-                            "§5PBR §f// §3Player §b" + participant1.getName().getUnformattedText() +
-                            "§3 started battling player §b" + participant2.getName().getUnformattedText() +
-                            "§3 in world \"§b" + participant1.getWorld().getWorldInfo().getWorldName() +
-                            "§3\", at X:§b" + location.getX() +
-                            "§3 Y:§b" + location.getY() +
-                            "§3 Z:§b" + location.getZ()
-                    );
-                }
-
-                if (printPVPChallenges || notifyPVPChallenges)
-                {
-                    // Create some more shorthand variables to avoid making this messier than it needs to be.
+                    // If we're still going, set up some more commonly-used variables. World stuff should be the same for both.
                     final EntityPlayer player1Entity = (EntityPlayer) participant1.getEntity();
-                    final EntityPlayer player2Entity = (EntityPlayer) participant2.getEntity();
+                    final EntityPlayer player2Entity = (EntityPlayer) participant1.getEntity();
 
-                    if (printPVPChallenges)
-                    {
-                        // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                        doBroadcast(EnumBroadcastTypes.PRINT, EventData.Challenges.BOSS,
-                                null, null, player1Entity, player2Entity);
-                    }
+                    // Send a log message if we're set up to do logging for this event.
+                    logEvent(EventData.Challenges.PVP, participant1.getWorld().getWorldInfo().getWorldName(),
+                            participant1.getEntity().getPosition(), player1Entity.getName(), player2Entity.getName());
 
-                    if (notifyPVPChallenges)
-                    {
-                        // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                        doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Challenges.BOSS,
-                                null, null, player1Entity, player2Entity);
-                    }
+                    // Send enabled broadcasts to people who should receive them.
+                    iterateAndBroadcast(EventData.Challenges.PVP,
+                            null, null, player1Entity, player2Entity);
                 }
             }
             // Are there any trainer NPCs in the battle?
@@ -99,59 +78,27 @@ public class BattleStartListener
 
                 if (npc.trainer.getBossMode().isBossPokemon())
                 {
-                    if (logBossTrainerChallenges)
+                    if (EventData.Challenges.BOSS_TRAINER.checkSettingsOrError("bossTrainerChallengeOptions"))
                     {
-                        // Print a challenge message to console, if enabled.
-                        logger.info
-                        (
-                                "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
-                                "§3 challenged a boss trainer in world \"§b" + worldName +
-                                "§3\", at X:§b" + location.getX() +
-                                "§3 Y:§b" + location.getY() +
-                                "§3 Z:§b" + location.getZ()
-                        );
-                    }
+                        // Send a log message if we're set up to do logging for this event.
+                        logEvent(EventData.Challenges.BOSS_TRAINER,
+                                worldName, location, playerEntity.getName(), "boss trainer");
 
-                    if (printBossTrainerChallenges)
-                    {
-                        // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                        doBroadcast(EnumBroadcastTypes.PRINT, EventData.Challenges.BOSS_TRAINER,
-                                null, null, playerEntity, null);
-                    }
-
-                    if (notifyBossTrainerChallenges)
-                    {
-                        // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                        doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Challenges.BOSS_TRAINER,
+                        // Send enabled broadcasts to people who should receive them.
+                        iterateAndBroadcast(EventData.Challenges.BOSS_TRAINER,
                                 null, null, playerEntity, null);
                     }
                 }
                 else
                 {
-                    if (logTrainerChallenges)
+                    if (EventData.Challenges.TRAINER.checkSettingsOrError("trainerChallengeOptions"))
                     {
-                        // Print a challenge message to console, if enabled.
-                        logger.info
-                        (
-                                "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
-                                "§3 challenged a normal trainer in world \"§b" + worldName +
-                                "§3\", at X:§b" + location.getX() +
-                                "§3 Y:§b" + location.getY() +
-                                "§3 Z:§b" + location.getZ()
-                        );
-                    }
+                        // Send a log message if we're set up to do logging for this event.
+                        logEvent(EventData.Challenges.TRAINER,
+                                worldName, location, playerEntity.getName(), "trainer");
 
-                    if (printTrainerChallenges)
-                    {
-                        // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                        doBroadcast(EnumBroadcastTypes.PRINT, EventData.Challenges.TRAINER,
-                                null, null, playerEntity, null);
-                    }
-
-                    if (notifyTrainerChallenges)
-                    {
-                        // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                        doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Challenges.TRAINER,
+                        // Send enabled broadcasts to people who should receive them.
+                        iterateAndBroadcast(EventData.Challenges.TRAINER,
                                 null, null, playerEntity, null);
                     }
                 }
@@ -178,242 +125,105 @@ public class BattleStartListener
                 // Set up even more common variables.
                 final EntityPlayer playerEntity = (EntityPlayer) player.getEntity();
                 final EntityPixelmon pokemonEntity = (EntityPixelmon) pokemon.getEntity();
-                final String baseName = pokemonEntity.getPokemonName();
-                final String localizedName = pokemonEntity.getLocalizedName();
-                final BlockPos location = pokemon.getEntity().getPosition();
 
                 // Make sure our Pokémon participant has no owner -- it has to be wild.
                 // I put bosses under this check, as well. Who knows what servers cook up for player parties?
                 if (!pokemonEntity.hasOwner())
                 {
+                    // Set up yet more common variables.
+                    final String baseName = pokemonEntity.getPokemonName();
+                    final String localizedName = pokemonEntity.getLocalizedName();
+                    final String worldName = participant1.getWorld().getWorldInfo().getWorldName();
+                    final BlockPos location = pokemon.getEntity().getPosition();
+
                     // If we're in a localized setup, log both names.
                     final String nameString =
-                            baseName.equals(localizedName) ? baseName : baseName + " §3(§b" + localizedName + "§3)";
+                            baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
 
-                    // Is the Pokémon a boss?
+                    // Figure out what our Pokémon is, exactly.
                     if (pokemonEntity.isBossPokemon())
                     {
-                        if (logBossChallenges)
+                        if (EventData.Challenges.BOSS.checkSettingsOrError("bossChallengeOptions"))
                         {
-                            // Print a challenge message to console, if enabled.
-                            logger.info
-                            (
-                                    "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
-                                    "§3 engaged a boss §b" + nameString +
-                                    "§3 in world \"§b" + pokemon.getWorld().getWorldInfo().getWorldName() +
-                                    "§3\", at X:§b" + location.getX() +
-                                    "§3 Y:§b" + location.getY() +
-                                    "§3 Z:§b" + location.getZ()
-                            );
-                        }
+                            // Send a log message if we're set up to do logging for this event.
+                            logEvent(EventData.Challenges.BOSS,
+                                    worldName, location, playerEntity.getName(), "boss " + nameString);
 
-                        if (printBossChallenges)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            doBroadcast(EnumBroadcastTypes.PRINT, EventData.Challenges.BOSS,
+                            // Send enabled broadcasts to people who should receive them.
+                            iterateAndBroadcast(EventData.Challenges.BOSS,
                                     pokemonEntity, null, playerEntity, null);
-                        }
-
-                        if (notifyBossChallenges)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Challenges.BOSS,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
-                    }
-                    else if (EnumSpecies.legendaries.contains(baseName) && pokemonEntity.getPokemonData().isShiny())
-                    {
-                        if (logLegendaryChallenges || logShinyChallenges)
-                        {
-                            // Print a challenge message to console, if enabled.
-                            logger.info
-                            (
-                                    "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
-                                    "§3 engaged a shiny legendary §b" + nameString +
-                                    "§3 in world \"§b" + pokemon.getWorld().getWorldInfo().getWorldName() +
-                                    "§3\", at X:§b" + location.getX() +
-                                    "§3 Y:§b" + location.getY() +
-                                    "§3 Z:§b" + location.getZ()
-                            );
-                        }
-
-                        if (printLegendaryChallenges || notifyLegendaryChallenges)
-                        {
-                            if (printLegendaryChallenges)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                doBroadcast(
-                                        EnumBroadcastTypes.PRINT, EventData.Challenges.SHINY_LEGENDARY_AS_LEGENDARY,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
-
-                            if (notifyLegendaryChallenges)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                doBroadcast(
-                                        EnumBroadcastTypes.NOTIFY, EventData.Challenges.SHINY_LEGENDARY_AS_LEGENDARY,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
-                        }
-                        else if (printShinyChallenges || notifyShinyChallenges)
-                        {
-                            if (printShinyChallenges)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                doBroadcast(
-                                        EnumBroadcastTypes.PRINT, EventData.Challenges.SHINY_LEGENDARY_AS_SHINY,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
-
-                            if (notifyShinyChallenges)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                doBroadcast(
-                                        EnumBroadcastTypes.NOTIFY, EventData.Challenges.SHINY_LEGENDARY_AS_SHINY,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
                         }
                     }
                     else if (EnumSpecies.legendaries.contains(baseName))
                     {
-                        if (logLegendaryChallenges)
+                        if (pokemonEntity.getPokemonData().isShiny())
                         {
-                            // Print a challenge message to console, if enabled.
-                            logger.info
-                            (
-                                    "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
-                                    "§3 engaged a legendary §b" + nameString +
-                                    "§3 in world \"§b" + pokemon.getWorld().getWorldInfo().getWorldName() +
-                                    "§3\", at X:§b" + location.getX() +
-                                    "§3 Y:§b" + location.getY() +
-                                    "§3 Z:§b" + location.getZ()
-                            );
-                        }
-
-                        if (printLegendaryChallenges)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            doBroadcast(EnumBroadcastTypes.PRINT, EventData.Challenges.LEGENDARY,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
-
-                        if (notifyLegendaryChallenges)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Challenges.LEGENDARY,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
-                    }
-                    else if (EnumSpecies.ultrabeasts.contains(baseName) && pokemonEntity.getPokemonData().isShiny())
-                    {
-                        if (logUltraBeastChallenges || logShinyChallenges)
-                        {
-                            // Print a challenge message to console, if enabled.
-                            logger.info
-                            (
-                                    "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
-                                    "§3 engaged a shiny §b" + nameString +
-                                    "§3 Ultra Beast in world \"§b" + pokemon.getWorld().getWorldInfo().getWorldName() +
-                                    "§3\", at X:§b" + location.getX() +
-                                    "§3 Y:§b" + location.getY() +
-                                    "§3 Z:§b" + location.getZ()
-                            );
-                        }
-
-                        if (printUltraBeastChallenges || notifyUltraBeastChallenges)
-                        {
-                            if (printUltraBeastChallenges)
+                            if (EventData.Challenges.SHINY_LEGENDARY.checkSettingsOrError(
+                                    "legendaryChallengeOptions", "shinyChallengeOptions"))
                             {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                doBroadcast(
-                                        EnumBroadcastTypes.PRINT, EventData.Challenges.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
+                                // Send a log message if we're set up to do logging for this event.
+                                logEvent(EventData.Challenges.SHINY_LEGENDARY,
+                                        worldName, location, playerEntity.getName(), "shiny legendary " + nameString);
 
-                            if (notifyUltraBeastChallenges)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                doBroadcast(
-                                        EnumBroadcastTypes.NOTIFY, EventData.Challenges.SHINY_ULTRA_BEAST_AS_ULTRA_BEAST,
+                                // Send enabled broadcasts to people who should receive them.
+                                iterateAndBroadcast(EventData.Challenges.SHINY_LEGENDARY,
                                         pokemonEntity, null, playerEntity, null);
                             }
                         }
-                        else if (printShinyChallenges || notifyShinyChallenges)
+                        else
                         {
-                            if (printShinyChallenges)
+                            if (EventData.Challenges.LEGENDARY.checkSettingsOrError("legendaryChallengeOptions"))
                             {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                                doBroadcast(
-                                        EnumBroadcastTypes.PRINT, EventData.Challenges.SHINY_ULTRA_BEAST_AS_SHINY,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
+                                // Send a log message if we're set up to do logging for this event.
+                                logEvent(EventData.Challenges.LEGENDARY,
+                                        worldName, location, playerEntity.getName(), "legendary " + nameString);
 
-                            if (notifyShinyChallenges)
-                            {
-                                // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                                doBroadcast(
-                                        EnumBroadcastTypes.NOTIFY, EventData.Challenges.SHINY_ULTRA_BEAST_AS_SHINY,
+                                // Send enabled broadcasts to people who should receive them.
+                                iterateAndBroadcast(EventData.Challenges.LEGENDARY,
                                         pokemonEntity, null, playerEntity, null);
                             }
                         }
                     }
                     else if (EnumSpecies.ultrabeasts.contains(baseName))
                     {
-                        if (logUltraBeastChallenges)
+                        if (pokemonEntity.getPokemonData().isShiny())
                         {
-                            // Print a challenge message to console, if enabled.
-                            logger.info
-                            (
-                                    "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
-                                    "§3 engaged a legendary §b" + nameString +
-                                    "§3 Ultra Beast in world \"§b" + pokemon.getWorld().getWorldInfo().getWorldName() +
-                                    "§3\", at X:§b" + location.getX() +
-                                    "§3 Y:§b" + location.getY() +
-                                    "§3 Z:§b" + location.getZ()
-                            );
-                        }
+                            if (EventData.Challenges.SHINY_ULTRA_BEAST.checkSettingsOrError(
+                                    "ultraBeastChallengeOptions", "shinyChallengeOptions"))
+                            {
+                                // Send a log message if we're set up to do logging for this event.
+                                logEvent(EventData.Challenges.SHINY_ULTRA_BEAST,
+                                        worldName, location, playerEntity.getName(), "shiny " + nameString + " Ultra Beast");
 
-                        if (printUltraBeastChallenges)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            doBroadcast(EnumBroadcastTypes.PRINT, EventData.Challenges.ULTRA_BEAST,
-                                    pokemonEntity, null, playerEntity, null);
+                                // Send enabled broadcasts to people who should receive them.
+                                iterateAndBroadcast(EventData.Challenges.SHINY_ULTRA_BEAST,
+                                        pokemonEntity, null, playerEntity, null);
+                            }
                         }
-
-                        if (notifyUltraBeastChallenges)
+                        else
                         {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Challenges.ULTRA_BEAST,
-                                    pokemonEntity, null, playerEntity, null);
+                            if (EventData.Challenges.ULTRA_BEAST.checkSettingsOrError("ultraBeastChallengeOptions"))
+                            {
+                                // Send a log message if we're set up to do logging for this event.
+                                logEvent(EventData.Challenges.ULTRA_BEAST,
+                                        worldName, location, playerEntity.getName(), "normal " + nameString + " Ultra Beast");
+
+                                // Send enabled broadcasts to people who should receive them.
+                                iterateAndBroadcast(EventData.Challenges.ULTRA_BEAST,
+                                        pokemonEntity, null, playerEntity, null);
+                            }
                         }
                     }
                     else if (pokemonEntity.getPokemonData().isShiny())
                     {
-                        if (logShinyChallenges)
+                        if (EventData.Challenges.SHINY.checkSettingsOrError("shinyChallengeOptions"))
                         {
-                            // Print a challenge message to console, if enabled.
-                            logger.info
-                            (
-                                    "§5PBR §f// §3Player §b" + player.getName().getUnformattedText() +
-                                    "§3 engaged a shiny §b" + nameString +
-                                    "§3 in world \"§b" + pokemon.getWorld().getWorldInfo().getWorldName() +
-                                    "§3\", at X:§b" + location.getX() +
-                                    "§3 Y:§b" + location.getY() +
-                                    "§3 Z:§b" + location.getZ()
-                            );
-                        }
+                            // Send a log message if we're set up to do logging for this event.
+                            logEvent(EventData.Challenges.SHINY,
+                                    worldName, location, playerEntity.getName(), "shiny " + nameString);
 
-                        if (printBossChallenges)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted chats.
-                            doBroadcast(EnumBroadcastTypes.PRINT, EventData.Challenges.BOSS,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
-
-                        if (notifyBossChallenges)
-                        {
-                            // Print our broadcast with placeholders replaced, if it exists. Send to permitted noticeboards.
-                            doBroadcast(EnumBroadcastTypes.NOTIFY, EventData.Challenges.BOSS,
+                            // Send enabled broadcasts to people who should receive them.
+                            iterateAndBroadcast(EventData.Challenges.SHINY,
                                     pokemonEntity, null, playerEntity, null);
                         }
                     }

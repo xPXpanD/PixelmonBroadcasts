@@ -174,6 +174,7 @@ public class ConfigMethods
         EventData.Challenges.BOSS.options = settingsConfig.getNode("bossChallengeOptions").getString();
         EventData.Challenges.TRAINER.options = settingsConfig.getNode("trainerChallengeOptions").getString();
         EventData.Challenges.BOSS_TRAINER.options = settingsConfig.getNode("bossTrainerChallengeOptions").getString();
+        EventData.Challenges.PVP.options = settingsConfig.getNode("pvpChallengeOptions").getString();
 
         /// Forfeits.
         EventData.Forfeits.SHINY.options = settingsConfig.getNode("shinyForfeitOptions").getString();
@@ -197,6 +198,7 @@ public class ConfigMethods
         EventData.Victories.BOSS.options = settingsConfig.getNode("bossVictoryOptions").getString();
         EventData.Victories.TRAINER.options = settingsConfig.getNode("trainerVictoryOptions").getString();
         EventData.Victories.BOSS_TRAINER.options = settingsConfig.getNode("bossTrainerVictoryOptions").getString();
+        EventData.Victories.PVP.options = settingsConfig.getNode("pvpVictoryOptions").getString();
 
         /// Hatches.
         EventData.Hatches.NORMAL.options = settingsConfig.getNode("normalHatchOptions").getString();
@@ -204,12 +206,10 @@ public class ConfigMethods
         EventData.Hatches.LEGENDARY.options = settingsConfig.getNode("legendaryHatchOptions").getString();
         EventData.Hatches.ULTRA_BEAST.options = settingsConfig.getNode("ultraBeastHatchOptions").getString();
 
-        // PvP options.
-        EventData.PVP.DRAW.options = settingsConfig.getNode("pvpDrawOptions").getString();
-        EventData.PVP.VICTORY.options = settingsConfig.getNode("pvpVictoryOptions").getString();
-        EventData.PVP.CHALLENGE.options = settingsConfig.getNode("pvpChallengeOptions").getString();
+        // Draws.
+        EventData.Draws.PVP.options = settingsConfig.getNode("pvpDrawOptions").getString();
 
-        /// Other options.
+        /// Other options. TODO: Implement fainting.
         EventData.Others.TRADE.options = settingsConfig.getNode("tradeOptions").getString();
         EventData.Others.FAINT.options = settingsConfig.getNode("faintOptions").getString();
 

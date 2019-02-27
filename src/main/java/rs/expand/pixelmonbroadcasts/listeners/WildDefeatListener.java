@@ -24,7 +24,7 @@ public class WildDefeatListener
 
         // If we're in a localized setup, log both names.
         final String nameString =
-                baseName.equals(localizedName) ? baseName : baseName + " §4(§c" + localizedName + "§4)";
+                baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
 
         if (pokemon.isBossPokemon())
         {

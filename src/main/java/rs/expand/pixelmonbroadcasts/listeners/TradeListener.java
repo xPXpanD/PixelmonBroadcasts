@@ -39,7 +39,7 @@ public class TradeListener
                 // Print a trade message to console, if enabled.
                 logger.info
                 (
-                        "§5PBR §f// " + EventData.Others.TRADE.color +
+                        "§5PBR §f// " + EventData.Others.TRADE.color() +
                         "Player " + event.player1.getName() +
                         " has traded a " + pokemon1ShinyStatus + name1String +
                         " for " + event.player2.getName() +

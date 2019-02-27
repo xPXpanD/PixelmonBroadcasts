@@ -57,6 +57,7 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 // FIXME: Bad event listeners from other mods may cause events to hang (stuck loop), which causes insane spam from us. Fix?
 // FIXME: Biome names are always English. Maybe add to the lang, and use English biome names as keys.
 // FIXME: Roll over cleanly to a new line if more than 5 toggles are available in a single category?
+// FIXME: Challenges and forfeits can be used to spam servers. Add a persistent tag to avoid repeats?
 
 @Plugin
 (

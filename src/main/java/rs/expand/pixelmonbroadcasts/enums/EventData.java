@@ -1,6 +1,12 @@
 package rs.expand.pixelmonbroadcasts.enums;
 
 import rs.expand.pixelmonbroadcasts.utilities.PrintingMethods;
+import scala.actors.threadpool.Arrays;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
 
@@ -14,16 +20,21 @@ public interface EventData
     String[] flags();
     String[] messages();
 
-    default boolean checkSettingsOrError(final String node)
+    default boolean checkSettingsOrError(final String... nodes)
     {
         logger.error("Entering valid options check. If we get an error, options are null?");
 
         if (this.options() == null)
         {
-            PrintingMethods.printOptionsNodeError(node);
+            if (nodes.length == 1)
+                PrintingMethods.printOptionsNodeError(nodes[0]);
+            else // TODO: TEST
+                PrintingMethods.printOptionsNodeError(Stream.of(nodes).collect(Collectors.toList()));
+
             return false;
         }
-        else return true;
+
+        return true;
     }
 
     enum Blackouts implements EventData
@@ -40,8 +51,9 @@ public interface EventData
         BOSS_TRAINER(null, "blackout.bosstrainer", "showBossTrainerBlackout");
 
         // Set up some variables for accessing the Enum's data through.
-        public String key, options;
-        public String[] flags;
+        private String key;
+        public String options;
+        private String[] flags;
 
         // Point to where we're grabbing from.
         Blackouts(final String options, final String key, final String... flags)
@@ -52,13 +64,12 @@ public interface EventData
         }
 
         // Expose values to anything accessing us through the main interface.
-        @Override
-        public boolean presentTense() { return false; }
-        public char color() { return '6'; } // Gold. (orange)
-        public String key() { return this.key; }
-        public String options() { return this.options; }
-        public String[] flags() { return this.flags; }
-        public String[] messages() { return new String[] {" was knocked out by a "}; }
+        @Override public boolean presentTense() { return false; }
+        @Override public char color() { return '6'; } // Gold. (orange)
+        @Override public String key() { return this.key; }
+        @Override public String options() { return this.options; }
+        @Override public String[] flags() { return this.flags; }
+        @Override public String[] messages() { return new String[] {" was knocked out by a "}; }
     }
 
     enum Catches implements EventData
@@ -72,8 +83,9 @@ public interface EventData
         SHINY_ULTRA_BEAST(null, "catch.shinyultrabeast", "showUltraBeastCatch", "showShinyCatch");
 
         // Set up some variables for accessing the Enum's data through.
-        public String key, options;
-        public String[] flags;
+        private String key;
+        public String options;
+        private String[] flags;
 
         // Point to where we're grabbing from.
         Catches(final String options, final String key, final String... flags)
@@ -84,47 +96,50 @@ public interface EventData
         }
 
         // Expose values to anything accessing us through the main interface.
-        @Override
-        public boolean presentTense() { return true; }
-        public char color() { return 'b'; } // Aqua. (light blue)
-        public String key() { return this.key; }
-        public String options() { return this.options; }
-        public String[] flags() { return this.flags; }
-        public String[] messages() { return new String[] {" caught a "}; }
+        @Override public boolean presentTense() { return true; }
+        @Override public char color() { return 'b'; } // Aqua. (light blue)
+        @Override public String key() { return this.key; }
+        @Override public String options() { return this.options; }
+        @Override public String[] flags() { return this.flags; }
+        @Override public String[] messages() { return new String[] {" caught a "}; }
     }
 
     enum Challenges implements EventData
     {
         // Challenges.
-        SHINY(null, "challenge.shiny", "showShinyChallenge"),
-        LEGENDARY(null, "challenge.legendary", "showLegendaryChallenge"),
-        SHINY_LEGENDARY(null, "challenge.shinylegendary", "showLegendaryChallenge", "showShinyChallenge"),
-        ULTRA_BEAST(null, "challenge.ultrabeast", "showUltraBeastChallenge"),
-        SHINY_ULTRA_BEAST(null, "challenge.shinyultrabeast", "showUltraBeastChallenge", "showShinyChallenge"),
-        BOSS(null, "challenge.boss", "showBossChallenge"),
-        TRAINER(null, "challenge.trainer", "showTrainerChallenge"),
-        BOSS_TRAINER(null, "challenge.bosstrainer", "showBossTrainerChallenge");
+        SHINY(null, null, "challenge.shiny", "showShinyChallenge"),
+        LEGENDARY(null, null, "challenge.legendary", "showLegendaryChallenge"),
+        SHINY_LEGENDARY(null, null, "challenge.shinylegendary", "showLegendaryChallenge", "showShinyChallenge"),
+        ULTRA_BEAST(null, null, "challenge.ultrabeast", "showUltraBeastChallenge"),
+        SHINY_ULTRA_BEAST(null, null, "challenge.shinyultrabeast", "showUltraBeastChallenge", "showShinyChallenge"),
+        BOSS(null, null, "challenge.boss", "showBossChallenge"),
+        TRAINER(null, null, "challenge.trainer", "showTrainerChallenge"),
+        BOSS_TRAINER(null, null, "challenge.bosstrainer", "showBossTrainerChallenge"),
+        PVP(null, new String[] {" started battling player "}, "challenge.pvp", "showPVPChallenge");
 
         // Set up some variables for accessing the Enum's data through.
-        public String key, options;
-        public String[] flags;
+        private String key;
+        public String options;
+        private String[] messages, flags;
 
         // Point to where we're grabbing from.
-        Challenges(final String options, final String key, final String... flags)
+        Challenges(final String options, final String[] messages, final String key, final String... flags)
         {
             this.options = options; // Can change! Null until filled in by a (re-)load.
+            this.messages = messages;
             this.key = key;
             this.flags = flags;
         }
 
         // Expose values to anything accessing us through the main interface.
-        @Override
-        public boolean presentTense() { return true; }
-        public char color() { return '9'; } // Blue.
-        public String key() { return this.key; }
-        public String options() { return this.options; }
-        public String[] flags() { return this.flags; }
-        public String[] messages() { return new String[] {" started fighting a "}; }
+        @Override public boolean presentTense() { return true; }
+        @Override public char color() { return '9'; } // Blue.
+        @Override public String key() { return this.key; }
+        @Override public String options() { return this.options; }
+        @Override public String[] flags() { return this.flags; }
+
+        // Return a default message unless we're on a challenge that should use special logging.
+        @Override public String[] messages() { return messages == null ? new String[] {" started fighting a "} : messages; }
     }
 
     enum Forfeits implements EventData
@@ -140,8 +155,9 @@ public interface EventData
         BOSS_TRAINER(null, "forfeit.bosstrainer", "showBossTrainerForfeit");
 
         // Set up some variables for accessing the Enum's data through.
-        public String key, options;
-        public String[] flags;
+        private String key;
+        public String options;
+        private String[] flags;
 
         // Point to where we're grabbing from.
         Forfeits(final String options, final String key, final String... flags)
@@ -152,13 +168,12 @@ public interface EventData
         }
 
         // Expose values to anything accessing us through the main interface.
-        @Override
-        public boolean presentTense() { return false; }
-        public char color() { return 'e'; } // Yellow
-        public String key() { return this.key; }
-        public String options() { return this.options; }
-        public String[] flags() { return this.flags; }
-        public String[] messages() { return new String[] {" fled from a "}; }
+        @Override public boolean presentTense() { return false; }
+        @Override public char color() { return 'e'; } // Yellow
+        @Override public String key() { return this.key; }
+        @Override public String options() { return this.options; }
+        @Override public String[] flags() { return this.flags; }
+        @Override public String[] messages() { return new String[] {" fled from a "}; }
     }
 
     enum Spawns implements EventData
@@ -173,8 +188,9 @@ public interface EventData
         BOSS(null, "spawn.boss", "showBossSpawn");
 
         // Set up some variables for accessing the Enum's data through.
-        public String key, options;
-        public String[] flags;
+        private String key;
+        public String options;
+        private String[] flags;
 
         // Point to where we're grabbing from.
         Spawns(final String options, final String key, final String... flags)
@@ -185,47 +201,50 @@ public interface EventData
         }
 
         // Expose values to anything accessing us through the main interface.
-        @Override
-        public boolean presentTense() { return false; }
-        public char color() { return 'a'; } // Green. (light green)
-        public String key() { return this.key; }
-        public String options() { return this.options; }
-        public String[] flags() { return this.flags; }
-        public String[] messages() { return null; } // Message has its own logic due to weird word ordering.
+        @Override public boolean presentTense() { return false; }
+        @Override public char color() { return 'a'; } // Green. (light green)
+        @Override public String key() { return this.key; }
+        @Override public String options() { return this.options; }
+        @Override public String[] flags() { return this.flags; }
+        @Override public String[] messages() { return null; } // Message has its own logic due to weird word ordering.
     }
 
     enum Victories implements EventData
     {
         // Victories.
-        SHINY(null, "victory.shiny", "showShinyVictory"),
-        LEGENDARY(null, "victory.legendary", "showLegendaryVictory"),
-        SHINY_LEGENDARY(null, "victory.shinylegendary", "showLegendaryVictory", "showShinyVictory"),
-        ULTRA_BEAST(null, "victory.ultrabeast", "showUltraBeastVictory"),
-        SHINY_ULTRA_BEAST(null, "victory.shinyultrabeast", "showUltraBeastVictory", "showShinyVictory"),
-        BOSS(null, "victory.boss", "showBossVictory"),
-        TRAINER(null, "victory.trainer", "showTrainerVictory"),
-        BOSS_TRAINER(null, "victory.bosstrainer", "showBossTrainerVictory");
+        SHINY(null, null, "victory.shiny", "showShinyVictory"),
+        LEGENDARY(null, null, "victory.legendary", "showLegendaryVictory"),
+        SHINY_LEGENDARY(null, null, "victory.shinylegendary", "showLegendaryVictory", "showShinyVictory"),
+        ULTRA_BEAST(null, null, "victory.ultrabeast", "showUltraBeastVictory"),
+        SHINY_ULTRA_BEAST(null, null, "victory.shinyultrabeast", "showUltraBeastVictory", "showShinyVictory"),
+        BOSS(null, null, "victory.boss", "showBossVictory"),
+        TRAINER(null, null, "victory.trainer", "showTrainerVictory"),
+        BOSS_TRAINER(null, null, "victory.bosstrainer", "showBossTrainerVictory"),
+        PVP(null, new String[] {" defeated player "}, "victory.pvp", "showPVPVictory");
 
         // Set up some variables for accessing the Enum's data through.
-        public String key, options;
-        public String[] flags;
+        private String key;
+        public String options;
+        private String[] messages, flags;
 
         // Point to where we're grabbing from.
-        Victories(final String options, final String key, final String... flags)
+        Victories(final String options, final String[] messages, final String key, final String... flags)
         {
             this.options = options; // Can change! Null until filled in by a (re-)load.
+            this.messages = messages;
             this.key = key;
             this.flags = flags;
         }
 
         // Expose values to anything accessing us through the main interface.
-        @Override
-        public boolean presentTense() { return false; }
-        public char color() { return '2'; } // Dark Green.
-        public String key() { return this.key; }
-        public String options() { return this.options; }
-        public String[] flags() { return this.flags; }
-        public String[] messages() { return new String[] {" defeated a "}; }
+        @Override public boolean presentTense() { return false; }
+        @Override public char color() { return '2'; } // Dark Green.
+        @Override public String key() { return this.key; }
+        @Override public String options() { return this.options; }
+        @Override public String[] flags() { return this.flags; }
+
+        // Return a default message unless we're on a victory that should use special logging.
+        @Override public String[] messages() { return messages == null ? new String[] {" defeated a "} : messages; }
     }
 
     enum Hatches implements EventData
@@ -239,8 +258,9 @@ public interface EventData
         SHINY_ULTRA_BEAST(null, "hatch.shinyultrabeast", "showUltraBeastHatch", "showShinyHatch");
 
         // Set up some variables for accessing the Enum's data through.
-        public String key, options;
-        public String[] flags;
+        private String key;
+        public String options;
+        private String[] flags;
 
         // Point to where we're grabbing from.
         Hatches(final String options, final String key, final String... flags)
@@ -251,48 +271,35 @@ public interface EventData
         }
 
         // Expose values to anything accessing us through the main interface.
-        @Override
-        public boolean presentTense() { return true; }
-        public char color() { return 'd'; } // Light Purple. (pink)
-        public String key() { return this.key; }
-        public String options() { return this.options; }
-        public String[] flags() { return this.flags; }
-        public String[] messages() { return new String[] {" hatched a "}; }
+        @Override public boolean presentTense() { return true; }
+        @Override public char color() { return 'd'; } // Light Purple. (pink)
+        @Override public String key() { return this.key; }
+        @Override public String options() { return this.options; }
+        @Override public String[] flags() { return this.flags; }
+        @Override public String[] messages() { return new String[] {" hatched a "}; }
     }
 
-    enum PVP implements EventData
+    enum Draws implements EventData
     {
-        // PvP stuff. In its own little category due to requiring different messages.
-        CHALLENGE(null, true, new String[] {" challenged player ", " to a battle"},
-                "challenge.pvp", "showPVPChallenge"),
-        DRAW(null, false, new String[] {"'s battle with ", " ended in a draw"},
-                "draw.pvp", "showPVPDraw"),
-        VICTORY(null, false, new String[] {" defeated player "},
-                "victory.pvp", "showPVPVictory");
+        // Draws. Currently just PvP, might get more eventually.
+        PVP(null);
 
         // Set up some variables for accessing the Enum's data through.
-        public boolean presentTense;
-        public String key, options;
-        public String[] flags, messages;
+        public String options;
 
         // Point to where we're grabbing from.
-        PVP(final String options, final boolean presentTense, final String[] messages, final String key, final String... flags)
+        Draws(final String options)
         {
             this.options = options; // Can change! Null until filled in by a (re-)load.
-            this.presentTense = presentTense;
-            this.messages = messages;
-            this.key = key;
-            this.flags = flags;
         }
 
-        // Expose values to anything accessing us through the main interface.
-        @Override
-        public boolean presentTense() { return this.presentTense; }
-        public char color() { return '7'; } // Gray. (light gray)
-        public String key() { return this.key; }
-        public String options() { return this.options; }
-        public String[] flags() { return this.flags; }
-        public String[] messages() { return this.messages; }
+        // Expose values to anything accessing us through the main interface. All set in advance for now.
+        @Override public boolean presentTense() { return false; }
+        @Override public char color() { return '7'; } // Gray. (light gray)
+        @Override public String key() { return "draw.pvp"; }
+        @Override public String options() { return this.options; }
+        @Override public String[] flags() { return new String[] {"showPVPDraw"}; }
+        @Override public String[] messages() { return new String[] {"'s battle with ", " ended in a draw"}; }
     }
 
     enum Others implements EventData
@@ -302,10 +309,11 @@ public interface EventData
         FAINT(null, false, new String[]{}, 'c', "faint.normal", "showFaint"); // Red.
 
         // Set up some variables for accessing the Enum's data through.
-        public boolean presentTense;
-        public char color;
-        public String key, options;
-        public String[] flags, messages;
+        private boolean presentTense;
+        private char color;
+        private String key;
+        public String options;
+        private String[] flags, messages;
 
         // Point to where we're grabbing from.
         Others(final String options, final boolean presentTense, final String[] messages, final char color,
@@ -320,12 +328,11 @@ public interface EventData
         }
 
         // Expose values to anything accessing us through the main interface.
-        @Override
-        public boolean presentTense() { return this.presentTense; }
-        public char color() { return this.color; }
-        public String key() { return this.key; }
-        public String options() { return this.options; }
-        public String[] flags() { return this.flags; }
-        public String[] messages() { return this.messages; }
+        @Override public boolean presentTense() { return this.presentTense; }
+        @Override public char color() { return this.color; }
+        @Override public String key() { return this.key; }
+        @Override public String options() { return this.options; }
+        @Override public String[] flags() { return this.flags; }
+        @Override public String[] messages() { return this.messages; }
     }
 }
