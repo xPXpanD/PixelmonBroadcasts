@@ -45,15 +45,14 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
       NOTE: Stuff that's here will not necessarily get done.
 \*                                                              */
 
-// TODO: Title-style display option?
 // TODO: Implement logging to a custom log file with the right option passed.
 // TODO: Ideas for new events: HA, successful breed, evolution, event spawns, maaaaybe level.
 // TODO: See if some of the BattleEnd stuff can be moved to separate and more specific events.
 // TODO: Maybe make events clickable? Staff node, teleport people to the source. Dunno.
-// TODO: Add a logger for individual player Pokémon being knocked out, for the Nuzlocke crowd.
 // TODO: Listen to commands being used, fire the right event if we have a successful hatch/spawn/etc..
 // TODO: Make a more comprehensive summon check.
 // TODO: Round up when close on stuff like IVs. Currently rounds down, even if at .99.
+// TODO: Maybe play a cry when something spawns. Slow it down?
 // FIXME: Bad event listeners from other mods may cause events to hang (stuck loop), which causes insane spam from us. Fix?
 // FIXME: Biome names are always English. Maybe add to the lang, and use English biome names as keys.
 // FIXME: Roll over cleanly to a new line if more than 5 toggles are available in a single category?

@@ -25,7 +25,8 @@ public class PrintingMethods
             {
                 logger.info
                 (
-                        "§5PBR §f// §1A " + inputs[0] +
+                        "§5PBR §f// §" + event.color() +
+                        "A " + inputs[0] +
                         " has spawned in world \"" + worldName +
                         "\", at X" + location.getX() +
                         " Y" + location.getY() +

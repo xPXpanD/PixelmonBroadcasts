@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.serializer.TextSerializers;
@@ -106,6 +107,14 @@ public class PlaceholderMethods
                 });
             }
         }
+    }
+
+    public static boolean canReceiveBroadcast(CommandSource src, EventData event)
+    {
+        if (src.hasPermission("pixelmonbroadcasts.notify." + event.key()) && event.options() != null)
+            return event.options().contains("chat") || event.options().contains("notify");
+
+        return false;
     }
 
     // Checks if a given flag is set for the given event. Has some hardcoded values on stuff that's off-limits.
@@ -610,14 +619,19 @@ public class PlaceholderMethods
         hovers.add(genderString);
         hovers.add(natureCompositeString);
 
-        // TODO: Retest due to deprecation update.
         // If ability showing is on, also do just that.
         if (showAbilities)
         {
             if (pokemon.getAbility().getName().equals(pokemon.getBaseStats().abilities[2]))
-                hovers.add(getTensedTranslation(isPresentTense, "hover.hidden_ability", pokemon.getAbility().getTranslatedName()));
+            {
+                hovers.add(getTensedTranslation(
+                        isPresentTense, "hover.hidden_ability", pokemon.getAbility().getTranslatedName().getUnformattedText()));
+            }
             else
-                hovers.add(getTensedTranslation(isPresentTense, "hover.ability", pokemon.getAbility().getTranslatedName()));
+            {
+                hovers.add(getTensedTranslation(
+                        isPresentTense, "hover.ability", pokemon.getAbility().getTranslatedName().getUnformattedText()));
+            }
         }
 
         // Make a finalized broadcast that we can show, and add a hover. Return the whole thing.

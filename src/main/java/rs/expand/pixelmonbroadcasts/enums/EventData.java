@@ -1,10 +1,7 @@
 package rs.expand.pixelmonbroadcasts.enums;
 
 import rs.expand.pixelmonbroadcasts.utilities.PrintingMethods;
-import scala.actors.threadpool.Arrays;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -201,7 +198,7 @@ public interface EventData
         }
 
         // Expose values to anything accessing us through the main interface.
-        @Override public boolean presentTense() { return false; }
+        @Override public boolean presentTense() { return true; }
         @Override public char color() { return 'a'; } // Green. (light green)
         @Override public String key() { return this.key; }
         @Override public String options() { return this.options; }
@@ -247,6 +244,29 @@ public interface EventData
         @Override public String[] messages() { return messages == null ? new String[] {" defeated a "} : messages; }
     }
 
+    enum Draws implements EventData
+    {
+        // Draws. Currently just PvP, might get more eventually.
+        PVP(null);
+
+        // Set up some variables for accessing the Enum's data through.
+        public String options;
+
+        // Point to where we're grabbing from.
+        Draws(final String options)
+        {
+            this.options = options; // Can change! Null until filled in by a (re-)load.
+        }
+
+        // Expose values to anything accessing us through the main interface. All set in advance for now.
+        @Override public boolean presentTense() { return false; }
+        @Override public char color() { return '7'; } // Gray. (light gray)
+        @Override public String key() { return "draw.pvp"; }
+        @Override public String options() { return this.options; }
+        @Override public String[] flags() { return new String[] {"showPVPDraw"}; }
+        @Override public String[] messages() { return new String[] {"'s battle with ", " ended in a draw"}; }
+    }
+
     enum Hatches implements EventData
     {
         // Hatches.
@@ -279,34 +299,11 @@ public interface EventData
         @Override public String[] messages() { return new String[] {" hatched a "}; }
     }
 
-    enum Draws implements EventData
-    {
-        // Draws. Currently just PvP, might get more eventually.
-        PVP(null);
-
-        // Set up some variables for accessing the Enum's data through.
-        public String options;
-
-        // Point to where we're grabbing from.
-        Draws(final String options)
-        {
-            this.options = options; // Can change! Null until filled in by a (re-)load.
-        }
-
-        // Expose values to anything accessing us through the main interface. All set in advance for now.
-        @Override public boolean presentTense() { return false; }
-        @Override public char color() { return '7'; } // Gray. (light gray)
-        @Override public String key() { return "draw.pvp"; }
-        @Override public String options() { return this.options; }
-        @Override public String[] flags() { return new String[] {"showPVPDraw"}; }
-        @Override public String[] messages() { return new String[] {"'s battle with ", " ended in a draw"}; }
-    }
-
     enum Others implements EventData
     {
         // Miscellaneous events. Trade has its own message logic to avoid needing to pass in a huge list of parameters.
-        TRADE(null, true, null, '5', "trade.normal", "showTrade"), // Dark Purple.
-        FAINT(null, false, new String[]{}, 'c', "faint.normal", "showFaint"); // Red.
+        FAINT(null, false, new String[]{}, 'c', "faint.normal", "showFaint"), // Red.
+        TRADE(null, true, null, '5', "trade.normal", "showTrade"); // Dark Purple.
 
         // Set up some variables for accessing the Enum's data through.
         private boolean presentTense;

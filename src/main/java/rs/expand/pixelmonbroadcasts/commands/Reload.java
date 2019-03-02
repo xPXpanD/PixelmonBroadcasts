@@ -9,6 +9,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import rs.expand.pixelmonbroadcasts.utilities.ConfigMethods;
 
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.sendTranslation;
 
 public class Reload implements CommandExecutor

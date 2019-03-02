@@ -12,6 +12,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.commandAlias;
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
 public class BaseCommand implements CommandExecutor
