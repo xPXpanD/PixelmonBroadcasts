@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.serializer.TextSerializers;
@@ -31,62 +32,131 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
 public class PlaceholderMethods
 {
-    public static void iterateAndBroadcast(
-            final EventData event, final Object pokemonObject, final Object pokemon2Object,
-            final EntityPlayer playerEntity, final EntityPlayer player2Entity)
+    public static void iterateAndBroadcast(final EventData event, final Object object1, final Object object2,
+                                           final EntityPlayer player1, final EntityPlayer player2)
     {
         if (event.options().toLowerCase().contains("chat"))
         {
             // Combine the passed broadcast type's prefix with the broadcast/permission key to make a full broadcast key.
             final String broadcast =
-                    getBroadcast("chat." + event.key(), pokemonObject, pokemon2Object, playerEntity, player2Entity);
+                    getBroadcast("chat." + event.key(), object1, object2, player1, player2);
 
-            // Make a Text clone of our broadcast message. We can add to this, or just send it directly.
-            final Text broadcastText;
+            // Make some Text clones of our broadcast message. We can add to these, or just send them directly.
+            Text simpleBroadcastText;
 
             // If hovers are enabled, make the line hoverable.
-            if (pokemonObject != null && getUnsafeFlag(event, "hover"))
+            if (object1 != null && getUnsafeFlag(event, "hover"))
             {
-                broadcastText =
-                        getHoverableLine(broadcast, pokemonObject, event.presentTense(), getUnsafeFlag(event, "reveal"));
+                simpleBroadcastText =
+                        getHoverableLine(broadcast, object1, event.presentTense(), getUnsafeFlag(event, "reveal"));
             }
             else
-                broadcastText = Text.of(broadcast);
+                simpleBroadcastText = Text.of(broadcast);
+
+            // Set up some variables that we can access later, if we do end up sending a clickable broadcast.
+            BlockPos position = null;
+            World world = null;
+
+            // Grab coordinates for making our chat broadcast clickable for those who have access.
+            if (object1 != null || player1 != null)
+            {
+                if (object1 != null)
+                {
+                    if (object1 instanceof EntityPixelmon || object1 instanceof EntityWormhole)
+                    {
+                        position = ((Entity) object1).getPosition();
+                        world = ((Entity) object1).getEntityWorld();
+
+                        // Do our coordinates make sense? If not, we may have breakage. Set back to null.
+                        if ((position.getX() == 0 && position.getZ() == 0))
+                            position = null;
+                    }
+                }
+
+                if (player1 != null)
+                {
+                    // Did we get a position yet? Prefer the generally more accurate Pokémon/wormhole data if available.
+                    if (position == null)
+                        position = player1.getPosition();
+
+                    // Same deal for world info.
+                    if (world == null)
+                        world = player1.getEntityWorld();
+                }
+            }
+
+            // Copy to finals.
+            final BlockPos finalPosition = position;
+            final World finalWorld = world;
 
             // Sift through the online players.
-            Sponge.getGame().getServer().getOnlinePlayers().forEach((recipient) ->
+            for (Player recipient : Sponge.getGame().getServer().getOnlinePlayers())
             {
                 // Does the iterated player have the needed notifier permission?
                 if (recipient.hasPermission("pixelmonbroadcasts.notify." + event.key()))
                 {
+                    // If the iterated player also has admin warp permissions, add a warp click action.
+                    if (position != null && recipient.hasPermission("pixelmonbroadcasts.action.staff.warp"))
+                    {
+                        // Does the iterated player want our broadcast? Send it if we get "true" returned.
+                        if (checkToggleStatus((EntityPlayer) recipient, event.flags()))
+                        {
+                            // Send a clickable version of the normal text. Yes, this is a mess.
+                            recipient.sendMessage(Text.builder()
+                                .append(simpleBroadcastText)
+                                .onClick(TextActions.executeCallback(callback ->
+                                {
+                                    ((EntityPlayer) recipient).setWorld(finalWorld);
+                                    ((EntityPlayer) recipient).setPosition(
+                                            finalPosition.getX(), finalPosition.getY() + 2, finalPosition.getZ());
+                                }))
+                                .build());
+                        }
+                    }
                     // Does the iterated player want our broadcast? Send it if we get "true" returned.
-                    if (checkToggleStatus((EntityPlayer) recipient, event.flags()))
-                        recipient.sendMessage(broadcastText);
+                    else if (checkToggleStatus((EntityPlayer) recipient, event.flags()))
+                        recipient.sendMessage(simpleBroadcastText);
                 }
-            });
+            }
         }
 
         if (event.options().toLowerCase().contains("notice"))
         {
-            if (pokemonObject != null)
+            if (object1 != null)
             {
                 // Combine the passed broadcast type's prefix with the broadcast/permission key to make a full broadcast key.
                 final String broadcast =
-                        getBroadcast("notice." + event.key(), pokemonObject, pokemon2Object, playerEntity, player2Entity);
+                        getBroadcast("notice." + event.key(), object1, object2, player1, player2);
 
                 // Figure out how to get a Pokemon object for our purposes.
-                final Pokemon pokemon;
-                if (pokemonObject instanceof Pokemon)
-                    pokemon = (Pokemon) pokemonObject;
+                Pokemon pokemon;
+                if (object1 instanceof Pokemon)
+                    pokemon = (Pokemon) object1;
+                else if (object1 instanceof EntityPixelmon)
+                    pokemon = ((EntityPixelmon) object1).getPokemonData();
                 else
-                    pokemon = ((EntityPixelmon) pokemonObject).getPokemonData();
+                    pokemon = null;
 
                 // Set up and format a builder for our notice.
                 NoticeOverlay.Builder builder = NoticeOverlay.builder().addLine(broadcast);
                 if (pokemon != null)
-                    builder.setPokemonSprite(new PokemonSpec(pokemon.getSpecies().getPokemonName()));
+                {
+                    // Puts up a sprite matching the current Pokémon's species, form and gender.
+                    builder.setPokemonSprite
+                    (
+                            new PokemonSpec
+                            (
+                                    pokemon.getSpecies().getPokemonName(),
+                                    "form:" + pokemon.getForm(),
+                                    "gender:" + pokemon.getGender().ordinal()
+                            )
+                    );
+                }
                 else
-                    builder.setPokemonSprite(new PokemonSpec("Unown"));
+                {
+                    // Creates a question mark Unown using specs.
+                    builder.setPokemonSprite(new PokemonSpec("Unown", "form:26"));
+                }
 
                 // Sift through the online players.
                 Sponge.getGame().getServer().getOnlinePlayers().forEach((recipient) ->
@@ -109,7 +179,7 @@ public class PlaceholderMethods
         }
     }
 
-    public static boolean canReceiveBroadcast(CommandSource src, EventData event)
+    public static boolean canReceiveBroadcast(final CommandSource src, final EventData event)
     {
         if (src.hasPermission("pixelmonbroadcasts.notify." + event.key()) && event.options() != null)
             return event.options().contains("chat") || event.options().contains("notify");
@@ -118,7 +188,7 @@ public class PlaceholderMethods
     }
 
     // Checks if a given flag is set for the given event. Has some hardcoded values on stuff that's off-limits.
-    private static boolean getUnsafeFlag(EventData event, String flag)
+    private static boolean getUnsafeFlag(final EventData event, final String flag)
     {
         if (event == EventData.Blackouts.TRAINER && (flag.equals("hover") || flag.equals("reveal")))
         {
@@ -196,15 +266,14 @@ public class PlaceholderMethods
     }
 
     // Replaces all placeholders in a provided message.
-    private static String getBroadcast(
-            final String key, final Object pokemonObject, final Object pokemon2Object, final EntityPlayer playerEntity,
-            final EntityPlayer player2Entity)
+    private static String getBroadcast(final String key, final Object object1, final Object object2,
+                                       final EntityPlayer player1, final EntityPlayer player2)
     {
         // This is slightly hacky, but split the incoming key up into separate nodes so we can read it.
-        final String[] keySet = key.split("\\.");
+        final Object[] keySet = key.split("\\.");
 
         // Get the broadcast from the broadcast config, if it's there.
-        String broadcast = broadcastsConfig.getNode((Object[]) keySet).getString();
+        String broadcast = broadcastsConfig.getNode(keySet).getString();
 
         // Did we get a broadcast?
         if (broadcast != null)
@@ -221,13 +290,13 @@ public class PlaceholderMethods
         Pokemon pokemon;
 
         // Do we have a Pokémon object? Replace Pokémon-specific placeholders.
-        if (pokemonObject != null)
+        if (object1 != null)
         {
             // Figure out what our received object is, exactly.
-            if (pokemonObject instanceof EntityPixelmon || pokemonObject instanceof EntityWormhole)
+            if (object1 instanceof EntityPixelmon || object1 instanceof EntityWormhole)
             {
                 // Make the entity a bit easier to access. It probably has more info than a Pokemon object would -- use it!
-                Entity entity = (Entity) pokemonObject;
+                Entity entity = (Entity) object1;
 
                 // Get a position, and do a sanity check on it to work around possible entity removal issues.
                 // (if both are zero, something might have broken -- we'll try getting the info from the player instead)
@@ -253,13 +322,13 @@ public class PlaceholderMethods
                 }
 
                 // Extract a Pokemon object for later use, if possible.
-                if (pokemonObject instanceof EntityPixelmon)
+                if (object1 instanceof EntityPixelmon)
                     pokemon = ((EntityPixelmon) entity).getPokemonData();
                 else // No more info to extract, here.
                     return broadcast;
             }
             else
-                pokemon = (Pokemon) pokemonObject;
+                pokemon = (Pokemon) object1;
 
             // Insert the Pokémon's name.
             if (broadcast.toLowerCase().contains("%pokemon%"))
@@ -305,14 +374,14 @@ public class PlaceholderMethods
                 broadcast = broadcast.replaceAll("(?i)%shiny%", "");
 
             // Rinse and repeat the above for a second Pokémon, if present.
-            if (pokemon2Object != null)
+            if (object2 != null)
             {
                 // We've got a second Pokémon! See what type this one is.
                 final Pokemon pokemon2;
-                if (pokemon2Object instanceof EntityPixelmon)
+                if (object2 instanceof EntityPixelmon)
                 {
                     // Make this one easier to access, too. We'll need it.
-                    EntityPixelmon pokemon2Entity = (EntityPixelmon) pokemon2Object;
+                    EntityPixelmon pokemon2Entity = (EntityPixelmon) object2;
 
                     // Extract a Pokemon object for later use.
                     pokemon2 = pokemon2Entity.getPokemonData();
@@ -336,7 +405,7 @@ public class PlaceholderMethods
                     }
                 }
                 else
-                    pokemon2 = (Pokemon) pokemon2Object;
+                    pokemon2 = (Pokemon) object2;
 
                 // Insert the Pokémon's name.
                 if (broadcast.toLowerCase().contains("%pokemon2%"))
@@ -384,20 +453,20 @@ public class PlaceholderMethods
         }
 
         // Do we have a player entity? Replace player-specific placeholders as well as some that we might not have yet.
-        if (playerEntity != null)
+        if (player1 != null)
         {
             // Insert the player's name.
-            broadcast = broadcast.replaceAll("(?i)%player%", playerEntity.getName());
+            broadcast = broadcast.replaceAll("(?i)%player%", player1.getName());
 
             // Get the player's position. We prefer using the Pokémon's position, but if that fails this should catch it.
-            position = playerEntity.getPosition();
+            position = player1.getPosition();
 
             // Get the player's biome, nicely formatted (spaces!) and all. Replace placeholder if it still exists.
-            final String biome = getFormattedBiome(playerEntity.getEntityWorld(), position);
+            final String biome = getFormattedBiome(player1.getEntityWorld(), position);
             broadcast = broadcast.replaceAll("(?i)%biome%", biome);
 
             // Insert a world name if necessary, still.
-            broadcast = broadcast.replaceAll("(?i)%world%", playerEntity.getEntityWorld().getWorldInfo().getWorldName());
+            broadcast = broadcast.replaceAll("(?i)%world%", player1.getEntityWorld().getWorldInfo().getWorldName());
 
             // Insert coordinates if necessary, still.
             broadcast = broadcast.replaceAll("(?i)%xpos%", String.valueOf(position.getX()));
@@ -406,20 +475,20 @@ public class PlaceholderMethods
         }
 
         // Do we have a second player? Replace player-specific placeholders as well as some that we might not have yet.
-        if (player2Entity != null)
+        if (player2 != null)
         {
             // Insert the player's name.
-            broadcast = broadcast.replaceAll("(?i)%player2%", player2Entity.getName());
+            broadcast = broadcast.replaceAll("(?i)%player2%", player2.getName());
 
             // Get the player's position. We prefer using the Pokémon's position, but if that fails this should catch it.
-            position = player2Entity.getPosition();
+            position = player2.getPosition();
 
             // Get the player's biome, nicely formatted (spaces!) and all. Replace placeholder if it still exists.
-            final String biome2 = getFormattedBiome(player2Entity.getEntityWorld(), position);
+            final String biome2 = getFormattedBiome(player2.getEntityWorld(), position);
             broadcast = broadcast.replaceAll("(?i)%biome2%", biome2);
 
             // Insert a world name if necessary, still.
-            broadcast = broadcast.replaceAll("(?i)%world2%", player2Entity.getEntityWorld().getWorldInfo().getWorldName());
+            broadcast = broadcast.replaceAll("(?i)%world2%", player2.getEntityWorld().getWorldInfo().getWorldName());
 
             // Insert coordinates if necessary, still.
             broadcast = broadcast.replaceAll("(?i)%xpos2%", String.valueOf(position.getX()));
@@ -494,11 +563,11 @@ public class PlaceholderMethods
     // Sets up a broadcast from the given info, with IV hovers thrown in in place of any placeholders.
     // FIXME: It may be a good idea to toggle off showIVs if we're showing off an egg. Need to think about this more.
     private static Text getHoverableLine(
-            final String broadcast, final Object pokemonObject, final boolean isPresentTense, final boolean showIVs)
+            final String broadcast, final Object object1, final boolean isPresentTense, final boolean showIVs)
     {
         // Is our received object of the older EntityPixelmon type, or is it Pokemon?
         Pokemon pokemon =
-                pokemonObject instanceof EntityPixelmon ? ((EntityPixelmon) pokemonObject).getPokemonData() : (Pokemon) pokemonObject;
+                object1 instanceof EntityPixelmon ? ((EntityPixelmon) object1).getPokemonData() : (Pokemon) object1;
 
         // We have at least one Pokémon, so start setup for this first one.
         final IVStore IVs = pokemon.getIVs();

@@ -152,13 +152,14 @@ public class PixelmonBroadcasts
             //Pixelmon.EVENT_BUS.register(new BirdSpawnListener());
             Pixelmon.EVENT_BUS.register(new CatchListener());
             Pixelmon.EVENT_BUS.register(new HatchListener());
+            Pixelmon.EVENT_BUS.register(new PartyFaintListener());
             Pixelmon.EVENT_BUS.register(new SpawnListener());
             Pixelmon.EVENT_BUS.register(new TradeListener());
             Pixelmon.EVENT_BUS.register(new WildDefeatListener());
 
             // (re-)register the main command and alias. Use the result we get back to see if everything worked.
             logger.info("--> §aRegistering commands with Sponge...");
-            if (ConfigMethods.registerCommands())
+            if (ConfigMethods.tryRegisterCommands())
                 logger.info("--> §aPre-init completed. All systems nominal.");
         }
         else

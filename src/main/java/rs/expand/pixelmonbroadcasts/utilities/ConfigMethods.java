@@ -30,7 +30,7 @@ public class ConfigMethods
     }
 
     // Unloads all known PixelmonBroadcasts commands and their aliases, and then re-registers them.
-    public static boolean registerCommands()
+    public static boolean tryRegisterCommands()
     {
         final PluginContainer pbcContainer = Sponge.getPluginManager().getPlugin("pixelmonbroadcasts").orElse(null);
 

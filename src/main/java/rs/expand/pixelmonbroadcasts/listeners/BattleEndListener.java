@@ -39,7 +39,7 @@ public class BattleEndListener
         final List<BattleParticipant> winners = new ArrayList<>(), losers = new ArrayList<>(), neutrals = new ArrayList<>();
         for (Map.Entry<BattleParticipant, BattleResults> entry : event.results.entrySet())
         {
-            logger.info("Looping. Participant is " + entry.getValue().name() + ", result is " + entry.getKey().getName());
+            //logger.info("Looping. Participant is " + entry.getValue().name() + ", result is " + entry.getKey().getName());
 
             switch (entry.getValue())
             {

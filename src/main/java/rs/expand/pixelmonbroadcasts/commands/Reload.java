@@ -32,7 +32,7 @@ public class Reload implements CommandExecutor
         {
             // (re-)register the main command and alias. Use the result we get back to see if everything worked.
             logger.info("--> §aRe-registering commands with Sponge...");
-            if (ConfigMethods.registerCommands())
+            if (ConfigMethods.tryRegisterCommands())
                 logger.info("--> §aReload completed. All systems nominal.");
         }
         else

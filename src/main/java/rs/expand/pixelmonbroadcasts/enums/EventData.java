@@ -302,7 +302,7 @@ public interface EventData
     enum Others implements EventData
     {
         // Miscellaneous events. Trade has its own message logic to avoid needing to pass in a huge list of parameters.
-        FAINT(null, false, new String[]{}, 'c', "faint.normal", "showFaint"), // Red.
+        FAINT(null, false, new String[] {" lost their "}, 'c', "faint.normal", "showFaint"), // Red.
         TRADE(null, true, null, '5', "trade.normal", "showTrade"); // Dark Purple.
 
         // Set up some variables for accessing the Enum's data through.
