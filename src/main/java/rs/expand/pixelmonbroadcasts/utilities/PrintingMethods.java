@@ -13,7 +13,6 @@ import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.messagesConfig;
 
 // A collection of methods that are commonly used. One changed word or color here, and half the mod changes. Sweet.
-// TODO: Maybe get the current event from LogMessages instead of requiring it up-front. Same info in two places, now.
 public class PrintingMethods
 {
     // Prints an event message to console, if it is enabled. One size fits all, with the help of the LogType enum.
@@ -63,7 +62,7 @@ public class PrintingMethods
             }
         }
         else
-            logger.error("Log flag not found for event " + event);
+            logger.error("Log flag not found for event " + event + ", type " + event.getClass().getSimpleName());
     }
 
     // If we can't read a main config options bundle (really just a String), throw this error. Called during execution.

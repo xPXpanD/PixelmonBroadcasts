@@ -1,29 +1,24 @@
-0.4 for 7.0.2
-Released February 22nd, 2019.
+0.4 for 7.0.3
+Released March 7th, 2019.
 
     Additions:
+    * Added Pixelmon noticeboard support. Shows stuff in a fancy box at the top, surrounded by sprites!
     * Added Ultra Beast broadcasts everywhere.
     * Added Ultra Space wormhole spawn broadcasts.
     * Added legendary/Ultra Beast hatch broadcasts.
-    * Added Pixelmon noticeboard support. Shows stuff in a fancy box at the top, surrounded by sprites!
+    * Added a fainting broadcast for the Nuzlocke crowd.
 
     Settings file additions and changes:
-    * Renamed the "show" toggle to "chat" to avoid confusion with the new "notice". Needs a regen! Sorry.
-    * Added a portal spawn setting, "wormholeSpawnOptions".
+    * Added new event settings. Config will need a regen, sorry!
+    * Renamed the "show" toggle to "chat" to avoid confusion with the new "notice".
 
-    Message file additions:
-    * "toggle.ultra_beast.on"   ->  "&a&nultra beast"
-    * "toggle.ultra_beast.off"  ->  "&c&nultra beast"
-    * "toggle.wormhole.on"      ->  "&a&nwormhole"
-    * "toggle.wormhole.off"     ->  "&c&nwormhole"
-
-    Message file removals:
-    * Removed "toggle.shiny_legendary.on". See "Tweaks".
-    * Removed "toggle.shiny_legendary.off". See "Tweaks".
+    Message file additions and changes:
+    * Added new event messages. Config will need a regen, sorry!
+    * Removed shiny legendary messages due to them being rolled in with the shiny/legendary checks.
 
     Broadcasts file additions and changes:
-    * Split "broadcast.EVENT.TYPE" into "chat.EVENT.TYPE" and "notice.EVENT.TYPE". Needs a regen! Sorry.
-    * Added a portal spawn broadcast, "chat.spawn.wormhole". (and "notice.spawn.wormhole")
+    * Added new event broadcasts. Config will need a regen, sorry!
+    * Split "broadcast.EVENT.TYPE" broadcasts into both "chat.EVENT.TYPE" and "notice.EVENT.TYPE".
     * Changed the default hatch and trade colors from pink to gray. Pink is now used for UBs.
 
     Tweaks:
@@ -34,7 +29,7 @@ Released February 22nd, 2019.
     Fixes:
     * Fixed a missing space in the default trade broadcast.
     * Fixed IVs, coordinates and world names in the trade broadcast always being from player 1's side.
-    * Fixed the trade event permission being wrong. (we checked for "trade", listed as "trade.normal")
+    * Fixed us looking for the trade event permission internally.
     * Fixed shiny legendary forfeit logging not working right.
 
 0.3 for 7.0

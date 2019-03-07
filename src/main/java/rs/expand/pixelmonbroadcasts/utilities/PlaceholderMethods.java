@@ -1,5 +1,6 @@
 package rs.expand.pixelmonbroadcasts.utilities;
 
+import com.pixelmonmod.pixelmon.api.overlay.notice.EnumOverlayLayout;
 import com.pixelmonmod.pixelmon.api.overlay.notice.NoticeOverlay;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.PokemonSpec;
@@ -86,7 +87,7 @@ public class PlaceholderMethods
             }
 
             // Copy to finals.
-            final BlockPos finalPosition = position;
+            final BlockPos finalPos = position;
             final World finalWorld = world;
 
             // Sift through the online players.
@@ -95,8 +96,8 @@ public class PlaceholderMethods
                 // Does the iterated player have the needed notifier permission?
                 if (recipient.hasPermission("pixelmonbroadcasts.notify." + event.key()))
                 {
-                    // If the iterated player also has admin warp permissions, add a warp click action.
-                    if (position != null && recipient.hasPermission("pixelmonbroadcasts.action.staff.warp"))
+                    // If the iterated player also has admin teleport permissions, add a teleport click action.
+                    if (position != null && recipient.hasPermission("pixelmonbroadcasts.action.staff.teleport"))
                     {
                         // Does the iterated player want our broadcast? Send it if we get "true" returned.
                         if (checkToggleStatus((EntityPlayer) recipient, event.flags()))
@@ -107,8 +108,7 @@ public class PlaceholderMethods
                                 .onClick(TextActions.executeCallback(callback ->
                                 {
                                     ((EntityPlayer) recipient).setWorld(finalWorld);
-                                    ((EntityPlayer) recipient).setPosition(
-                                            finalPosition.getX(), finalPosition.getY() + 2, finalPosition.getZ());
+                                    ((EntityPlayer) recipient).setPosition(finalPos.getX(), finalPos.getY() + 2, finalPos.getZ());
                                 }))
                                 .build());
                         }
@@ -137,8 +137,10 @@ public class PlaceholderMethods
                 else
                     pokemon = null;
 
-                // Set up and format a builder for our notice.
-                NoticeOverlay.Builder builder = NoticeOverlay.builder().addLine(broadcast);
+                // Set up a builder for our notice.
+                NoticeOverlay.Builder builder = NoticeOverlay.builder().setLayout(EnumOverlayLayout.LEFT_AND_RIGHT);
+
+                // Do some magic for getting the right sprite.
                 if (pokemon != null)
                 {
                     // Puts up a sprite matching the current Pokémon's species, form and gender.
@@ -157,6 +159,9 @@ public class PlaceholderMethods
                     // Creates a question mark Unown using specs.
                     builder.setPokemonSprite(new PokemonSpec("Unown", "form:26"));
                 }
+
+                // Add the message here, after applying other stuff. Doing earlier causes an NPE, apparently. Dunno.
+                builder.setLines(broadcast);
 
                 // Sift through the online players.
                 Sponge.getGame().getServer().getOnlinePlayers().forEach((recipient) ->
@@ -200,7 +205,7 @@ public class PlaceholderMethods
             logger.error("Exit path 2.");
             return false;
         }
-        else if (event instanceof EventData.Challenges && flag.equals("reveal")) // TODO: TEST!
+        else if (event instanceof EventData.Challenges && flag.equals("reveal"))
         {
             logger.error("Exit path 3!!");
             return false;
@@ -230,11 +235,8 @@ public class PlaceholderMethods
             logger.error("Exit path 8.");
             return false;
         }
-        else if (event instanceof EventData.Spawns && flag.equals("reveal")) // TODO: TEST!
-        {
-            logger.error("Exit path 9!!");
+        else if (event instanceof EventData.Spawns && flag.equals("reveal"))
             return false;
-        }
         else if (event == EventData.Spawns.WORMHOLE && flag.equals("hover"))
         {
             logger.error("Exit path 10.");
@@ -255,11 +257,8 @@ public class PlaceholderMethods
             logger.error("Exit path 13.");
             return false;
         }
-        else if (event instanceof EventData.Others && (flag.equals("hover") || flag.equals("reveal"))) // TODO: TEST!
-        {
-            logger.error("Exit path 14!!");
+        else if (event == EventData.Others.TRADE && (flag.equals("hover") || flag.equals("reveal")))
             return false;
-        }
 
         logger.error("Exit path is fallthrough.");
         return event.options().toLowerCase().contains(flag);
@@ -273,7 +272,10 @@ public class PlaceholderMethods
         final Object[] keySet = key.split("\\.");
 
         // Get the broadcast from the broadcast config, if it's there.
-        String broadcast = broadcastsConfig.getNode(keySet).getString();
+        //String broadcast = broadcastsConfig.getNode(keySet).getString();
+        // DEBUG:
+        String broadcast = key + " : %biome% %world% %pokemon% %player% %ivpercent% %xpos% %ypos% %zpos% %shiny% : " +
+                                "%biome2% %world2% %pokemon2% %player2% %ivpercent2% %xpos2% %ypos2% %zpos2% %shiny2%";
 
         // Did we get a broadcast?
         if (broadcast != null)

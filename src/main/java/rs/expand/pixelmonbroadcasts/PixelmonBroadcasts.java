@@ -48,7 +48,6 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 // TODO: Implement logging to a custom log file with the right option passed.
 // TODO: Ideas for new events: HA, successful breed, evolution, event spawns, maaaaybe level.
 // TODO: See if some of the BattleEnd stuff can be moved to separate and more specific events.
-// TODO: Maybe make events clickable? Staff node, teleport people to the source. Dunno.
 // TODO: Listen to commands being used, fire the right event if we have a successful hatch/spawn/etc..
 // TODO: Make a more comprehensive summon check.
 // TODO: Round up when close on stuff like IVs. Currently rounds down, even if at .99.
@@ -152,10 +151,9 @@ public class PixelmonBroadcasts
             //Pixelmon.EVENT_BUS.register(new BirdSpawnListener());
             Pixelmon.EVENT_BUS.register(new CatchListener());
             Pixelmon.EVENT_BUS.register(new HatchListener());
-            Pixelmon.EVENT_BUS.register(new PartyFaintListener());
+            Pixelmon.EVENT_BUS.register(new PokemonFaintListener());
             Pixelmon.EVENT_BUS.register(new SpawnListener());
             Pixelmon.EVENT_BUS.register(new TradeListener());
-            Pixelmon.EVENT_BUS.register(new WildDefeatListener());
 
             // (re-)register the main command and alias. Use the result we get back to see if everything worked.
             logger.info("--> §aRegistering commands with Sponge...");
@@ -213,7 +211,7 @@ public class PixelmonBroadcasts
                 // Complaining, commence.
                 logger.info("=============== P I X E L M O N  B R O A D C A S T S ===============");
                 logger.info("--> §ePixelmon's \"§6displayLegendaryGlobalMessage§e\" setting is enabled.");
-                logger.info("    §eThis setting will now be disabled, as it conflicts with this sidemod.");
+                logger.info("    §eThis setting will now be disabled as it conflicts with this mod.");
                 logger.info("    §eIf you remove this mod, revert this in Pixelmon's config!");
                 logger.info("====================================================================");
 

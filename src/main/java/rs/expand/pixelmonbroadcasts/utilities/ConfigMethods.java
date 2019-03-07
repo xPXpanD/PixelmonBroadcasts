@@ -209,7 +209,7 @@ public class ConfigMethods
         // Draws.
         EventData.Draws.PVP.options = settingsConfig.getNode("pvpDrawOptions").getString();
 
-        /// Other options. TODO: Implement fainting.
+        /// Other options.
         EventData.Others.TRADE.options = settingsConfig.getNode("tradeOptions").getString();
         EventData.Others.FAINT.options = settingsConfig.getNode("faintOptions").getString();
 
@@ -259,8 +259,6 @@ public class ConfigMethods
         /// Do validation for logging purposes.
         // To start, set up an error array. Check later, and print errors to the console if stuff broke.
         final List<String> optionsErrorArray = new ArrayList<>();
-
-        // TODO: ACTUALLY IMPLEMENT THESE PROPERLY!!
         
         // Blackouts.
         if (EventData.Blackouts.NORMAL.options == null)

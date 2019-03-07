@@ -5,8 +5,6 @@ import rs.expand.pixelmonbroadcasts.utilities.PrintingMethods;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
-
 // A big list of all event options (as loaded from settings.conf), broadcast/permission keys and logging settings.
 public interface EventData
 {
@@ -19,8 +17,6 @@ public interface EventData
 
     default boolean checkSettingsOrError(final String... nodes)
     {
-        logger.error("Entering valid options check. If we get an error, options are null?");
-
         if (this.options() == null)
         {
             if (nodes.length == 1)
@@ -36,7 +32,7 @@ public interface EventData
 
     enum Blackouts implements EventData
     {
-        // Blackouts.
+        // Blackouts
         NORMAL(null, "blackout.normal", "showNormalBlackout"),
         SHINY(null, "blackout.shiny", "showShinyBlackout"),
         LEGENDARY(null, "blackout.legendary", "showLegendaryBlackout"),

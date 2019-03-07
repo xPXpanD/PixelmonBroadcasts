@@ -8,7 +8,7 @@ import rs.expand.pixelmonbroadcasts.enums.EventData;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndBroadcast;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.logEvent;
 
-public class PartyFaintListener
+public class PokemonFaintListener
 {
     @SubscribeEvent
     public void onPartyPokemonFaintEvent(PixelmonFaintEvent event)

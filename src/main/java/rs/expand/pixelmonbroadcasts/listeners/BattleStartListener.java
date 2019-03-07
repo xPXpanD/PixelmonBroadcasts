@@ -31,12 +31,6 @@ public class BattleStartListener
             // Did a PvP battle just start? (two players, one on either side)
             if (participant1 instanceof PlayerParticipant && participant2 instanceof PlayerParticipant)
             {
-                // Create a list of participants, and then sort them based on their display names.
-                // This ensures names and their associated stats are always in the same place.
-                // TODO: Actually get this working, it didn't last time.
-                //ArrayList<BattleParticipant> participants = new ArrayList<>(Arrays.asList(participant1, participant2));
-                //participants.sort(Comparator.comparing(t -> BattleParticipant.class.getName()));
-
                 if (EventData.Challenges.PVP.checkSettingsOrError("pvpChallengeOptions"))
                 {
                     // If we're still going, set up some more commonly-used variables. World stuff should be the same for both.
