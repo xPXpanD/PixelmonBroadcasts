@@ -46,14 +46,15 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 \*                                                              */
 
 // TODO: Implement logging to a custom log file with the right option passed.
-// TODO: Ideas for new events: HA, successful breed, evolution, event spawns, maaaaybe level.
-// TODO: See if some of the BattleEnd stuff can be moved to separate and more specific events.
-// TODO: Listen to commands being used, fire the right event if we have a successful hatch/spawn/etc..
+// TODO: Ideas for new events: HA, successful breed, event spawns, maaaaybe level.
+// TODO: Listen to commands being used, fire the right event if we have a successful hatch/spawn/etcetera.
 // TODO: Make a more comprehensive summon check.
 // TODO: Round up when close on stuff like IVs. Currently rounds down, even if at .99.
 // TODO: Maybe play a cry when something spawns. Slow it down?
+// TODO: Custom spawns. Oh boy. Separate file that includes broadcasts and settings?
 // FIXME: Bad event listeners from other mods may cause events to hang (stuck loop), which causes insane spam from us. Fix?
 // FIXME: Biome names are always English. Maybe add to the lang, and use English biome names as keys.
+// FIXME: Similarly, Pokémon names seem to be English as well.
 // FIXME: Roll over cleanly to a new line if more than 5 toggles are available in a single category?
 // FIXME: Challenges and forfeits can be used to spam servers. Add a persistent tag to avoid repeats?
 
@@ -150,6 +151,7 @@ public class PixelmonBroadcasts
             Pixelmon.EVENT_BUS.register(new BattleStartListener());
             //Pixelmon.EVENT_BUS.register(new BirdSpawnListener());
             Pixelmon.EVENT_BUS.register(new CatchListener());
+            Pixelmon.EVENT_BUS.register(new EvolutionListener());
             Pixelmon.EVENT_BUS.register(new HatchListener());
             Pixelmon.EVENT_BUS.register(new PokemonFaintListener());
             Pixelmon.EVENT_BUS.register(new SpawnListener());

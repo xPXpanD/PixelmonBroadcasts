@@ -84,7 +84,7 @@ public class CatchListener
                 {
                     // Send a log message if we're set up to do logging for this event.
                     logEvent(EventData.Catches.ULTRA_BEAST,
-                            worldName, location, event.player.getName(), "normal " + nameString + " Ultra Beast");
+                            worldName, location, event.player.getName(), nameString + " Ultra Beast");
 
                     // Send enabled broadcasts to people who should receive them.
                     iterateAndBroadcast(EventData.Catches.ULTRA_BEAST,
@@ -111,7 +111,7 @@ public class CatchListener
             {
                 // Send a log message if we're set up to do logging for this event.
                 logEvent(EventData.Catches.NORMAL,
-                        worldName, location, event.player.getName(), "normal " + nameString);
+                        worldName, location, event.player.getName(), nameString);
 
                 // Send enabled broadcasts to people who should receive them.
                 iterateAndBroadcast(EventData.Catches.NORMAL,

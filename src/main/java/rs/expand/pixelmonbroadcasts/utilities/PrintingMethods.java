@@ -61,8 +61,8 @@ public class PrintingMethods
                 );
             }
         }
-        else
-            logger.error("Log flag not found for event " + event + ", type " + event.getClass().getSimpleName());
+        /*else
+            logger.error("Log flag not found for event " + event + ", type " + event.getClass().getSimpleName());*/
     }
 
     // If we can't read a main config options bundle (really just a String), throw this error. Called during execution.
@@ -82,7 +82,7 @@ public class PrintingMethods
         logger.error("Check the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
     }
 
-    // Gets a key from messages.conf, formats it (ampersands to section characters), and then sends it.
+    // Gets a value matching the given messages key, formats it (ampersands to section characters), and then sends it.
     // Also swaps any provided placeholders with String representations of the Objects given, if present.
     public static void sendTranslation(CommandSource recipient, String key, Object... params)
     {
@@ -95,18 +95,22 @@ public class PrintingMethods
         // Did we get a message?
         if (message != null)
         {
-            // If any parameters are available, find all placeholders in the message and replace them.
-            for (int i = 0; i < params.length; i++)
-                message = message.replace("{" + (i+1) + "}", params[i].toString());
+            // Swallow the message if it's been emptied out.
+            if (!message.equals(""))
+            {
+                // If any parameters are available, find all placeholders in the message and replace them.
+                for (int i = 0; i < params.length; i++)
+                    message = message.replace("{" + (i+1) + "}", params[i].toString());
 
-            recipient.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(message).toText());
+                recipient.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(message).toText());
+            }
         }
         // We did not get a message, return the provided key and make sure it's unformatted.
         else
             recipient.sendMessage(Text.of("§r" + key));
     }
 
-    // Gets a key from messages.conf, formats it (ampersands to section characters), and then returns it.
+    // Gets a value matching the given messages key, formats it (ampersands to section characters), and then returns it.
     // Also swaps any provided placeholders with String representations of the Objects given, if present.
     public static String getTranslation(String key, final Object... params)
     {

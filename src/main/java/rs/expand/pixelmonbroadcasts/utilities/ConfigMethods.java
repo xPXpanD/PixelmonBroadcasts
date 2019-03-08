@@ -210,15 +210,16 @@ public class ConfigMethods
         EventData.Draws.PVP.options = settingsConfig.getNode("pvpDrawOptions").getString();
 
         /// Other options.
-        EventData.Others.TRADE.options = settingsConfig.getNode("tradeOptions").getString();
+        EventData.Others.EVOLVE.options = settingsConfig.getNode("evolveOptions").getString();
         EventData.Others.FAINT.options = settingsConfig.getNode("faintOptions").getString();
+        EventData.Others.TRADE.options = settingsConfig.getNode("tradeOptions").getString();
 
         // For these hybrid events, combine options for both of them. Nulls or bad joins won't matter. A bit hacky.
         // Blackouts.
         EventData.Blackouts.SHINY_LEGENDARY.options =
-                settingsConfig.getNode("shinyBlackouts§Options").getString() + settingsConfig.getNode("legendaryBlackouts§Options").getString();
+                settingsConfig.getNode("shinyBlackoutOptions").getString() + settingsConfig.getNode("legendaryBlackoutOptions").getString();
         EventData.Blackouts.SHINY_ULTRA_BEAST.options =
-                settingsConfig.getNode("shinyBlackouts§Options").getString() + settingsConfig.getNode("ultraBeastBlackouts§Options").getString();
+                settingsConfig.getNode("shinyBlackoutOptions").getString() + settingsConfig.getNode("ultraBeastBlackoutOptions").getString();
 
         // Catches.
         EventData.Catches.SHINY_LEGENDARY.options =
@@ -267,12 +268,8 @@ public class ConfigMethods
             optionsErrorArray.add("shinyBlackoutOptions");
         if (EventData.Blackouts.LEGENDARY.options == null)
             optionsErrorArray.add("legendaryBlackoutOptions");
-        if (EventData.Blackouts.SHINY_LEGENDARY.options == null)
-            optionsErrorArray.add("shinyLegendaryBlackoutOptions");
         if (EventData.Blackouts.ULTRA_BEAST.options == null)
             optionsErrorArray.add("ultraBeastBlackoutOptions");
-        if (EventData.Blackouts.SHINY_ULTRA_BEAST.options == null)
-            optionsErrorArray.add("shinyUltraBeastBlackoutOptions");
         if (EventData.Blackouts.BOSS.options == null)
             optionsErrorArray.add("bossBlackoutOptions");
         if (EventData.Blackouts.TRAINER.options == null)
@@ -281,138 +278,94 @@ public class ConfigMethods
             optionsErrorArray.add("bossTrainerBlackoutOptions");
 
         // Catches.
-        if (EventData.Blackouts.NORMAL.options == null)
-            optionsErrorArray.add("normalBlackoutOptions");
-        if (EventData.Blackouts.SHINY.options == null)
-            optionsErrorArray.add("shinyBlackoutOptions");
-        if (EventData.Blackouts.LEGENDARY.options == null)
-            optionsErrorArray.add("legendaryBlackoutOptions");
-        if (EventData.Blackouts.SHINY_LEGENDARY.options == null)
-            optionsErrorArray.add("shinyLegendaryBlackoutOptions");
-        if (EventData.Blackouts.ULTRA_BEAST.options == null)
-            optionsErrorArray.add("ultraBeastBlackoutOptions");
-        if (EventData.Blackouts.SHINY_ULTRA_BEAST.options == null)
-            optionsErrorArray.add("shinyUltraBeastBlackoutOptions");
+        if (EventData.Catches.NORMAL.options == null)
+            optionsErrorArray.add("normalCatchOptions");
+        if (EventData.Catches.SHINY.options == null)
+            optionsErrorArray.add("shinyCatchOptions");
+        if (EventData.Catches.LEGENDARY.options == null)
+            optionsErrorArray.add("legendaryCatchOptions");
+        if (EventData.Catches.ULTRA_BEAST.options == null)
+            optionsErrorArray.add("ultraBeastCatchOptions");
 
-        // Blackouts.
-        if (EventData.Blackouts.NORMAL.options == null)
-            optionsErrorArray.add("normalBlackoutOptions");
-        if (EventData.Blackouts.SHINY.options == null)
-            optionsErrorArray.add("shinyBlackoutOptions");
-        if (EventData.Blackouts.LEGENDARY.options == null)
-            optionsErrorArray.add("legendaryBlackoutOptions");
-        if (EventData.Blackouts.SHINY_LEGENDARY.options == null)
-            optionsErrorArray.add("shinyLegendaryBlackoutOptions");
-        if (EventData.Blackouts.ULTRA_BEAST.options == null)
-            optionsErrorArray.add("ultraBeastBlackoutOptions");
-        if (EventData.Blackouts.SHINY_ULTRA_BEAST.options == null)
-            optionsErrorArray.add("shinyUltraBeastBlackoutOptions");
-        if (EventData.Blackouts.BOSS.options == null)
-            optionsErrorArray.add("bossBlackoutOptions");
-        if (EventData.Blackouts.TRAINER.options == null)
-            optionsErrorArray.add("trainerBlackoutOptions");
-        if (EventData.Blackouts.BOSS_TRAINER.options == null)
-            optionsErrorArray.add("bossTrainerBlackoutOptions");
+        // Challenges.
+        if (EventData.Challenges.SHINY.options == null)
+            optionsErrorArray.add("shinyChallengeOptions");
+        if (EventData.Challenges.LEGENDARY.options == null)
+            optionsErrorArray.add("legendaryChallengeOptions");
+        if (EventData.Challenges.ULTRA_BEAST.options == null)
+            optionsErrorArray.add("ultraBeastChallengeOptions");
+        if (EventData.Challenges.BOSS.options == null)
+            optionsErrorArray.add("bossChallengeOptions");
+        if (EventData.Challenges.TRAINER.options == null)
+            optionsErrorArray.add("trainerChallengeOptions");
+        if (EventData.Challenges.BOSS_TRAINER.options == null)
+            optionsErrorArray.add("bossTrainerChallengeOptions");
+        if (EventData.Challenges.PVP.options == null)
+            optionsErrorArray.add("pvpChallengeOptions");
 
-        // Blackouts.
-        if (EventData.Blackouts.NORMAL.options == null)
-            optionsErrorArray.add("normalBlackoutOptions");
-        if (EventData.Blackouts.SHINY.options == null)
-            optionsErrorArray.add("shinyBlackoutOptions");
-        if (EventData.Blackouts.LEGENDARY.options == null)
-            optionsErrorArray.add("legendaryBlackoutOptions");
-        if (EventData.Blackouts.SHINY_LEGENDARY.options == null)
-            optionsErrorArray.add("shinyLegendaryBlackoutOptions");
-        if (EventData.Blackouts.ULTRA_BEAST.options == null)
-            optionsErrorArray.add("ultraBeastBlackoutOptions");
-        if (EventData.Blackouts.SHINY_ULTRA_BEAST.options == null)
-            optionsErrorArray.add("shinyUltraBeastBlackoutOptions");
-        if (EventData.Blackouts.BOSS.options == null)
-            optionsErrorArray.add("bossBlackoutOptions");
-        if (EventData.Blackouts.TRAINER.options == null)
-            optionsErrorArray.add("trainerBlackoutOptions");
-        if (EventData.Blackouts.BOSS_TRAINER.options == null)
-            optionsErrorArray.add("bossTrainerBlackoutOptions");
+        // Forfeits.
+        if (EventData.Forfeits.SHINY.options == null)
+            optionsErrorArray.add("shinyForfeitOptions");
+        if (EventData.Forfeits.LEGENDARY.options == null)
+            optionsErrorArray.add("legendaryForfeitOptions");
+        if (EventData.Forfeits.ULTRA_BEAST.options == null)
+            optionsErrorArray.add("ultraBeastForfeitOptions");
+        if (EventData.Forfeits.BOSS.options == null)
+            optionsErrorArray.add("bossForfeitOptions");
+        if (EventData.Forfeits.TRAINER.options == null)
+            optionsErrorArray.add("trainerForfeitOptions");
+        if (EventData.Forfeits.BOSS_TRAINER.options == null)
+            optionsErrorArray.add("bossTrainerForfeitOptions");
 
-        // Blackouts.
-        if (EventData.Blackouts.NORMAL.options == null)
-            optionsErrorArray.add("normalBlackoutOptions");
-        if (EventData.Blackouts.SHINY.options == null)
-            optionsErrorArray.add("shinyBlackoutOptions");
-        if (EventData.Blackouts.LEGENDARY.options == null)
-            optionsErrorArray.add("legendaryBlackoutOptions");
-        if (EventData.Blackouts.SHINY_LEGENDARY.options == null)
-            optionsErrorArray.add("shinyLegendaryBlackoutOptions");
-        if (EventData.Blackouts.ULTRA_BEAST.options == null)
-            optionsErrorArray.add("ultraBeastBlackoutOptions");
-        if (EventData.Blackouts.SHINY_ULTRA_BEAST.options == null)
-            optionsErrorArray.add("shinyUltraBeastBlackoutOptions");
-        if (EventData.Blackouts.BOSS.options == null)
-            optionsErrorArray.add("bossBlackoutOptions");
-        if (EventData.Blackouts.TRAINER.options == null)
-            optionsErrorArray.add("trainerBlackoutOptions");
-        if (EventData.Blackouts.BOSS_TRAINER.options == null)
-            optionsErrorArray.add("bossTrainerBlackoutOptions");
+        // Spawns.
+        if (EventData.Spawns.SHINY.options == null)
+            optionsErrorArray.add("shinySpawnOptions");
+        if (EventData.Spawns.LEGENDARY.options == null)
+            optionsErrorArray.add("legendarySpawnOptions");
+        if (EventData.Spawns.ULTRA_BEAST.options == null)
+            optionsErrorArray.add("ultraBeastSpawnOptions");
+        if (EventData.Spawns.WORMHOLE.options == null)
+            optionsErrorArray.add("wormholeSpawnOptions");
+        if (EventData.Spawns.BOSS.options == null)
+            optionsErrorArray.add("bossSpawnOptions");
 
-        // Blackouts.
-        if (EventData.Blackouts.NORMAL.options == null)
-            optionsErrorArray.add("normalBlackoutOptions");
-        if (EventData.Blackouts.SHINY.options == null)
-            optionsErrorArray.add("shinyBlackoutOptions");
-        if (EventData.Blackouts.LEGENDARY.options == null)
-            optionsErrorArray.add("legendaryBlackoutOptions");
-        if (EventData.Blackouts.SHINY_LEGENDARY.options == null)
-            optionsErrorArray.add("shinyLegendaryBlackoutOptions");
-        if (EventData.Blackouts.ULTRA_BEAST.options == null)
-            optionsErrorArray.add("ultraBeastBlackoutOptions");
-        if (EventData.Blackouts.SHINY_ULTRA_BEAST.options == null)
-            optionsErrorArray.add("shinyUltraBeastBlackoutOptions");
-        if (EventData.Blackouts.BOSS.options == null)
-            optionsErrorArray.add("bossBlackoutOptions");
-        if (EventData.Blackouts.TRAINER.options == null)
-            optionsErrorArray.add("trainerBlackoutOptions");
-        if (EventData.Blackouts.BOSS_TRAINER.options == null)
-            optionsErrorArray.add("bossTrainerBlackoutOptions");
+        // Victories.
+        if (EventData.Victories.SHINY.options == null)
+            optionsErrorArray.add("shinyVictoryOptions");
+        if (EventData.Victories.LEGENDARY.options == null)
+            optionsErrorArray.add("legendaryVictoryOptions");
+        if (EventData.Victories.ULTRA_BEAST.options == null)
+            optionsErrorArray.add("ultraBeastVictoryOptions");
+        if (EventData.Victories.BOSS.options == null)
+            optionsErrorArray.add("bossVictoryOptions");
+        if (EventData.Victories.TRAINER.options == null)
+            optionsErrorArray.add("trainerVictoryOptions");
+        if (EventData.Victories.BOSS_TRAINER.options == null)
+            optionsErrorArray.add("bossTrainerVictoryOptions");
+        if (EventData.Victories.PVP.options == null)
+            optionsErrorArray.add("pvpVictoryOptions");
 
-        // Blackouts.
-        if (EventData.Blackouts.NORMAL.options == null)
-            optionsErrorArray.add("normalBlackoutOptions");
-        if (EventData.Blackouts.SHINY.options == null)
-            optionsErrorArray.add("shinyBlackoutOptions");
-        if (EventData.Blackouts.LEGENDARY.options == null)
-            optionsErrorArray.add("legendaryBlackoutOptions");
-        if (EventData.Blackouts.SHINY_LEGENDARY.options == null)
-            optionsErrorArray.add("shinyLegendaryBlackoutOptions");
-        if (EventData.Blackouts.ULTRA_BEAST.options == null)
-            optionsErrorArray.add("ultraBeastBlackoutOptions");
-        if (EventData.Blackouts.SHINY_ULTRA_BEAST.options == null)
-            optionsErrorArray.add("shinyUltraBeastBlackoutOptions");
-        if (EventData.Blackouts.BOSS.options == null)
-            optionsErrorArray.add("bossBlackoutOptions");
-        if (EventData.Blackouts.TRAINER.options == null)
-            optionsErrorArray.add("trainerBlackoutOptions");
-        if (EventData.Blackouts.BOSS_TRAINER.options == null)
-            optionsErrorArray.add("bossTrainerBlackoutOptions");
+        // Draws.
+        if (EventData.Draws.PVP.options == null)
+            optionsErrorArray.add("pvpDrawOptions");
 
-        // Blackouts.
-        if (EventData.Blackouts.NORMAL.options == null)
-            optionsErrorArray.add("normalBlackoutOptions");
-        if (EventData.Blackouts.SHINY.options == null)
-            optionsErrorArray.add("shinyBlackoutOptions");
-        if (EventData.Blackouts.LEGENDARY.options == null)
-            optionsErrorArray.add("legendaryBlackoutOptions");
-        if (EventData.Blackouts.SHINY_LEGENDARY.options == null)
-            optionsErrorArray.add("shinyLegendaryBlackoutOptions");
-        if (EventData.Blackouts.ULTRA_BEAST.options == null)
-            optionsErrorArray.add("ultraBeastBlackoutOptions");
-        if (EventData.Blackouts.SHINY_ULTRA_BEAST.options == null)
-            optionsErrorArray.add("shinyUltraBeastBlackoutOptions");
-        if (EventData.Blackouts.BOSS.options == null)
-            optionsErrorArray.add("bossBlackoutOptions");
-        if (EventData.Blackouts.TRAINER.options == null)
-            optionsErrorArray.add("trainerBlackoutOptions");
-        if (EventData.Blackouts.BOSS_TRAINER.options == null)
-            optionsErrorArray.add("bossTrainerBlackoutOptions");
+        // Hatches.
+        if (EventData.Hatches.NORMAL.options == null)
+            optionsErrorArray.add("normalHatchOptions");
+        if (EventData.Hatches.SHINY.options == null)
+            optionsErrorArray.add("shinyHatchOptions");
+        if (EventData.Hatches.LEGENDARY.options == null)
+            optionsErrorArray.add("legendaryHatchOptions");
+        if (EventData.Hatches.ULTRA_BEAST.options == null)
+            optionsErrorArray.add("ultraBeastHatchOptions");
+
+        // Other options.
+        if (EventData.Others.EVOLVE.options == null)
+            optionsErrorArray.add("evolveOptions");
+        if (EventData.Others.FAINT.options == null)
+            optionsErrorArray.add("faintOptions");
+        if (EventData.Others.TRADE.options == null)
+            optionsErrorArray.add("tradeOptions");
 
         // Print errors if something broke.
         if (!optionsErrorArray.isEmpty())

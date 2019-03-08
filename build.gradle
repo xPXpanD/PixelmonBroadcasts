@@ -80,7 +80,4 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
-
-    // Moves the access transformer config to the right folder in the compiled .jar.
-    rename '(.+_at.cfg)', 'META-INF/$1'
 }

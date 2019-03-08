@@ -35,7 +35,7 @@ public class BattleStartListener
                 {
                     // If we're still going, set up some more commonly-used variables. World stuff should be the same for both.
                     final EntityPlayer player1Entity = (EntityPlayer) participant1.getEntity();
-                    final EntityPlayer player2Entity = (EntityPlayer) participant1.getEntity();
+                    final EntityPlayer player2Entity = (EntityPlayer) participant2.getEntity();
 
                     // Send a log message if we're set up to do logging for this event.
                     logEvent(EventData.Challenges.PVP, participant1.getWorld().getWorldInfo().getWorldName(),
@@ -200,7 +200,7 @@ public class BattleStartListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 logEvent(EventData.Challenges.ULTRA_BEAST,
-                                        worldName, location, playerEntity.getName(), "normal " + nameString + " Ultra Beast");
+                                        worldName, location, playerEntity.getName(), nameString + " Ultra Beast");
 
                                 // Send enabled broadcasts to people who should receive them.
                                 iterateAndBroadcast(EventData.Challenges.ULTRA_BEAST,

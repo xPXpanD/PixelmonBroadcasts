@@ -298,8 +298,9 @@ public interface EventData
     enum Others implements EventData
     {
         // Miscellaneous events. Trade has its own message logic to avoid needing to pass in a huge list of parameters.
+        EVOLVE(null, true, null, '3', "evolve.normal", "showEvolve"), // Dark Aqua.
         FAINT(null, false, new String[] {" lost their "}, 'c', "faint.normal", "showFaint"), // Red.
-        TRADE(null, true, null, '5', "trade.normal", "showTrade"); // Dark Purple.
+        TRADE(null, true, null, '3', "trade.normal", "showTrade"); // Dark Aqua.
 
         // Set up some variables for accessing the Enum's data through.
         private boolean presentTense;

@@ -61,7 +61,7 @@ public class Toggle implements CommandExecutor
                     case "showBossTrainerBlackout": case "showBossTrainerForfeit":
                     case "showPVPChallenge": case "showPVPVictory": case "showPVPDraw":
                     case "showNormalHatch": case "showShinyHatch":
-                    case "showTrade":
+                    case "showEvolve": case "showFaint": case "showTrade":
                     //case "showBirdTrioSummon":
                     {
                         // Got a valid flag. Toggle it.
@@ -682,6 +682,16 @@ public class Toggle implements CommandExecutor
                MISCELLANEOUS TOGGLES
             \*                       */
             // Check perms. Add toggle status if perms look good.
+            if (canReceiveBroadcast(src, EventData.Others.EVOLVE))
+            {
+                flags.add("showEvolve");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showEvolve"))
+                    messages.add(getTranslation("toggle.evolve.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.evolve.off") + separator);
+            }
             if (canReceiveBroadcast(src, EventData.Others.FAINT))
             {
                 flags.add("showFaint");

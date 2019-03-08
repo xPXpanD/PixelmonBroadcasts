@@ -129,7 +129,7 @@ public class BattleEndListener
                     }
                 }
                 // Did our player get defeated?
-                else if (event.results.entrySet().iterator().next().getValue() == BattleResults.DEFEAT)
+                else if (event.results.get(player) == BattleResults.DEFEAT)
                 {
                     // Is our trainer a boss trainer?
                     if (((TrainerParticipant) opponent).trainer.getBossMode().isBossPokemon())
@@ -160,7 +160,7 @@ public class BattleEndListener
                     }
                 }
                 // Did our player win? Nice.
-                else if (event.results.entrySet().iterator().next().getValue() == BattleResults.VICTORY)
+                else if (event.results.get(player) == BattleResults.VICTORY)
                 {
                     // Is our trainer a boss trainer?
                     if (((TrainerParticipant) opponent).trainer.getBossMode().isBossPokemon())
@@ -194,7 +194,7 @@ public class BattleEndListener
             // Is our first opponent a wild Pokémon?
             else if (opponent instanceof WildPixelmonParticipant)
             {
-                // Needed to prevent a weird issue where it would sometimes register a loss when catching a Pokémon.
+                // Needed to prevent it detecting catches, as they show up as a FORCE result.
                 if (event.cause != EnumBattleEndCause.FORCE)
                 {
                     // Get the Pokémon's entity. Cast to EntityPixelmon as this is the type we need to pass in.
@@ -219,7 +219,7 @@ public class BattleEndListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 logEvent(EventData.Forfeits.BOSS, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "boss " + nameString);
+                                        playerEntity.getName(), "boss " + nameString);
 
                                 // Send enabled broadcasts to people who should receive them.
                                 iterateAndBroadcast(EventData.Forfeits.BOSS,
@@ -235,7 +235,7 @@ public class BattleEndListener
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     logEvent(EventData.Forfeits.SHINY_LEGENDARY, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "shiny legendary " + nameString);
+                                            playerEntity.getName(), "shiny legendary " + nameString);
 
                                     // Send enabled broadcasts to people who should receive them.
                                     iterateAndBroadcast(EventData.Forfeits.SHINY_LEGENDARY,
@@ -248,7 +248,7 @@ public class BattleEndListener
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     logEvent(EventData.Forfeits.LEGENDARY, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "legendary " + nameString);
+                                            playerEntity.getName(), "legendary " + nameString);
 
                                     // Send enabled broadcasts to people who should receive them.
                                     iterateAndBroadcast(EventData.Forfeits.LEGENDARY,
@@ -256,7 +256,7 @@ public class BattleEndListener
                                 }
                             }
                         }
-                        else if (EnumSpecies.ultrabeasts.contains(baseName) && pokemonEntity.getPokemonData().isShiny())
+                        else if (EnumSpecies.ultrabeasts.contains(baseName))
                         {
                             if (pokemonEntity.getPokemonData().isShiny())
                             {
@@ -265,7 +265,7 @@ public class BattleEndListener
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     logEvent(EventData.Forfeits.SHINY_ULTRA_BEAST, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "shiny " + nameString + " Ultra Beast");
+                                            playerEntity.getName(), "shiny " + nameString + " Ultra Beast");
 
                                     // Send enabled broadcasts to people who should receive them.
                                     iterateAndBroadcast(EventData.Forfeits.SHINY_ULTRA_BEAST,
@@ -278,7 +278,7 @@ public class BattleEndListener
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     logEvent(EventData.Forfeits.ULTRA_BEAST, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "normal " + nameString + " Ultra Beast");
+                                            playerEntity.getName(), nameString + " Ultra Beast");
 
                                     // Send enabled broadcasts to people who should receive them.
                                     iterateAndBroadcast(EventData.Forfeits.ULTRA_BEAST,
@@ -292,7 +292,7 @@ public class BattleEndListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 logEvent(EventData.Forfeits.SHINY, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "shiny " + nameString);
+                                        playerEntity.getName(), "shiny " + nameString);
 
                                 // Send enabled broadcasts to people who should receive them.
                                 iterateAndBroadcast(EventData.Forfeits.SHINY,
@@ -309,7 +309,7 @@ public class BattleEndListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 logEvent(EventData.Victories.BOSS, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "boss " + nameString);
+                                        playerEntity.getName(), "boss " + nameString);
 
                                 // Send enabled broadcasts to people who should receive them.
                                 iterateAndBroadcast(EventData.Victories.BOSS,
@@ -325,7 +325,7 @@ public class BattleEndListener
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     logEvent(EventData.Victories.SHINY_LEGENDARY, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "shiny legendary " + nameString);
+                                            playerEntity.getName(), "shiny legendary " + nameString);
 
                                     // Send enabled broadcasts to people who should receive them.
                                     iterateAndBroadcast(EventData.Victories.SHINY_LEGENDARY,
@@ -338,7 +338,7 @@ public class BattleEndListener
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     logEvent(EventData.Victories.LEGENDARY, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "legendary " + nameString);
+                                            playerEntity.getName(), "legendary " + nameString);
 
                                     // Send enabled broadcasts to people who should receive them.
                                     iterateAndBroadcast(EventData.Victories.LEGENDARY,
@@ -355,7 +355,7 @@ public class BattleEndListener
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     logEvent(EventData.Victories.SHINY_ULTRA_BEAST, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "shiny " + nameString + " Ultra Beast");
+                                            playerEntity.getName(), "shiny " + nameString + " Ultra Beast");
 
                                     // Send enabled broadcasts to people who should receive them.
                                     iterateAndBroadcast(EventData.Victories.SHINY_ULTRA_BEAST,
@@ -368,7 +368,7 @@ public class BattleEndListener
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     logEvent(EventData.Victories.ULTRA_BEAST, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "normal " + nameString + " Ultra Beast");
+                                            playerEntity.getName(), nameString + " Ultra Beast");
 
                                     // Send enabled broadcasts to people who should receive them.
                                     iterateAndBroadcast(EventData.Victories.ULTRA_BEAST,
@@ -382,10 +382,10 @@ public class BattleEndListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 logEvent(EventData.Victories.SHINY, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "shiny " + nameString);
+                                        playerEntity.getName(), "shiny " + nameString);
 
                                 // Send enabled broadcasts to people who should receive them.
-                                iterateAndBroadcast(EventData.Spawns.SHINY,
+                                iterateAndBroadcast(EventData.Victories.SHINY,
                                         pokemonEntity, null, playerEntity, null);
                             }
                         }
@@ -400,7 +400,7 @@ public class BattleEndListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 logEvent(EventData.Blackouts.BOSS, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "boss " + nameString);
+                                        playerEntity.getName(), "boss " + nameString);
 
                                 // Send enabled broadcasts to people who should receive them.
                                 iterateAndBroadcast(EventData.Blackouts.BOSS,
@@ -416,7 +416,7 @@ public class BattleEndListener
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     logEvent(EventData.Blackouts.SHINY_LEGENDARY, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "shiny legendary " + nameString);
+                                            playerEntity.getName(), "shiny legendary " + nameString);
 
                                     // Send enabled broadcasts to people who should receive them.
                                     iterateAndBroadcast(EventData.Blackouts.SHINY_LEGENDARY,
@@ -429,7 +429,7 @@ public class BattleEndListener
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     logEvent(EventData.Blackouts.LEGENDARY, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "legendary " + nameString);
+                                            playerEntity.getName(), "legendary " + nameString);
 
                                     // Send enabled broadcasts to people who should receive them.
                                     iterateAndBroadcast(EventData.Blackouts.LEGENDARY,
@@ -447,7 +447,7 @@ public class BattleEndListener
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     logEvent(EventData.Blackouts.SHINY_ULTRA_BEAST, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "shiny " + nameString + " Ultra Beast");
+                                            playerEntity.getName(), "shiny " + nameString + " Ultra Beast");
 
                                     // Send enabled broadcasts to people who should receive them.
                                     iterateAndBroadcast(EventData.Blackouts.SHINY_ULTRA_BEAST,
@@ -460,13 +460,12 @@ public class BattleEndListener
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     logEvent(EventData.Blackouts.ULTRA_BEAST, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "normal " + nameString + " Ultra Beast");
+                                            playerEntity.getName(), nameString + " Ultra Beast");
 
                                     // Send enabled broadcasts to people who should receive them.
                                     iterateAndBroadcast(EventData.Blackouts.ULTRA_BEAST,
                                             pokemonEntity, null, playerEntity, null);
                                 }
-
                             }
                         }
                         else if (pokemonEntity.getPokemonData().isShiny())
@@ -475,7 +474,7 @@ public class BattleEndListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 logEvent(EventData.Blackouts.SHINY, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "shiny " + nameString);
+                                        playerEntity.getName(), "shiny " + nameString);
 
                                 // Send enabled broadcasts to people who should receive them.
                                 iterateAndBroadcast(EventData.Blackouts.SHINY,
@@ -488,7 +487,7 @@ public class BattleEndListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 logEvent(EventData.Blackouts.NORMAL, worldName, playerEntity.getPosition(),
-                                    playerEntity.getName(), "normal " + nameString);
+                                        playerEntity.getName(), nameString);
 
                                 // Send enabled broadcasts to people who should receive them.
                                 iterateAndBroadcast(EventData.Blackouts.NORMAL,
@@ -499,8 +498,6 @@ public class BattleEndListener
                     else
                         logger.error("Event result for player is: " + event.results.get(player));
                 }
-                else
-                    logger.error("Event cause is force!");
             }
         }
     }

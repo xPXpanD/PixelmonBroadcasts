@@ -3,6 +3,8 @@ Released March 7th, 2019.
 
     Additions:
     * Added Pixelmon noticeboard support. Shows stuff in a fancy box at the top, surrounded by sprites!
+    * Added an on-click teleport option that allows players to warp to the event's source, if permitted.
+    * Added an evolution event. Only fires on successful evolutions, so no spam.
     * Added Ultra Beast broadcasts everywhere.
     * Added Ultra Space wormhole spawn broadcasts.
     * Added legendary/Ultra Beast hatch broadcasts.
@@ -13,7 +15,7 @@ Released March 7th, 2019.
     * Renamed the "show" toggle to "chat" to avoid confusion with the new "notice".
 
     Message file additions and changes:
-    * Added new event messages. Config will need a regen, sorry!
+    * Added new event messages, as well as on-click teleport ones. Config will need a regen, sorry!
     * Removed shiny legendary messages due to them being rolled in with the shiny/legendary checks.
 
     Broadcasts file additions and changes:
@@ -27,10 +29,13 @@ Released March 7th, 2019.
     * Renamed several internal listeners to make more sense in errors/debug output.
 
     Fixes:
+    * Hopefully fixed several BattleEndListener-related log errors.
     * Fixed a missing space in the default trade broadcast.
     * Fixed IVs, coordinates and world names in the trade broadcast always being from player 1's side.
-    * Fixed us looking for the trade event permission internally.
-    * Fixed shiny legendary forfeit logging not working right.
+    * Fixed shiny legendary forfeit logging not working right. (through rewriting ALL the things)
+    * Fixed shown IVs always being rounded down.
+    * Fixed trade event permission checks failing in certain setups.
+    * Probably fixed player-versus-player battles occasionally getting the winner/loser wrong. Oops.
 
 0.3 for 7.0
 Released February 2nd, 2019.

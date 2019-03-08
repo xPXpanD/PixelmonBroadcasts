@@ -78,7 +78,7 @@ public class HatchListener
                 {
                     // Send a log message if we're set up to do logging for this event.
                     logEvent(EventData.Hatches.ULTRA_BEAST,
-                            worldName, location, player.getName(), "normal " + nameString + " Ultra Beast egg");
+                            worldName, location, player.getName(), nameString + " Ultra Beast egg");
 
                     // Send enabled broadcasts to people who should receive them.
                     iterateAndBroadcast(EventData.Hatches.ULTRA_BEAST,
@@ -105,7 +105,7 @@ public class HatchListener
             {
                 // Send a log message if we're set up to do logging for this event.
                 logEvent(EventData.Hatches.NORMAL,
-                        worldName, location, player.getName(), "normal " + nameString + " egg");
+                        worldName, location, player.getName(), nameString + " egg");
 
                 // Send enabled broadcasts to people who should receive them.
                 iterateAndBroadcast(EventData.Hatches.NORMAL,

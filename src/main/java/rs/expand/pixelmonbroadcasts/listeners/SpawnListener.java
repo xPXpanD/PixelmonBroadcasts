@@ -21,6 +21,9 @@ public class SpawnListener
         // Create an entity from the event info that we can check.
         final Entity spawnedEntity = event.action.getOrCreateEntity();
 
+        // Set up a world name variable that we can reuse throughout.
+        final String worldName = spawnedEntity.getEntityWorld().getWorldInfo().getWorldName();
+
         // Check if the entity is a wormhole.
         if (spawnedEntity instanceof EntityWormhole)
         {
@@ -30,12 +33,10 @@ public class SpawnListener
                 final EntityWormhole wormhole = (EntityWormhole) spawnedEntity;
 
                 // Send a log message if we're set up to do logging for this event.
-                logEvent(EventData.Spawns.WORMHOLE,
-                        wormhole.getEntityWorld().getWorldInfo().getWorldName(), wormhole.getPosition(), "wormhole");
+                logEvent(EventData.Spawns.WORMHOLE, worldName, wormhole.getPosition(), "wormhole");
 
                 // Send enabled broadcasts to people who should receive them.
-                iterateAndBroadcast(EventData.Spawns.WORMHOLE,
-                        null, null, null, null);
+                iterateAndBroadcast(EventData.Spawns.WORMHOLE, wormhole, null, null, null);
             }
         }
         // Check if the entity is a Pokémon. We don't want no stinkin' trainers or the like.
@@ -52,7 +53,6 @@ public class SpawnListener
                 final String baseName = pokemonEntity.getPokemonName();
                 final String localizedName = pokemonEntity.getLocalizedName();
                 final BlockPos location = event.action.spawnLocation.location.pos;
-                final String worldName = pokemonEntity.getEntityWorld().getWorldInfo().getWorldName();
 
                 // Sets the position of the entity we created, as it's 0 on all coordinates by default.
                 pokemonEntity.setPosition(location.getX(), location.getY(), location.getZ());
@@ -127,7 +127,7 @@ public class SpawnListener
                         {
                             // Send a log message if we're set up to do logging for this event.
                             logEvent(EventData.Spawns.ULTRA_BEAST,
-                                    worldName, location, "normal " + nameString + " Ultra Beast");
+                                    worldName, location, nameString + " Ultra Beast");
 
                             // Send enabled broadcasts to people who should receive them.
                             iterateAndBroadcast(EventData.Spawns.ULTRA_BEAST,
