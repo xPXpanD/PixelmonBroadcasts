@@ -25,6 +25,7 @@ Released March 9th, 2019.
 
     Permission changes:
     * "pixelmonbroadcasts.notify.trade.normal" is now "pixelmonbroadcasts.notify.trade", for consistency.
+    * "pixelmonbroadcasts.notify.pvp.draw" is now "pixelmonbroadcasts.notify.draw.pvp", same idea.
 
     Tweaks:
     * Simplified shiny legendary settings to work with either event's toggles enabled. UBs work similarly.
