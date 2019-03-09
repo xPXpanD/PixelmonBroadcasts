@@ -1,10 +1,5 @@
 package rs.expand.pixelmonbroadcasts.enums;
 
-import rs.expand.pixelmonbroadcasts.utilities.PrintingMethods;
-
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 // A big list of all event options (as loaded from settings.conf), broadcast/permission keys and logging settings.
 public interface EventData
 {
@@ -14,21 +9,6 @@ public interface EventData
     String options();
     String[] flags();
     String[] messages();
-
-    default boolean checkSettingsOrError(final String... nodes)
-    {
-        if (this.options() == null)
-        {
-            if (nodes.length == 1)
-                PrintingMethods.printOptionsNodeError(nodes[0]);
-            else // TODO: TEST
-                PrintingMethods.printOptionsNodeError(Stream.of(nodes).collect(Collectors.toList()));
-
-            return false;
-        }
-
-        return true;
-    }
 
     enum Blackouts implements EventData
     {
@@ -298,9 +278,10 @@ public interface EventData
     enum Others implements EventData
     {
         // Miscellaneous events. Trade has its own message logic to avoid needing to pass in a huge list of parameters.
-        EVOLVE(null, true, null, '3', "evolve.normal", "showEvolve"), // Dark Aqua.
-        FAINT(null, false, new String[] {" lost their "}, 'c', "faint.normal", "showFaint"), // Red.
-        TRADE(null, true, null, '3', "trade.normal", "showTrade"); // Dark Aqua.
+        EVOLVE(null, true, null, '3', "evolve", "showEvolve"), // Dark Aqua.
+        FAINT(null, false, new String[] {" lost their "}, 'c', "faint", "showFaint"), // Red.
+        //LOOT(null, false, null, '3', "loot", "showLoot"), // Dark Aqua.
+        TRADE(null, true, null, '3', "trade", "showTrade"); // Dark Aqua.
 
         // Set up some variables for accessing the Enum's data through.
         private boolean presentTense;

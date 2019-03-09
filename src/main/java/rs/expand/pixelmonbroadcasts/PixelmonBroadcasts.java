@@ -45,17 +45,16 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
       NOTE: Stuff that's here will not necessarily get done.
 \*                                                              */
 
+// TODO: Pixelmon Overlay integration for noticeboard message syncing. Important.
 // TODO: Implement logging to a custom log file with the right option passed.
 // TODO: Ideas for new events: HA, successful breed, event spawns, maaaaybe level.
 // TODO: Listen to commands being used, fire the right event if we have a successful hatch/spawn/etcetera.
 // TODO: Make a more comprehensive summon check.
-// TODO: Round up when close on stuff like IVs. Currently rounds down, even if at .99.
 // TODO: Maybe play a cry when something spawns. Slow it down?
 // TODO: Custom spawns. Oh boy. Separate file that includes broadcasts and settings?
 // FIXME: Bad event listeners from other mods may cause events to hang (stuck loop), which causes insane spam from us. Fix?
 // FIXME: Biome names are always English. Maybe add to the lang, and use English biome names as keys.
 // FIXME: Similarly, Pokémon names seem to be English as well.
-// FIXME: Roll over cleanly to a new line if more than 5 toggles are available in a single category?
 // FIXME: Challenges and forfeits can be used to spam servers. Add a persistent tag to avoid repeats?
 
 @Plugin
@@ -136,7 +135,7 @@ public class PixelmonBroadcasts
     {
         // Load up all the configs and figure out the info alias. Start printing. Methods may insert errors as they go.
         logger.info("");
-        logger.info("=============== P I X E L M O N  B R O A D C A S T S ===============");
+        logger.info("§f=============== P I X E L M O N  B R O A D C A S T S ===============");
 
         // Load up all configuration files. Creates new configs/folders if necessary. Commit settings to memory.
         // Store whether we actually loaded things up correctly in this bool, which we can check again later.
@@ -146,7 +145,7 @@ public class PixelmonBroadcasts
         if (loadedCorrectly)
         {
             // Register listeners with Pixelmon.
-            logger.info("--> §aRegistering listeners with Pixelmon...");
+            logger.info("§f--> §aRegistering listeners with Pixelmon...");
             Pixelmon.EVENT_BUS.register(new BattleEndListener());
             Pixelmon.EVENT_BUS.register(new BattleStartListener());
             //Pixelmon.EVENT_BUS.register(new BirdSpawnListener());
@@ -158,15 +157,15 @@ public class PixelmonBroadcasts
             Pixelmon.EVENT_BUS.register(new TradeListener());
 
             // (re-)register the main command and alias. Use the result we get back to see if everything worked.
-            logger.info("--> §aRegistering commands with Sponge...");
+            logger.info("§f--> §aRegistering commands with Sponge...");
             if (ConfigMethods.tryRegisterCommands())
-                logger.info("--> §aPre-init completed. All systems nominal.");
+                logger.info("§f--> §aPre-init completed. All systems nominal.");
         }
         else
-            logger.info("--> §cLoad aborted due to critical errors.");
+            logger.info("§f--> §cLoad aborted due to critical errors. PB is not running!");
 
         // We're done, one way or another. Add a footer, and a space to avoid clutter with other marginal'd mods.
-        logger.info("====================================================================");
+        logger.info("§f====================================================================");
         logger.info("");
     }
 
@@ -211,11 +210,11 @@ public class PixelmonBroadcasts
             if (configStatus != null && configStatus)
             {
                 // Complaining, commence.
-                logger.info("=============== P I X E L M O N  B R O A D C A S T S ===============");
-                logger.info("--> §ePixelmon's \"§6displayLegendaryGlobalMessage§e\" setting is enabled.");
+                logger.info("§f=============== P I X E L M O N  B R O A D C A S T S ===============");
+                logger.info("§f--> §ePixelmon's \"§6displayLegendaryGlobalMessage§e\" setting is enabled.");
                 logger.info("    §eThis setting will now be disabled as it conflicts with this mod.");
                 logger.info("    §eIf you remove this mod, revert this in Pixelmon's config!");
-                logger.info("====================================================================");
+                logger.info("§f====================================================================");
 
                 // Flip the setting in Pixelmon's config.
                 PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").setValue(false);
@@ -233,27 +232,29 @@ public class PixelmonBroadcasts
                     F.printStackTrace();
                 }
 
-                if (configVersion != null && configVersion < 30)
+                if (configVersion != null && configVersion < 40)
                     logger.info("");
             }
 
-            if (configVersion != null && configVersion < 30)
+            if (configVersion != null && configVersion < 40)
             {
                 // More complaining, commence.
-                logger.info("=============== P I X E L M O N  B R O A D C A S T S ===============");
-                logger.info("--> §ePixelmon Broadcast has a new feature! We can now show abilities.");
-                logger.info("    §ePlease open your \"§6settings.conf§e\" file and add the following:");
+                logger.info("§f=============== P I X E L M O N  B R O A D C A S T S ===============");
+                logger.info("§f--> §eWelcome to the 0.4 update! We've added lots of new features.");
+                logger.info("    §eDue to all the additions, new configs are required. Sorry!");
                 logger.info("");
-                logger.info("    showAbilities = true (or false, pick one)");
-                logger.info("");
-                logger.info("    §eAlso change the value of \"§6configVersion§e\" to \"§630§e\".");
-                logger.info("====================================================================");
+                logger.info("§f--> §eTo finish updating, do the following:");
+                logger.info("    §61. §eMove any customized configs somewhere safe, if present.");
+                logger.info("    §62. §eDelete the \"PixelmonBroadcasts\" config folder.");
+                logger.info("    §63. §eUse \"/pixelmonbroadcasts reload\". This creates new files.");
+                logger.info("    §64. §eCopy back any old tweaks carefully -- many things changed!");
+                logger.info("§f====================================================================");
 
                 // TODO: Get this working without it squashing the whole config down.
-                /*// Set the config's version value to 30.
+                /*// Set the config's version value to whatever version we're on right now.
                 try
                 {
-                    settingsConfig.getNode("configVersion").setValue(30);
+                    settingsConfig.getNode("configVersion").setValue(40);
                     settingsLoader.save(settingsLoader.load());
                 }
                 catch (IOException F)

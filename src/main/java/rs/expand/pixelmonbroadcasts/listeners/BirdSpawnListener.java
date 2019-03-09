@@ -1,3 +1,4 @@
+/*
 // Listens for people using bird shrines. Work in progress, currently commented out in production code.
 package rs.expand.pixelmonbroadcasts.listeners;
 
@@ -8,7 +9,7 @@ package rs.expand.pixelmonbroadcasts.listeners;
 // TODO: Check for the name bug.
 public class BirdSpawnListener
 {
-    /*@SubscribeEvent
+    @SubscribeEvent
     public void onActivateBirdShrineEvent(final PlayerActivateShrineEvent event)
     {
         // Create shorthand variables for convenience.
@@ -51,5 +52,6 @@ public class BirdSpawnListener
                         true, false, "summon.birdtrio", "showBirdTrioSummon");
             }
         }
-    }*/
+    }
 }
+*/

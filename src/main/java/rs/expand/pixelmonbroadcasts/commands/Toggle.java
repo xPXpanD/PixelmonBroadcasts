@@ -21,6 +21,7 @@ import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.checkTog
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
 // TODO: Maybe get paginated lists working. Tried it before, but it seems to cut things off randomly...
+// FIXME: A blank list gets printed to chat if you run the toggle command without having access to any. Fix.
 public class Toggle implements CommandExecutor
 {
     // The command executor.

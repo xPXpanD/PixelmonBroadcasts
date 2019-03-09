@@ -1,5 +1,5 @@
 0.4 for 7.0.3
-Released March 7th, 2019.
+Released March 9th, 2019.
 
     Additions:
     * Added Pixelmon noticeboard support. Shows stuff in a fancy box at the top, surrounded by sprites!
@@ -23,19 +23,25 @@ Released March 7th, 2019.
     * Split "broadcast.EVENT.TYPE" broadcasts into both "chat.EVENT.TYPE" and "notice.EVENT.TYPE".
     * Changed the default hatch and trade colors from pink to gray. Pink is now used for UBs.
 
+    Permission changes:
+    * "pixelmonbroadcasts.notify.trade.normal" is now "pixelmonbroadcasts.notify.trade", for consistency.
+
     Tweaks:
-    * Simplified shiny legendary settings. They now work if either legendaries or shinies are on.
-    * Streamlined logging to be a lot simpler. Messages are now single colors, depending on the event type.
+    * Simplified shiny legendary settings to work with either event's toggles enabled. UBs work similarly.
+    * Simplified logging. Messages are now single colors, depending on the event type.
     * Renamed several internal listeners to make more sense in errors/debug output.
 
     Fixes:
     * Hopefully fixed several BattleEndListener-related log errors.
     * Fixed a missing space in the default trade broadcast.
     * Fixed IVs, coordinates and world names in the trade broadcast always being from player 1's side.
+    * Fixed pyrrhic self-kill wins (think Explosion) not registering as a victory in wild battles.
+    * Fixed PvP draws with self-kill moves like Explosion being counted as wins.
     * Fixed shiny legendary forfeit logging not working right. (through rewriting ALL the things)
     * Fixed shown IVs always being rounded down.
     * Fixed trade event permission checks failing in certain setups.
-    * Probably fixed player-versus-player battles occasionally getting the winner/loser wrong. Oops.
+    * Probably fixed player-versus-player battles occasionally getting the winner/loser wrong.
+    * Probably fixed us causing Pixelmon battle errors (double kills!) in double battles.
 
 0.3 for 7.0
 Released February 2nd, 2019.

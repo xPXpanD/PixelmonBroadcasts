@@ -32,85 +32,67 @@ public class HatchListener
         {
             if (event.pokemon.isShiny())
             {
-                if (EventData.Hatches.SHINY_LEGENDARY.checkSettingsOrError("legendaryHatchOptions", "shinyHatchOptions"))
-                {
-                    // Send a log message if we're set up to do logging for this event.
-                    logEvent(EventData.Hatches.SHINY_LEGENDARY,
-                            worldName, location, player.getName(), "shiny legendary " + nameString + " egg");
+                // Send a log message if we're set up to do logging for this event.
+                logEvent(EventData.Hatches.SHINY_LEGENDARY,
+                        worldName, location, player.getName(), "shiny legendary " + nameString + " egg");
 
-                    // Send enabled broadcasts to people who should receive them.
-                    iterateAndBroadcast(EventData.Hatches.SHINY_LEGENDARY,
-                            event.pokemon, null, player, null);
-                }
+                // Send enabled broadcasts to people who should receive them.
+                iterateAndBroadcast(EventData.Hatches.SHINY_LEGENDARY,
+                        event.pokemon, null, player, null);
             }
             else
             {
-                if (EventData.Hatches.LEGENDARY.checkSettingsOrError("legendaryHatchOptions"))
-                {
-                    // Send a log message if we're set up to do logging for this event.
-                    logEvent(EventData.Hatches.LEGENDARY,
-                            worldName, location, player.getName(), "legendary " + nameString + " egg");
+                // Send a log message if we're set up to do logging for this event.
+                logEvent(EventData.Hatches.LEGENDARY,
+                        worldName, location, player.getName(), "legendary " + nameString + " egg");
 
-                    // Send enabled broadcasts to people who should receive them.
-                    iterateAndBroadcast(EventData.Hatches.LEGENDARY,
-                            event.pokemon, null, player, null);
-                }
+                // Send enabled broadcasts to people who should receive them.
+                iterateAndBroadcast(EventData.Hatches.LEGENDARY,
+                        event.pokemon, null, player, null);
             }
         }
         else if (EnumSpecies.ultrabeasts.contains(baseName))
         {
             if (event.pokemon.isShiny())
             {
-                if (EventData.Hatches.SHINY_ULTRA_BEAST.checkSettingsOrError("ultraBeastHatchOptions", "shinyHatchOptions"))
-                {
-                    // Send a log message if we're set up to do logging for this event.
-                    logEvent(EventData.Hatches.SHINY_ULTRA_BEAST,
-                            worldName, location, player.getName(), "shiny " + nameString + " Ultra Beast egg");
+                // Send a log message if we're set up to do logging for this event.
+                logEvent(EventData.Hatches.SHINY_ULTRA_BEAST,
+                        worldName, location, player.getName(), "shiny " + nameString + " Ultra Beast egg");
 
-                    // Send enabled broadcasts to people who should receive them.
-                    iterateAndBroadcast(EventData.Hatches.SHINY_ULTRA_BEAST,
-                            event.pokemon, null, player, null);
-                }
+                // Send enabled broadcasts to people who should receive them.
+                iterateAndBroadcast(EventData.Hatches.SHINY_ULTRA_BEAST,
+                        event.pokemon, null, player, null);
             }
             else
             {
-                if (EventData.Hatches.ULTRA_BEAST.checkSettingsOrError("ultraBeastHatchOptions"))
-                {
-                    // Send a log message if we're set up to do logging for this event.
-                    logEvent(EventData.Hatches.ULTRA_BEAST,
-                            worldName, location, player.getName(), nameString + " Ultra Beast egg");
+                // Send a log message if we're set up to do logging for this event.
+                logEvent(EventData.Hatches.ULTRA_BEAST,
+                        worldName, location, player.getName(), nameString + " Ultra Beast egg");
 
-                    // Send enabled broadcasts to people who should receive them.
-                    iterateAndBroadcast(EventData.Hatches.ULTRA_BEAST,
-                            event.pokemon, null, player, null);
-                }
+                // Send enabled broadcasts to people who should receive them.
+                iterateAndBroadcast(EventData.Hatches.ULTRA_BEAST,
+                        event.pokemon, null, player, null);
             }
         }
         else if (event.pokemon.isShiny())
         {
-            if (EventData.Hatches.SHINY.checkSettingsOrError("shinyHatchOptions"))
-            {
-                // Send a log message if we're set up to do logging for this event.
-                logEvent(EventData.Hatches.SHINY,
-                        worldName, location, player.getName(), "shiny " + nameString + " egg");
+            // Send a log message if we're set up to do logging for this event.
+            logEvent(EventData.Hatches.SHINY,
+                    worldName, location, player.getName(), "shiny " + nameString + " egg");
 
-                // Send enabled broadcasts to people who should receive them.
-                iterateAndBroadcast(EventData.Hatches.SHINY,
-                        event.pokemon, null, player, null);
-            }
+            // Send enabled broadcasts to people who should receive them.
+            iterateAndBroadcast(EventData.Hatches.SHINY,
+                    event.pokemon, null, player, null);
         }
         else
         {
-            if (EventData.Hatches.NORMAL.checkSettingsOrError("normalHatchOptions"))
-            {
-                // Send a log message if we're set up to do logging for this event.
-                logEvent(EventData.Hatches.NORMAL,
-                        worldName, location, player.getName(), nameString + " egg");
+            // Send a log message if we're set up to do logging for this event.
+            logEvent(EventData.Hatches.NORMAL,
+                    worldName, location, player.getName(), nameString + " egg");
 
-                // Send enabled broadcasts to people who should receive them.
-                iterateAndBroadcast(EventData.Hatches.NORMAL,
-                        event.pokemon, null, player, null);
-            }
+            // Send enabled broadcasts to people who should receive them.
+            iterateAndBroadcast(EventData.Hatches.NORMAL,
+                    event.pokemon, null, player, null);
         }
     }
 }

@@ -18,13 +18,13 @@ public class Reload implements CommandExecutor
     public CommandResult execute(final CommandSource src, final CommandContext args)
     {
         if (src instanceof Player)
-            logger.info("§4PBR §f// §5Player " + src.getName() + " started a Pixelmon Broadcasts config reload.");
+            logger.info("§5PBR §f// §5Player " + src.getName() + " started a Pixelmon Broadcasts config reload.");
         else
-            logger.info("§4PBR §f// §5A Pixelmon Broadcasts config reload was started through console or blocks.");
+            logger.info("§5PBR §f// §5A Pixelmon Broadcasts config reload was started through console or blocks.");
 
         // Load up all the configs and figure out the info alias. Start printing. Methods may insert errors as they go.
         logger.info("");
-        logger.info("=============== P I X E L M O N  B R O A D C A S T S ===============");
+        logger.info("§f=============== P I X E L M O N  B R O A D C A S T S ===============");
 
         // Load up all configuration files. Creates new configs/folders if necessary. Commit settings to memory.
         boolean loadedCorrectly = ConfigMethods.tryCreateAndLoadConfigs();
@@ -33,15 +33,15 @@ public class Reload implements CommandExecutor
         if (loadedCorrectly)
         {
             // (re-)register the main command and alias. Use the result we get back to see if everything worked.
-            logger.info("--> §aRe-registering commands with Sponge...");
+            logger.info("§f--> §aRe-registering commands with Sponge...");
             if (ConfigMethods.tryRegisterCommands())
-                logger.info("--> §aReload completed. All systems nominal.");
+                logger.info("§f--> §aReload completed. All systems nominal.");
         }
         else
-            logger.info("--> §cLoad aborted due to critical errors.");
+            logger.info("§f--> §cLoad aborted due to critical errors. Check your configs and logs.");
 
         // We're done, one way or another. Add a footer, and a space to stay consistent.
-        logger.info("====================================================================");
+        logger.info("§f====================================================================");
         logger.info("");
 
         // Print a message to chat.

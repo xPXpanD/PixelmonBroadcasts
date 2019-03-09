@@ -16,24 +16,21 @@ public class PokemonFaintListener
         // Make sure our Pokémon has an owner!
         if (event.pokemon.hasOwner())
         {
-            if (EventData.Others.FAINT.checkSettingsOrError("faintOptions"))
-            {
-                // Create shorthand variables for convenience.
-                final String baseName = event.pokemon.getPokemonName();
-                final String localizedName = event.pokemon.getLocalizedName();
+            // Create shorthand variables for convenience.
+            final String baseName = event.pokemon.getPokemonName();
+            final String localizedName = event.pokemon.getLocalizedName();
 
-                // If we're in a localized setup, format a string for logging both names.
-                final String nameString =
-                        baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
+            // If we're in a localized setup, format a string for logging both names.
+            final String nameString =
+                    baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
 
-                // Send a log message if we're set up to do logging for this event.
-                logEvent(EventData.Others.FAINT, event.player.getEntityWorld().getWorldInfo().getWorldName(),
-                        event.player.getPosition(), event.player.getName(), nameString);
+            // Send a log message if we're set up to do logging for this event.
+            logEvent(EventData.Others.FAINT, event.player.getEntityWorld().getWorldInfo().getWorldName(),
+                    event.player.getPosition(), event.player.getName(), nameString);
 
-                // Send enabled broadcasts to people who should receive them.
-                iterateAndBroadcast(EventData.Others.FAINT,
-                        event.pokemon, null, event.player, null);
-            }
+            // Send enabled broadcasts to people who should receive them.
+            iterateAndBroadcast(EventData.Others.FAINT,
+                    event.pokemon, null, event.player, null);
         }
     }
 }

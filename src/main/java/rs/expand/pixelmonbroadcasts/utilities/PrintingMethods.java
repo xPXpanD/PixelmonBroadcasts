@@ -18,7 +18,8 @@ public class PrintingMethods
     // Prints an event message to console, if it is enabled. One size fits all, with the help of the LogType enum.
     public static void logEvent(final EventData event, final String worldName, final BlockPos location, final String... inputs)
     {
-        if (event.options().toLowerCase().contains("log"))
+        // If options() is null, we'll catch that and error in our iterateAndBroadcast call. Don't worry about it here.
+        if (event.options() != null && event.options().toLowerCase().contains("log"))
         {
             if (event instanceof EventData.Spawns) // Spawn logging needs some special logic.
             {
@@ -27,9 +28,9 @@ public class PrintingMethods
                         "§5PBR §f// §" + event.color() +
                         "A " + inputs[0] +
                         " has spawned in world \"" + worldName +
-                        "\", at X" + location.getX() +
-                        " Y" + location.getY() +
-                        " Z" + location.getZ()
+                        "\", at X:" + location.getX() +
+                        " Y:" + location.getY() +
+                        " Z:" + location.getZ()
                 );
             }
             else if (event.messages().length == 2) // Generally used for events that have two players.
@@ -41,9 +42,9 @@ public class PrintingMethods
                 //                  player 1    's battle with        player 2    ended in a draw
                         "Player " + inputs[0] + event.messages()[0] + inputs[1] + event.messages()[1] +
                         " in world \"" + worldName +
-                        "\", at X" + location.getX() +
-                        " Y" + location.getY() +
-                        " Z" + location.getZ()
+                        "\", at X:" + location.getX() +
+                        " Y:" + location.getY() +
+                        " Z:" + location.getZ()
                 );
             }
             else
@@ -55,31 +56,22 @@ public class PrintingMethods
                 //                  player      fled from a           pokémon/trainer
                         "Player " + inputs[0] + event.messages()[0] + inputs[1] +
                         " in world \"" + worldName +
-                        "\", at X" + location.getX() +
-                        " Y" + location.getY() +
-                        " Z" + location.getZ()
+                        "\", at X:" + location.getX() +
+                        " Y:" + location.getY() +
+                        " Z:" + location.getZ()
                 );
             }
         }
-        /*else
-            logger.error("Log flag not found for event " + event + ", type " + event.getClass().getSimpleName());*/
-    }
-
-    // If we can't read a main config options bundle (really just a String), throw this error. Called during execution.
-    public static void printOptionsNodeError(final String node)
-    {
-        logger.error("Could not read settings.conf node \"§4" + node + "§c\"! Messages swallowed.");
-        logger.error("Check the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
     }
 
     // If we can't read a main config options bundle, throw this error. Called during reloads and hybrid checks.
-    public static void printOptionsNodeError(final List<String> nodes)
+    static void printOptionsNodeError(final List<String> nodes)
     {
         for (final String node : nodes)
-            logger.error("Could not read settings.conf node \"§4" + node + "§c\"!");
+            logger.info("    §cCould not read settings.conf node \"§4" + node + "§c\"!");
 
-        logger.error("The main configuration file contains one or more invalid options.");
-        logger.error("Check the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
+        logger.info("    §cThe main configuration file contains one or more invalid options.");
+        logger.info("    §cCheck the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
     }
 
     // Gets a value matching the given messages key, formats it (ampersands to section characters), and then sends it.

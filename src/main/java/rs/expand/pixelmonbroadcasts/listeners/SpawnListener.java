@@ -27,17 +27,14 @@ public class SpawnListener
         // Check if the entity is a wormhole.
         if (spawnedEntity instanceof EntityWormhole)
         {
-            if (EventData.Spawns.WORMHOLE.checkSettingsOrError("wormholeSpawnOptions"))
-            {
-                // Grab a specific entity for re-use purposes. This is safe, now.
-                final EntityWormhole wormhole = (EntityWormhole) spawnedEntity;
+            // Grab a specific entity for re-use purposes. This is safe, now.
+            final EntityWormhole wormhole = (EntityWormhole) spawnedEntity;
 
-                // Send a log message if we're set up to do logging for this event.
-                logEvent(EventData.Spawns.WORMHOLE, worldName, wormhole.getPosition(), "wormhole");
+            // Send a log message if we're set up to do logging for this event.
+            logEvent(EventData.Spawns.WORMHOLE, worldName, wormhole.getPosition(), "wormhole");
 
-                // Send enabled broadcasts to people who should receive them.
-                iterateAndBroadcast(EventData.Spawns.WORMHOLE, wormhole, null, null, null);
-            }
+            // Send enabled broadcasts to people who should receive them.
+            iterateAndBroadcast(EventData.Spawns.WORMHOLE, wormhole, null, null, null);
         }
         // Check if the entity is a Pokémon. We don't want no stinkin' trainers or the like.
         else if (spawnedEntity instanceof EntityPixelmon)
@@ -63,90 +60,69 @@ public class SpawnListener
 
                 if (pokemonEntity.isBossPokemon())
                 {
-                    if (EventData.Spawns.BOSS.checkSettingsOrError("bossSpawnOptions"))
-                    {
-                        // Send a log message if we're set up to do logging for this event.
-                        logEvent(EventData.Spawns.BOSS,
-                                worldName, location, "boss " + nameString);
+                    // Send a log message if we're set up to do logging for this event.
+                    logEvent(EventData.Spawns.BOSS,
+                            worldName, location, "boss " + nameString);
 
-                        // Send enabled broadcasts to people who should receive them.
-                        iterateAndBroadcast(EventData.Spawns.BOSS,
-                                pokemonEntity, null, null, null);
-                    }
+                    // Send enabled broadcasts to people who should receive them.
+                    iterateAndBroadcast(EventData.Spawns.BOSS,
+                            pokemonEntity, null, null, null);
                 }
                 else if (EnumSpecies.legendaries.contains(baseName))
                 {
                     if (pokemonEntity.getPokemonData().isShiny())
                     {
-                        if (EventData.Spawns.SHINY_LEGENDARY.checkSettingsOrError(
-                                "legendarySpawnOptions", "shinySpawnOptions"))
-                        {
-                            // Send a log message if we're set up to do logging for this event.
-                            logEvent(EventData.Spawns.SHINY_LEGENDARY,
-                                    worldName, location, "shiny legendary " + nameString);
+                        // Send a log message if we're set up to do logging for this event.
+                        logEvent(EventData.Spawns.SHINY_LEGENDARY,
+                                worldName, location, "shiny legendary " + nameString);
 
-                            // Send enabled broadcasts to people who should receive them.
-                            iterateAndBroadcast(EventData.Spawns.SHINY_LEGENDARY,
-                                    pokemonEntity, null, null, null);
-                        }
+                        // Send enabled broadcasts to people who should receive them.
+                        iterateAndBroadcast(EventData.Spawns.SHINY_LEGENDARY,
+                                pokemonEntity, null, null, null);
                     }
                     else
                     {
-                        if (EventData.Spawns.LEGENDARY.checkSettingsOrError("legendarySpawnOptions"))
-                        {
-                            // Send a log message if we're set up to do logging for this event.
-                            logEvent(EventData.Spawns.LEGENDARY,
-                                    worldName, location, "legendary " + nameString);
+                        // Send a log message if we're set up to do logging for this event.
+                        logEvent(EventData.Spawns.LEGENDARY,
+                                worldName, location, "legendary " + nameString);
 
-                            // Send enabled broadcasts to people who should receive them.
-                            iterateAndBroadcast(EventData.Spawns.LEGENDARY,
-                                    pokemonEntity, null, null, null);
-                        }
-
+                        // Send enabled broadcasts to people who should receive them.
+                        iterateAndBroadcast(EventData.Spawns.LEGENDARY,
+                                pokemonEntity, null, null, null);
                     }
                 }
                 else if (EnumSpecies.ultrabeasts.contains(baseName))
                 {
                     if (pokemonEntity.getPokemonData().isShiny())
                     {
-                        if (EventData.Spawns.SHINY_ULTRA_BEAST.checkSettingsOrError(
-                                "ultraBeastSpawnOptions", "shinySpawnOptions"))
-                        {
-                            // Send a log message if we're set up to do logging for this event.
-                            logEvent(EventData.Spawns.SHINY_ULTRA_BEAST,
-                                    worldName, location, "shiny " + nameString + " Ultra Beast");
+                        // Send a log message if we're set up to do logging for this event.
+                        logEvent(EventData.Spawns.SHINY_ULTRA_BEAST,
+                                worldName, location, "shiny " + nameString + " Ultra Beast");
 
-                            // Send enabled broadcasts to people who should receive them.
-                            iterateAndBroadcast(EventData.Spawns.SHINY_ULTRA_BEAST,
-                                    pokemonEntity, null, null, null);
-                        }
+                        // Send enabled broadcasts to people who should receive them.
+                        iterateAndBroadcast(EventData.Spawns.SHINY_ULTRA_BEAST,
+                                pokemonEntity, null, null, null);
                     }
                     else
                     {
-                        if (EventData.Spawns.ULTRA_BEAST.checkSettingsOrError("ultraBeastSpawnOptions"))
-                        {
-                            // Send a log message if we're set up to do logging for this event.
-                            logEvent(EventData.Spawns.ULTRA_BEAST,
-                                    worldName, location, nameString + " Ultra Beast");
+                        // Send a log message if we're set up to do logging for this event.
+                        logEvent(EventData.Spawns.ULTRA_BEAST,
+                                worldName, location, nameString + " Ultra Beast");
 
-                            // Send enabled broadcasts to people who should receive them.
-                            iterateAndBroadcast(EventData.Spawns.ULTRA_BEAST,
-                                    pokemonEntity, null, null, null);
-                        }
+                        // Send enabled broadcasts to people who should receive them.
+                        iterateAndBroadcast(EventData.Spawns.ULTRA_BEAST,
+                                pokemonEntity, null, null, null);
                     }
                 }
                 else if (pokemonEntity.getPokemonData().isShiny())
                 {
-                    if (EventData.Spawns.SHINY.checkSettingsOrError("shinySpawnOptions"))
-                    {
-                        // Send a log message if we're set up to do logging for this event.
-                        logEvent(EventData.Spawns.SHINY,
-                                worldName, location, "shiny " + nameString);
+                    // Send a log message if we're set up to do logging for this event.
+                    logEvent(EventData.Spawns.SHINY,
+                            worldName, location, "shiny " + nameString);
 
-                        // Send enabled broadcasts to people who should receive them.
-                        iterateAndBroadcast(EventData.Spawns.SHINY,
-                                pokemonEntity, null, null, null);
-                    }
+                    // Send enabled broadcasts to people who should receive them.
+                    iterateAndBroadcast(EventData.Spawns.SHINY,
+                            pokemonEntity, null, null, null);
                 }
             }
         }

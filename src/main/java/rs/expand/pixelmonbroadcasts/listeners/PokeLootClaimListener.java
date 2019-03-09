@@ -1,53 +1,76 @@
-// Listens for people looting Pokéloot chests.
+/*// Listens for people looting Pokéloot chests. TODO: Figure out a way to get world loot... Dead end, it seems.
 package rs.expand.pixelmonbroadcasts.listeners;
 
 import com.pixelmonmod.pixelmon.api.events.PokeLootClaimedEvent;
+import com.pixelmonmod.pixelmon.blocks.enums.EnumPokeChestType;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import rs.expand.pixelmonbroadcasts.enums.EventData;
 
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndBroadcast;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.logEvent;
 
 public class PokeLootClaimListener
 {
     @SubscribeEvent
     public void onPokeLootClaimEvent(final PokeLootClaimedEvent event)
     {
-        if (EventData.Others.LOOT_CLAIM.checkSettingsOrError("lootClaimOptions"))
+        if (event.chest.getType() != EnumPokeChestType.SPECIAL)
         {
-            // Don't pass this to PrintingMethods#logEvent(), far too messy.
-            if (EventData.Others.LOOT_CLAIM.options.contains("log"))
+            final ItemStack[] items = event.chest.getCustomDrops();
+
+            if (items.length != 0)
             {
-                // Create a pretty string for the type of ball we have.
-                final String lootType;
-                switch (event.chest.getType())
+                // Don't pass this to PrintingMethods#logEvent(), far too messy.
+                if (EventData.Others.LOOT.options() != null && EventData.Others.LOOT.options().contains("log"))
                 {
-                    case MASTERBALL:
-                        lootType = "Master Ball"; break;
-                    case ULTRABALL:
-                        lootType = "Ultra Ball"; break;
-                    case POKEBALL:
-                        lootType = "Poké Ball"; break;
-                    case BEASTBALL:
-                        lootType = "Beast Ball"; break;
-                    default:
-                        lootType = "no clue"; break; // TODO: Acquire clue.
+                    // Print a loot message to console, if enabled.
+                    logger.info
+                    (
+                            "§5PBR §f// §" + EventData.Others.LOOT.color() +
+                            "Player " + event.player.getName() +
+                            " looted " + items[0].getCount() +
+                            " " + items[0].getDisplayName() +
+                            " from a chest of the " + event.chest.getType().name() +
+                            " type."
+                    );
                 }
 
-                if (EventData.Others.LOOT_CLAIM.checkSettingsOrError("bossSpawnOptions"))
-                {
-                    // Send a log message if we're set up to do logging for this event.
-                    logEvent(EventData.Others.LOOT_CLAIM, event.player.getEntityWorld().getWorldInfo().getWorldName(),
-                            event.player.getPosition(), event.player.getName(), lootType + " chest");
-
-                    // Send enabled broadcasts to people who should receive them.
-                    iterateAndBroadcast(EventData.Others.LOOT_CLAIM,
-                            null, null, event.player, null);
-                }
+                // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                iterateAndBroadcast(EventData.Others.LOOT, items, null, event.player, null);
             }
-
-            // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
-            iterateAndBroadcast(EventData.Others.LOOT_CLAIM, event.pokemon1, event.pokemon2, event.player1, event.player2);
+            else
+                logger.error("Could not find an item on a Pokéloot claim event! Please report this.");
         }
+        else
+            logger.error("Hey, we got a SPECIAL chest type. Gift?");
     }
-}
+}*/
+
+
+/*
+            else if (object1 instanceof ItemStack[])
+            {
+                // Make the item stack a bit easier to access.
+                final ItemStack[] items = (ItemStack[]) object1;
+
+                // Swap. We've already validated the ItemStack array is not empty before sending.
+                broadcast = broadcast.replaceAll("(?i)%item%", items[0].getDisplayName());
+            }*/
+
+/*
+            // If we're still running, did we get a Pokémon? This is only null if we got an ItemStack array before.
+            if (pokemon != null)
+            {*/
+
+/*
+            if (canReceiveBroadcast(src, EventData.Others.LOOT))
+            {
+                flags.add("showLoot");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showLoot"))
+                    messages.add(getTranslation("toggle.loot.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.loot.off") + separator);
+            }*/

@@ -31,20 +31,17 @@ public class BattleStartListener
             // Did a PvP battle just start? (two players, one on either side)
             if (participant1 instanceof PlayerParticipant && participant2 instanceof PlayerParticipant)
             {
-                if (EventData.Challenges.PVP.checkSettingsOrError("pvpChallengeOptions"))
-                {
-                    // If we're still going, set up some more commonly-used variables. World stuff should be the same for both.
-                    final EntityPlayer player1Entity = (EntityPlayer) participant1.getEntity();
-                    final EntityPlayer player2Entity = (EntityPlayer) participant2.getEntity();
+                // If we're still going, set up some more commonly-used variables. World stuff should be the same for both.
+                final EntityPlayer player1Entity = (EntityPlayer) participant1.getEntity();
+                final EntityPlayer player2Entity = (EntityPlayer) participant2.getEntity();
 
-                    // Send a log message if we're set up to do logging for this event.
-                    logEvent(EventData.Challenges.PVP, participant1.getWorld().getWorldInfo().getWorldName(),
-                            participant1.getEntity().getPosition(), player1Entity.getName(), player2Entity.getName());
+                // Send a log message if we're set up to do logging for this event.
+                logEvent(EventData.Challenges.PVP, participant1.getWorld().getWorldInfo().getWorldName(),
+                        participant1.getEntity().getPosition(), player1Entity.getName(), player2Entity.getName());
 
-                    // Send enabled broadcasts to people who should receive them.
-                    iterateAndBroadcast(EventData.Challenges.PVP,
-                            null, null, player1Entity, player2Entity);
-                }
+                // Send enabled broadcasts to people who should receive them.
+                iterateAndBroadcast(EventData.Challenges.PVP,
+                        null, null, player1Entity, player2Entity);
             }
             // Are there any trainer NPCs in the battle?
             else if (participant1 instanceof TrainerParticipant || participant2 instanceof TrainerParticipant)
@@ -72,29 +69,23 @@ public class BattleStartListener
 
                 if (npc.trainer.getBossMode().isBossPokemon())
                 {
-                    if (EventData.Challenges.BOSS_TRAINER.checkSettingsOrError("bossTrainerChallengeOptions"))
-                    {
-                        // Send a log message if we're set up to do logging for this event.
-                        logEvent(EventData.Challenges.BOSS_TRAINER,
-                                worldName, location, playerEntity.getName(), "boss trainer");
+                    // Send a log message if we're set up to do logging for this event.
+                    logEvent(EventData.Challenges.BOSS_TRAINER,
+                            worldName, location, playerEntity.getName(), "boss trainer");
 
-                        // Send enabled broadcasts to people who should receive them.
-                        iterateAndBroadcast(EventData.Challenges.BOSS_TRAINER,
-                                null, null, playerEntity, null);
-                    }
+                    // Send enabled broadcasts to people who should receive them.
+                    iterateAndBroadcast(EventData.Challenges.BOSS_TRAINER,
+                            null, null, playerEntity, null);
                 }
                 else
                 {
-                    if (EventData.Challenges.TRAINER.checkSettingsOrError("trainerChallengeOptions"))
-                    {
-                        // Send a log message if we're set up to do logging for this event.
-                        logEvent(EventData.Challenges.TRAINER,
-                                worldName, location, playerEntity.getName(), "trainer");
+                    // Send a log message if we're set up to do logging for this event.
+                    logEvent(EventData.Challenges.TRAINER,
+                            worldName, location, playerEntity.getName(), "trainer");
 
-                        // Send enabled broadcasts to people who should receive them.
-                        iterateAndBroadcast(EventData.Challenges.TRAINER,
-                                null, null, playerEntity, null);
-                    }
+                    // Send enabled broadcasts to people who should receive them.
+                    iterateAndBroadcast(EventData.Challenges.TRAINER,
+                            null, null, playerEntity, null);
                 }
             }
             // Are there any wild Pokémon in the battle?
@@ -137,89 +128,69 @@ public class BattleStartListener
                     // Figure out what our Pokémon is, exactly.
                     if (pokemonEntity.isBossPokemon())
                     {
-                        if (EventData.Challenges.BOSS.checkSettingsOrError("bossChallengeOptions"))
-                        {
-                            // Send a log message if we're set up to do logging for this event.
-                            logEvent(EventData.Challenges.BOSS,
-                                    worldName, location, playerEntity.getName(), "boss " + nameString);
+                        // Send a log message if we're set up to do logging for this event.
+                        logEvent(EventData.Challenges.BOSS,
+                                worldName, location, playerEntity.getName(), "boss " + nameString);
 
-                            // Send enabled broadcasts to people who should receive them.
-                            iterateAndBroadcast(EventData.Challenges.BOSS,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
+                        // Send enabled broadcasts to people who should receive them.
+                        iterateAndBroadcast(EventData.Challenges.BOSS,
+                                pokemonEntity, null, playerEntity, null);
                     }
                     else if (EnumSpecies.legendaries.contains(baseName))
                     {
                         if (pokemonEntity.getPokemonData().isShiny())
                         {
-                            if (EventData.Challenges.SHINY_LEGENDARY.checkSettingsOrError(
-                                    "legendaryChallengeOptions", "shinyChallengeOptions"))
-                            {
-                                // Send a log message if we're set up to do logging for this event.
-                                logEvent(EventData.Challenges.SHINY_LEGENDARY,
-                                        worldName, location, playerEntity.getName(), "shiny legendary " + nameString);
+                            // Send a log message if we're set up to do logging for this event.
+                            logEvent(EventData.Challenges.SHINY_LEGENDARY,
+                                    worldName, location, playerEntity.getName(), "shiny legendary " + nameString);
 
-                                // Send enabled broadcasts to people who should receive them.
-                                iterateAndBroadcast(EventData.Challenges.SHINY_LEGENDARY,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
+                            // Send enabled broadcasts to people who should receive them.
+                            iterateAndBroadcast(EventData.Challenges.SHINY_LEGENDARY,
+                                    pokemonEntity, null, playerEntity, null);
                         }
                         else
                         {
-                            if (EventData.Challenges.LEGENDARY.checkSettingsOrError("legendaryChallengeOptions"))
-                            {
-                                // Send a log message if we're set up to do logging for this event.
-                                logEvent(EventData.Challenges.LEGENDARY,
-                                        worldName, location, playerEntity.getName(), "legendary " + nameString);
+                            // Send a log message if we're set up to do logging for this event.
+                            logEvent(EventData.Challenges.LEGENDARY,
+                                    worldName, location, playerEntity.getName(), "legendary " + nameString);
 
-                                // Send enabled broadcasts to people who should receive them.
-                                iterateAndBroadcast(EventData.Challenges.LEGENDARY,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
+                            // Send enabled broadcasts to people who should receive them.
+                            iterateAndBroadcast(EventData.Challenges.LEGENDARY,
+                                    pokemonEntity, null, playerEntity, null);
                         }
                     }
                     else if (EnumSpecies.ultrabeasts.contains(baseName))
                     {
                         if (pokemonEntity.getPokemonData().isShiny())
                         {
-                            if (EventData.Challenges.SHINY_ULTRA_BEAST.checkSettingsOrError(
-                                    "ultraBeastChallengeOptions", "shinyChallengeOptions"))
-                            {
-                                // Send a log message if we're set up to do logging for this event.
-                                logEvent(EventData.Challenges.SHINY_ULTRA_BEAST,
-                                        worldName, location, playerEntity.getName(), "shiny " + nameString + " Ultra Beast");
+                            // Send a log message if we're set up to do logging for this event.
+                            logEvent(EventData.Challenges.SHINY_ULTRA_BEAST,
+                                    worldName, location, playerEntity.getName(), "shiny " + nameString + " Ultra Beast");
 
-                                // Send enabled broadcasts to people who should receive them.
-                                iterateAndBroadcast(EventData.Challenges.SHINY_ULTRA_BEAST,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
+                            // Send enabled broadcasts to people who should receive them.
+                            iterateAndBroadcast(EventData.Challenges.SHINY_ULTRA_BEAST,
+                                    pokemonEntity, null, playerEntity, null);
                         }
                         else
                         {
-                            if (EventData.Challenges.ULTRA_BEAST.checkSettingsOrError("ultraBeastChallengeOptions"))
-                            {
-                                // Send a log message if we're set up to do logging for this event.
-                                logEvent(EventData.Challenges.ULTRA_BEAST,
-                                        worldName, location, playerEntity.getName(), nameString + " Ultra Beast");
+                            // Send a log message if we're set up to do logging for this event.
+                            logEvent(EventData.Challenges.ULTRA_BEAST,
+                                    worldName, location, playerEntity.getName(), nameString + " Ultra Beast");
 
-                                // Send enabled broadcasts to people who should receive them.
-                                iterateAndBroadcast(EventData.Challenges.ULTRA_BEAST,
-                                        pokemonEntity, null, playerEntity, null);
-                            }
+                            // Send enabled broadcasts to people who should receive them.
+                            iterateAndBroadcast(EventData.Challenges.ULTRA_BEAST,
+                                    pokemonEntity, null, playerEntity, null);
                         }
                     }
                     else if (pokemonEntity.getPokemonData().isShiny())
                     {
-                        if (EventData.Challenges.SHINY.checkSettingsOrError("shinyChallengeOptions"))
-                        {
-                            // Send a log message if we're set up to do logging for this event.
-                            logEvent(EventData.Challenges.SHINY,
-                                    worldName, location, playerEntity.getName(), "shiny " + nameString);
+                        // Send a log message if we're set up to do logging for this event.
+                        logEvent(EventData.Challenges.SHINY,
+                                worldName, location, playerEntity.getName(), "shiny " + nameString);
 
-                            // Send enabled broadcasts to people who should receive them.
-                            iterateAndBroadcast(EventData.Challenges.SHINY,
-                                    pokemonEntity, null, playerEntity, null);
-                        }
+                        // Send enabled broadcasts to people who should receive them.
+                        iterateAndBroadcast(EventData.Challenges.SHINY,
+                                pokemonEntity, null, playerEntity, null);
                     }
                 }
             }
