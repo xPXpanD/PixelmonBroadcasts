@@ -40,51 +40,35 @@ public class BaseCommand implements CommandExecutor
             // Set up a flag to see where we're running from. Gets set to true if we weren't called by a player.
             final boolean calledRemotely = !(src instanceof Player);
 
-            // Also set up a flag for seeing whether the user had any permissions.
-            boolean hasPermissions = false;
+            src.sendMessage
+            (
+                    Text.builder(getTranslation("hub.toggle_syntax", checkedAlias))
+                            .onClick(TextActions.runCommand("/pixelmonbroadcasts toggle"))
+                            .build()
+            );
 
-            // Start permission checks.
-            if (src.hasPermission("pixelmonbroadcasts.command.toggle"))
+            if (src instanceof Player)
+                src.sendMessage(Text.of(getTranslation("hub.toggle_info")));
+            else
             {
-                hasPermissions = true;
-
-                final String finalMessage = getTranslation("hub.toggle_syntax", checkedAlias);
-
-                LiteralText clickableLine = Text.builder(finalMessage)
-                        .onClick(TextActions.runCommand("/pixelmonbroadcasts toggle"))
-                        .build();
-                
-                src.sendMessage(clickableLine);
-
-                if (src instanceof Player)
-                    src.sendMessage(Text.of(getTranslation("hub.toggle_info")));
-                else
-                {
-                    // Message locked in, as it's not visible in-game. Keeps the lang workload down, with minimal loss.
-                    src.sendMessage(Text.of(
-                            "➡ §eAllows in-game players to toggle event messages by clicking them."));
-                }
+                // Message locked in, as it's not visible in-game. Keeps the lang workload down, with minimal loss.
+                src.sendMessage(Text.of(
+                        "➡ §eAllows in-game players to toggle event messages by clicking them."));
             }
+
             if (src.hasPermission("pixelmonbroadcasts.command.staff.reload"))
             {
-                hasPermissions = true;
+                src.sendMessage
+                (
+                        Text.builder(getTranslation("hub.reload_syntax", checkedAlias, "test1", "test2"))
+                            .onClick(TextActions.runCommand("/pixelmonbroadcasts reload"))
+                            .build()
+                );
 
-                final String finalMessage = getTranslation("hub.reload_syntax", checkedAlias, "test1", "test2");
-
-                LiteralText clickableLine = Text.builder(finalMessage)
-                        .onClick(TextActions.runCommand("/pixelmonbroadcasts reload"))
-                        .build();
-
-                src.sendMessage(clickableLine);
                 src.sendMessage(Text.of(getTranslation("hub.reload_info")));
             }
 
-            if (!hasPermissions)
-            {
-                sendTranslation(src, "hub.no_permissions");
-                sendTranslation(src, "hub.contact_staff");
-            }
-            else if (calledRemotely)
+            if (calledRemotely)
             {
                 // Messages locked in, as they're not visible in-game. Keeps the lang workload down, with minimal loss.
                 src.sendMessage(Text.of(""));

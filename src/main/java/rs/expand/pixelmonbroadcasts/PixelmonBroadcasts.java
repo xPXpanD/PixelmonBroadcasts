@@ -45,14 +45,19 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
       NOTE: Stuff that's here will not necessarily get done.
 \*                                                              */
 
-// TODO: Pixelmon Overlay integration for noticeboard message syncing. Important.
+// TODO: PixelmonOverlay integration for noticeboard message syncing. Important.
+// TODO: Get rid of the shinylegendary/shinyultrabeast key checks, somehow.
+// TODO: Add a "minimum boss level" option to the global settings. Make it only broadcast bosses at or above that level.
+// TODO: Adding on to the above, also add the boss level to logging and maybe broadcasts.
+// TODO: Maybe play a cry when something spawns. Slow it down?
+// TODO: Maybe move some of the less unique logging info out of EventData and into the listener classes via constants.
+
 // TODO: Implement logging to a custom log file with the right option passed.
 // TODO: Ideas for new events: HA, successful breed, event spawns, maaaaybe level.
 // TODO: Listen to commands being used, fire the right event if we have a successful hatch/spawn/etcetera.
 // TODO: Make a more comprehensive summon check.
-// TODO: Maybe play a cry when something spawns. Slow it down?
-// TODO: Custom spawns. Oh boy. Separate file that includes broadcasts and settings?
-// FIXME: Bad event listeners from other mods may cause events to hang (stuck loop), which causes insane spam from us. Fix?
+// TODO: Custom event setups. Oh boy. Separate file that includes broadcasts and settings?
+// FIXME: Bad event listeners from other mods may cause events to start looping, which causes insane spam from us. Fix?
 // FIXME: Biome names are always English. Maybe add to the lang, and use English biome names as keys.
 // FIXME: Similarly, Pokémon names seem to be English as well.
 // FIXME: Challenges and forfeits can be used to spam servers. Add a persistent tag to avoid repeats?
@@ -61,7 +66,7 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 (
         id = "pixelmonbroadcasts",
         name = "PixelmonBroadcasts",
-        version = "0.4",
+        version = "0.4t2",
         dependencies = @Dependency(id = "pixelmon", version = "7.0"),
         description = "Adds fully custom legendary-like messages for tons of events, and optionally logs them, too.",
         authors = "XpanD"
@@ -114,7 +119,6 @@ public class PixelmonBroadcasts
          Utility commands.
     \*                       */
     private static CommandSpec togglepreferences = CommandSpec.builder()
-            .permission("pixelmonbroadcasts.command.toggle")
             .arguments(GenericArguments.optionalWeak(GenericArguments.string(Text.of("setting"))))
             .executor(new Toggle())
             .build();
@@ -240,8 +244,8 @@ public class PixelmonBroadcasts
             {
                 // More complaining, commence.
                 logger.info("§f=============== P I X E L M O N  B R O A D C A S T S ===============");
-                logger.info("§f--> §eWelcome to the 0.4 update! We've added lots of new features.");
-                logger.info("    §eDue to all the additions, new configs are required. Sorry!");
+                logger.info("§f--> §eWelcome to the 0.4(.1) update! There's a bunch of new stuff.");
+                logger.info("    §eDue to all of the changes, new configs are required. Sorry!");
                 logger.info("");
                 logger.info("§f--> §eTo finish updating, do the following:");
                 logger.info("    §61. §eMove any customized configs somewhere safe, if present.");
