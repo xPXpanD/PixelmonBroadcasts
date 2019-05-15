@@ -1,11 +1,21 @@
-0.4.1 for ???
-Released ???
+0.4.1 for 7.0.5
+Released May 15th, 2019.
+
+    Additions:
+    * Added support for happyzlife's Pixelmon Overlay, allowing noticeboard sharing with other plugins.
 
     Tweaks:
-    * Removed the Toggle permission check. They populate based on what's available anyways, so no point.
+    * Removed the Toggle command permission check due to it being unnecessary. We'll use individual perms.
 
-    Message file changes:
-    * Due to Toggle now being free for all, "hub.no_permissions" and "hub.contact_staff" are now gone.
+    Message file additions and changes:
+    * Removed "hub.no_permissions" and "hub.contact_staff".
+    * Added "toggle.no_permissions".
+    * Re-worded "action.teleport.no_permissions" to fall in line with other no-perm messages.
+
+    Fixes:
+    * Added debug and a workaround for a weird issue that potentially breaks battles. Thanks, I9hdkill!
+    * Added some listener safeguards to hopefully avoid issues when other plugins kill the event.
+    * Fixed the Toggle command showing only a header and footer to people with no event permissions.
 
 0.4 for 7.0.3
 Released March 9th, 2019.

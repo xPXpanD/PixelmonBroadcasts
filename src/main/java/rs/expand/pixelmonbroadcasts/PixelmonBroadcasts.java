@@ -10,7 +10,6 @@ import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.args.GenericArguments;
@@ -21,6 +20,7 @@ import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
+import rs.expand.pixelmonbroadcasts.bridges.PixelmonOverlayBridge;
 import rs.expand.pixelmonbroadcasts.commands.BaseCommand;
 import rs.expand.pixelmonbroadcasts.commands.Reload;
 import rs.expand.pixelmonbroadcasts.commands.Toggle;
@@ -34,7 +34,6 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
@@ -45,13 +44,11 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
       NOTE: Stuff that's here will not necessarily get done.
 \*                                                              */
 
-// TODO: PixelmonOverlay integration for noticeboard message syncing. Important.
 // TODO: Get rid of the shinylegendary/shinyultrabeast key checks, somehow.
 // TODO: Add a "minimum boss level" option to the global settings. Make it only broadcast bosses at or above that level.
 // TODO: Adding on to the above, also add the boss level to logging and maybe broadcasts.
 // TODO: Maybe play a cry when something spawns. Slow it down?
 // TODO: Maybe move some of the less unique logging info out of EventData and into the listener classes via constants.
-
 // TODO: Implement logging to a custom log file with the right option passed.
 // TODO: Ideas for new events: HA, successful breed, event spawns, maaaaybe level.
 // TODO: Listen to commands being used, fire the right event if we have a successful hatch/spawn/etcetera.
@@ -61,17 +58,23 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 // FIXME: Biome names are always English. Maybe add to the lang, and use English biome names as keys.
 // FIXME: Similarly, Pokémon names seem to be English as well.
 // FIXME: Challenges and forfeits can be used to spam servers. Add a persistent tag to avoid repeats?
+// NOTE: Be careful with grabbing stuff directly from event players, they occasionally go null.
 
 @Plugin
 (
         id = "pixelmonbroadcasts",
         name = "PixelmonBroadcasts",
-        version = "0.4t2",
-        dependencies = @Dependency(id = "pixelmon", version = "7.0"),
+        version = "0.4.1",
+        dependencies = {
+                @Dependency(id = "pixelmon", version = "7.0.5"),
+                @Dependency(id = "pixelmonoverlay", version = "1.1.0", optional = true)
+        },
         description = "Adds fully custom legendary-like messages for tons of events, and optionally logs them, too.",
         authors = "XpanD"
 
         /*                                                                                                         *\
+            Big thanks to happyzleaf for the basic PixelmonOverlay integration.
+
             Loosely inspired by PixelAnnouncer, which I totally forgot existed up until I wanted to release.
             After people reminded me that PA was a thing, I ended up making PBR a full-on replacement for it.
 
@@ -166,7 +169,7 @@ public class PixelmonBroadcasts
                 logger.info("§f--> §aPre-init completed. All systems nominal.");
         }
         else
-            logger.info("§f--> §cLoad aborted due to critical errors. PB is not running!");
+            logger.info("§f--> §cLoad aborted due to critical errors. Mod is not running!");
 
         // We're done, one way or another. Add a footer, and a space to avoid clutter with other marginal'd mods.
         logger.info("§f====================================================================");
@@ -178,37 +181,43 @@ public class PixelmonBroadcasts
     {
         if (loadedCorrectly)
         {
-            // Set up a repeating task. It checks if any players need their notices wiped. (happens every 10-12s)
-            // Won't do much if Pixelmon's notice board (the thing that shows messages at the top) isn't being sent to.
-            final ScheduledExecutorService noticeClearTimer = Executors.newSingleThreadScheduledExecutor();
-            final Server server = Sponge.getGame().getServer();
-            noticeClearTimer.scheduleWithFixedDelay(() ->
+            // Is PixelmonOverlay loaded? If so, do setup. If not, use our own fallback implementation.
+            if (Sponge.getPluginManager().isLoaded("pixelmonoverlay"))
             {
-                // Grab current time in milliseconds.
-                final long currentTime = System.currentTimeMillis();
-
-                // Iterate through all online players.
-                server.getOnlinePlayers().forEach(player ->
+                logger.info("§aDetected Pixelmon Overlay, we'll use that for noticeboard messages.");
+                PixelmonOverlayBridge.setup(this);
+            }
+            else
+            {
+                // Set up a repeating task. It checks if any players need their notices wiped. (happens every 10-12s)
+                Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(() ->
                 {
-                    // Check if our player is using any noticeboard-enabled broadcasts.
-                    if (noticeExpiryMap.containsKey(player.getUniqueId()))
+                    // Grab current time in milliseconds.
+                    final long currentTime = System.currentTimeMillis();
+
+                    // Iterate through all online players.
+                    Sponge.getGame().getServer().getOnlinePlayers().forEach(player ->
                     {
-                        // Are we 10 or more seconds ahead of the last time a notice was added? Hide it!
-                        if (currentTime - noticeExpiryMap.get(player.getUniqueId()) >= 10000)
+                        // Check if our player is using any noticeboard-enabled broadcasts.
+                        if (noticeExpiryMap.containsKey(player.getUniqueId()))
                         {
-                            // Hide the overlay for the targeted player.
-                            NoticeOverlay.hide((EntityPlayerMP) player);
+                            // Are we 10 or more seconds ahead of the last time a notice was added? Hide it!
+                            if (currentTime - noticeExpiryMap.get(player.getUniqueId()) >= 10000)
+                            {
+                                // Hide the overlay for the targeted player.
+                                NoticeOverlay.hide((EntityPlayerMP) player);
 
-                            // Remove the player's UUID from the map. This prevents needless clears every iteration.
-                            noticeExpiryMap.remove(player.getUniqueId());
+                                // Remove the player's UUID from the map. This prevents needless clears every iteration.
+                                noticeExpiryMap.remove(player.getUniqueId());
+                            }
                         }
-                    }
-                });
-            }, 0, 2, TimeUnit.SECONDS);
+                    });
+                }, 0, 2, TimeUnit.SECONDS);
+            }
 
-            // Check Pixelmon's config and get whether the legendary spawning message is in.
-            final Boolean configStatus = toBooleanObject(
-                    PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").getString());
+            // Check Pixelmon's config and get whether the legendary spawning message is enabled there.
+            final Boolean configStatus =
+                    toBooleanObject(PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").getString());
 
             // Is the config setting we're reading available, /and/ is the setting turned on? Complain!
             if (configStatus != null && configStatus)

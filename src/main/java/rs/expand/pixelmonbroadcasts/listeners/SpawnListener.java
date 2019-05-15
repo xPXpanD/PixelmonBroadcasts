@@ -11,18 +11,16 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import rs.expand.pixelmonbroadcasts.enums.EventData;
 
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndBroadcast;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.logEvent;
 
 public class SpawnListener
 {
+    // Drop event priority to lowest, and only proceed if the event is still alive by the time we get to it.
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onSpawnEntityEvent(final SpawnEvent event)
     {
-        if (event.isCanceled())
-            logger.info("§5Debug: §dSpawn event was cancelled, halting execution!");
-        else
+        if (!event.isCanceled())
         {
             // Create an entity from the event info that we can check.
             final Entity spawnedEntity = event.action.getOrCreateEntity();

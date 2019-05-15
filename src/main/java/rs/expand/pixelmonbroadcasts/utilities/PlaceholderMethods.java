@@ -5,6 +5,7 @@ import com.pixelmonmod.pixelmon.api.overlay.notice.EnumOverlayLayout;
 import com.pixelmonmod.pixelmon.api.overlay.notice.NoticeOverlay;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.PokemonSpec;
+import com.pixelmonmod.pixelmon.client.gui.custom.overlays.OverlayGraphicType;
 import com.pixelmonmod.pixelmon.entities.EntityWormhole;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.IVStore;
@@ -16,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
@@ -24,9 +26,11 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
+import rs.expand.pixelmonbroadcasts.bridges.PixelmonOverlayBridge;
 import rs.expand.pixelmonbroadcasts.enums.EventData;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
@@ -42,7 +46,7 @@ public class PlaceholderMethods
         {
             if (event.options().toLowerCase().contains("chat"))
             {
-                // Combine the passed broadcast type's prefix with the broadcast/permission key to make a full broadcast key.
+                // Combine the passed broadcast type's prefix with the broadcast/permission key to make a full key.
                 final String broadcast = getBroadcast("chat." + event.key(), object1, object2, player1, player2);
 
                 // Make some Text clones of our broadcast message. We can add to these, or just send them directly.
@@ -137,8 +141,11 @@ public class PlaceholderMethods
             {
                 if (object1 != null)
                 {
-                    // Combine the passed broadcast type's prefix with the broadcast/permission key to make a full broadcast key.
+                    // Combine the passed broadcast type's prefix with the broadcast/permission key to make a full key.
                     final String broadcast = getBroadcast("notice." + event.key(), object1, object2, player1, player2);
+
+                    // Set up a Pokéspec to pass in.
+                    final String spec;
 
                     // Figure out how to get a Pokemon object for our purposes.
                     Pokemon pokemon;
@@ -149,52 +156,57 @@ public class PlaceholderMethods
                     else
                         pokemon = null;
 
-                    // Set up a builder for our notice.
-                    NoticeOverlay.Builder builder = NoticeOverlay.builder().setLayout(EnumOverlayLayout.LEFT_AND_RIGHT);
-
-                    // Do some magic for getting the right sprite.
+                    // Do we have a Pokémon? Do some magic for getting the right sprite.
                     if (pokemon != null)
                     {
                         // Puts up a sprite matching the current Pokémon's species, form, gender and shiny status. Nice, eh?
-                        builder.setPokemonSprite
+                        // TODO: Custom texture support is completely untested. Get some confirmation.
+                        // TODO: Test function with different server langs.
+                        spec = pokemon.getSpecies().getPokemonName()
+                                + " form:" + pokemon.getForm()
+                                + " gender:" + pokemon.getGender().name().charAt(0)
+                                + (pokemon.isShiny() ? " shiny" : " !shiny")
+                                + (pokemon.getCustomTexture().isEmpty() ? "" : " texture:" + pokemon.getCustomTexture());
+                    }
+                    // We don't, so create a question mark Unown.
+                    else
+                        spec = "Unown form:26";
+
+                    if (Sponge.getPluginManager().isLoaded("pixelmonoverlay"))
+                    {
+                        PixelmonOverlayBridge.display
                         (
-                                // TODO: Custom texture support is completely untested. Get some confirmation.
-                                new PokemonSpec
-                                (
-                                        pokemon.getSpecies().getPokemonName(),
-                                        "form:" + pokemon.getForm(),
-                                        "gender:" + pokemon.getGender().ordinal(), // TODO: Test in 7.0.4 or something.
-                                        pokemon.isShiny() ? "shiny" : "!shiny",
-                                        pokemon.getCustomTexture().isEmpty() ? "" : "texture:" + pokemon.getCustomTexture()
-                                )
+                                EnumOverlayLayout.LEFT_AND_RIGHT, OverlayGraphicType.PokemonSprite,
+                                Collections.singletonList(broadcast), 10L, spec, null
                         );
                     }
                     else
                     {
-                        // Creates a question mark Unown using specs.
-                        builder.setPokemonSprite(new PokemonSpec("Unown", "form:26"));
-                    }
+                        // Set up a builder for our notice and populate it.
+                        NoticeOverlay.Builder builder =
+                                NoticeOverlay.builder().setLayout(EnumOverlayLayout.LEFT_AND_RIGHT).setPokemonSprite(new PokemonSpec(spec));
 
-                    // Add the message here, after applying other stuff. Doing earlier causes an NPE, apparently. Dunno.
-                    builder.setLines(broadcast);
+                        // Add the message here, after applying other stuff. Doing earlier causes an NPE, apparently. Dunno.
+                        builder.setLines(broadcast);
 
-                    // Sift through the online players.
-                    Sponge.getGame().getServer().getOnlinePlayers().forEach((recipient) ->
-                    {
-                        // Does the iterated player have the needed notifier permission?
-                        if (recipient.hasPermission("pixelmonbroadcasts.notify." + event.key()))
+                        // Sift through the online players.
+                        Sponge.getGame().getServer().getOnlinePlayers().forEach((recipient) ->
                         {
-                            // Does the iterated player want our broadcast? Send it if we get "true" returned.
-                            if (checkToggleStatus((EntityPlayer) recipient, event.flags()))
+                            // Does the iterated player have the needed notifier permission?
+                            if (recipient.hasPermission("pixelmonbroadcasts.notify." + event.key()))
                             {
-                                // Prints a message to Pixelmon's notice board. (cool box at the top)
-                                builder.sendTo((EntityPlayerMP) recipient);
+                                // Does the iterated player want our broadcast? Send it if we get "true" returned.
+                                if (checkToggleStatus((EntityPlayer) recipient, event.flags()))
+                                {
+                                    // Prints a message to Pixelmon's notice board. (cool box at the top)
+                                    builder.sendTo((EntityPlayerMP) recipient);
 
-                                // Put the player's UUID and the current time into a hashmap. Check regularly to wipe notices.
-                                noticeExpiryMap.put(recipient.getUniqueId(), System.currentTimeMillis());
+                                    // Put the player's UUID and the current time into a hashmap. Check regularly to wipe notices.
+                                    noticeExpiryMap.put(recipient.getUniqueId(), System.currentTimeMillis());
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
         }
@@ -220,6 +232,28 @@ public class PlaceholderMethods
             return event.options().contains("chat") || event.options().contains("notice");
 
         return false;
+    }
+
+    // Attempts to safely grab a player's world on events that also have a Pokémon, even if the player is somehow null.
+    public static EntityPlayerMP getSafePlayer(
+            final String eventType, final EntityPlayerMP playerEntity, final EntityPixelmon pokemonEntity)
+    {
+        if (playerEntity != null)
+            return playerEntity;
+        else if (pokemonEntity.getOwnerId() != null)
+        {
+            logger.warn("Event did not have a player! Falling back to event entity's owner.");
+            logger.warn("Please report this to the tracker. Include any details you may have.");
+            logger.warn("Event type: " + eventType + " (include this as well)");
+            return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(pokemonEntity.getOwnerId());
+        }
+        else
+        {
+            logger.error("Event did not have a player, and there's no owner! Halting execution.");
+            logger.error("Please report this to the tracker. Include any details you may have.");
+            logger.error("Event type: " + eventType + " (include this as well)");
+            return null;
+        }
     }
 
     // Checks whether a given flag is set for the given event. Has some hardcoded values on stuff that's off-limits.

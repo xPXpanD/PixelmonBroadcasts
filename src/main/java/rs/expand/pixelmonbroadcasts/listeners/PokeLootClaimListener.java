@@ -12,38 +12,42 @@ import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateA
 
 public class PokeLootClaimListener
 {
-    @SubscribeEvent
+    // Drop event priority to lowest, and only proceed if the event is still alive by the time we get to it.
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onPokeLootClaimEvent(final PokeLootClaimedEvent event)
     {
-        if (event.chest.getType() != EnumPokeChestType.SPECIAL)
+        if (!event.isCanceled())
         {
-            final ItemStack[] items = event.chest.getCustomDrops();
-
-            if (items.length != 0)
+            if (event.chest.getType() != EnumPokeChestType.SPECIAL)
             {
-                // Don't pass this to PrintingMethods#logEvent(), far too messy.
-                if (EventData.Others.LOOT.options() != null && EventData.Others.LOOT.options().contains("log"))
-                {
-                    // Print a loot message to console, if enabled.
-                    logger.info
-                    (
-                            "§5PBR §f// §" + EventData.Others.LOOT.color() +
-                            "Player " + event.player.getName() +
-                            " looted " + items[0].getCount() +
-                            " " + items[0].getDisplayName() +
-                            " from a chest of the " + event.chest.getType().name() +
-                            " type."
-                    );
-                }
+                final ItemStack[] items = event.chest.getCustomDrops();
 
-                // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
-                iterateAndBroadcast(EventData.Others.LOOT, items, null, event.player, null);
+                if (items.length != 0)
+                {
+                    // Don't pass this to PrintingMethods#logEvent(), far too messy.
+                    if (EventData.Others.LOOT.options() != null && EventData.Others.LOOT.options().contains("log"))
+                    {
+                        // Print a loot message to console, if enabled.
+                        logger.info
+                        (
+                                "§5PBR §f// §" + EventData.Others.LOOT.color() +
+                                "Player " + event.player.getName() +
+                                " looted " + items[0].getCount() +
+                                " " + items[0].getDisplayName() +
+                                " from a chest of the " + event.chest.getType().name() +
+                                " type."
+                        );
+                    }
+
+                    // Check whether any broadcasts are enabled, and send them to people who are set up to receive them.
+                    iterateAndBroadcast(EventData.Others.LOOT, items, null, event.player, null);
+                }
+                else
+                    logger.error("Could not find an item on a Pokéloot claim event! Please report this.");
             }
             else
-                logger.error("Could not find an item on a Pokéloot claim event! Please report this.");
+                logger.error("Hey, we got a SPECIAL chest type. Gift?");
         }
-        else
-            logger.error("Hey, we got a SPECIAL chest type. Gift?");
     }
 }*/
 

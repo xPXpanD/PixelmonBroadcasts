@@ -7,13 +7,13 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.text.LiteralText;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.commandAlias;
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.getTranslation;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.sendTranslation;
 
 public class BaseCommand implements CommandExecutor
 {

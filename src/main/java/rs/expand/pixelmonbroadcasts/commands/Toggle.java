@@ -15,13 +15,14 @@ import rs.expand.pixelmonbroadcasts.enums.EventData;
 import java.util.ArrayList;
 import java.util.List;
 
-import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.commandAlias;
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.canReceiveBroadcast;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.checkToggleStatus;
-import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.getTranslation;
+import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.sendTranslation;
 
 // TODO: Maybe get paginated lists working. Tried it before, but it seems to cut things off randomly...
-// FIXME: A blank list gets printed to chat if you run the toggle command without having access to any. Fix.
 public class Toggle implements CommandExecutor
 {
     // The command executor.
@@ -84,9 +85,6 @@ public class Toggle implements CommandExecutor
 
             // Get the separator message so we don't have to read it dozens of times.
             final String separator = getTranslation("hover.status.separator");
-
-            // Add a header so we can start counting and printing.
-            sendTranslation(src, "toggle.header");
 
             /*                  *\
                BLACKOUT TOGGLES
@@ -730,18 +728,20 @@ public class Toggle implements CommandExecutor
             if (toggleMessageList.isEmpty())
             {
                 // Show a clean error since we have no allowed toggles.
-                toggleMessageList.add(Text.of("§cYou have no permissions for any broadcast toggles."));
-                toggleMessageList.add(Text.of("§cPlease contact staff if you believe this to be in error."));
+                sendTranslation(src, "toggle.no_permissions");
             }
             else
             {
+                // Add a header.
+                sendTranslation(src, "toggle.header");
+
                 // Send all toggle messages.
                 for (Text toggleMessage : toggleMessageList)
                     src.sendMessage(toggleMessage);
-            }
 
-            // Add a footer.
-            sendTranslation(src, "universal.footer");
+                // Add a footer.
+                sendTranslation(src, "universal.footer");
+            }
         }
         else
             logger.error("This command can only be run by players.");
@@ -766,7 +766,7 @@ public class Toggle implements CommandExecutor
         // Grab the size of one of our Lists, as they should be matched. Iterate over it.
         for (int i = 0; i < messages.size(); i++)
         {
-            // Set up a temporary pair.
+            // Set up a temporary pair of message and action.
             actionPair = Text.builder(messages.get(i))
                 .onClick(TextActions.runCommand("/pixelmonbroadcasts toggle " + flags.get(i)))
                 .build();
