@@ -25,7 +25,7 @@ public class BirdSpawnListener
                 // Print a summon message to console, if enabled.
                 logger.info
                 (
-                        "§5PBR §f// §ePlayer §6" + player.getName() +
+                        "§ePlayer §6" + player.getName() +
                         "§e has summoned a §6" + pokemonName +
                         "§e in world \"§6" + player.getEntityWorld().getWorldInfo().getWorldName() +
                         "§e\", at X:§6" + location.getX() +

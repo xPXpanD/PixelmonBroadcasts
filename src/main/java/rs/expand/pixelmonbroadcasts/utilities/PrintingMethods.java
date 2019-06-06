@@ -25,7 +25,7 @@ public class PrintingMethods
             {
                 logger.info
                 (
-                        "§5PBR §f// §" + event.color() +
+                        '§' + event.color() +
                         "A " + inputs[0] +
                         " has spawned in world \"" + worldName +
                         "\", at X:" + location.getX() +
@@ -38,7 +38,7 @@ public class PrintingMethods
                 // An example from the battle draw event follows.
                 logger.info
                 (
-                        "§5PBR §f// §" + event.color() +
+                        '§' + event.color() +
                 //                  player 1    's battle with        player 2    ended in a draw
                         "Player " + inputs[0] + event.messages()[0] + inputs[1] + event.messages()[1] +
                         " in world \"" + worldName +
@@ -52,7 +52,7 @@ public class PrintingMethods
                 // An example from the forfeit event follows.
                 logger.info
                 (
-                        "§5PBR §f// §" + event.color() +
+                        '§' + event.color() +
                 //                  player      fled from a           pokémon/trainer
                         "Player " + inputs[0] + event.messages()[0] + inputs[1] +
                         " in world \"" + worldName +

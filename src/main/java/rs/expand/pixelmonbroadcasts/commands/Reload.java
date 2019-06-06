@@ -18,9 +18,9 @@ public class Reload implements CommandExecutor
     public CommandResult execute(final CommandSource src, final CommandContext args)
     {
         if (src instanceof Player)
-            logger.info("§5PBR §f// §5Player " + src.getName() + " started a Pixelmon Broadcasts config reload.");
+            logger.info("§5Player " + src.getName() + " started a Pixelmon Broadcasts config reload.");
         else
-            logger.info("§5PBR §f// §5A Pixelmon Broadcasts config reload was started through console or blocks.");
+            logger.info("§5A Pixelmon Broadcasts config reload was started through console or blocks.");
 
         // Load up all the configs and figure out the info alias. Start printing. Methods may insert errors as they go.
         logger.info("");

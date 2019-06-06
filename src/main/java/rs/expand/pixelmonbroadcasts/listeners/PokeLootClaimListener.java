@@ -30,7 +30,7 @@ public class PokeLootClaimListener
                         // Print a loot message to console, if enabled.
                         logger.info
                         (
-                                "§5PBR §f// §" + EventData.Others.LOOT.color() +
+                                '§' + EventData.Others.LOOT.color() +
                                 "Player " + event.player.getName() +
                                 " looted " + items[0].getCount() +
                                 " " + items[0].getDisplayName() +
