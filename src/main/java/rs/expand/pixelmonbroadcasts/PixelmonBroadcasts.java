@@ -27,7 +27,6 @@ import rs.expand.pixelmonbroadcasts.commands.Toggle;
 import rs.expand.pixelmonbroadcasts.listeners.*;
 import rs.expand.pixelmonbroadcasts.utilities.ConfigMethods;
 
-import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -59,14 +58,15 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 // FIXME: Similarly, Pokémon names seem to be English as well.
 // FIXME: Challenges and forfeits can be used to spam servers. Add a persistent tag to avoid repeats?
 // NOTE: Be careful with grabbing stuff directly from event players, they occasionally go null.
+// TODO: Add Alolans/Galarians to the logger.
 
 @Plugin
 (
         id = "pixelmonbroadcasts",
         name = "PixelmonBroadcasts",
-        version = "0.4.1",
+        version = "0.4.2",
         dependencies = {
-                @Dependency(id = "pixelmon", version = "7.0.5"),
+                @Dependency(id = "pixelmon", version = "8.0.0"),
                 @Dependency(id = "pixelmonoverlay", version = "1.1.0", optional = true)
         },
         description = "Adds fully custom legendary-like messages for tons of events, and optionally logs them, too.",
@@ -99,7 +99,7 @@ public class PixelmonBroadcasts
     public static HashMap<UUID, Long> noticeExpiryMap = new HashMap<>();
 
     // Create and set up config paths, and grab an OS-specific file path separator. This will usually be a forward slash.
-    private static String fileSystemSeparator = FileSystems.getDefault().getSeparator();
+    private static final String fileSystemSeparator = FileSystems.getDefault().getSeparator();
     public static String configPathAsString = "config" + fileSystemSeparator + "PixelmonBroadcasts" + fileSystemSeparator;
     public static Path broadcastsPath = Paths.get(configPathAsString, "broadcasts.conf");
     public static Path messagesPath = Paths.get(configPathAsString, "messages.conf");
@@ -121,12 +121,12 @@ public class PixelmonBroadcasts
     /*                       *\
          Utility commands.
     \*                       */
-    private static CommandSpec togglepreferences = CommandSpec.builder()
+    private static final CommandSpec togglepreferences = CommandSpec.builder()
             .arguments(GenericArguments.optionalWeak(GenericArguments.string(Text.of("setting"))))
             .executor(new Toggle())
             .build();
 
-    private static CommandSpec reloadconfigs = CommandSpec.builder()
+    private static final CommandSpec reloadconfigs = CommandSpec.builder()
             .permission("pixelmonbroadcasts.command.staff.reload")
             .executor(new Reload())
             .build();
@@ -225,35 +225,32 @@ public class PixelmonBroadcasts
                 // Complaining, commence.
                 logger.info("§f=============== P I X E L M O N  B R O A D C A S T S ===============");
                 logger.info("§f--> §ePixelmon's \"§6displayLegendaryGlobalMessage§e\" setting is enabled.");
-                logger.info("    §eThis setting will now be disabled as it conflicts with this mod.");
-                logger.info("    §eIf you remove this mod, revert this in Pixelmon's config!");
+                logger.info("    §ePlease disable this setting, as it conflicts with this mod!");
                 logger.info("§f====================================================================");
 
-                // Flip the setting in Pixelmon's config.
+                // TODO: See if this can be made to work again in 8.0.0+.
+                /* // Flip the setting in Pixelmon's config.
                 PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").setValue(false);
                 PixelmonConfig.saveConfig();
 
                 // Force a config reload from disk.
                 try
                 {
-                    PixelmonConfig.reload(true);
+                    PixelmonConfig.reload();
                 }
                 catch (IOException F)
                 {
                     logger.info("");
                     logger.info("§cSomething went wrong during Pixelmon config reload from disk! Trace:");
                     F.printStackTrace();
-                }
-
-                if (configVersion != null && configVersion < 40)
-                    logger.info("");
+                }*/
             }
 
-            if (configVersion != null && configVersion < 40)
+            /*if (configVersion != null && configVersion < 40)
             {
                 // More complaining, commence.
                 logger.info("§f=============== P I X E L M O N  B R O A D C A S T S ===============");
-                logger.info("§f--> §eWelcome to the 0.4(.1) update! There's a bunch of new stuff.");
+                logger.info("§f--> §eWelcome to the 0.4(.2) update! There's a bunch of new stuff.");
                 logger.info("    §eDue to all of the changes, new configs are required. Sorry!");
                 logger.info("");
                 logger.info("§f--> §eTo finish updating, do the following:");
@@ -264,7 +261,7 @@ public class PixelmonBroadcasts
                 logger.info("§f====================================================================");
 
                 // TODO: Get this working without it squashing the whole config down.
-                /*// Set the config's version value to whatever version we're on right now.
+                // Set the config's version value to whatever version we're on right now.
                 try
                 {
                     settingsConfig.getNode("configVersion").setValue(40);
@@ -274,8 +271,8 @@ public class PixelmonBroadcasts
                 {
                     logger.error("Something broke while updating config version! Please report. Stack trace:");
                     F.printStackTrace();
-                }*/
-            }
+                }
+            }*/
         }
     }
 }

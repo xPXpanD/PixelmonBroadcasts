@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import rs.expand.pixelmonbroadcasts.enums.EventData;
 
+import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.getSafePlayer;
 import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.iterateAndBroadcast;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.logEvent;
@@ -19,30 +20,36 @@ public class PokemonFaintListener
     {
         if (!event.isCanceled())
         {
-            // Make sure our Pokémon has an owner!
-            if (event.pokemon.hasOwner())
+            // Needed to work around a bug with Bide making this go null.
+            if (event.pokemon != null)
             {
-                // Get a sanitized player, to work around a weird issue where "event.player" can go null.
-                final EntityPlayerMP player = getSafePlayer("EventData.Others.FAINT", event.player, event.pokemon);
-
-                // Did we get a player back? If not, things broke horribly.
-                if (player != null)
+                // Make sure our Pokémon has an owner!
+                if (event.pokemon.hasOwner())
                 {
-                    // Create more shorthand variables for convenience.
-                    final String baseName = event.pokemon.getPokemonName();
-                    final String localizedName = event.pokemon.getLocalizedName();
+                    // Get a sanitized player, to work around a weird issue where "event.player" can go null.
+                    final EntityPlayerMP player = getSafePlayer("EventData.Others.FAINT", event.player, event.pokemon);
 
-                    // If we're in a localized setup, format a string for logging both names.
-                    final String nameString = baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
+                    // Did we get a player back? If not, things broke horribly.
+                    if (player != null)
+                    {
+                        // Create more shorthand variables for convenience.
+                        final String baseName = event.pokemon.getPokemonName();
+                        final String localizedName = event.pokemon.getLocalizedName();
 
-                    // Send a log message if we're set up to do logging for this event.
-                    logEvent(EventData.Others.FAINT, player.getEntityWorld().getWorldInfo().getWorldName(),
-                            player.getPosition(), player.getName(), nameString);
+                        // If we're in a localized setup, format a string for logging both names.
+                        final String nameString = baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
 
-                    // Send enabled broadcasts to people who should receive them.
-                    iterateAndBroadcast(EventData.Others.FAINT, event.pokemon, null, player, null);
+                        // Send a log message if we're set up to do logging for this event.
+                        logEvent(EventData.Others.FAINT, player.getEntityWorld().getWorldInfo().getWorldName(),
+                                player.getPosition(), player.getName(), nameString);
+
+                        // Send enabled broadcasts to people who should receive them.
+                        iterateAndBroadcast(EventData.Others.FAINT, event.pokemon, null, player, null);
+                    }
                 }
             }
+            else
+                logger.error("A fainting Pokémon event could not be parsed and was discarded! This is a Pixelmon bug.");
         }
     }
 }

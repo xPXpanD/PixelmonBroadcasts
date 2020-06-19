@@ -1,8 +1,16 @@
-0.4.2 for ???
-Released ???
+0.4.2 for 8.0.0
+Released June 19th, 2020.
+
+    Additions:
+    * Added support for showing Galarians in broadcasts.
 
     Tweaks:
     * Removed the "PBR //" fluff from console messages as the sidemod name is already shown.
+    * Removed the config helper that automatically turns off Pixelmon's legendary message due to mod updates breaking it.
+
+    Fixes:
+    * Fixed the horrible spam/crashing from Alolans being moved to a different enum in Pixelmon.
+    * Worked around Bind causing a NullPointerException on the Faint event listener. (likely a Pixelmon bug)
 
 0.4.1 for 7.0.5
 Released May 15th, 2019.

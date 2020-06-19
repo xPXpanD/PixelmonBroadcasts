@@ -12,7 +12,7 @@ import com.pixelmonmod.pixelmon.entities.pixelmon.stats.IVStore;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.StatsType;
 import com.pixelmonmod.pixelmon.enums.EnumGrowth;
 import com.pixelmonmod.pixelmon.enums.EnumNature;
-import com.pixelmonmod.pixelmon.enums.forms.EnumAlolan;
+import com.pixelmonmod.pixelmon.enums.forms.RegionalForms;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -346,8 +346,10 @@ public class PlaceholderMethods
                 final String pokemonName;
                 if (pokemon.isEgg())
                     pokemonName = getTranslation("placeholder.pokemon.is_egg");
-                else if (pokemon.getFormEnum() == EnumAlolan.ALOLAN)
+                else if (pokemon.getFormEnum() == RegionalForms.ALOLAN)
                     pokemonName = "Alolan " + pokemon.getSpecies().getLocalizedName();
+                else if (pokemon.getFormEnum() == RegionalForms.GALARIAN)
+                    pokemonName = "Galarian " + pokemon.getSpecies().getLocalizedName();
                 else
                     pokemonName = pokemon.getSpecies().getLocalizedName();
 
@@ -423,8 +425,10 @@ public class PlaceholderMethods
                     final String pokemon2Name;
                     if (pokemon2.isEgg())
                         pokemon2Name = getTranslation("placeholder.pokemon.is_egg");
-                    else if (pokemon2.getFormEnum() == EnumAlolan.ALOLAN)
+                    else if (pokemon2.getFormEnum() == RegionalForms.ALOLAN)
                         pokemon2Name = "Alolan " + pokemon2.getSpecies().getLocalizedName();
+                    else if (pokemon2.getFormEnum() == RegionalForms.GALARIAN)
+                        pokemon2Name = "Galarian " + pokemon2.getSpecies().getLocalizedName();
                     else
                         pokemon2Name = pokemon2.getSpecies().getLocalizedName();
 
