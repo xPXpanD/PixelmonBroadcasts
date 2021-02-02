@@ -81,6 +81,7 @@ public class BattleEndListener
                 final PlayerParticipant player = event.bc.getPlayers().get(0);
                 final BattleParticipant opponent = event.bc.getOpponents(player).get(0);
 
+                // FIXME: This can apparently go null? Needs more info.
                 // Get a world name String. Cleans things up a little.
                 final String worldName = player.getWorld().getWorldInfo().getWorldName();
 

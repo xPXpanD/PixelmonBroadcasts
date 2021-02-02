@@ -60,8 +60,8 @@ public class ConfigMethods
         }
         else
         {
-            logger.info("    §cCommand (re-)initialization failed. Please report, this is a bug.");
-            logger.info("    §cSidemod commands are likely dead. A reboot may work.");
+            logger.info("    §cCommand (re-)initialization failed; we cannot find the Sponge plugin container.");
+            logger.info("    §cSidemod commands are likely dead. A reboot may work. This may be a bug, please report.");
 
             return false;
         }

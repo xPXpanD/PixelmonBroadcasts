@@ -47,22 +47,29 @@ public class Toggle implements CommandExecutor
                 // See if the argument is a valid flag, either from a remote caller or from getClickableLine.
                 switch (input)
                 {
-                    case "showNormalCatch": case "showNormalBlackout":
-                    case "showLegendarySpawn": case "showLegendaryChallenge": case "showLegendaryCatch":
-                    case "showLegendaryVictory": case "showLegendaryBlackout": case "showLegendaryForfeit":
-                    case "showShinySpawn": case "showShinyChallenge": case "showShinyCatch":
-                    case "showShinyVictory": case "showShinyBlackout": case "showShinyForfeit":
-                    case "showUltraBeastSpawn": case "showUltraBeastChallenge": case "showUltraBeastCatch":
-                    case "showUltraBeastVictory": case "showUltraBeastBlackout": case "showUltraBeastForfeit":
+                    // Normals.
+                    case "showNormalCatch": case "showNormalBlackout": case "showNormalHatch":
+                    // Legendaries.
+                    case "showLegendarySpawn": case "showLegendaryChallenge": case "showLegendaryCatch": case "showLegendaryVictory":
+                    case "showLegendaryBlackout": case "showLegendaryForfeit": case "showLegendaryHatch":
+                    // Shinies.
+                    case "showShinySpawn": case "showShinyChallenge": case "showShinyCatch": case "showShinyVictory":
+                    case "showShinyBlackout": case "showShinyForfeit": case "showShinyHatch":
+                    // Ultra Beasts.
+                    case "showUltraBeastSpawn": case "showUltraBeastChallenge": case "showUltraBeastCatch": case "showUltraBeastVictory":
+                    case "showUltraBeastBlackout": case "showUltraBeastForfeit": case "showUltraBeastHatch":
+                    // Wormholes.
                     case "showWormholeSpawn":
-                    case "showBossSpawn": case "showBossChallenge":
-                    case "showBossVictory": case "showBossBlackout": case "showBossForfeit":
-                    case "showTrainerChallenge": case "showTrainerVictory":
-                    case "showTrainerBlackout": case "showTrainerForfeit":
+                    // Bosses.
+                    case "showBossSpawn": case "showBossChallenge": case "showBossVictory": case "showBossBlackout": case "showBossForfeit":
+                    // Trainers.
+                    case "showTrainerChallenge": case "showTrainerVictory": case "showTrainerBlackout": case "showTrainerForfeit":
+                    // Boss trainers.
                     case "showBossTrainerChallenge": case "showBossTrainerVictory":
                     case "showBossTrainerBlackout": case "showBossTrainerForfeit":
+                    // PVP stuff.
                     case "showPVPChallenge": case "showPVPVictory": case "showPVPDraw":
-                    case "showNormalHatch": case "showShinyHatch":
+                    // Miscellany.
                     case "showEvolve": case "showFaint": case "showTrade":
                     //case "showBirdTrioSummon":
                     {
@@ -780,14 +787,14 @@ public class Toggle implements CommandExecutor
     }
 
     // Toggle a message-showing flag if it exists already, or create one if it does not.
+    // TODO: To avoid bloat, don't save "true" flags if we ever get to a point where old data can be invalidated. (1.15+?)
     private void toggleFlag(CommandSource src, String flag)
     {
         // Get a player entity.
         EntityPlayer player = (EntityPlayer) src;
 
         // If the NBT "folder" we use does not exist, create it.
-        // Uses new Forge stuff. IntelliJ reports a "cannot resolve"a error, but it compiles fine? Dunno.
-        if (player.getEntityData().getCompoundTag("pbToggles").isEmpty())
+        if (player.getEntityData().getCompoundTag("pbToggles").hasNoTags())
             player.getEntityData().setTag("pbToggles", new NBTTagCompound());
 
         // Does the flag key not exist yet? Do this.

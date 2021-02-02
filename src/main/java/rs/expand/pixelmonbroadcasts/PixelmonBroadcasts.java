@@ -5,6 +5,7 @@ import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.overlay.notice.NoticeOverlay;
 import com.pixelmonmod.pixelmon.config.PixelmonConfig;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.common.MinecraftForge;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -58,13 +59,12 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 // FIXME: Similarly, Pokémon names seem to be English as well.
 // FIXME: Challenges and forfeits can be used to spam servers. Add a persistent tag to avoid repeats?
 // NOTE: Be careful with grabbing stuff directly from event players, they occasionally go null.
-// TODO: Add Alolans/Galarians to the logger.
 
 @Plugin
 (
         id = "pixelmonbroadcasts",
         name = "PixelmonBroadcasts",
-        version = "0.4.2",
+        version = "0.4.3",
         dependencies = {
                 @Dependency(id = "pixelmon", version = "8.0.0"),
                 @Dependency(id = "pixelmonoverlay", version = "1.1.0", optional = true)
@@ -73,18 +73,17 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
         authors = "XpanD"
 
         /*                                                                                                         *\
-            Big thanks to happyzleaf for the basic PixelmonOverlay integration.
-
             Loosely inspired by PixelAnnouncer, which I totally forgot existed up until I wanted to release.
             After people reminded me that PA was a thing, I ended up making PBR a full-on replacement for it.
 
-            Thanks for the go-ahead on that, Proxying! Let's make this count.                             -- XpanD
+            Thanks for the go-ahead on that, Proxying! Let's make this count.
+            Also, thanks to happyzleaf for the basic PixelmonOverlay integration.                        -- XpanD
         \*                                                                                                         */
 )
 
 public class PixelmonBroadcasts
 {
-    // Set up an internal variable so we can see if we loaded correctly.
+    // Set up an internal variable so we can see if we loaded correctly. Slightly dirty, but it works.
     private boolean loadedCorrectly = false;
 
     // Set up a logger for logging stuff. Yup.
@@ -151,7 +150,7 @@ public class PixelmonBroadcasts
         // If we got a good result from the config loading method, proceed to initializing more stuff.
         if (loadedCorrectly)
         {
-            // Register listeners with Pixelmon.
+            // Register relevant listeners with Pixelmon.
             logger.info("§f--> §aRegistering listeners with Pixelmon...");
             Pixelmon.EVENT_BUS.register(new BattleEndListener());
             Pixelmon.EVENT_BUS.register(new BattleStartListener());
@@ -162,6 +161,9 @@ public class PixelmonBroadcasts
             Pixelmon.EVENT_BUS.register(new PokemonFaintListener());
             Pixelmon.EVENT_BUS.register(new SpawnListener());
             Pixelmon.EVENT_BUS.register(new TradeListener());
+
+            // Register relevant listeners with Forge.
+            MinecraftForge.EVENT_BUS.register(new DeathCloneListener());
 
             // (re-)register the main command and alias. Use the result we get back to see if everything worked.
             logger.info("§f--> §aRegistering commands with Sponge...");

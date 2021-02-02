@@ -1,3 +1,10 @@
+0.4.3 for 8.1.2
+Released February 2nd, 2021.
+
+    Fixes:
+    * Ultra Beast and Legendary hatch toggles now work.
+    * Toggles should now be preserved when a player dies. Some plugins/mods may interfere with this, let me know!
+
 0.4.2 for 8.0.0
 Released June 19th, 2020.
 
@@ -6,11 +13,11 @@ Released June 19th, 2020.
 
     Tweaks:
     * Removed the "PBR //" fluff from console messages as the sidemod name is already shown.
-    * Removed the config helper that automatically turns off Pixelmon's legendary message due to mod updates breaking it.
+    * Removed the config helper that automatically turns off Pixelmon's legendary message. Mod updates broke it.
 
     Fixes:
     * Fixed the horrible spam/crashing from Alolans being moved to a different enum in Pixelmon.
-    * Worked around Bind causing a NullPointerException on the Faint event listener. (likely a Pixelmon bug)
+    * Worked around Bide causing a NullPointerException on the Faint event listener. (likely a Pixelmon bug)
 
 0.4.1 for 7.0.5
 Released May 15th, 2019.
