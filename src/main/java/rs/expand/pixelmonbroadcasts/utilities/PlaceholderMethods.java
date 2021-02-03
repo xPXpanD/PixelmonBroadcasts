@@ -33,7 +33,6 @@ import rs.expand.pixelmonbroadcasts.enums.EventData;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
@@ -349,9 +348,9 @@ public class PlaceholderMethods
                 if (pokemon.isEgg())
                     pokemonName = getTranslation("placeholder.pokemon.is_egg");
                 else if (pokemon.getFormEnum() == RegionalForms.ALOLAN)
-                    pokemonName = "Alolan " + pokemon.getSpecies().getLocalizedName();
+                    pokemonName = getTranslation("insert.alolan") + pokemon.getSpecies().getLocalizedName();
                 else if (pokemon.getFormEnum() == RegionalForms.GALARIAN)
-                    pokemonName = "Galarian " + pokemon.getSpecies().getLocalizedName();
+                    pokemonName = getTranslation("insert.galarian") + pokemon.getSpecies().getLocalizedName();
                 else
                 {
                     boolean isMega = false;
@@ -364,7 +363,7 @@ public class PlaceholderMethods
                     catch(Exception ignored){}
 
                     if (isMega)
-                        pokemonName = "Mega " + pokemon.getSpecies().getLocalizedName();
+                        pokemonName = getTranslation("insert.mega") + pokemon.getSpecies().getLocalizedName();
                     else
                         pokemonName = pokemon.getSpecies().getLocalizedName();
                 }
@@ -442,9 +441,9 @@ public class PlaceholderMethods
                     if (pokemon2.isEgg())
                         pokemon2Name = getTranslation("placeholder.pokemon.is_egg");
                     else if (pokemon2.getFormEnum() == RegionalForms.ALOLAN)
-                        pokemon2Name = "Alolan " + pokemon2.getSpecies().getLocalizedName();
+                        pokemon2Name = getTranslation("insert.alolan") + pokemon2.getSpecies().getLocalizedName();
                     else if (pokemon2.getFormEnum() == RegionalForms.GALARIAN)
-                        pokemon2Name = "Galarian " + pokemon2.getSpecies().getLocalizedName();
+                        pokemon2Name = getTranslation("insert.galarian") + pokemon2.getSpecies().getLocalizedName();
                     else
                     {
                         // Most Pokémon don't have Mega forms, so check in a try/catch block and store the result.
@@ -458,7 +457,7 @@ public class PlaceholderMethods
                         catch(Exception ignored){}
 
                         if (isMega)
-                            pokemon2Name = "Mega " + pokemon2.getSpecies().getLocalizedName();
+                            pokemon2Name = getTranslation("insert.mega") + pokemon2.getSpecies().getLocalizedName();
                         else
                             pokemon2Name = pokemon2.getSpecies().getLocalizedName();
                     }

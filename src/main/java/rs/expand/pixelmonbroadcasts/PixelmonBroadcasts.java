@@ -52,6 +52,7 @@ import java.util.concurrent.TimeUnit;
 // TODO: Make a more comprehensive summon check.
 // TODO: Custom event setups. Oh boy. Separate file that includes broadcasts and settings?
 // TODO: Stop using deprecated API once newer versions are more common.
+// TODO: Maybe have Toggle ask for a category first. Would tidy things up with how many events we have.
 // FIXME: Biome names are always English. Maybe add to the lang, and use English biome names as keys.
 // FIXME: Similarly, Pokémon names seem to be English as well.
 // FIXME: Challenges and forfeits can be used to spam servers. Add a persistent tag to avoid repeats?

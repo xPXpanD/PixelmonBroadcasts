@@ -7,6 +7,21 @@ Released February 3rd, 2021.
     Tweaks:
     * Shortened the info text on console messages from "Pixelmon Broadcasts" to just "Broadcasts".
 
+    Settings file additions and changes:
+    * Added settings for the different boss types.
+    * Disabled some unpopular/spammy settings by default.
+
+    Message file additions and changes:
+    * Added toggles for the different boss types.
+    * Added a new placeholder for showing Mega status in broadcasts: insert.mega = "Mega "
+    * Added a new placeholder for showing Alolan forms in broadcasts: insert.alolan = "Alolan "
+    * Added a new placeholder for showing Galarian forms in broadcasts: insert.galarian = "Galarian "
+    * Changed the generic boss toggle's text from "boss" to "any boss". (forfeits use this)
+
+    Broadcasts file additions and changes:
+    * Added broadcasts for the different boss types.
+    * Flattened down the layout to use single lines, as it was getting unwieldy and caused some confusion.
+
     Fixes:
     * Fixed colors on event log entries showing up as a series of numbers on some consoles.
     * Ultra Beast and Legendary hatch toggles now work.
