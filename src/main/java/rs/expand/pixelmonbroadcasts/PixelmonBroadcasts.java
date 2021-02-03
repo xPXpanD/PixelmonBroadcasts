@@ -44,8 +44,6 @@ import java.util.concurrent.TimeUnit;
 \*                                                              */
 
 // TODO: Get rid of the shinylegendary/shinyultrabeast key checks, somehow.
-// TODO: Add a "minimum boss level" option to the global settings. Make it only broadcast bosses at or above that level.
-// TODO: Adding on to the above, also add the boss level to logging and maybe broadcasts.
 // TODO: Maybe play a cry when something spawns. Slow it down?
 // TODO: Maybe move some of the less unique logging info out of EventData and into the listener classes via constants.
 // TODO: Implement logging to a custom log file with the right option passed.
@@ -54,11 +52,9 @@ import java.util.concurrent.TimeUnit;
 // TODO: Make a more comprehensive summon check.
 // TODO: Custom event setups. Oh boy. Separate file that includes broadcasts and settings?
 // TODO: Stop using deprecated API once newer versions are more common.
-// FIXME: Bad event listeners from other mods may cause events to start looping, which causes insane spam from us. Fix?
 // FIXME: Biome names are always English. Maybe add to the lang, and use English biome names as keys.
 // FIXME: Similarly, Pokémon names seem to be English as well.
 // FIXME: Challenges and forfeits can be used to spam servers. Add a persistent tag to avoid repeats?
-// NOTE: Be careful with grabbing stuff directly from event players, they occasionally go null.
 
 @Plugin
 (
@@ -72,13 +68,13 @@ import java.util.concurrent.TimeUnit;
         description = "Adds fully custom legendary-like messages for tons of events, and optionally logs them, too.",
         authors = "XpanD"
 
-        /*                                                                                                         *\
+        /*                                                                                                     *\
             Loosely inspired by PixelAnnouncer, which I totally forgot existed up until I wanted to release.
             After people reminded me that PA was a thing, I ended up making PBR a full-on replacement for it.
 
             Thanks for the go-ahead on that, Proxying! Let's make this count.
-            Also, thanks to happyzleaf for the basic PixelmonOverlay integration.                        -- XpanD
-        \*                                                                                                         */
+            Also, thanks to happyzleaf for the basic PixelmonOverlay integration.                    -- XpanD
+        \*                                                                                                     */
 )
 
 public class PixelmonBroadcasts
@@ -87,7 +83,7 @@ public class PixelmonBroadcasts
     private boolean loadedCorrectly = false;
 
     // Set up a logger for logging stuff. Yup.
-    public static final Logger logger = LogManager.getLogger("Pixelmon Broadcasts");
+    public static final Logger logger = LogManager.getLogger("Broadcasts");
 
     // Start setting up some basic variables that we'll fill in remotely when we read the config.
     public static Integer configVersion;
@@ -141,7 +137,7 @@ public class PixelmonBroadcasts
     {
         // Load up all the configs and figure out the info alias. Start printing. Methods may insert errors as they go.
         logger.info("");
-        logger.info("§f=============== P I X E L M O N  B R O A D C A S T S ===============");
+        logger.info("§f================= P I X E L M O N  B R O A D C A S T S =================");
 
         // Load up all configuration files. Creates new configs/folders if necessary. Commit settings to memory.
         // Store whether we actually loaded things up correctly in this bool, which we can check again later.
@@ -174,7 +170,7 @@ public class PixelmonBroadcasts
             logger.info("§f--> §cLoad aborted due to critical errors. Mod is not running!");
 
         // We're done, one way or another. Add a footer, and a space to avoid clutter with other marginal'd mods.
-        logger.info("§f====================================================================");
+        logger.info("§f========================================================================");
         logger.info("");
     }
 
@@ -224,10 +220,12 @@ public class PixelmonBroadcasts
             if (configStatus != null && configStatus)
             {
                 // Complaining, commence.
-                logger.info("§f=============== P I X E L M O N  B R O A D C A S T S ===============");
+                logger.info("");
+                logger.info("§f================= P I X E L M O N  B R O A D C A S T S =================");
                 logger.info("§f--> §ePixelmon's \"§6displayLegendaryGlobalMessage§e\" setting is enabled.");
-                logger.info("    §ePlease disable this setting, as it conflicts with this mod!");
-                logger.info("§f====================================================================");
+                logger.info("§e    For best functionality and to avoid conflicts, disable this setting.");
+                logger.info("§f========================================================================");
+                logger.info("");
 
                 // TODO: See if this can be made to work again in 8.0.0+.
                 /* // Flip the setting in Pixelmon's config.
@@ -247,22 +245,27 @@ public class PixelmonBroadcasts
                 }*/
             }
 
-            /*if (configVersion != null && configVersion < 40)
+            if (configVersion != null && configVersion < 50)
             {
                 // More complaining, commence.
-                logger.info("§f=============== P I X E L M O N  B R O A D C A S T S ===============");
-                logger.info("§f--> §eWelcome to the 0.4(.2) update! There's a bunch of new stuff.");
-                logger.info("    §eDue to all of the changes, new configs are required. Sorry!");
                 logger.info("");
+                logger.info("§f================= P I X E L M O N  B R O A D C A S T S =================");
+                logger.info("§f--> §eWelcome to the 0.5 update! There's some new stuff to configure.");
                 logger.info("§f--> §eTo finish updating, do the following:");
-                logger.info("    §61. §eMove any customized configs somewhere safe, if present.");
-                logger.info("    §62. §eDelete the \"PixelmonBroadcasts\" config folder.");
-                logger.info("    §63. §eUse \"/pixelmonbroadcasts reload\". This creates new files.");
-                logger.info("    §64. §eCopy back any old tweaks carefully -- many things changed!");
-                logger.info("§f====================================================================");
+                logger.info("§6    1. §eMove any customized PBR configs somewhere safe, if present.");
+                logger.info("§6    2. §eDelete the \"PixelmonBroadcasts\" config folder.");
+                logger.info("§6    3. §eUse \"/pixelmonbroadcasts reload\". This creates new files.");
+                logger.info("§6    4. §eCopy back any old tweaks carefully -- many things changed!");
+                logger.info("§6       --- OR ---");
+                logger.info("§6    4. §eCopy new boss lines into the old files, and move them back in.");
+                logger.info("§6    5. §eIf using an old settings file, set \"configVersion\" to \"50\".");
+                logger.info("");
+                logger.info("§6    §eReport any bugs here: https://github.com/xPXpanD/PixelmonBroadcasts");
+                logger.info("§f========================================================================");
+                logger.info("");
 
                 // TODO: Get this working without it squashing the whole config down.
-                // Set the config's version value to whatever version we're on right now.
+                /*// Set the config's version value to whatever version we're on right now.
                 try
                 {
                     settingsConfig.getNode("configVersion").setValue(40);
@@ -272,8 +275,8 @@ public class PixelmonBroadcasts
                 {
                     logger.error("Something broke while updating config version! Please report. Stack trace:");
                     F.printStackTrace();
-                }
-            }*/
+                }*/
+            }
         }
     }
 }

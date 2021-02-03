@@ -11,6 +11,7 @@ import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.IVStore;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.StatsType;
 import com.pixelmonmod.pixelmon.enums.EnumGrowth;
+import com.pixelmonmod.pixelmon.enums.EnumMegaPokemon;
 import com.pixelmonmod.pixelmon.enums.EnumNature;
 import com.pixelmonmod.pixelmon.enums.forms.RegionalForms;
 import net.minecraft.entity.Entity;
@@ -32,6 +33,7 @@ import rs.expand.pixelmonbroadcasts.enums.EventData;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
@@ -341,7 +343,7 @@ public class PlaceholderMethods
             // Insert the Pokémon's name.
             if (broadcast.toLowerCase().contains("%pokemon%"))
             {
-                // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
+                // First see if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
                 // FIXME: Could do with an option, or a cleaner way to make this all work.
                 final String pokemonName;
                 if (pokemon.isEgg())
@@ -351,7 +353,21 @@ public class PlaceholderMethods
                 else if (pokemon.getFormEnum() == RegionalForms.GALARIAN)
                     pokemonName = "Galarian " + pokemon.getSpecies().getLocalizedName();
                 else
-                    pokemonName = pokemon.getSpecies().getLocalizedName();
+                {
+                    boolean isMega = false;
+                    try
+                    {
+                        // Is there a Mega form for this Pokémon?
+                        if (EnumMegaPokemon.getMega(pokemon.getSpecies()).numMegaForms > 0)
+                            isMega = true;
+                    }
+                    catch(Exception ignored){}
+
+                    if (isMega)
+                        pokemonName = "Mega " + pokemon.getSpecies().getLocalizedName();
+                    else
+                        pokemonName = pokemon.getSpecies().getLocalizedName();
+                }
 
                 // Proceed with insertion.
                 broadcast = broadcast.replaceAll("(?i)%pokemon%", pokemonName);
@@ -420,7 +436,7 @@ public class PlaceholderMethods
                 // Insert the Pokémon's name.
                 if (broadcast.toLowerCase().contains("%pokemon2%"))
                 {
-                    // See if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
+                    // First see if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
                     // FIXME: Could do with an option, or a cleaner way to make this all work.
                     final String pokemon2Name;
                     if (pokemon2.isEgg())
@@ -430,7 +446,22 @@ public class PlaceholderMethods
                     else if (pokemon2.getFormEnum() == RegionalForms.GALARIAN)
                         pokemon2Name = "Galarian " + pokemon2.getSpecies().getLocalizedName();
                     else
-                        pokemon2Name = pokemon2.getSpecies().getLocalizedName();
+                    {
+                        // Most Pokémon don't have Mega forms, so check in a try/catch block and store the result.
+                        boolean isMega = false;
+                        try
+                        {
+                            // Is there a Mega form for this Pokémon? Pixelmon seems to always spawn as Mega if available.
+                            if (EnumMegaPokemon.getMega(pokemon2.getSpecies()).numMegaForms > 0)
+                                isMega = true;
+                        }
+                        catch(Exception ignored){}
+
+                        if (isMega)
+                            pokemon2Name = "Mega " + pokemon2.getSpecies().getLocalizedName();
+                        else
+                            pokemon2Name = pokemon2.getSpecies().getLocalizedName();
+                    }
 
                     // Proceed with insertion.
                     broadcast = broadcast.replaceAll("(?i)%pokemon2%", pokemon2Name);

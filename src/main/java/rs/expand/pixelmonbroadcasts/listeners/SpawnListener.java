@@ -74,6 +74,8 @@ public class SpawnListener
                                 // Send enabled broadcasts to people who should receive them.
                                 iterateAndBroadcast(EventData.Spawns.ULTIMATE_BOSS,
                                         pokemonEntity, null, null, null);
+
+                                break;
                             }
                             case Legendary:
                             {
@@ -84,6 +86,8 @@ public class SpawnListener
                                 // Send enabled broadcasts to people who should receive them.
                                 iterateAndBroadcast(EventData.Spawns.LEGENDARY_BOSS,
                                         pokemonEntity, null, null, null);
+
+                                break;
                             }
                             case Rare:
                             {
@@ -94,6 +98,8 @@ public class SpawnListener
                                 // Send enabled broadcasts to people who should receive them.
                                 iterateAndBroadcast(EventData.Spawns.RARE_BOSS,
                                         pokemonEntity, null, null, null);
+
+                                break;
                             }
                             default: // Will be Equal or Uncommon, only the latter should spawn naturally.
                             {

@@ -34,7 +34,7 @@ public interface EventData
         // Point to where we're grabbing from.
         Blackouts(final String key, final String... flags)
         {
-            this.options = null; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Null until filled in by a (re-)load.
             this.key = key;
             this.flags = flags;
         }
@@ -66,7 +66,7 @@ public interface EventData
         // Point to where we're grabbing from.
         Catches(final String key, final String... flags)
         {
-            this.options = null; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Null until filled in by a (re-)load.
             this.key = key;
             this.flags = flags;
         }
@@ -104,7 +104,7 @@ public interface EventData
         // Point to where we're grabbing from.
         Challenges(final String[] messages, final String key, final String... flags)
         {
-            this.options = null; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Null until filled in by a (re-)load.
             this.messages = messages;
             this.key = key;
             this.flags = flags;
@@ -141,7 +141,7 @@ public interface EventData
         // Point to where we're grabbing from.
         Forfeits(final String key, final String... flags)
         {
-            this.options = null; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Null until filled in by a (re-)load.
             this.key = key;
             this.flags = flags;
         }
@@ -177,7 +177,7 @@ public interface EventData
         // Point to where we're grabbing from.
         Spawns(final String key, final String... flags)
         {
-            this.options = null; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Null until filled in by a (re-)load.
             this.key = key;
             this.flags = flags;
         }
@@ -215,7 +215,7 @@ public interface EventData
         // Point to where we're grabbing from.
         Victories(final String[] messages, final String key, final String... flags)
         {
-            this.options = null; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Null until filled in by a (re-)load.
             this.messages = messages;
             this.key = key;
             this.flags = flags;
@@ -243,7 +243,7 @@ public interface EventData
         // Point to where we're grabbing from.
         Draws()
         {
-            this.options = null; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Null until filled in by a (re-)load.
         }
 
         // Expose values to anything accessing us through the main interface. All set in advance for now.
@@ -273,7 +273,7 @@ public interface EventData
         // Point to where we're grabbing from.
         Hatches(final String key, final String... flags)
         {
-            this.options = null; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Null until filled in by a (re-)load.
             this.key = key;
             this.flags = flags;
         }
@@ -306,7 +306,7 @@ public interface EventData
         Others(final boolean presentTense, final String[] messages, final char color,
                final String key, final String... flags)
         {
-            this.options = null; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Null until filled in by a (re-)load.
             this.presentTense = presentTense;
             this.messages = messages;
             this.color = color;

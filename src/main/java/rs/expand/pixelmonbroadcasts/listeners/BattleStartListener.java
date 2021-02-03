@@ -143,6 +143,8 @@ public class BattleStartListener
                                     // Send enabled broadcasts to people who should receive them.
                                     iterateAndBroadcast(EventData.Challenges.ULTIMATE_BOSS,
                                             pokemonEntity, null, playerEntity, null);
+
+                                    break;
                                 }
                                 case Legendary:
                                 {
@@ -153,6 +155,8 @@ public class BattleStartListener
                                     // Send enabled broadcasts to people who should receive them.
                                     iterateAndBroadcast(EventData.Challenges.LEGENDARY_BOSS,
                                             pokemonEntity, null, playerEntity, null);
+
+                                    break;
                                 }
                                 case Rare:
                                 {
@@ -163,6 +167,8 @@ public class BattleStartListener
                                     // Send enabled broadcasts to people who should receive them.
                                     iterateAndBroadcast(EventData.Challenges.RARE_BOSS,
                                             pokemonEntity, null, playerEntity, null);
+
+                                    break;
                                 }
                                 default: // Will be Equal or Uncommon, only the latter should spawn naturally.
                                 {

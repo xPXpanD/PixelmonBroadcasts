@@ -19,13 +19,14 @@ public class PrintingMethods
     public static void logEvent(final EventData event, final String worldName, final BlockPos location, final String... inputs)
     {
         // If options() is null, we'll catch that and error in our iterateAndBroadcast call. Don't worry about it here.
+        // Note to future me: Passing in § as a char breaks colors, so keep it as a String.
         if (event.options() != null && event.options().toLowerCase().contains("log"))
         {
             if (event instanceof EventData.Spawns) // Spawn logging needs some special logic.
             {
                 logger.info
                 (
-                        '§' + event.color() +
+                        "§" + event.color() +
                         "A " + inputs[0] +
                         " has spawned in world \"" + worldName +
                         "\", at X:" + location.getX() +
@@ -38,7 +39,7 @@ public class PrintingMethods
                 // An example from the battle draw event follows.
                 logger.info
                 (
-                        '§' + event.color() +
+                        "§" + event.color() +
                 //                  player 1    's battle with        player 2    ended in a draw
                         "Player " + inputs[0] + event.messages()[0] + inputs[1] + event.messages()[1] +
                         " in world \"" + worldName +
@@ -52,7 +53,7 @@ public class PrintingMethods
                 // An example from the forfeit event follows.
                 logger.info
                 (
-                        '§' + event.color() +
+                        "§" + event.color() +
                 //                  player      fled from a           pokémon/trainer
                         "Player " + inputs[0] + event.messages()[0] + inputs[1] +
                         " in world \"" + worldName +

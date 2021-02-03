@@ -25,6 +25,9 @@ import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.sendTransla
 // TODO: Maybe get paginated lists working. Tried it before, but it seems to cut things off randomly...
 public class Toggle implements CommandExecutor
 {
+    // Create a List of Texts that we can dump ready-to-print messages into. Goes down with the class instance.
+    List<Text> toggleMessageList = new ArrayList<>();
+
     // The command executor.
     @SuppressWarnings("NullableProblems")
     public CommandResult execute(final CommandSource src, final CommandContext args)
@@ -98,9 +101,6 @@ public class Toggle implements CommandExecutor
             // These are linked, and used to show available toggles. If one has two entries, the other gets two, too!
             final List<String> messages = new ArrayList<>();
             final List<String> flags = new ArrayList<>();
-
-            // Create a List of Texts that we can dump messages that are ready to be printed into.
-            final List<Text> toggleMessageList = new ArrayList<>();
 
             // Get the separator message so we don't have to read it dozens of times.
             final String separator = getTranslation("hover.status.separator");
@@ -216,8 +216,8 @@ public class Toggle implements CommandExecutor
                 // Get and add the "blackout toggles" header message.
                 toggleMessageList.add(Text.of(getTranslation("toggle.blackout_toggles")));
 
-                // Get a clickable line with all the toggles that we can squeeze onto it.
-                toggleMessageList.add(getClickableLine(messages, flags));
+                // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
+                addClickableLine(messages, flags);
 
                 // Clear the Lists so we can reuse them, if need be.
                 messages.clear();
@@ -275,8 +275,8 @@ public class Toggle implements CommandExecutor
                 // Get and add the "catch toggles" header message.
                 toggleMessageList.add(Text.of(getTranslation("toggle.catch_toggles")));
 
-                // Get a clickable line with all the toggles that we can squeeze onto it.
-                toggleMessageList.add(getClickableLine(messages, flags));
+                // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
+                addClickableLine(messages, flags);
 
                 // Clear the Lists so we can reuse them, if need be.
                 messages.clear();
@@ -394,8 +394,8 @@ public class Toggle implements CommandExecutor
                 // Get and add the "challenge toggles" header message.
                 toggleMessageList.add(Text.of(getTranslation("toggle.challenge_toggles")));
 
-                // Get a clickable line with all the toggles that we can squeeze onto it.
-                toggleMessageList.add(getClickableLine(messages, flags));
+                // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
+                addClickableLine(messages, flags);
 
                 // Clear the Lists so we can reuse them, if need be.
                 messages.clear();
@@ -473,8 +473,8 @@ public class Toggle implements CommandExecutor
                 // Get and add the "forfeit toggles" header message.
                 toggleMessageList.add(Text.of(getTranslation("toggle.forfeit_toggles")));
 
-                // Get a clickable line with all the toggles that we can squeeze onto it.
-                toggleMessageList.add(getClickableLine(messages, flags));
+                // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
+                addClickableLine(messages, flags);
 
                 // Clear the Lists so we can reuse them, if need be.
                 messages.clear();
@@ -572,8 +572,8 @@ public class Toggle implements CommandExecutor
                 // Get and add the "spawn toggles" header message.
                 toggleMessageList.add(Text.of(getTranslation("toggle.spawning_toggles")));
 
-                // Get a clickable line with all the toggles that we can squeeze onto it.
-                toggleMessageList.add(getClickableLine(messages, flags));
+                // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
+                addClickableLine(messages, flags);
 
                 // Clear the Lists so we can reuse them, if need be.
                 messages.clear();
@@ -601,8 +601,8 @@ public class Toggle implements CommandExecutor
                 // Get and add the "summon toggles" header message.
                 toggleMessageList.add(Text.of(getTranslation("toggle.summon_toggles")));
 
-                // Get a clickable line with all the toggles that we can squeeze onto it.
-                toggleMessageList.add(getClickableLine(messages, flags));
+                // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
+                addClickableLine(messages, flags);
 
                 // Clear the Lists so we can reuse them, if need be.
                 messages.clear();
@@ -720,8 +720,8 @@ public class Toggle implements CommandExecutor
                 // Get and add the "victory toggles" header message.
                 toggleMessageList.add(Text.of(getTranslation("toggle.victory_toggles")));
 
-                // Get a clickable line with all the toggles that we can squeeze onto it.
-                toggleMessageList.add(getClickableLine(messages, flags));
+                // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
+                addClickableLine(messages, flags);
 
                 // Clear the Lists so we can reuse them, if need be.
                 messages.clear();
@@ -749,8 +749,8 @@ public class Toggle implements CommandExecutor
                 // Get and add the "draw toggles" header message.
                 toggleMessageList.add(Text.of(getTranslation("toggle.draw_toggles")));
 
-                // Get a clickable line with all the toggles that we can squeeze onto it.
-                toggleMessageList.add(getClickableLine(messages, flags));
+                // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
+                addClickableLine(messages, flags);
 
                 // Clear the Lists so we can reuse them, if need be.
                 messages.clear();
@@ -808,8 +808,8 @@ public class Toggle implements CommandExecutor
                 // Get and add the "victory toggles" header message.
                 toggleMessageList.add(Text.of(getTranslation("toggle.hatch_toggles")));
 
-                // Get a clickable line with all the toggles that we can squeeze onto it.
-                toggleMessageList.add(getClickableLine(messages, flags));
+                // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
+                addClickableLine(messages, flags);
 
                 // Clear the Lists so we can reuse them, if need be.
                 messages.clear();
@@ -857,8 +857,8 @@ public class Toggle implements CommandExecutor
                 // Get and add the "other toggles" header message.
                 toggleMessageList.add(Text.of(getTranslation("toggle.other_toggles")));
 
-                // Get a clickable line with all the toggles that we can squeeze onto it.
-                toggleMessageList.add(getClickableLine(messages, flags));
+                // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
+                addClickableLine(messages, flags);
             }
 
             /*                *\
@@ -880,6 +880,9 @@ public class Toggle implements CommandExecutor
 
                 // Add a footer.
                 sendTranslation(src, "universal.footer");
+
+                // Clear the list.
+                toggleMessageList = new ArrayList<>();
             }
         }
         else
@@ -888,33 +891,50 @@ public class Toggle implements CommandExecutor
         return CommandResult.success();
     }
 
-    // Takes two matched Lists, and combines their entries.
-    private Text getClickableLine(List<String> messages, List<String> flags)
+    // Takes two matched Lists, combines their entries and sends them off to the toggle List, ready to print.
+    private void addClickableLine(List<String> messages, List<String> flags)
     {
+        // What's the size of our messages List? Always matched with the flags List.
+        int listSize = messages.size();
+
         // Get the last entry in the messages array and shank the trailing comma and space.
-        String lastEntry = messages.get(messages.size() - 1);
+        String lastEntry = messages.get(listSize - 1);
         lastEntry = lastEntry.substring(0, lastEntry.length() - 2);
-        messages.set(messages.size() - 1, lastEntry);
+        messages.set(listSize - 1, lastEntry);
 
-        // Set up a basic Text that we'll be returning, after adding all passed hoverable options to it.
-        Text returnText = Text.of(getTranslation("toggle.line_start"));
+        // Get a clickable line with all the toggles that we can squeeze onto it. Split lines at >5 toggles.
+        if (listSize > 5)
+        {
+            // Sublisting is stupid. Lower bound is inclusive, upper bound exclusive. 0-5 = 0, 1, 2, 3, 4. Angery. 3 hours!!
+            toggleMessageList.add(createClickablePair(messages.subList(0, 5), flags.subList(0, 5)));
+            toggleMessageList.add(createClickablePair(messages.subList(5, listSize), flags.subList(5, listSize)));
+        }
+        else
+            toggleMessageList.add(createClickablePair(messages, flags));
+    }
 
+    // Takes a list of messages and assigns a matching toggle from a list of flags. Allows people to toggle by clicking!
+    private Text createClickablePair(List<String> messages, List<String> flags)
+    {
         // Set up a temporary Text for putting the message/flag pair that we're currently processing into.
         Text actionPair;
 
-        // Grab the size of one of our Lists, as they should be matched. Iterate over it.
+        // Set up a basic Text with our line starter. Add the rest of the line's contents as we go.
+        Text returnText = Text.of(getTranslation("toggle.line_start"));
+
+        // Grab the size of one of our Lists, as they should be matched. Add clickable elements as we go.
         for (int i = 0; i < messages.size(); i++)
         {
             // Set up a temporary pair of message and action.
             actionPair = Text.builder(messages.get(i))
-                .onClick(TextActions.runCommand("/pixelmonbroadcasts toggle " + flags.get(i)))
-                .build();
+                    .onClick(TextActions.runCommand("/pixelmonbroadcasts toggle " + flags.get(i)))
+                    .build();
 
-            // Add the pair to our returnable Text.
+            // Iteratively add the pair to our returnable Text.
             returnText = returnText.toBuilder().append(actionPair).build();
         }
 
-        // Return the finalized Text.
+        // Return the built text.
         return returnText;
     }
 

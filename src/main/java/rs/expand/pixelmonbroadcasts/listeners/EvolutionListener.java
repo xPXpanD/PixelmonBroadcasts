@@ -35,7 +35,7 @@ public class EvolutionListener
                 // Print an evolution message to console, if enabled.
                 logger.info
                 (
-                        '§' + EventData.Others.EVOLVE.color() +
+                        "§" + EventData.Others.EVOLVE.color() +
                         "Player " + event.player.getName() +
                         "'s " + preEvoNameString +
                         " evolved into " + postEvoNameString + "."

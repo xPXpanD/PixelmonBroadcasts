@@ -269,6 +269,8 @@ public class BattleEndListener
                                         // Send enabled broadcasts to people who should receive them.
                                         iterateAndBroadcast(EventData.Victories.ULTIMATE_BOSS,
                                                 pokemonEntity, null, playerEntity, null);
+
+                                        break;
                                     }
                                     case Legendary:
                                     {
@@ -279,6 +281,8 @@ public class BattleEndListener
                                         // Send enabled broadcasts to people who should receive them.
                                         iterateAndBroadcast(EventData.Victories.LEGENDARY_BOSS,
                                                 pokemonEntity, null, playerEntity, null);
+
+                                        break;
                                     }
                                     case Rare:
                                     {
@@ -289,6 +293,8 @@ public class BattleEndListener
                                         // Send enabled broadcasts to people who should receive them.
                                         iterateAndBroadcast(EventData.Victories.RARE_BOSS,
                                                 pokemonEntity, null, playerEntity, null);
+
+                                        break;
                                     }
                                     default: // Will be Equal or Uncommon, only the latter should spawn naturally.
                                     {
@@ -376,6 +382,8 @@ public class BattleEndListener
                                         // Send enabled broadcasts to people who should receive them.
                                         iterateAndBroadcast(EventData.Blackouts.ULTIMATE_BOSS,
                                                 pokemonEntity, null, playerEntity, null);
+
+                                        break;
                                     }
                                     case Legendary:
                                     {
@@ -386,6 +394,8 @@ public class BattleEndListener
                                         // Send enabled broadcasts to people who should receive them.
                                         iterateAndBroadcast(EventData.Blackouts.LEGENDARY_BOSS,
                                                 pokemonEntity, null, playerEntity, null);
+
+                                        break;
                                     }
                                     case Rare:
                                     {
@@ -396,6 +406,8 @@ public class BattleEndListener
                                         // Send enabled broadcasts to people who should receive them.
                                         iterateAndBroadcast(EventData.Blackouts.RARE_BOSS,
                                                 pokemonEntity, null, playerEntity, null);
+
+                                        break;
                                     }
                                     default: // Will be Equal or Uncommon, only the latter should spawn naturally.
                                     {

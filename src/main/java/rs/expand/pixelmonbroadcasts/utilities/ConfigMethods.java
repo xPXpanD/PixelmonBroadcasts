@@ -71,7 +71,7 @@ public class ConfigMethods
     public static boolean tryCreateAndLoadConfigs()
     {
         // Print a message to squeeze between the messages of whatever called the (re-)load.
-        logger.info("§f--> §aLoading and validating Pixelmon Broadcasts settings...");
+        logger.info("§f--> §aLoading and validating settings for Pixelmon Broadcasts 0.5...");
 
         // Create a config directory if it doesn't exist. Silently swallow an error if it does. I/O is awkward.
         try
