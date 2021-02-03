@@ -15,7 +15,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 // Sets the version number shown in the file name.
-version = "1.12.2-0.4.3"
+version = "1.12.2-0.5"
 group = 'rs.expand.pixelmonbroadcasts' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'pixelmonbroadcasts'
 
@@ -30,7 +30,7 @@ minecraft {
     //mappings channel: 'snapshot', version: '20171003-1.12'
     mappings channel: 'snapshot', version: '20171003-1.12'
     
-    accessTransformer = file('src/main/resources/META-INF/pixelmon_at.cfg')
+    //accessTransformer = file('src/main/resources/META-INF/pixelmon_at.cfg')
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.

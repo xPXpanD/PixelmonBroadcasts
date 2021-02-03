@@ -59,18 +59,54 @@ public class SpawnListener
                     pokemonEntity.setPosition(location.getX(), location.getY(), location.getZ());
 
                     // If we're in a localized setup, log both names.
-                    final String nameString =
-                            baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
+                    final String nameString = baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
 
                     if (pokemonEntity.isBossPokemon())
                     {
-                        // Send a log message if we're set up to do logging for this event.
-                        logEvent(EventData.Spawns.BOSS,
-                                worldName, location, "boss " + nameString);
+                        switch (pokemonEntity.getBossMode())
+                        {
+                            case Ultimate:
+                            {
+                                // Send a log message if we're set up to do logging for this event.
+                                logEvent(EventData.Spawns.ULTIMATE_BOSS,
+                                        worldName, location, "boss " + nameString + " (Ultimate)");
 
-                        // Send enabled broadcasts to people who should receive them.
-                        iterateAndBroadcast(EventData.Spawns.BOSS,
-                                pokemonEntity, null, null, null);
+                                // Send enabled broadcasts to people who should receive them.
+                                iterateAndBroadcast(EventData.Spawns.ULTIMATE_BOSS,
+                                        pokemonEntity, null, null, null);
+                            }
+                            case Legendary:
+                            {
+                                // Send a log message if we're set up to do logging for this event.
+                                logEvent(EventData.Spawns.LEGENDARY_BOSS,
+                                        worldName, location, "boss " + nameString + " (Legendary)");
+
+                                // Send enabled broadcasts to people who should receive them.
+                                iterateAndBroadcast(EventData.Spawns.LEGENDARY_BOSS,
+                                        pokemonEntity, null, null, null);
+                            }
+                            case Rare:
+                            {
+                                // Send a log message if we're set up to do logging for this event.
+                                logEvent(EventData.Spawns.RARE_BOSS,
+                                        worldName, location, "boss " + nameString + " (Rare)");
+
+                                // Send enabled broadcasts to people who should receive them.
+                                iterateAndBroadcast(EventData.Spawns.RARE_BOSS,
+                                        pokemonEntity, null, null, null);
+                            }
+                            default: // Will be Equal or Uncommon, only the latter should spawn naturally.
+                            {
+                                // Send a log message if we're set up to do logging for this event.
+                                logEvent(EventData.Spawns.UNCOMMON_BOSS,
+                                        worldName, location, "generic boss " + nameString);
+
+                                // Send enabled broadcasts to people who should receive them.
+                                iterateAndBroadcast(EventData.Spawns.UNCOMMON_BOSS,
+                                        pokemonEntity, null, null, null);
+                            }
+                        }
+
                     }
                     else if (EnumSpecies.legendaries.contains(baseName))
                     {

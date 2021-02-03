@@ -50,28 +50,40 @@ public class Toggle implements CommandExecutor
                     // Normals.
                     case "showNormalCatch": case "showNormalBlackout": case "showNormalHatch":
                     // Legendaries.
-                    case "showLegendarySpawn": case "showLegendaryChallenge": case "showLegendaryCatch": case "showLegendaryVictory":
-                    case "showLegendaryBlackout": case "showLegendaryForfeit": case "showLegendaryHatch":
+                    case "showLegendarySpawn": case "showLegendaryChallenge": case "showLegendaryCatch":
+                    case "showLegendaryVictory": case "showLegendaryBlackout": case "showLegendaryForfeit":
+                    case "showLegendaryHatch":
                     // Shinies.
                     case "showShinySpawn": case "showShinyChallenge": case "showShinyCatch": case "showShinyVictory":
                     case "showShinyBlackout": case "showShinyForfeit": case "showShinyHatch":
                     // Ultra Beasts.
-                    case "showUltraBeastSpawn": case "showUltraBeastChallenge": case "showUltraBeastCatch": case "showUltraBeastVictory":
-                    case "showUltraBeastBlackout": case "showUltraBeastForfeit": case "showUltraBeastHatch":
+                    case "showUltraBeastSpawn": case "showUltraBeastChallenge": case "showUltraBeastCatch":
+                    case "showUltraBeastVictory": case "showUltraBeastBlackout": case "showUltraBeastForfeit":
+                    case "showUltraBeastHatch":
                     // Wormholes.
                     case "showWormholeSpawn":
-                    // Bosses.
-                    case "showBossSpawn": case "showBossChallenge": case "showBossVictory": case "showBossBlackout": case "showBossForfeit":
+                    // Generic bosses and boss catch-alls.
+                    case "showUncommonBossSpawn": case "showUncommonBossChallenge": case "showUncommonBossVictory":
+                    case "showUncommonBossBlackout": case "showBossForfeit":
+                    // Rare bosses.
+                    case "showRareBossSpawn": case "showRareBossChallenge": case "showRareBossVictory":
+                    case "showRareBossBlackout":
+                    // Legendary bosses.
+                    case "showLegendaryBossSpawn": case "showLegendaryBossChallenge": case "showLegendaryBossVictory":
+                    case "showLegendaryBossBlackout":
+                    // Ultimate bosses.
+                    case "showUltimateBossSpawn": case "showUltimateBossChallenge": case "showUltimateBossVictory":
+                    case "showUltimateBossBlackout":
                     // Trainers.
-                    case "showTrainerChallenge": case "showTrainerVictory": case "showTrainerBlackout": case "showTrainerForfeit":
+                    case "showTrainerChallenge": case "showTrainerVictory": case "showTrainerBlackout":
+                    case "showTrainerForfeit":
                     // Boss trainers.
-                    case "showBossTrainerChallenge": case "showBossTrainerVictory":
-                    case "showBossTrainerBlackout": case "showBossTrainerForfeit":
+                    case "showBossTrainerChallenge": case "showBossTrainerVictory": case "showBossTrainerBlackout":
+                    case "showBossTrainerForfeit":
                     // PVP stuff.
                     case "showPVPChallenge": case "showPVPVictory": case "showPVPDraw":
                     // Miscellany.
-                    case "showEvolve": case "showFaint": case "showTrade":
-                    //case "showBirdTrioSummon":
+                    case "showEvolve": case "showFaint": case "showTrade": /* case "showBirdTrioSummon": */
                     {
                         // Got a valid flag. Toggle it.
                         toggleFlag(src, input);
@@ -137,15 +149,45 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.ultra_beast.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Blackouts.BOSS))
+            if (canReceiveBroadcast(src, EventData.Blackouts.UNCOMMON_BOSS))
             {
-                flags.add("showBossBlackout");
+                flags.add("showUncommonBossBlackout");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (checkToggleStatus(player, "showBossBlackout"))
-                    messages.add(getTranslation("toggle.boss.on") + separator);
+                if (checkToggleStatus(player, "showUncommonBossBlackout"))
+                    messages.add(getTranslation("toggle.uncommon_boss.on") + separator);
                 else
-                    messages.add(getTranslation("toggle.boss.off") + separator);
+                    messages.add(getTranslation("toggle.uncommon_boss.off") + separator);
+            }
+            if (canReceiveBroadcast(src, EventData.Blackouts.RARE_BOSS))
+            {
+                flags.add("showRareBossBlackout");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showRareBossBlackout"))
+                    messages.add(getTranslation("toggle.rare_boss.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.rare_boss.off") + separator);
+            }
+            if (canReceiveBroadcast(src, EventData.Blackouts.LEGENDARY_BOSS))
+            {
+                flags.add("showLegendaryBossBlackout");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showLegendaryBossBlackout"))
+                    messages.add(getTranslation("toggle.legendary_boss.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.legendary_boss.off") + separator);
+            }
+            if (canReceiveBroadcast(src, EventData.Blackouts.ULTIMATE_BOSS))
+            {
+                flags.add("showUltimateBossBlackout");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showUltimateBossBlackout"))
+                    messages.add(getTranslation("toggle.ultimate_boss.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.ultimate_boss.off") + separator);
             }
             if (canReceiveBroadcast(src, EventData.Blackouts.TRAINER))
             {
@@ -275,15 +317,45 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.ultra_beast.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Challenges.BOSS))
+            if (canReceiveBroadcast(src, EventData.Challenges.UNCOMMON_BOSS))
             {
-                flags.add("showBossChallenge");
+                flags.add("showUncommonBossChallenge");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (checkToggleStatus(player, "showBossChallenge"))
-                    messages.add(getTranslation("toggle.boss.on") + separator);
+                if (checkToggleStatus(player, "showUncommonBossChallenge"))
+                    messages.add(getTranslation("toggle.uncommon_boss.on") + separator);
                 else
-                    messages.add(getTranslation("toggle.boss.off") + separator);
+                    messages.add(getTranslation("toggle.uncommon_boss.off") + separator);
+            }
+            if (canReceiveBroadcast(src, EventData.Challenges.RARE_BOSS))
+            {
+                flags.add("showRareBossChallenge");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showRareBossChallenge"))
+                    messages.add(getTranslation("toggle.rare_boss.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.rare_boss.off") + separator);
+            }
+            if (canReceiveBroadcast(src, EventData.Challenges.LEGENDARY_BOSS))
+            {
+                flags.add("showLegendaryBossChallenge");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showLegendaryBossChallenge"))
+                    messages.add(getTranslation("toggle.legendary_boss.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.legendary_boss.off") + separator);
+            }
+            if (canReceiveBroadcast(src, EventData.Challenges.ULTIMATE_BOSS))
+            {
+                flags.add("showUltimateBossChallenge");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showUltimateBossChallenge"))
+                    messages.add(getTranslation("toggle.ultimate_boss.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.ultimate_boss.off") + separator);
             }
             if (canReceiveBroadcast(src, EventData.Challenges.TRAINER))
             {
@@ -453,15 +525,45 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.wormhole.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Spawns.BOSS))
+            if (canReceiveBroadcast(src, EventData.Spawns.UNCOMMON_BOSS))
             {
-                flags.add("showBossSpawn");
+                flags.add("showUncommonBossSpawn");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (checkToggleStatus(player, "showBossSpawn"))
-                    messages.add(getTranslation("toggle.boss.on") + separator);
+                if (checkToggleStatus(player, "showUncommonBossSpawn"))
+                    messages.add(getTranslation("toggle.uncommon_boss.on") + separator);
                 else
-                    messages.add(getTranslation("toggle.boss.off") + separator);
+                    messages.add(getTranslation("toggle.uncommon_boss.off") + separator);
+            }
+            if (canReceiveBroadcast(src, EventData.Spawns.RARE_BOSS))
+            {
+                flags.add("showRareBossSpawn");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showRareBossSpawn"))
+                    messages.add(getTranslation("toggle.rare_boss.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.rare_boss.off") + separator);
+            }
+            if (canReceiveBroadcast(src, EventData.Spawns.LEGENDARY_BOSS))
+            {
+                flags.add("showLegendaryBossSpawn");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showLegendaryBossSpawn"))
+                    messages.add(getTranslation("toggle.legendary_boss.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.legendary_boss.off") + separator);
+            }
+            if (canReceiveBroadcast(src, EventData.Spawns.ULTIMATE_BOSS))
+            {
+                flags.add("showUltimateBossSpawn");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showUltimateBossSpawn"))
+                    messages.add(getTranslation("toggle.ultimate_boss.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.ultimate_boss.off") + separator);
             }
 
             // If we have any toggles lined up, print and clear.
@@ -541,15 +643,45 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.ultra_beast.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Victories.BOSS))
+            if (canReceiveBroadcast(src, EventData.Victories.UNCOMMON_BOSS))
             {
-                flags.add("showBossVictory");
+                flags.add("showUncommonBossVictory");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (checkToggleStatus(player, "showBossVictory"))
-                    messages.add(getTranslation("toggle.boss.on") + separator);
+                if (checkToggleStatus(player, "showUncommonBossVictory"))
+                    messages.add(getTranslation("toggle.uncommon_boss.on") + separator);
                 else
-                    messages.add(getTranslation("toggle.boss.off") + separator);
+                    messages.add(getTranslation("toggle.uncommon_boss.off") + separator);
+            }
+            if (canReceiveBroadcast(src, EventData.Victories.RARE_BOSS))
+            {
+                flags.add("showRareBossVictory");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showRareBossVictory"))
+                    messages.add(getTranslation("toggle.rare_boss.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.rare_boss.off") + separator);
+            }
+            if (canReceiveBroadcast(src, EventData.Victories.LEGENDARY_BOSS))
+            {
+                flags.add("showLegendaryBossVictory");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showLegendaryBossVictory"))
+                    messages.add(getTranslation("toggle.legendary_boss.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.legendary_boss.off") + separator);
+            }
+            if (canReceiveBroadcast(src, EventData.Victories.ULTIMATE_BOSS))
+            {
+                flags.add("showUltimateBossVictory");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (checkToggleStatus(player, "showUltimateBossVictory"))
+                    messages.add(getTranslation("toggle.ultimate_boss.on") + separator);
+                else
+                    messages.add(getTranslation("toggle.ultimate_boss.off") + separator);
             }
             if (canReceiveBroadcast(src, EventData.Victories.TRAINER))
             {

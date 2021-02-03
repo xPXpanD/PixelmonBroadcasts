@@ -27,7 +27,6 @@ public class PixelmonOverlayAPI implements EventListener<ChangeServiceProviderEv
 		Sponge.getEventManager().registerListener(plugin, ChangeServiceProviderEvent.class, this);
 	}
 
-	@SuppressWarnings("NullableProblems")
 	@Override
 	public void handle(ChangeServiceProviderEvent event)
 	{

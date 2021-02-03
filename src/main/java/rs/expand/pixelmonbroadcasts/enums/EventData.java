@@ -13,25 +13,28 @@ public interface EventData
     enum Blackouts implements EventData
     {
         // Blackouts
-        NORMAL(null, "blackout.normal", "showNormalBlackout"),
-        SHINY(null, "blackout.shiny", "showShinyBlackout"),
-        LEGENDARY(null, "blackout.legendary", "showLegendaryBlackout"),
-        SHINY_LEGENDARY(null, "blackout.shinylegendary", "showLegendaryBlackout", "showShinyBlackout"),
-        ULTRA_BEAST(null, "blackout.ultrabeast", "showUltraBeastBlackout"),
-        SHINY_ULTRA_BEAST(null, "blackout.shinyultrabeast", "showUltraBeastBlackout", "showShinyBlackout"),
-        BOSS(null, "blackout.boss", "showBossBlackout"),
-        TRAINER(null, "blackout.trainer", "showTrainerBlackout"),
-        BOSS_TRAINER(null, "blackout.bosstrainer", "showBossTrainerBlackout");
+        NORMAL("blackout.normal", "showNormalBlackout"),
+        SHINY("blackout.shiny", "showShinyBlackout"),
+        LEGENDARY("blackout.legendary", "showLegendaryBlackout"),
+        SHINY_LEGENDARY("blackout.shinylegendary", "showLegendaryBlackout", "showShinyBlackout"),
+        ULTRA_BEAST("blackout.ultrabeast", "showUltraBeastBlackout"),
+        SHINY_ULTRA_BEAST("blackout.shinyultrabeast", "showUltraBeastBlackout", "showShinyBlackout"),
+        UNCOMMON_BOSS("blackout.uncommonboss", "showUncommonBossBlackout"),
+        RARE_BOSS("blackout.rareboss", "showRareBossBlackout"),
+        LEGENDARY_BOSS("blackout.legendaryboss", "showLegendaryBossBlackout"),
+        ULTIMATE_BOSS("blackout.ultimateboss", "showUltimateBossBlackout"),
+        TRAINER("blackout.trainer", "showTrainerBlackout"),
+        BOSS_TRAINER("blackout.bosstrainer", "showBossTrainerBlackout");
 
         // Set up some variables for accessing the Enum's data through.
-        private String key;
+        private final String key;
         public String options;
-        private String[] flags;
+        private final String[] flags;
 
         // Point to where we're grabbing from.
-        Blackouts(final String options, final String key, final String... flags)
+        Blackouts(final String key, final String... flags)
         {
-            this.options = options; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Can change! Null until filled in by a (re-)load.
             this.key = key;
             this.flags = flags;
         }
@@ -48,22 +51,22 @@ public interface EventData
     enum Catches implements EventData
     {
         // Catches.
-        NORMAL(null, "catch.normal", "showNormalCatch"),
-        SHINY(null, "catch.shiny", "showShinyCatch"),
-        LEGENDARY(null, "catch.legendary", "showLegendaryCatch"),
-        SHINY_LEGENDARY(null, "catch.shinylegendary", "showLegendaryCatch", "showShinyCatch"),
-        ULTRA_BEAST(null, "catch.ultrabeast", "showUltraBeastCatch"),
-        SHINY_ULTRA_BEAST(null, "catch.shinyultrabeast", "showUltraBeastCatch", "showShinyCatch");
+        NORMAL("catch.normal", "showNormalCatch"),
+        SHINY("catch.shiny", "showShinyCatch"),
+        LEGENDARY("catch.legendary", "showLegendaryCatch"),
+        SHINY_LEGENDARY("catch.shinylegendary", "showLegendaryCatch", "showShinyCatch"),
+        ULTRA_BEAST("catch.ultrabeast", "showUltraBeastCatch"),
+        SHINY_ULTRA_BEAST("catch.shinyultrabeast", "showUltraBeastCatch", "showShinyCatch");
 
         // Set up some variables for accessing the Enum's data through.
-        private String key;
+        private final String key;
         public String options;
-        private String[] flags;
+        private final String[] flags;
 
         // Point to where we're grabbing from.
-        Catches(final String options, final String key, final String... flags)
+        Catches(final String key, final String... flags)
         {
-            this.options = options; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Can change! Null until filled in by a (re-)load.
             this.key = key;
             this.flags = flags;
         }
@@ -80,25 +83,28 @@ public interface EventData
     enum Challenges implements EventData
     {
         // Challenges.
-        SHINY(null, null, "challenge.shiny", "showShinyChallenge"),
-        LEGENDARY(null, null, "challenge.legendary", "showLegendaryChallenge"),
-        SHINY_LEGENDARY(null, null, "challenge.shinylegendary", "showLegendaryChallenge", "showShinyChallenge"),
-        ULTRA_BEAST(null, null, "challenge.ultrabeast", "showUltraBeastChallenge"),
-        SHINY_ULTRA_BEAST(null, null, "challenge.shinyultrabeast", "showUltraBeastChallenge", "showShinyChallenge"),
-        BOSS(null, null, "challenge.boss", "showBossChallenge"),
-        TRAINER(null, null, "challenge.trainer", "showTrainerChallenge"),
-        BOSS_TRAINER(null, null, "challenge.bosstrainer", "showBossTrainerChallenge"),
-        PVP(null, new String[] {" started battling player "}, "challenge.pvp", "showPVPChallenge");
+        SHINY(null, "challenge.shiny", "showShinyChallenge"),
+        LEGENDARY(null, "challenge.legendary", "showLegendaryChallenge"),
+        SHINY_LEGENDARY(null, "challenge.shinylegendary", "showLegendaryChallenge", "showShinyChallenge"),
+        ULTRA_BEAST(null, "challenge.ultrabeast", "showUltraBeastChallenge"),
+        SHINY_ULTRA_BEAST(null, "challenge.shinyultrabeast", "showUltraBeastChallenge", "showShinyChallenge"),
+        UNCOMMON_BOSS(null, "challenge.uncommonboss", "showUncommonBossChallenge"),
+        RARE_BOSS(null, "challenge.rareboss", "showRareBossChallenge"),
+        LEGENDARY_BOSS(null, "challenge.legendaryboss", "showLegendaryBossChallenge"),
+        ULTIMATE_BOSS(null, "challenge.ultimateboss", "showUltimateBossChallenge"),
+        TRAINER(null, "challenge.trainer", "showTrainerChallenge"),
+        BOSS_TRAINER(null, "challenge.bosstrainer", "showBossTrainerChallenge"),
+        PVP(new String[] {" started battling player "}, "challenge.pvp", "showPVPChallenge");
 
         // Set up some variables for accessing the Enum's data through.
-        private String key;
+        private final String key;
         public String options;
-        private String[] messages, flags;
+        private final String[] messages, flags;
 
         // Point to where we're grabbing from.
-        Challenges(final String options, final String[] messages, final String key, final String... flags)
+        Challenges(final String[] messages, final String key, final String... flags)
         {
-            this.options = options; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Can change! Null until filled in by a (re-)load.
             this.messages = messages;
             this.key = key;
             this.flags = flags;
@@ -118,24 +124,24 @@ public interface EventData
     enum Forfeits implements EventData
     {
         // Forfeits.
-        SHINY(null, "forfeit.shiny", "showShinyForfeit"),
-        LEGENDARY(null, "forfeit.legendary", "showLegendaryForfeit"),
-        SHINY_LEGENDARY(null, "forfeit.shinylegendary", "showLegendaryForfeit", "showShinyForfeit"),
-        ULTRA_BEAST(null, "forfeit.ultrabeast", "showUltraBeastForfeit"),
-        SHINY_ULTRA_BEAST(null, "forfeit.shinyultrabeast", "showUltraBeastForfeit", "showShinyForfeit"),
-        BOSS(null, "forfeit.boss", "showBossForfeit"),
-        TRAINER(null, "forfeit.trainer", "showTrainerForfeit"),
-        BOSS_TRAINER(null, "forfeit.bosstrainer", "showBossTrainerForfeit");
+        SHINY("forfeit.shiny", "showShinyForfeit"),
+        LEGENDARY("forfeit.legendary", "showLegendaryForfeit"),
+        SHINY_LEGENDARY("forfeit.shinylegendary", "showLegendaryForfeit", "showShinyForfeit"),
+        ULTRA_BEAST("forfeit.ultrabeast", "showUltraBeastForfeit"),
+        SHINY_ULTRA_BEAST("forfeit.shinyultrabeast", "showUltraBeastForfeit", "showShinyForfeit"),
+        BOSS("forfeit.boss", "showBossForfeit"),
+        TRAINER("forfeit.trainer", "showTrainerForfeit"),
+        BOSS_TRAINER("forfeit.bosstrainer", "showBossTrainerForfeit");
 
         // Set up some variables for accessing the Enum's data through.
-        private String key;
+        private final String key;
         public String options;
-        private String[] flags;
+        private final String[] flags;
 
         // Point to where we're grabbing from.
-        Forfeits(final String options, final String key, final String... flags)
+        Forfeits(final String key, final String... flags)
         {
-            this.options = options; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Can change! Null until filled in by a (re-)load.
             this.key = key;
             this.flags = flags;
         }
@@ -152,23 +158,26 @@ public interface EventData
     enum Spawns implements EventData
     {
         // Spawns.
-        SHINY(null, "spawn.shiny", "showShinySpawn"),
-        LEGENDARY(null, "spawn.legendary", "showLegendarySpawn"),
-        SHINY_LEGENDARY(null, "spawn.shinylegendary", "showLegendarySpawn", "showShinySpawn"),
-        ULTRA_BEAST(null, "spawn.ultrabeast", "showUltraBeastSpawn"),
-        SHINY_ULTRA_BEAST(null, "spawn.shinyultrabeast", "showUltraBeastSpawn", "showShinySpawn"),
-        WORMHOLE(null, "spawn.wormhole", "showWormholeSpawn"),
-        BOSS(null, "spawn.boss", "showBossSpawn");
+        SHINY("spawn.shiny", "showShinySpawn"),
+        LEGENDARY("spawn.legendary", "showLegendarySpawn"),
+        SHINY_LEGENDARY("spawn.shinylegendary", "showLegendarySpawn", "showShinySpawn"),
+        ULTRA_BEAST("spawn.ultrabeast", "showUltraBeastSpawn"),
+        SHINY_ULTRA_BEAST("spawn.shinyultrabeast", "showUltraBeastSpawn", "showShinySpawn"),
+        WORMHOLE("spawn.wormhole", "showWormholeSpawn"),
+        UNCOMMON_BOSS("spawn.uncommonboss", "showUncommonBossSpawn"),
+        RARE_BOSS("spawn.rareboss", "showRareBossSpawn"),
+        LEGENDARY_BOSS("spawn.legendaryboss", "showLegendaryBossSpawn"),
+        ULTIMATE_BOSS("spawn.ultimateboss", "showUltimateBossSpawn");
 
         // Set up some variables for accessing the Enum's data through.
-        private String key;
+        private final String key;
         public String options;
-        private String[] flags;
+        private final String[] flags;
 
         // Point to where we're grabbing from.
-        Spawns(final String options, final String key, final String... flags)
+        Spawns(final String key, final String... flags)
         {
-            this.options = options; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Can change! Null until filled in by a (re-)load.
             this.key = key;
             this.flags = flags;
         }
@@ -185,25 +194,28 @@ public interface EventData
     enum Victories implements EventData
     {
         // Victories.
-        SHINY(null, null, "victory.shiny", "showShinyVictory"),
-        LEGENDARY(null, null, "victory.legendary", "showLegendaryVictory"),
-        SHINY_LEGENDARY(null, null, "victory.shinylegendary", "showLegendaryVictory", "showShinyVictory"),
-        ULTRA_BEAST(null, null, "victory.ultrabeast", "showUltraBeastVictory"),
-        SHINY_ULTRA_BEAST(null, null, "victory.shinyultrabeast", "showUltraBeastVictory", "showShinyVictory"),
-        BOSS(null, null, "victory.boss", "showBossVictory"),
-        TRAINER(null, null, "victory.trainer", "showTrainerVictory"),
-        BOSS_TRAINER(null, null, "victory.bosstrainer", "showBossTrainerVictory"),
-        PVP(null, new String[] {" defeated player "}, "victory.pvp", "showPVPVictory");
+        SHINY(null, "victory.shiny", "showShinyVictory"),
+        LEGENDARY(null, "victory.legendary", "showLegendaryVictory"),
+        SHINY_LEGENDARY(null, "victory.shinylegendary", "showLegendaryVictory", "showShinyVictory"),
+        ULTRA_BEAST(null, "victory.ultrabeast", "showUltraBeastVictory"),
+        SHINY_ULTRA_BEAST(null, "victory.shinyultrabeast", "showUltraBeastVictory", "showShinyVictory"),
+        UNCOMMON_BOSS(null, "victory.uncommonboss", "showUncommonBossVictory"),
+        RARE_BOSS(null, "victory.rareboss", "showRareBossVictory"),
+        LEGENDARY_BOSS(null, "victory.legendaryboss", "showLegendaryBossVictory"),
+        ULTIMATE_BOSS(null, "victory.ultimateboss", "showUltimateBossVictory"),
+        TRAINER(null, "victory.trainer", "showTrainerVictory"),
+        BOSS_TRAINER(null, "victory.bosstrainer", "showBossTrainerVictory"),
+        PVP(new String[] {" defeated player "}, "victory.pvp", "showPVPVictory");
 
         // Set up some variables for accessing the Enum's data through.
-        private String key;
+        private final String key;
         public String options;
-        private String[] messages, flags;
+        private final String[] messages, flags;
 
         // Point to where we're grabbing from.
-        Victories(final String options, final String[] messages, final String key, final String... flags)
+        Victories(final String[] messages, final String key, final String... flags)
         {
-            this.options = options; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Can change! Null until filled in by a (re-)load.
             this.messages = messages;
             this.key = key;
             this.flags = flags;
@@ -223,15 +235,15 @@ public interface EventData
     enum Draws implements EventData
     {
         // Draws. Currently just PvP, might get more eventually.
-        PVP(null);
+        PVP();
 
         // Set up some variables for accessing the Enum's data through.
         public String options;
 
         // Point to where we're grabbing from.
-        Draws(final String options)
+        Draws()
         {
-            this.options = options; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Can change! Null until filled in by a (re-)load.
         }
 
         // Expose values to anything accessing us through the main interface. All set in advance for now.
@@ -246,22 +258,22 @@ public interface EventData
     enum Hatches implements EventData
     {
         // Hatches.
-        NORMAL(null, "hatch.normal", "showNormalHatch"),
-        SHINY(null, "hatch.shiny", "showShinyHatch"),
-        LEGENDARY(null, "hatch.legendary", "showLegendaryHatch"),
-        SHINY_LEGENDARY(null, "hatch.shinylegendary", "showLegendaryHatch", "showShinyHatch"),
-        ULTRA_BEAST(null, "hatch.ultrabeast", "showUltraBeastHatch"),
-        SHINY_ULTRA_BEAST(null, "hatch.shinyultrabeast", "showUltraBeastHatch", "showShinyHatch");
+        NORMAL("hatch.normal", "showNormalHatch"),
+        SHINY("hatch.shiny", "showShinyHatch"),
+        LEGENDARY("hatch.legendary", "showLegendaryHatch"),
+        SHINY_LEGENDARY("hatch.shinylegendary", "showLegendaryHatch", "showShinyHatch"),
+        ULTRA_BEAST("hatch.ultrabeast", "showUltraBeastHatch"),
+        SHINY_ULTRA_BEAST("hatch.shinyultrabeast", "showUltraBeastHatch", "showShinyHatch");
 
         // Set up some variables for accessing the Enum's data through.
-        private String key;
+        private final String key;
         public String options;
-        private String[] flags;
+        private final String[] flags;
 
         // Point to where we're grabbing from.
-        Hatches(final String options, final String key, final String... flags)
+        Hatches(final String key, final String... flags)
         {
-            this.options = options; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Can change! Null until filled in by a (re-)load.
             this.key = key;
             this.flags = flags;
         }
@@ -278,23 +290,23 @@ public interface EventData
     enum Others implements EventData
     {
         // Miscellaneous events. Trade has its own message logic to avoid needing to pass in a huge list of parameters.
-        EVOLVE(null, true, null, '3', "evolve", "showEvolve"), // Dark Aqua.
-        FAINT(null, false, new String[] {" lost their "}, 'c', "faint", "showFaint"), // Red.
+        EVOLVE(true, null, '3', "evolve", "showEvolve"), // Dark Aqua.
+        FAINT(false, new String[] {" lost their "}, 'c', "faint", "showFaint"), // Red.
         //LOOT(null, false, null, '3', "loot", "showLoot"), // Dark Aqua.
-        TRADE(null, true, null, '3', "trade", "showTrade"); // Dark Aqua.
+        TRADE(true, null, '3', "trade", "showTrade"); // Dark Aqua.
 
         // Set up some variables for accessing the Enum's data through.
-        private boolean presentTense;
-        private char color;
-        private String key;
+        private final boolean presentTense;
+        private final char color;
+        private final String key;
         public String options;
-        private String[] flags, messages;
+        private final String[] flags, messages;
 
         // Point to where we're grabbing from.
-        Others(final String options, final boolean presentTense, final String[] messages, final char color,
+        Others(final boolean presentTense, final String[] messages, final char color,
                final String key, final String... flags)
         {
-            this.options = options; // Can change! Null until filled in by a (re-)load.
+            this.options = null; // Can change! Null until filled in by a (re-)load.
             this.presentTense = presentTense;
             this.messages = messages;
             this.color = color;

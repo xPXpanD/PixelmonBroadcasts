@@ -156,7 +156,10 @@ public class ConfigMethods
         EventData.Blackouts.SHINY.options = settingsConfig.getNode("shinyBlackoutOptions").getString();
         EventData.Blackouts.LEGENDARY.options = settingsConfig.getNode("legendaryBlackoutOptions").getString();
         EventData.Blackouts.ULTRA_BEAST.options = settingsConfig.getNode("ultraBeastBlackoutOptions").getString();
-        EventData.Blackouts.BOSS.options = settingsConfig.getNode("bossBlackoutOptions").getString();
+        EventData.Blackouts.UNCOMMON_BOSS.options = settingsConfig.getNode("uncommonBossBlackoutOptions").getString();
+        EventData.Blackouts.RARE_BOSS.options = settingsConfig.getNode("rareBossBlackoutOptions").getString();
+        EventData.Blackouts.LEGENDARY_BOSS.options = settingsConfig.getNode("legendaryBossBlackoutOptions").getString();
+        EventData.Blackouts.ULTIMATE_BOSS.options = settingsConfig.getNode("ultimateBossBlackoutOptions").getString();
         EventData.Blackouts.TRAINER.options = settingsConfig.getNode("trainerBlackoutOptions").getString();
         EventData.Blackouts.BOSS_TRAINER.options = settingsConfig.getNode("bossTrainerBlackoutOptions").getString();
 
@@ -170,7 +173,10 @@ public class ConfigMethods
         EventData.Challenges.SHINY.options = settingsConfig.getNode("shinyChallengeOptions").getString();
         EventData.Challenges.LEGENDARY.options = settingsConfig.getNode("legendaryChallengeOptions").getString();
         EventData.Challenges.ULTRA_BEAST.options = settingsConfig.getNode("ultraBeastChallengeOptions").getString();
-        EventData.Challenges.BOSS.options = settingsConfig.getNode("bossChallengeOptions").getString();
+        EventData.Challenges.UNCOMMON_BOSS.options = settingsConfig.getNode("uncommonBossChallengeOptions").getString();
+        EventData.Challenges.RARE_BOSS.options = settingsConfig.getNode("rareBossChallengeOptions").getString();
+        EventData.Challenges.LEGENDARY_BOSS.options = settingsConfig.getNode("legendaryBossChallengeOptions").getString();
+        EventData.Challenges.ULTIMATE_BOSS.options = settingsConfig.getNode("ultimateBossChallengeOptions").getString();
         EventData.Challenges.TRAINER.options = settingsConfig.getNode("trainerChallengeOptions").getString();
         EventData.Challenges.BOSS_TRAINER.options = settingsConfig.getNode("bossTrainerChallengeOptions").getString();
         EventData.Challenges.PVP.options = settingsConfig.getNode("pvpChallengeOptions").getString();
@@ -188,13 +194,19 @@ public class ConfigMethods
         EventData.Spawns.LEGENDARY.options = settingsConfig.getNode("legendarySpawnOptions").getString();
         EventData.Spawns.ULTRA_BEAST.options = settingsConfig.getNode("ultraBeastSpawnOptions").getString();
         EventData.Spawns.WORMHOLE.options = settingsConfig.getNode("wormholeSpawnOptions").getString();
-        EventData.Spawns.BOSS.options = settingsConfig.getNode("bossSpawnOptions").getString();
+        EventData.Spawns.UNCOMMON_BOSS.options = settingsConfig.getNode("uncommonBossSpawnOptions").getString();
+        EventData.Spawns.RARE_BOSS.options = settingsConfig.getNode("rareBossSpawnOptions").getString();
+        EventData.Spawns.LEGENDARY_BOSS.options = settingsConfig.getNode("legendaryBossSpawnOptions").getString();
+        EventData.Spawns.ULTIMATE_BOSS.options = settingsConfig.getNode("ultimateBossSpawnOptions").getString();
 
         /// Victories.
         EventData.Victories.SHINY.options = settingsConfig.getNode("shinyVictoryOptions").getString();
         EventData.Victories.LEGENDARY.options = settingsConfig.getNode("legendaryVictoryOptions").getString();
         EventData.Victories.ULTRA_BEAST.options = settingsConfig.getNode("ultraBeastVictoryOptions").getString();
-        EventData.Victories.BOSS.options = settingsConfig.getNode("bossVictoryOptions").getString();
+        EventData.Victories.UNCOMMON_BOSS.options = settingsConfig.getNode("uncommonBossVictoryOptions").getString();
+        EventData.Victories.RARE_BOSS.options = settingsConfig.getNode("rareBossVictoryOptions").getString();
+        EventData.Victories.LEGENDARY_BOSS.options = settingsConfig.getNode("legendaryBossVictoryOptions").getString();
+        EventData.Victories.ULTIMATE_BOSS.options = settingsConfig.getNode("ultimateBossVictoryOptions").getString();
         EventData.Victories.TRAINER.options = settingsConfig.getNode("trainerVictoryOptions").getString();
         EventData.Victories.BOSS_TRAINER.options = settingsConfig.getNode("bossTrainerVictoryOptions").getString();
         EventData.Victories.PVP.options = settingsConfig.getNode("pvpVictoryOptions").getString();
@@ -269,8 +281,14 @@ public class ConfigMethods
             optionsErrorList.add("legendaryBlackoutOptions");
         if (EventData.Blackouts.ULTRA_BEAST.options == null)
             optionsErrorList.add("ultraBeastBlackoutOptions");
-        if (EventData.Blackouts.BOSS.options == null)
-            optionsErrorList.add("bossBlackoutOptions");
+        if (EventData.Blackouts.UNCOMMON_BOSS.options == null)
+            optionsErrorList.add("uncommonBossBlackoutOptions");
+        if (EventData.Blackouts.RARE_BOSS.options == null)
+            optionsErrorList.add("rareBossBlackoutOptions");
+        if (EventData.Blackouts.LEGENDARY_BOSS.options == null)
+            optionsErrorList.add("legendaryBossBlackoutOptions");
+        if (EventData.Blackouts.ULTIMATE_BOSS.options == null)
+            optionsErrorList.add("ultimateBossBlackoutOptions");
         if (EventData.Blackouts.TRAINER.options == null)
             optionsErrorList.add("trainerBlackoutOptions");
         if (EventData.Blackouts.BOSS_TRAINER.options == null)
@@ -293,8 +311,14 @@ public class ConfigMethods
             optionsErrorList.add("legendaryChallengeOptions");
         if (EventData.Challenges.ULTRA_BEAST.options == null)
             optionsErrorList.add("ultraBeastChallengeOptions");
-        if (EventData.Challenges.BOSS.options == null)
-            optionsErrorList.add("bossChallengeOptions");
+        if (EventData.Challenges.UNCOMMON_BOSS.options == null)
+            optionsErrorList.add("uncommonBossChallengeOptions");
+        if (EventData.Challenges.RARE_BOSS.options == null)
+            optionsErrorList.add("rareBossChallengeOptions");
+        if (EventData.Challenges.LEGENDARY_BOSS.options == null)
+            optionsErrorList.add("legendaryBossChallengeOptions");
+        if (EventData.Challenges.ULTIMATE_BOSS.options == null)
+            optionsErrorList.add("ultimateBossChallengeOptions");
         if (EventData.Challenges.TRAINER.options == null)
             optionsErrorList.add("trainerChallengeOptions");
         if (EventData.Challenges.BOSS_TRAINER.options == null)
@@ -325,8 +349,14 @@ public class ConfigMethods
             optionsErrorList.add("ultraBeastSpawnOptions");
         if (EventData.Spawns.WORMHOLE.options == null)
             optionsErrorList.add("wormholeSpawnOptions");
-        if (EventData.Spawns.BOSS.options == null)
-            optionsErrorList.add("bossSpawnOptions");
+        if (EventData.Spawns.UNCOMMON_BOSS.options == null)
+            optionsErrorList.add("uncommonBossSpawnOptions");
+        if (EventData.Spawns.RARE_BOSS.options == null)
+            optionsErrorList.add("rareBossSpawnOptions");
+        if (EventData.Spawns.LEGENDARY_BOSS.options == null)
+            optionsErrorList.add("legendaryBossSpawnOptions");
+        if (EventData.Spawns.ULTIMATE_BOSS.options == null)
+            optionsErrorList.add("ultimateBossSpawnOptions");
 
         // Victories.
         if (EventData.Victories.SHINY.options == null)
@@ -335,8 +365,14 @@ public class ConfigMethods
             optionsErrorList.add("legendaryVictoryOptions");
         if (EventData.Victories.ULTRA_BEAST.options == null)
             optionsErrorList.add("ultraBeastVictoryOptions");
-        if (EventData.Victories.BOSS.options == null)
-            optionsErrorList.add("bossVictoryOptions");
+        if (EventData.Victories.UNCOMMON_BOSS.options == null)
+            optionsErrorList.add("uncommonBossVictoryOptions");
+        if (EventData.Victories.RARE_BOSS.options == null)
+            optionsErrorList.add("rareBossVictoryOptions");
+        if (EventData.Victories.LEGENDARY_BOSS.options == null)
+            optionsErrorList.add("legendaryBossVictoryOptions");
+        if (EventData.Victories.ULTIMATE_BOSS.options == null)
+            optionsErrorList.add("ultimateBossVictoryOptions");
         if (EventData.Victories.TRAINER.options == null)
             optionsErrorList.add("trainerVictoryOptions");
         if (EventData.Victories.BOSS_TRAINER.options == null)

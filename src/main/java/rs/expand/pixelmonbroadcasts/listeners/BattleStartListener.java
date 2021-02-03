@@ -132,13 +132,49 @@ public class BattleStartListener
                         // Figure out what our Pokémon is, exactly.
                         if (pokemonEntity.isBossPokemon())
                         {
-                            // Send a log message if we're set up to do logging for this event.
-                            logEvent(EventData.Challenges.BOSS,
-                                    worldName, location, playerEntity.getName(), "boss " + nameString);
+                            switch (pokemonEntity.getBossMode())
+                            {
+                                case Ultimate:
+                                {
+                                    // Send a log message if we're set up to do logging for this event.
+                                    logEvent(EventData.Challenges.ULTIMATE_BOSS, worldName, location,
+                                            playerEntity.getName(), "boss " + nameString + " (Ultimate)");
 
-                            // Send enabled broadcasts to people who should receive them.
-                            iterateAndBroadcast(EventData.Challenges.BOSS,
-                                    pokemonEntity, null, playerEntity, null);
+                                    // Send enabled broadcasts to people who should receive them.
+                                    iterateAndBroadcast(EventData.Challenges.ULTIMATE_BOSS,
+                                            pokemonEntity, null, playerEntity, null);
+                                }
+                                case Legendary:
+                                {
+                                    // Send a log message if we're set up to do logging for this event.
+                                    logEvent(EventData.Challenges.LEGENDARY_BOSS, worldName, location,
+                                            playerEntity.getName(), "boss " + nameString + " (Legendary)");
+
+                                    // Send enabled broadcasts to people who should receive them.
+                                    iterateAndBroadcast(EventData.Challenges.LEGENDARY_BOSS,
+                                            pokemonEntity, null, playerEntity, null);
+                                }
+                                case Rare:
+                                {
+                                    // Send a log message if we're set up to do logging for this event.
+                                    logEvent(EventData.Challenges.RARE_BOSS, worldName, location,
+                                            playerEntity.getName(), "boss " + nameString + " (Rare)");
+
+                                    // Send enabled broadcasts to people who should receive them.
+                                    iterateAndBroadcast(EventData.Challenges.RARE_BOSS,
+                                            pokemonEntity, null, playerEntity, null);
+                                }
+                                default: // Will be Equal or Uncommon, only the latter should spawn naturally.
+                                {
+                                    // Send a log message if we're set up to do logging for this event.
+                                    logEvent(EventData.Challenges.UNCOMMON_BOSS,worldName, location,
+                                            playerEntity.getName(), "generic boss " + nameString);
+
+                                    // Send enabled broadcasts to people who should receive them.
+                                    iterateAndBroadcast(EventData.Challenges.UNCOMMON_BOSS,
+                                            pokemonEntity, null, playerEntity, null);
+                                }
+                            }
                         }
                         else if (EnumSpecies.legendaries.contains(baseName))
                         {

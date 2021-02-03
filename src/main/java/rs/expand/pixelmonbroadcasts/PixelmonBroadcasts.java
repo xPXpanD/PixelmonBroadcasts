@@ -9,6 +9,7 @@ import net.minecraftforge.common.MinecraftForge;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.api.Sponge;
@@ -36,8 +37,6 @@ import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
-
 /*                                                              *\
        THE WHO-KNOWS-WHEN LIST OF POTENTIALLY AWESOME IDEAS
     TODO: Add new TODOs here. Cross off TODOs if they're done.
@@ -54,6 +53,7 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 // TODO: Listen to commands being used, fire the right event if we have a successful hatch/spawn/etcetera.
 // TODO: Make a more comprehensive summon check.
 // TODO: Custom event setups. Oh boy. Separate file that includes broadcasts and settings?
+// TODO: Stop using deprecated API once newer versions are more common.
 // FIXME: Bad event listeners from other mods may cause events to start looping, which causes insane spam from us. Fix?
 // FIXME: Biome names are always English. Maybe add to the lang, and use English biome names as keys.
 // FIXME: Similarly, Pokémon names seem to be English as well.
@@ -64,7 +64,7 @@ import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 (
         id = "pixelmonbroadcasts",
         name = "PixelmonBroadcasts",
-        version = "0.4.3",
+        version = "0.5",
         dependencies = {
                 @Dependency(id = "pixelmon", version = "8.0.0"),
                 @Dependency(id = "pixelmonoverlay", version = "1.1.0", optional = true)
@@ -95,21 +95,21 @@ public class PixelmonBroadcasts
     public static Boolean showAbilities;
 
     // Set up a hashmap for tracking shown Pixelmon notices. Allows us to kill them after a fixed amount of time.
-    public static HashMap<UUID, Long> noticeExpiryMap = new HashMap<>();
+    public static final HashMap<UUID, Long> noticeExpiryMap = new HashMap<>();
 
     // Create and set up config paths, and grab an OS-specific file path separator. This will usually be a forward slash.
     private static final String fileSystemSeparator = FileSystems.getDefault().getSeparator();
-    public static String configPathAsString = "config" + fileSystemSeparator + "PixelmonBroadcasts" + fileSystemSeparator;
-    public static Path broadcastsPath = Paths.get(configPathAsString, "broadcasts.conf");
-    public static Path messagesPath = Paths.get(configPathAsString, "messages.conf");
-    public static Path settingsPath = Paths.get(configPathAsString, "settings.conf");
+    public static final String configPathAsString = "config" + fileSystemSeparator + "PixelmonBroadcasts" + fileSystemSeparator;
+    public static final Path broadcastsPath = Paths.get(configPathAsString, "broadcasts.conf");
+    public static final Path messagesPath = Paths.get(configPathAsString, "messages.conf");
+    public static final Path settingsPath = Paths.get(configPathAsString, "settings.conf");
 
     // Set up configuration loaders that we can call on later.
-    public static ConfigurationLoader<CommentedConfigurationNode> broadcastsLoader =
+    public static final ConfigurationLoader<CommentedConfigurationNode> broadcastsLoader =
             HoconConfigurationLoader.builder().setPath(broadcastsPath).build();
-    public static ConfigurationLoader<CommentedConfigurationNode> messagesLoader =
+    public static final ConfigurationLoader<CommentedConfigurationNode> messagesLoader =
             HoconConfigurationLoader.builder().setPath(messagesPath).build();
-    public static ConfigurationLoader<CommentedConfigurationNode> settingsLoader =
+    public static final ConfigurationLoader<CommentedConfigurationNode> settingsLoader =
             HoconConfigurationLoader.builder().setPath(settingsPath).build();
 
     // Set up a few places for us to load all our settings/messages/broadcasts into later.
@@ -130,7 +130,7 @@ public class PixelmonBroadcasts
             .executor(new Reload())
             .build();
 
-    public static CommandCallable basecommand = CommandSpec.builder()
+    public static final CommandCallable basecommand = CommandSpec.builder()
             .child(reloadconfigs, "reload")
             .child(togglepreferences, "toggle")
             .executor(new BaseCommand())
@@ -218,8 +218,7 @@ public class PixelmonBroadcasts
             }
 
             // Check Pixelmon's config and get whether the legendary spawning message is enabled there.
-            final Boolean configStatus =
-                    toBooleanObject(PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").getString());
+            final Boolean configStatus = BooleanUtils.toBooleanObject(PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").getString());
 
             // Is the config setting we're reading available, /and/ is the setting turned on? Complain!
             if (configStatus != null && configStatus)

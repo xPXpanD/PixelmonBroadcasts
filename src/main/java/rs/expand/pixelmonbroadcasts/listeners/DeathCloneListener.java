@@ -32,7 +32,9 @@ public class DeathCloneListener
                 }
                 else
                 {
-                    logger.info("A new player entity was created, but this entity already had toggles set? Probably due to another plugin/mod.");
+                    // Toss some debug. Do it at info level so we can be sure it's printed to normal consoles.
+                    // TODO: Remove at some point, once we have enough data. (or none; if nothing hits this I won't complain!)
+                    logger.info("A player died and had a new entity created, but toggles were already set? Probably due to another plugin/mod.");
                     logger.info("Please check whether this player's toggles still exist. I (XpanD) can't test this, so let me know what happened!");
                     logger.info("Player name: " + event.getEntityPlayer().getName());
                 }
