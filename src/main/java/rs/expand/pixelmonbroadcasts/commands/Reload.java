@@ -1,24 +1,46 @@
 // Reloads Pixelmon Broadcast's config, alias included. Does not reload langs.
 package rs.expand.pixelmonbroadcasts.commands;
 
-import org.spongepowered.api.command.CommandResult;
-import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.command.spec.CommandExecutor;
-import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.text.Text;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
 import rs.expand.pixelmonbroadcasts.utilities.ConfigMethods;
 
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.sendTranslation;
 
-public class Reload implements CommandExecutor
+public class Reload extends HubCommand
 {
-    @SuppressWarnings("NullableProblems")
-    public CommandResult execute(final CommandSource src, final CommandContext args)
+    @Override
+    public String getName()
     {
-        if (src instanceof Player)
-            logger.info("§5Player " + src.getName() + " started a Pixelmon Broadcasts config reload.");
+        return "reload";
+    }
+
+    @Override
+    public String getUsage(ICommandSender sender)
+    {
+        return "/pixelmonbroadcasts reload";
+    }
+
+    @Override
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender)
+    {
+        if (sender.canUseCommand(4, "pixelmonbroadcasts.action.staff.reload"))
+            return true;
+        else
+        {
+            sendTranslation(sender, "universal.no_permissions");
+            return false;
+        }
+    }
+
+    @Override
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args)
+    {
+        if (sender instanceof EntityPlayer)
+            logger.info("§5Player " + sender.getName() + " started a Pixelmon Broadcasts config reload.");
         else
             logger.info("§5A Pixelmon Broadcasts config reload was started through console or blocks.");
 
@@ -33,9 +55,7 @@ public class Reload implements CommandExecutor
         if (loadedCorrectly)
         {
             // (re-)register the main command and alias. Use the result we get back to see if everything worked.
-            logger.info("§f--> §aRe-registering commands with Sponge...");
-            if (ConfigMethods.tryRegisterCommands())
-                logger.info("§f--> §aReload completed. All systems nominal.");
+            logger.info("§f--> §aReload completed. All systems nominal.");
         }
         else
             logger.info("§f--> §cLoad aborted due to critical errors. Check your configs and logs.");
@@ -45,21 +65,19 @@ public class Reload implements CommandExecutor
         logger.info("");
 
         // Print a message to chat.
-        if (src instanceof Player)
+        if (sender instanceof EntityPlayer)
         {
             // Not entirely sure why I made this use the lang, but hey. Two new lines, no harm.
-            sendTranslation(src, "universal.header");
-            sendTranslation(src, "reload.reload_complete");
-            sendTranslation(src, "reload.check_console");
-            sendTranslation(src, "universal.footer");
+            sendTranslation(sender, "universal.header");
+            sendTranslation(sender, "reload.reload_complete");
+            sendTranslation(sender, "reload.check_console");
+            sendTranslation(sender, "universal.footer");
         }
         else
         {
             // These messages, however, are locked in. They won't be visible in-game.
-            src.sendMessage(Text.of("§bReloaded the Pixelmon Broadcasts configs!"));
-            src.sendMessage(Text.of("§bPlease check the console for any errors."));
+            sender.sendMessage(new TextComponentString("§bReloaded the Pixelmon Broadcasts configs!"));
+            sender.sendMessage(new TextComponentString("§bPlease check the console for any errors."));
         }
-
-        return CommandResult.success();
     }
 }

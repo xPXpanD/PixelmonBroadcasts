@@ -6,34 +6,28 @@ import com.pixelmonmod.pixelmon.api.overlay.notice.NoticeOverlay;
 import com.pixelmonmod.pixelmon.config.PixelmonConfig;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.CommandCallable;
-import org.spongepowered.api.command.args.GenericArguments;
-import org.spongepowered.api.command.spec.CommandSpec;
-import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
-import org.spongepowered.api.event.game.state.GameStartedServerEvent;
-import org.spongepowered.api.plugin.Dependency;
-import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.text.Text;
-import rs.expand.pixelmonbroadcasts.bridges.PixelmonOverlayBridge;
-import rs.expand.pixelmonbroadcasts.commands.BaseCommand;
+import rs.expand.pixelmonbroadcasts.commands.HubCommand;
 import rs.expand.pixelmonbroadcasts.commands.Reload;
+import rs.expand.pixelmonbroadcasts.commands.Teleport;
 import rs.expand.pixelmonbroadcasts.commands.Toggle;
 import rs.expand.pixelmonbroadcasts.listeners.*;
 import rs.expand.pixelmonbroadcasts.utilities.ConfigMethods;
+import rs.expand.pixelmonbroadcasts.utilities.PlayerMethods;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -55,33 +49,35 @@ import java.util.concurrent.TimeUnit;
 // TODO: Maybe have Toggle ask for a category first. Would tidy things up with how many events we have.
 // TODO: See what we can do with other forms. (Altered ones come to mind)
 // TODO: See what we can do with custom textures.
+// TODO: Cache calculated results instead of pulling and processing them from the cached config every time.
 // FIXME: Biome names are always English. Maybe add to the lang, and use English biome names as keys.
 // FIXME: Similarly, Pokémon names seem to be English as well.
 // FIXME: Challenges and forfeits can be used to spam servers. Add a persistent tag to avoid repeats?
 
-@Plugin
-(
-        id = "pixelmonbroadcasts",
-        name = "PixelmonBroadcasts",
-        version = "0.5",
-        dependencies = {
-                @Dependency(id = "pixelmon", version = "8.0.0"),
-                @Dependency(id = "pixelmonoverlay", version = "1.1.0", optional = true)
-        },
-        description = "Adds fully custom legendary-like messages for tons of events, and optionally logs them, too.",
-        authors = "XpanD"
+@Mod
+        (
+                modid = PixelmonBroadcasts.MOD_ID,
+                name = PixelmonBroadcasts.MOD_NAME,
+                version = PixelmonBroadcasts.VERSION,
+                dependencies = "required-after:pixelmon",
+                acceptableRemoteVersions = "*"
 
-        /*                                                                                                     *\
-            Loosely inspired by PixelAnnouncer, which I totally forgot existed up until I wanted to release.
-            After people reminded me that PA was a thing, I ended up making PBR a full-on replacement for it.
+                /*                                                                                                    *\
+                    Loosely inspired by PixelAnnouncer, which I totally forgot existed up until I wanted to release.
+                    After people reminded me that PA was a thing, I ended up making PBR a full-on replacement for it.
 
-            Thanks for the go-ahead on that, Proxying! Let's make this count.
-            Also, thanks to happyzleaf for the basic PixelmonOverlay integration.                    -- XpanD
-        \*                                                                                                     */
-)
+                    Thanks for the go-ahead on that, Proxying! Let's make this count.
+                    Also, thanks to happyzleaf for the basic PixelmonOverlay integration.                   -- XpanD
+                \*                                                                                                    */
+        )
 
 public class PixelmonBroadcasts
 {
+    // Set up base mod info.
+    static final String MOD_ID = "pixelmonbroadcasts";
+    static final String MOD_NAME = "PixelmonBroadcasts";
+    static final String VERSION = "0.5.1t1 FORGE";
+
     // Set up an internal variable so we can see if we loaded correctly. Slightly dirty, but it works.
     private boolean loadedCorrectly = false;
 
@@ -116,27 +112,8 @@ public class PixelmonBroadcasts
     public static CommentedConfigurationNode messagesConfig = null;
     public static CommentedConfigurationNode settingsConfig = null;
 
-    /*                       *\
-         Utility commands.
-    \*                       */
-    private static final CommandSpec togglepreferences = CommandSpec.builder()
-            .arguments(GenericArguments.optionalWeak(GenericArguments.string(Text.of("setting"))))
-            .executor(new Toggle())
-            .build();
-
-    private static final CommandSpec reloadconfigs = CommandSpec.builder()
-            .permission("pixelmonbroadcasts.command.staff.reload")
-            .executor(new Reload())
-            .build();
-
-    public static final CommandCallable basecommand = CommandSpec.builder()
-            .child(reloadconfigs, "reload")
-            .child(togglepreferences, "toggle")
-            .executor(new BaseCommand())
-            .build();
-
-    @Listener
-    public void onGamePreInitEvent(final GamePreInitializationEvent event)
+    @Mod.EventHandler
+    public void onFMLPreInitEvent(final FMLPreInitializationEvent event)
     {
         // Load up all the configs and figure out the info alias. Start printing. Methods may insert errors as they go.
         logger.info("");
@@ -162,12 +139,11 @@ public class PixelmonBroadcasts
             Pixelmon.EVENT_BUS.register(new TradeListener());
 
             // Register relevant listeners with Forge.
+            logger.info("§f--> §aRegistering listeners with Forge...");
             MinecraftForge.EVENT_BUS.register(new DeathCloneListener());
 
             // (re-)register the main command and alias. Use the result we get back to see if everything worked.
-            logger.info("§f--> §aRegistering commands with Sponge...");
-            if (ConfigMethods.tryRegisterCommands())
-                logger.info("§f--> §aPre-init completed. All systems nominal.");
+            logger.info("§f--> §aPre-init completed. All systems nominal.");
         }
         else
             logger.info("§f--> §cLoad aborted due to critical errors. Mod is not running!");
@@ -177,44 +153,43 @@ public class PixelmonBroadcasts
         logger.info("");
     }
 
-    @Listener
-    public void onServerStartedEvent(final GameStartedServerEvent event)
+    @Mod.EventHandler
+    public void onFMLInitEvent(FMLInitializationEvent event)
     {
         if (loadedCorrectly)
         {
-            // Is PixelmonOverlay loaded? If so, do setup. If not, use our own fallback implementation.
+/*            // Is PixelmonOverlay loaded? If so, do setup. If not, use our own fallback implementation.
             if (Sponge.getPluginManager().isLoaded("pixelmonoverlay"))
             {
                 logger.info("§aDetected Pixelmon Overlay, we'll use that for noticeboard messages.");
                 PixelmonOverlayBridge.setup(this);
             }
             else
+            {*/
+            // Set up a repeating task. It checks if any players need their notices wiped. (happens every 10-12s)
+            Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(() ->
             {
-                // Set up a repeating task. It checks if any players need their notices wiped. (happens every 10-12s)
-                Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(() ->
+                // Grab current time in milliseconds.
+                final long currentTime = System.currentTimeMillis();
+
+                // Iterate through all online players.
+                PlayerMethods.getOnlinePlayers().forEach(player ->
                 {
-                    // Grab current time in milliseconds.
-                    final long currentTime = System.currentTimeMillis();
-
-                    // Iterate through all online players.
-                    Sponge.getGame().getServer().getOnlinePlayers().forEach(player ->
+                    // Check if our player is using any noticeboard-enabled broadcasts.
+                    if (noticeExpiryMap.containsKey(player.getUniqueID()))
                     {
-                        // Check if our player is using any noticeboard-enabled broadcasts.
-                        if (noticeExpiryMap.containsKey(player.getUniqueId()))
+                        // Are we 10 or more seconds ahead of the last time a notice was added? Hide it!
+                        if (currentTime - noticeExpiryMap.get(player.getUniqueID()) >= 10000)
                         {
-                            // Are we 10 or more seconds ahead of the last time a notice was added? Hide it!
-                            if (currentTime - noticeExpiryMap.get(player.getUniqueId()) >= 10000)
-                            {
-                                // Hide the overlay for the targeted player.
-                                NoticeOverlay.hide((EntityPlayerMP) player);
+                            // Hide the overlay for the targeted player.
+                            NoticeOverlay.hide((EntityPlayerMP) player);
 
-                                // Remove the player's UUID from the map. This prevents needless clears every iteration.
-                                noticeExpiryMap.remove(player.getUniqueId());
-                            }
+                            // Remove the player's UUID from the map. This prevents needless clears every iteration.
+                            noticeExpiryMap.remove(player.getUniqueID());
                         }
-                    });
-                }, 0, 2, TimeUnit.SECONDS);
-            }
+                    }
+                });
+            }, 0, 2, TimeUnit.SECONDS);
 
             // Check Pixelmon's config and get whether the legendary spawning message is enabled there.
             final Boolean configStatus = BooleanUtils.toBooleanObject(PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").getString());
@@ -281,5 +256,22 @@ public class PixelmonBroadcasts
                 }*/
             }
         }
+    }
+
+    @Mod.EventHandler
+    public void onServerStartedEvent(FMLServerStartingEvent event)
+    {
+        HubCommand hubCommand = new HubCommand();
+        hubCommand.addSubcommand(new Reload());
+        hubCommand.addSubcommand(new Teleport());
+        hubCommand.addSubcommand(new Toggle());
+        event.registerServerCommand(hubCommand);
+
+/*        event.registerServerCommand(new Reload());
+        event.registerServerCommand(new Teleport());
+        event.registerServerCommand(new Toggle());*/
+
+        /*PermissionAPI.registerNode("pixelmonbroadcasts.command.staff.reload", DefaultPermissionLevel.OP,
+                "Allows reloading Pixelmon Broadcasts' configs via /pixelmonbroadcasts reload.");*/
     }
 }

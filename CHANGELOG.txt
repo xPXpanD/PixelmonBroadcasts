@@ -1,8 +1,18 @@
 0.5.1 for ???
 Released ???
 
-    Addiitons:
-    * ???
+    Additions:
+    * We're now on pure Forge! Sponge is no longer required.
+    * Added experimental support for single player use! As always, let me know if stuff breaks.
+
+    Tweaks:
+    * (temporarily?) Removed integration with the Pixelmon Overlay plugin, as it requires Sponge.
+
+    Message file additions and changes:
+    * Combined all "no_permissions" messages except for the teleport one into "universal.no_permissions".
+
+    Broadcasts file additions and changes:
+    * Slightly changed the non-shiny Ultra Beast and Legendary egg hatching broadcasts to avoid a/an issues.
 
 0.5 for 8.1.2
 Released February 3rd, 2021.

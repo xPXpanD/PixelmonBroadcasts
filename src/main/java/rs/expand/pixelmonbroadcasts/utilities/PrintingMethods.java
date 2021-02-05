@@ -1,10 +1,9 @@
 package rs.expand.pixelmonbroadcasts.utilities;
 
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.StatsType;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.util.math.BlockPos;
-import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.serializer.TextSerializers;
+import net.minecraft.util.text.TextComponentString;
 import rs.expand.pixelmonbroadcasts.enums.EventData;
 
 import java.util.List;
@@ -75,9 +74,59 @@ public class PrintingMethods
         logger.info("    §cCheck the config, and when fixed use §4/pixelmonbroadcasts reload§c.");
     }
 
+    // Converts a String with section colors into Forge's Text representation with proper Forge formatting.
+    public static String convertSectionColors(String message)
+    {
+        StringBuilder output = new StringBuilder();
+
+        // Split our incoming String into an array of characters. Set up some needed variables.
+        char[] charSet = message.toCharArray();
+        char currentChar, nextChar;
+        int messageLength = charSet.length;
+
+        for (int i = 0; i < messageLength; i++)
+        {
+            currentChar = charSet[i];
+
+            // Do we have a potential formatting character? Don't just replace all ampersands, people may want those.
+            if (currentChar == '&')
+            {
+                // Can we look ahead safely?
+                if (i + 1 <= messageLength)
+                {
+                    // Get the next character in line.
+                    nextChar = charSet[i+1];
+
+                    // Is our next character a formatting character? Ignore uppercase, lowercase is standard for formatting.
+                    switch (nextChar)
+                    {
+                        // Colors.
+                        case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8':
+                        case '9': case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
+                        // Formatting.
+                        case 'k': case 'l': case 'm': case 'n': case 'o':
+                        // Reset.
+                        case 'r':
+                        {
+                            // Do we have a number? Replace the ampersand with a proper formatting character.
+                            currentChar = '§';
+                        }
+                    }
+
+                    // Add our character, whether it was swapped or not.
+                    output.append(currentChar);
+                }
+            }
+            else
+                output.append(currentChar);
+        }
+
+        return output.toString();
+    }
+
     // Gets a value matching the given messages key, formats it (ampersands to section characters), and then sends it.
     // Also swaps any provided placeholders with String representations of the Objects given, if present.
-    public static void sendTranslation(CommandSource recipient, String key, Object... params)
+    public static void sendTranslation(ICommandSender recipient, String key, Object... params)
     {
         // This is slightly hacky, but split the incoming key up into separate nodes so we can read it.
         final String[] keySet = key.split("\\.");
@@ -95,12 +144,12 @@ public class PrintingMethods
                 for (int i = 0; i < params.length; i++)
                     message = message.replace("{" + (i+1) + "}", params[i].toString());
 
-                recipient.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(message).toText());
+                recipient.sendMessage(new TextComponentString(convertSectionColors(message)));
             }
         }
         // We did not get a message, return the provided key and make sure it's unformatted.
         else
-            recipient.sendMessage(Text.of("§r" + key));
+            recipient.sendMessage(new TextComponentString("§r" + key));
     }
 
     // Gets a value matching the given messages key, formats it (ampersands to section characters), and then returns it.
@@ -120,7 +169,7 @@ public class PrintingMethods
             for (int i = 0; i < params.length; i++)
                 message = message.replace("{" + (i+1) + "}", params[i].toString());
 
-            return TextSerializers.FORMATTING_CODE.replaceCodes(message, '§');
+            return convertSectionColors(message);
         }
         // We did not get a message, return the provided key and make sure it's unformatted.
         else

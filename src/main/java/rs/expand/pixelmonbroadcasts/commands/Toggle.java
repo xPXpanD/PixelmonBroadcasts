@@ -1,15 +1,13 @@
 // Allows people to toggle individual event notifications through a fancy clickable menu.
 package rs.expand.pixelmonbroadcasts.commands;
 
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import org.spongepowered.api.command.CommandResult;
-import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.command.spec.CommandExecutor;
-import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.action.TextActions;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.event.ClickEvent;
 import rs.expand.pixelmonbroadcasts.enums.EventData;
 
 import java.util.ArrayList;
@@ -22,18 +20,35 @@ import static rs.expand.pixelmonbroadcasts.utilities.PlaceholderMethods.checkTog
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.getTranslation;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.sendTranslation;
 
-// TODO: Maybe get paginated lists working. Tried it before, but it seems to cut things off randomly...
-public class Toggle implements CommandExecutor
+// TODO: Maybe get paginated lists working.
+public class Toggle extends HubCommand
 {
     // Create a List of Texts that we can dump ready-to-print messages into. Goes down with the class instance.
-    List<Text> toggleMessageList = new ArrayList<>();
+    List<TextComponentString> toggleMessageList = new ArrayList<>();
 
-    // The command executor.
-    @SuppressWarnings("NullableProblems")
-    public CommandResult execute(final CommandSource src, final CommandContext args)
+    @Override
+    public String getName()
+    {
+        return "toggle";
+    }
+
+    @Override
+    public String getUsage(ICommandSender sender)
+    {
+        return "/pixelmonbroadcasts toggle <event flag>";
+    }
+
+    @Override
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender)
+    {
+        return true;
+    }
+
+    @Override
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args)
     {
         // Were we called by a player? Let's not try toggling flags on things that can't have flags.
-        if (src instanceof Player)
+        if (sender instanceof EntityPlayer)
         {
             if (commandAlias == null)
             {
@@ -41,11 +56,11 @@ public class Toggle implements CommandExecutor
                 logger.error("We'll continue with the command, but aliases will break. Check your config.");
             }
 
-            // Do we have an argument in the first slot? If valid, use it to toggle the matching setting and then show.
-            if (args.<String>getOne("setting").isPresent())
+            // Do we have an argument? If valid, use it to toggle the matching setting and then show. (if valid)
+            if (args.length > 1)
             {
                 // We have an argument, extract it.
-                final String input = args.<String>getOne("setting").get();
+                final String input = args[1];
 
                 // See if the argument is a valid flag, either from a remote caller or from getClickableLine.
                 switch (input)
@@ -89,14 +104,14 @@ public class Toggle implements CommandExecutor
                     case "showEvolve": case "showFaint": case "showTrade": /* case "showBirdTrioSummon": */
                     {
                         // Got a valid flag. Toggle it.
-                        toggleFlag(src, input);
+                        toggleFlag(sender, input);
                         break;
                     }
                 }
             }
 
             // Get a player entity.
-            EntityPlayer player = (EntityPlayer) src;
+            EntityPlayer player = (EntityPlayer) sender;
 
             // These are linked, and used to show available toggles. If one has two entries, the other gets two, too!
             final List<String> messages = new ArrayList<>();
@@ -109,7 +124,7 @@ public class Toggle implements CommandExecutor
                BLACKOUT TOGGLES
             \*                  */
             // Check perms. Add toggle status if perms look good.
-            if (canReceiveBroadcast(src, EventData.Blackouts.NORMAL))
+            if (canReceiveBroadcast(player, EventData.Blackouts.NORMAL))
             {
                 flags.add("showNormalBlackout");
 
@@ -119,7 +134,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.normal.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Blackouts.SHINY))
+            if (canReceiveBroadcast(player, EventData.Blackouts.SHINY))
             {
                 flags.add("showShinyBlackout");
 
@@ -129,7 +144,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.shiny.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Blackouts.LEGENDARY))
+            if (canReceiveBroadcast(player, EventData.Blackouts.LEGENDARY))
             {
                 flags.add("showLegendaryBlackout");
 
@@ -139,7 +154,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.legendary.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Blackouts.ULTRA_BEAST))
+            if (canReceiveBroadcast(player, EventData.Blackouts.ULTRA_BEAST))
             {
                 flags.add("showUltraBeastBlackout");
 
@@ -149,7 +164,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.ultra_beast.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Blackouts.UNCOMMON_BOSS))
+            if (canReceiveBroadcast(player, EventData.Blackouts.UNCOMMON_BOSS))
             {
                 flags.add("showUncommonBossBlackout");
 
@@ -159,7 +174,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.uncommon_boss.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Blackouts.RARE_BOSS))
+            if (canReceiveBroadcast(player, EventData.Blackouts.RARE_BOSS))
             {
                 flags.add("showRareBossBlackout");
 
@@ -169,7 +184,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.rare_boss.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Blackouts.LEGENDARY_BOSS))
+            if (canReceiveBroadcast(player, EventData.Blackouts.LEGENDARY_BOSS))
             {
                 flags.add("showLegendaryBossBlackout");
 
@@ -179,7 +194,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.legendary_boss.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Blackouts.ULTIMATE_BOSS))
+            if (canReceiveBroadcast(player, EventData.Blackouts.ULTIMATE_BOSS))
             {
                 flags.add("showUltimateBossBlackout");
 
@@ -189,7 +204,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.ultimate_boss.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Blackouts.TRAINER))
+            if (canReceiveBroadcast(player, EventData.Blackouts.TRAINER))
             {
                 flags.add("showTrainerBlackout");
 
@@ -199,7 +214,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.trainer.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Blackouts.BOSS_TRAINER))
+            if (canReceiveBroadcast(player, EventData.Blackouts.BOSS_TRAINER))
             {
                 flags.add("showBossTrainerBlackout");
 
@@ -214,7 +229,7 @@ public class Toggle implements CommandExecutor
             if (!messages.isEmpty())
             {
                 // Get and add the "blackout toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.blackout_toggles")));
+                toggleMessageList.add(new TextComponentString(getTranslation("toggle.blackout_toggles")));
 
                 // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
                 addClickableLine(messages, flags);
@@ -228,7 +243,7 @@ public class Toggle implements CommandExecutor
                CATCH TOGGLES
             \*               */
             // Check perms. Add toggle status if perms look good.
-            if (canReceiveBroadcast(src, EventData.Catches.NORMAL))
+            if (canReceiveBroadcast(player, EventData.Catches.NORMAL))
             {
                 flags.add("showNormalCatch");
 
@@ -238,7 +253,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.normal.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Catches.SHINY))
+            if (canReceiveBroadcast(player, EventData.Catches.SHINY))
             {
                 flags.add("showShinyCatch");
 
@@ -248,7 +263,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.shiny.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Catches.LEGENDARY))
+            if (canReceiveBroadcast(player, EventData.Catches.LEGENDARY))
             {
                 flags.add("showLegendaryCatch");
 
@@ -258,7 +273,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.legendary.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Catches.ULTRA_BEAST))
+            if (canReceiveBroadcast(player, EventData.Catches.ULTRA_BEAST))
             {
                 flags.add("showUltraBeastCatch");
 
@@ -273,7 +288,7 @@ public class Toggle implements CommandExecutor
             if (!messages.isEmpty())
             {
                 // Get and add the "catch toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.catch_toggles")));
+                toggleMessageList.add(new TextComponentString(getTranslation("toggle.catch_toggles")));
 
                 // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
                 addClickableLine(messages, flags);
@@ -287,7 +302,7 @@ public class Toggle implements CommandExecutor
                CHALLENGE TOGGLES
             \*                   */
             // Check perms. Add toggle status if perms look good.
-            if (canReceiveBroadcast(src, EventData.Challenges.SHINY))
+            if (canReceiveBroadcast(player, EventData.Challenges.SHINY))
             {
                 flags.add("showShinyChallenge");
 
@@ -297,7 +312,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.shiny.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Challenges.LEGENDARY))
+            if (canReceiveBroadcast(player, EventData.Challenges.LEGENDARY))
             {
                 flags.add("showLegendaryChallenge");
 
@@ -307,7 +322,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.legendary.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Challenges.ULTRA_BEAST))
+            if (canReceiveBroadcast(player, EventData.Challenges.ULTRA_BEAST))
             {
                 flags.add("showUltraBeastChallenge");
 
@@ -317,7 +332,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.ultra_beast.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Challenges.UNCOMMON_BOSS))
+            if (canReceiveBroadcast(player, EventData.Challenges.UNCOMMON_BOSS))
             {
                 flags.add("showUncommonBossChallenge");
 
@@ -327,7 +342,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.uncommon_boss.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Challenges.RARE_BOSS))
+            if (canReceiveBroadcast(player, EventData.Challenges.RARE_BOSS))
             {
                 flags.add("showRareBossChallenge");
 
@@ -337,7 +352,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.rare_boss.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Challenges.LEGENDARY_BOSS))
+            if (canReceiveBroadcast(player, EventData.Challenges.LEGENDARY_BOSS))
             {
                 flags.add("showLegendaryBossChallenge");
 
@@ -347,7 +362,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.legendary_boss.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Challenges.ULTIMATE_BOSS))
+            if (canReceiveBroadcast(player, EventData.Challenges.ULTIMATE_BOSS))
             {
                 flags.add("showUltimateBossChallenge");
 
@@ -357,7 +372,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.ultimate_boss.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Challenges.TRAINER))
+            if (canReceiveBroadcast(player, EventData.Challenges.TRAINER))
             {
                 flags.add("showTrainerChallenge");
 
@@ -367,7 +382,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.trainer.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Challenges.BOSS_TRAINER))
+            if (canReceiveBroadcast(player, EventData.Challenges.BOSS_TRAINER))
             {
                 flags.add("showBossTrainerChallenge");
 
@@ -377,7 +392,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.boss_trainer.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Challenges.PVP))
+            if (canReceiveBroadcast(player, EventData.Challenges.PVP))
             {
                 flags.add("showPVPChallenge");
 
@@ -392,7 +407,7 @@ public class Toggle implements CommandExecutor
             if (!messages.isEmpty())
             {
                 // Get and add the "challenge toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.challenge_toggles")));
+                toggleMessageList.add(new TextComponentString(getTranslation("toggle.challenge_toggles")));
 
                 // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
                 addClickableLine(messages, flags);
@@ -406,7 +421,7 @@ public class Toggle implements CommandExecutor
                FORFEIT TOGGLES
             \*                 */
             // Check perms. Add toggle status if perms look good.
-            if (canReceiveBroadcast(src, EventData.Forfeits.SHINY))
+            if (canReceiveBroadcast(player, EventData.Forfeits.SHINY))
             {
                 flags.add("showShinyForfeit");
 
@@ -416,7 +431,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.shiny.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Forfeits.LEGENDARY))
+            if (canReceiveBroadcast(player, EventData.Forfeits.LEGENDARY))
             {
                 flags.add("showLegendaryForfeit");
 
@@ -426,7 +441,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.legendary.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Forfeits.ULTRA_BEAST))
+            if (canReceiveBroadcast(player, EventData.Forfeits.ULTRA_BEAST))
             {
                 flags.add("showUltraBeastForfeit");
 
@@ -436,7 +451,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.ultra_beast.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Forfeits.BOSS))
+            if (canReceiveBroadcast(player, EventData.Forfeits.BOSS))
             {
                 flags.add("showBossForfeit");
 
@@ -446,7 +461,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.boss.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Forfeits.TRAINER))
+            if (canReceiveBroadcast(player, EventData.Forfeits.TRAINER))
             {
                 flags.add("showTrainerForfeit");
 
@@ -456,7 +471,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.trainer.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Forfeits.BOSS_TRAINER))
+            if (canReceiveBroadcast(player, EventData.Forfeits.BOSS_TRAINER))
             {
                 flags.add("showBossTrainerForfeit");
 
@@ -471,7 +486,7 @@ public class Toggle implements CommandExecutor
             if (!messages.isEmpty())
             {
                 // Get and add the "forfeit toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.forfeit_toggles")));
+                toggleMessageList.add(new TextComponentString(getTranslation("toggle.forfeit_toggles")));
 
                 // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
                 addClickableLine(messages, flags);
@@ -485,7 +500,7 @@ public class Toggle implements CommandExecutor
                SPAWN TOGGLES
             \*               */
             // Check perms. Add toggle status if perms look good.
-            if (canReceiveBroadcast(src, EventData.Spawns.SHINY))
+            if (canReceiveBroadcast(player, EventData.Spawns.SHINY))
             {
                 flags.add("showShinySpawn");
 
@@ -495,7 +510,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.shiny.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Spawns.LEGENDARY))
+            if (canReceiveBroadcast(player, EventData.Spawns.LEGENDARY))
             {
                 flags.add("showLegendarySpawn");
 
@@ -505,7 +520,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.legendary.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Spawns.ULTRA_BEAST))
+            if (canReceiveBroadcast(player, EventData.Spawns.ULTRA_BEAST))
             {
                 flags.add("showUltraBeastSpawn");
 
@@ -515,7 +530,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.ultra_beast.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Spawns.WORMHOLE))
+            if (canReceiveBroadcast(player, EventData.Spawns.WORMHOLE))
             {
                 flags.add("showWormholeSpawn");
 
@@ -525,7 +540,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.wormhole.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Spawns.UNCOMMON_BOSS))
+            if (canReceiveBroadcast(player, EventData.Spawns.UNCOMMON_BOSS))
             {
                 flags.add("showUncommonBossSpawn");
 
@@ -535,7 +550,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.uncommon_boss.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Spawns.RARE_BOSS))
+            if (canReceiveBroadcast(player, EventData.Spawns.RARE_BOSS))
             {
                 flags.add("showRareBossSpawn");
 
@@ -545,7 +560,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.rare_boss.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Spawns.LEGENDARY_BOSS))
+            if (canReceiveBroadcast(player, EventData.Spawns.LEGENDARY_BOSS))
             {
                 flags.add("showLegendaryBossSpawn");
 
@@ -555,7 +570,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.legendary_boss.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Spawns.ULTIMATE_BOSS))
+            if (canReceiveBroadcast(player, EventData.Spawns.ULTIMATE_BOSS))
             {
                 flags.add("showUltimateBossSpawn");
 
@@ -570,7 +585,7 @@ public class Toggle implements CommandExecutor
             if (!messages.isEmpty())
             {
                 // Get and add the "spawn toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.spawning_toggles")));
+                toggleMessageList.add(new TextComponentString(getTranslation("toggle.spawning_toggles")));
 
                 // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
                 addClickableLine(messages, flags);
@@ -584,7 +599,7 @@ public class Toggle implements CommandExecutor
                SUMMON TOGGLES
             \*
             // Check perms. Add toggle status if perms look good.
-            if (showBirdTrioSummons && src.hasPermission("pixelmonbroadcasts.notify.spawn.shiny"))
+            if (showBirdTrioSummons && player.hasPermission("pixelmonbroadcasts.notify.spawn.shiny"))
             {
                 flags.add("showBirdTrioSummon");
 
@@ -599,7 +614,7 @@ public class Toggle implements CommandExecutor
             if (!messages.isEmpty())
             {
                 // Get and add the "summon toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.summon_toggles")));
+                toggleMessageList.add(new TextComponentString(getTranslation("toggle.summon_toggles")));
 
                 // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
                 addClickableLine(messages, flags);
@@ -613,7 +628,7 @@ public class Toggle implements CommandExecutor
                VICTORY TOGGLES
             \*                 */
             // Check perms. Add toggle status if perms look good.
-            if (canReceiveBroadcast(src, EventData.Victories.SHINY))
+            if (canReceiveBroadcast(player, EventData.Victories.SHINY))
             {
                 flags.add("showShinyVictory");
 
@@ -623,7 +638,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.shiny.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Victories.LEGENDARY))
+            if (canReceiveBroadcast(player, EventData.Victories.LEGENDARY))
             {
                 flags.add("showLegendaryVictory");
 
@@ -633,7 +648,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.legendary.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Victories.ULTRA_BEAST))
+            if (canReceiveBroadcast(player, EventData.Victories.ULTRA_BEAST))
             {
                 flags.add("showUltraBeastVictory");
 
@@ -643,7 +658,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.ultra_beast.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Victories.UNCOMMON_BOSS))
+            if (canReceiveBroadcast(player, EventData.Victories.UNCOMMON_BOSS))
             {
                 flags.add("showUncommonBossVictory");
 
@@ -653,7 +668,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.uncommon_boss.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Victories.RARE_BOSS))
+            if (canReceiveBroadcast(player, EventData.Victories.RARE_BOSS))
             {
                 flags.add("showRareBossVictory");
 
@@ -663,7 +678,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.rare_boss.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Victories.LEGENDARY_BOSS))
+            if (canReceiveBroadcast(player, EventData.Victories.LEGENDARY_BOSS))
             {
                 flags.add("showLegendaryBossVictory");
 
@@ -673,7 +688,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.legendary_boss.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Victories.ULTIMATE_BOSS))
+            if (canReceiveBroadcast(player, EventData.Victories.ULTIMATE_BOSS))
             {
                 flags.add("showUltimateBossVictory");
 
@@ -683,7 +698,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.ultimate_boss.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Victories.TRAINER))
+            if (canReceiveBroadcast(player, EventData.Victories.TRAINER))
             {
                 flags.add("showTrainerVictory");
 
@@ -693,7 +708,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.trainer.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Victories.BOSS_TRAINER))
+            if (canReceiveBroadcast(player, EventData.Victories.BOSS_TRAINER))
             {
                 flags.add("showBossTrainerVictory");
 
@@ -703,7 +718,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.boss_trainer.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Victories.PVP))
+            if (canReceiveBroadcast(player, EventData.Victories.PVP))
             {
                 flags.add("showPVPVictory");
 
@@ -718,7 +733,7 @@ public class Toggle implements CommandExecutor
             if (!messages.isEmpty())
             {
                 // Get and add the "victory toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.victory_toggles")));
+                toggleMessageList.add(new TextComponentString(getTranslation("toggle.victory_toggles")));
 
                 // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
                 addClickableLine(messages, flags);
@@ -732,7 +747,7 @@ public class Toggle implements CommandExecutor
                DRAW TOGGLES
             \*              */
             // Check perms. Add toggle status if perms look good.
-            if (canReceiveBroadcast(src, EventData.Draws.PVP))
+            if (canReceiveBroadcast(player, EventData.Draws.PVP))
             {
                 flags.add("showPVPDraw");
 
@@ -747,7 +762,7 @@ public class Toggle implements CommandExecutor
             if (!messages.isEmpty())
             {
                 // Get and add the "draw toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.draw_toggles")));
+                toggleMessageList.add(new TextComponentString(getTranslation("toggle.draw_toggles")));
 
                 // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
                 addClickableLine(messages, flags);
@@ -761,7 +776,7 @@ public class Toggle implements CommandExecutor
                HATCH TOGGLES
             \*               */
             // Check perms. Add toggle status if perms look good.
-            if (canReceiveBroadcast(src, EventData.Hatches.NORMAL))
+            if (canReceiveBroadcast(player, EventData.Hatches.NORMAL))
             {
                 flags.add("showNormalHatch");
 
@@ -771,7 +786,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.normal.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Hatches.SHINY))
+            if (canReceiveBroadcast(player, EventData.Hatches.SHINY))
             {
                 flags.add("showShinyHatch");
 
@@ -781,7 +796,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.shiny.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Hatches.LEGENDARY))
+            if (canReceiveBroadcast(player, EventData.Hatches.LEGENDARY))
             {
                 flags.add("showLegendaryHatch");
 
@@ -791,7 +806,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.legendary.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Hatches.ULTRA_BEAST))
+            if (canReceiveBroadcast(player, EventData.Hatches.ULTRA_BEAST))
             {
                 flags.add("showUltraBeastHatch");
 
@@ -806,7 +821,7 @@ public class Toggle implements CommandExecutor
             if (!messages.isEmpty())
             {
                 // Get and add the "victory toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.hatch_toggles")));
+                toggleMessageList.add(new TextComponentString(getTranslation("toggle.hatch_toggles")));
 
                 // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
                 addClickableLine(messages, flags);
@@ -820,7 +835,7 @@ public class Toggle implements CommandExecutor
                MISCELLANEOUS TOGGLES
             \*                       */
             // Check perms. Add toggle status if perms look good.
-            if (canReceiveBroadcast(src, EventData.Others.EVOLVE))
+            if (canReceiveBroadcast(player, EventData.Others.EVOLVE))
             {
                 flags.add("showEvolve");
 
@@ -830,7 +845,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.evolve.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Others.FAINT))
+            if (canReceiveBroadcast(player, EventData.Others.FAINT))
             {
                 flags.add("showFaint");
 
@@ -840,7 +855,7 @@ public class Toggle implements CommandExecutor
                 else
                     messages.add(getTranslation("toggle.faint.off") + separator);
             }
-            if (canReceiveBroadcast(src, EventData.Others.TRADE))
+            if (canReceiveBroadcast(player, EventData.Others.TRADE))
             {
                 flags.add("showTrade");
 
@@ -855,7 +870,7 @@ public class Toggle implements CommandExecutor
             if (!messages.isEmpty())
             {
                 // Get and add the "other toggles" header message.
-                toggleMessageList.add(Text.of(getTranslation("toggle.other_toggles")));
+                toggleMessageList.add(new TextComponentString(getTranslation("toggle.other_toggles")));
 
                 // Submit one or more clickable lines with up to 5 toggles each. Split where necessary.
                 addClickableLine(messages, flags);
@@ -867,19 +882,19 @@ public class Toggle implements CommandExecutor
             if (toggleMessageList.isEmpty())
             {
                 // Show a clean error since we have no allowed toggles.
-                sendTranslation(src, "toggle.no_permissions");
+                sendTranslation(player, "universal.no_permissions");
             }
             else
             {
                 // Add a header.
-                sendTranslation(src, "toggle.header");
+                sendTranslation(player, "toggle.header");
 
                 // Send all toggle messages.
-                for (Text toggleMessage : toggleMessageList)
-                    src.sendMessage(toggleMessage);
+                for (TextComponentString toggleMessage : toggleMessageList)
+                    player.sendMessage(toggleMessage);
 
                 // Add a footer.
-                sendTranslation(src, "universal.footer");
+                sendTranslation(player, "universal.footer");
 
                 // Clear the list.
                 toggleMessageList = new ArrayList<>();
@@ -887,8 +902,6 @@ public class Toggle implements CommandExecutor
         }
         else
             logger.error("This command can only be run by players.");
-
-        return CommandResult.success();
     }
 
     // Takes two matched Lists, combines their entries and sends them off to the toggle List, ready to print.
@@ -914,36 +927,38 @@ public class Toggle implements CommandExecutor
     }
 
     // Takes a list of messages and assigns a matching toggle from a list of flags. Allows people to toggle by clicking!
-    private Text createClickablePair(List<String> messages, List<String> flags)
+    private TextComponentString createClickablePair(List<String> messages, List<String> flags)
     {
-        // Set up a temporary Text for putting the message/flag pair that we're currently processing into.
-        Text actionPair;
+        // Set up temporary variables for putting stuff we're processing into. Append as we go.
+        TextComponentString returnText = new TextComponentString(getTranslation("toggle.line_start"));
+        ITextComponent messageComponent;
 
         // Set up a basic Text with our line starter. Add the rest of the line's contents as we go.
-        Text returnText = Text.of(getTranslation("toggle.line_start"));
 
         // Grab the size of one of our Lists, as they should be matched. Add clickable elements as we go.
         for (int i = 0; i < messages.size(); i++)
         {
-            // Set up a temporary pair of message and action.
-            actionPair = Text.builder(messages.get(i))
-                    .onClick(TextActions.runCommand("/pixelmonbroadcasts toggle " + flags.get(i)))
-                    .build();
+            // Get the message.
+            messageComponent = new TextComponentString(messages.get(i));
 
-            // Iteratively add the pair to our returnable Text.
-            returnText = returnText.toBuilder().append(actionPair).build();
+            // Add our click action.
+            messageComponent.getStyle().setClickEvent(
+                    new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pixelmonbroadcasts toggle " + flags.get(i)));
+
+            // Iteratively build up our returnable text String.
+            returnText.appendSibling(messageComponent);
         }
 
-        // Return the built text.
+        // Return the built text String.
         return returnText;
     }
 
     // Toggle a message-showing flag if it exists already, or create one if it does not.
     // TODO: To avoid bloat, don't save "true" flags if we ever get to a point where old data can be invalidated. (1.15+?)
-    private void toggleFlag(CommandSource src, String flag)
+    private void toggleFlag(ICommandSender sender, String flag)
     {
         // Get a player entity.
-        EntityPlayer player = (EntityPlayer) src;
+        EntityPlayer player = (EntityPlayer) sender;
 
         // If the NBT "folder" we use does not exist, create it.
         if (player.getEntityData().getCompoundTag("pbToggles").hasNoTags())

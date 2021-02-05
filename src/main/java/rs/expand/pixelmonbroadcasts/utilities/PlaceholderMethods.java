@@ -5,7 +5,6 @@ import com.pixelmonmod.pixelmon.api.overlay.notice.EnumOverlayLayout;
 import com.pixelmonmod.pixelmon.api.overlay.notice.NoticeOverlay;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.PokemonSpec;
-import com.pixelmonmod.pixelmon.client.gui.custom.overlays.OverlayGraphicType;
 import com.pixelmonmod.pixelmon.entities.EntityWormhole;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.IVStore;
@@ -18,25 +17,21 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.HoverEvent;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.action.TextActions;
-import org.spongepowered.api.text.serializer.TextSerializers;
-import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.World;
-import rs.expand.pixelmonbroadcasts.bridges.PixelmonOverlayBridge;
 import rs.expand.pixelmonbroadcasts.enums.EventData;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.*;
 
+@SuppressWarnings("deprecation")
 public class PlaceholderMethods
 {
     public static void iterateAndBroadcast(final EventData event, final Object object1, final Object object2,
@@ -51,7 +46,7 @@ public class PlaceholderMethods
                 final String broadcast = getBroadcast("chat." + event.key(), object1, object2, player1, player2);
 
                 // Make some Text clones of our broadcast message. We can add to these, or just send them directly.
-                Text simpleBroadcastText;
+                ITextComponent simpleBroadcastText;
 
                 // If hovers are enabled, make the line hoverable.
                 if (object1 != null && getFlagStatus(event, "hover"))
@@ -60,11 +55,10 @@ public class PlaceholderMethods
                             getHoverableLine(broadcast, object1, event.presentTense(), getFlagStatus(event, "reveal"));
                 }
                 else
-                    simpleBroadcastText = Text.of(broadcast);
+                    simpleBroadcastText = new TextComponentString(broadcast);
 
                 // Set up some variables that we can access later, if we do end up sending a clickable broadcast.
                 BlockPos location = null;
-                World world = null;
 
                 // Grab coordinates for making our chat broadcast clickable for those who have access.
                 if (object1 != null || player1 != null)
@@ -74,7 +68,6 @@ public class PlaceholderMethods
                         if (object1 instanceof EntityPixelmon || object1 instanceof EntityWormhole)
                         {
                             location = ((Entity) object1).getPosition();
-                            world = (World) ((Entity) object1).getEntityWorld();
 
                             // Do our coordinates make sense? If not, we may have breakage. Set back to null.
                             if ((location.getX() == 0 && location.getZ() == 0))
@@ -87,52 +80,34 @@ public class PlaceholderMethods
                         // Did we get a location yet? Prefer the generally more accurate Pokémon/wormhole data if available.
                         if (location == null)
                             location = player1.getPosition();
-
-                        // Same deal for world info.
-                        if (world == null)
-                            world = (World) player1.getEntityWorld();
                     }
                 }
 
-                // Set up a finalized location for callback use.
-                final Location<World> finalLocation;
-                if (location != null)
-                    finalLocation = new Location<>(world, location.getX(), location.getY(), location.getZ());
-                else
-                    finalLocation = null;
-
                 // Sift through the online players.
-                for (Player recipient : Sponge.getGame().getServer().getOnlinePlayers())
+                for (EntityPlayer recipient : PlayerMethods.getOnlinePlayers())
                 {
                     // Does the iterated player have the needed notifier permission?
-                    if (recipient.hasPermission("pixelmonbroadcasts.notify." + event.key()))
+                    if (recipient.canUseCommand(4, "pixelmonbroadcasts.notify." + event.key()))
                     {
                         // Does the iterated player want our broadcast? Send it if we get "true" returned.
-                        if (checkToggleStatus((EntityPlayer) recipient, event.flags()))
+                        if (checkToggleStatus(recipient, event.flags()))
                         {
-                            // Send a clickable version of the normal text.
-                            recipient.sendMessage
-                            (
-                                // Add a click action onto our existing broadcast Text.
-                                Text.builder().append(simpleBroadcastText).onClick(TextActions.executeCallback(callback ->
-                                {
-                                    // Do we have a location we can potentially teleport people to?
-                                    if (finalLocation != null)
-                                    {
-                                        // Is the player allowed to teleport when clicking a broadcast?
-                                        if (recipient.hasPermission("pixelmonbroadcasts.action.staff.teleport"))
-                                        {
-                                            // If clicked, engage!
-                                            recipient.setLocation(finalLocation);
+                            // Set up some X/Y/Z variables.
+                            final int locX, locY, locZ;
 
-                                            // Send confirmation.
-                                            sendTranslation(recipient, "action.teleport.executed");
-                                        }
-                                        else
-                                            sendTranslation(recipient, "action.teleport.no_permissions");
-                                    }
-                                })).build()
-                            );
+                            // Do we have a location? Add a click action.
+                            if (location != null)
+                            {
+                                locX = location.getX();
+                                locY = location.getY() + 1; // Increment Y by one so people don't get stuck in blocks.
+                                locZ = location.getZ();
+
+                                simpleBroadcastText.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+                                        "/pixelmonbroadcasts teleport " + recipient.getName() + ' ' + recipient.world.provider.getDimension() + ' ' + locX + ' ' + locY + ' ' + locZ));
+                            }
+
+                            // Send!
+                            recipient.sendMessage(simpleBroadcastText);
                         }
                     }
                 }
@@ -169,11 +144,11 @@ public class PlaceholderMethods
                                 + (pokemon.isShiny() ? " shiny" : " !shiny")
                                 + (pokemon.getCustomTexture().isEmpty() ? "" : " texture:" + pokemon.getCustomTexture());
                     }
-                    // We don't, so create a question mark Unown.
+                    // Create a question mark Unown!
                     else
                         spec = "Unown form:26";
 
-                    if (Sponge.getPluginManager().isLoaded("pixelmonoverlay"))
+/*                    if (Sponge.getPluginManager().isLoaded("pixelmonoverlay"))
                     {
                         PixelmonOverlayBridge.display
                         (
@@ -182,32 +157,31 @@ public class PlaceholderMethods
                         );
                     }
                     else
+                    {*/
+                    // Set up a builder for our notice and populate it.
+                    NoticeOverlay.Builder builder =
+                            NoticeOverlay.builder().setLayout(EnumOverlayLayout.LEFT_AND_RIGHT).setPokemonSprite(new PokemonSpec(spec));
+
+                    // Add the message here, after applying other stuff. Doing earlier causes an NPE, apparently. Dunno.
+                    builder.setLines(broadcast);
+
+                    // Sift through the online players.
+                    PlayerMethods.getOnlinePlayers().forEach((recipient) ->
                     {
-                        // Set up a builder for our notice and populate it.
-                        NoticeOverlay.Builder builder =
-                                NoticeOverlay.builder().setLayout(EnumOverlayLayout.LEFT_AND_RIGHT).setPokemonSprite(new PokemonSpec(spec));
-
-                        // Add the message here, after applying other stuff. Doing earlier causes an NPE, apparently. Dunno.
-                        builder.setLines(broadcast);
-
-                        // Sift through the online players.
-                        Sponge.getGame().getServer().getOnlinePlayers().forEach((recipient) ->
+                        // Does the iterated player have the needed notifier permission?
+                        if (recipient.canUseCommand(4, "pixelmonbroadcasts.notify." + event.key()))
                         {
-                            // Does the iterated player have the needed notifier permission?
-                            if (recipient.hasPermission("pixelmonbroadcasts.notify." + event.key()))
+                            // Does the iterated player want our broadcast? Send it if we get "true" returned.
+                            if (checkToggleStatus(recipient, event.flags()))
                             {
-                                // Does the iterated player want our broadcast? Send it if we get "true" returned.
-                                if (checkToggleStatus((EntityPlayer) recipient, event.flags()))
-                                {
-                                    // Prints a message to Pixelmon's notice board. (cool box at the top)
-                                    builder.sendTo((EntityPlayerMP) recipient);
+                                // Prints a message to Pixelmon's notice board. (cool box at the top)
+                                builder.sendTo((EntityPlayerMP) recipient);
 
-                                    // Put the player's UUID and the current time into a hashmap. Check regularly to wipe notices.
-                                    noticeExpiryMap.put(recipient.getUniqueId(), System.currentTimeMillis());
-                                }
+                                // Put the player's UUID and the current time into a hashmap. Check regularly to wipe notices.
+                                noticeExpiryMap.put(recipient.getUniqueID(), System.currentTimeMillis());
                             }
-                        });
-                    }
+                        }
+                    });
                 }
             }
         }
@@ -215,21 +189,14 @@ public class PlaceholderMethods
         {
             logger.error("Could not get settings for the \"" + event.toString().toLowerCase() +
                     "\" event in the \"" + event.getClass().getSimpleName().toLowerCase() + "\" category!");
-
-            if (configVersion != null && configVersion < 40)
-            {
-                logger.error("Outdated (pre-0.4) configs were detected, and are likely causing this issue.");
-                logger.error("Check the startup log for help on updating. Search for: \"0.4 update\"");
-            }
-            else
-                logger.error("Check settings.conf, and when fixed use §4/pixelmonbroadcasts reload§c.");
+            logger.error("Check settings.conf, and when fixed use §4/pixelmonbroadcasts reload§c.");
         }
     }
 
     // Checks whether a player can receive a given broadcast. Used for determining which toggles to display.
-    public static boolean canReceiveBroadcast(final CommandSource src, final EventData event)
+    public static boolean canReceiveBroadcast(final EntityPlayer player, final EventData event)
     {
-        if (src.hasPermission("pixelmonbroadcasts.notify." + event.key()) && event.options() != null)
+        if (player.canUseCommand(4, "pixelmonbroadcasts.notify." + event.key()) && event.options() != null)
             return event.options().contains("chat") || event.options().contains("notice");
 
         return false;
@@ -286,7 +253,7 @@ public class PlaceholderMethods
 
         // Did we get a broadcast?
         if (broadcast != null)
-            broadcast = TextSerializers.FORMATTING_CODE.replaceCodes(broadcast, '§');
+            broadcast = convertSectionColors(broadcast);
         // We did not get a broadcast, return the provided key and make sure it's unformatted.
         else
         {
@@ -563,10 +530,14 @@ public class PlaceholderMethods
     }
 
     // Gets a cleaned-up English name of the biome at the provided coordinates. Add spaces when there's multiple words.
-    private static String getFormattedBiome(net.minecraft.world.World world, BlockPos location)
+    private static String getFormattedBiome(World world, BlockPos location)
     {
         // Grab the name. Cast the World object to Sponge's World so we can do this without needing AT trickery.
-        String biome = ((World) world).getBiome(location.getX(), location.getY(), location.getZ()).getName();
+        // Grab a biome name. This compiles fine if the access transformer is loa   ded correctly, despite any errors.
+        //FIXME String biome = pokemonToSpawn.getEntityWorld().getBiomeForCoordsBody(pokemonToSpawn.getPosition()).biomeName;
+
+        // Grab a biome name. This compiles fine if the access transformer is loaded correctly, despite any errors.
+        String biome = world.getBiomeForCoordsBody(location).biomeName;
 
         // Add a space in front of every capital letter after the first.
         int capitalCount = 0, iterator = 0;
@@ -601,7 +572,7 @@ public class PlaceholderMethods
     }
 
     // Sets up a broadcast from the given info, with IV hovers thrown in in place of any placeholders.
-    private static Text getHoverableLine(
+    private static ITextComponent getHoverableLine(
             final String broadcast, final Object object1, final boolean isPresentTense, final boolean showIVs)
     {
         // Is our received object of the older EntityPixelmon type, or is it Pokemon?
@@ -743,9 +714,10 @@ public class PlaceholderMethods
             }
         }
 
+        ITextComponent broadcastComponent = new TextComponentString(broadcast);
+        broadcastComponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(String.join("\n§r", hovers))));
+
         // Make a finalized broadcast that we can show, and add a hover. Return the whole thing.
-        return Text.builder(broadcast)
-                .onHover(TextActions.showText(Text.of(String.join("\n§r", hovers))))
-                .build();
+        return broadcastComponent;
     }
 }

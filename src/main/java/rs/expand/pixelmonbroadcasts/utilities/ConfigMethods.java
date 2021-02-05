@@ -1,10 +1,8 @@
 // The probably-too-complicated config handler, mark whatever. A bit less messy, but still needs work.
 package rs.expand.pixelmonbroadcasts.utilities;
 
-import org.spongepowered.api.Game;
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.CommandManager;
-import org.spongepowered.api.plugin.PluginContainer;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import rs.expand.pixelmonbroadcasts.PixelmonBroadcasts;
 import rs.expand.pixelmonbroadcasts.enums.EventData;
 
@@ -14,7 +12,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.commons.lang3.BooleanUtils.toBooleanObject;
 import static rs.expand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 import static rs.expand.pixelmonbroadcasts.utilities.PrintingMethods.printOptionsNodeError;
 
@@ -23,13 +20,14 @@ public class ConfigMethods
     // Make a little converter for safely handling Strings that might have an integer value inside.
     private static Integer interpretInteger(final String input)
     {
-        if (input != null && input.matches("-?[1-9]\\d*|0"))
+        // TODO: Check if this works.
+        if (NumberUtils.isParsable(input))
             return Integer.parseInt(input);
         else
             return null;
     }
 
-    // Unloads all known PixelmonBroadcasts commands and their aliases, and then re-registers them.
+/*    // Unloads all known PixelmonBroadcasts commands and their aliases, and then re-registers them.
     public static boolean tryRegisterCommands()
     {
         final PluginContainer pbcContainer = Sponge.getPluginManager().getPlugin("pixelmonbroadcasts").orElse(null);
@@ -65,13 +63,13 @@ public class ConfigMethods
 
             return false;
         }
-    }
+    }*/
 
     // Called during initial setup, either when the server is booting up or when /pbroadcasts reload has been executed.
     public static boolean tryCreateAndLoadConfigs()
     {
         // Print a message to squeeze between the messages of whatever called the (re-)load.
-        logger.info("§f--> §aLoading and validating settings for Pixelmon Broadcasts 0.5...");
+        logger.info("§f--> §aLoading and validating settings for Pixelmon Broadcasts 0.5.1...");
 
         // Create a config directory if it doesn't exist. Silently swallow an error if it does. I/O is awkward.
         try
@@ -137,7 +135,7 @@ public class ConfigMethods
         PixelmonBroadcasts.commandAlias =
                 settingsConfig.getNode("commandAlias").getString();
         PixelmonBroadcasts.showAbilities =
-                toBooleanObject(settingsConfig.getNode("showAbilities").getString());
+                BooleanUtils.toBooleanObject(settingsConfig.getNode("showAbilities").getString());
 
         // Show errors if any of these main variables are broken.
         if (configVersion == null)

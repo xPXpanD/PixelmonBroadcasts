@@ -15,9 +15,9 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 // Sets the version number shown in the file name.
-version = "1.12.2-0.5"
+version = "1.12.2-0.5.1t1-FORGE"
 group = 'rs.expand.pixelmonbroadcasts' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'pixelmonbroadcasts'
+archivesBaseName = 'PixelmonBroadcasts'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -30,7 +30,7 @@ minecraft {
     //mappings channel: 'snapshot', version: '20171003-1.12'
     mappings channel: 'snapshot', version: '20171003-1.12'
     
-    //accessTransformer = file('src/main/resources/META-INF/pixelmon_at.cfg')
+    accessTransformer = file('src/main/resources/META-INF/pixelmon_at.cfg')
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -65,15 +65,6 @@ tasks.withType(JavaCompile)
     task.options.fork = true
 }
 
-// Taken from the internet. vvv
-repositories {
-    mavenCentral()
-    maven {
-        name = 'sponge'
-        url = 'https://repo.spongepowered.org/maven'
-    }
-}
-
 dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
@@ -87,8 +78,7 @@ dependencies {
     // Real examples
     // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
     // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-    // Grab and include Sponge.
-    compile 'org.spongepowered:spongeapi:7.2.0'
+    compile 'ninja.leaping.configurate:configurate-hocon:3.7.1'
 
     // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
     // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
