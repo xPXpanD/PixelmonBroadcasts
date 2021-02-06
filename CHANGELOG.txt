@@ -1,18 +1,21 @@
-0.5.1 for ???
+0.6 for ???
 Released ???
 
     Additions:
-    * We're now on pure Forge! Sponge is no longer required.
+    * Moved everything to pure Forge! Broadcasts now runs on any server setup that supports Forge mods.
     * Added experimental support for single player use! As always, let me know if stuff breaks.
+    * When in single player, you get a lighter settings file by default with multiplayer fluff turned off.
 
-    Tweaks:
+    Removals:
     * (temporarily?) Removed integration with the Pixelmon Overlay plugin, as it requires Sponge.
 
     Message file additions and changes:
-    * Combined all "no_permissions" messages except for the teleport one into "universal.no_permissions".
+    * Combined all non-teleport "no_permissions" messages into "universal.no_permissions".
+    * Renamed "action.teleport" into just "teleport" as we now need to use a command. (no Sponge callbacks)
+    * Added a few new teleport command errors for the different failure modes.
 
     Broadcasts file additions and changes:
-    * Slightly changed the non-shiny Ultra Beast and Legendary egg hatching broadcasts to avoid a/an issues.
+    * Slightly changed the non-shiny Ultra Beast and Legendary egg hatch broadcasts to avoid "a"/"an" issues.
 
 0.5 for 8.1.2
 Released February 3rd, 2021.

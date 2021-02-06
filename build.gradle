@@ -15,8 +15,8 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 // Sets the version number shown in the file name.
-version = "1.12.2-0.5.1t1-FORGE"
-group = 'rs.expand.pixelmonbroadcasts' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = "1.12.2-0.6-universal-t1"
+group = 'com.github.xpxpand.pixelmonbroadcasts' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'PixelmonBroadcasts'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
@@ -78,7 +78,7 @@ dependencies {
     // Real examples
     // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
     // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-    compile 'ninja.leaping.configurate:configurate-hocon:3.7.1'
+
 
     // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
     // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
@@ -140,11 +140,6 @@ jar.finalizedBy('reobfJar')
 //publish.dependsOn('reobfJar')
 
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-        }
-    }
     repositories {
         maven {
             url "file:///${project.projectDir}/mcmodsrepo"
