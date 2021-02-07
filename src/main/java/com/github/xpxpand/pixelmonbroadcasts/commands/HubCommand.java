@@ -7,26 +7,39 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.CommandBlockBaseLogic;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.server.command.CommandTreeBase;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static com.github.xpxpand.pixelmonbroadcasts.PixelmonBroadcasts.commandAlias;
 import static com.github.xpxpand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
 
+// Note: /teleport is not shown here, it's just for internal use and there are better alternatives available.
 @SuppressWarnings("NullableProblems")
 public class HubCommand extends CommandTreeBase
 {
-/*    public BaseCommand()
+    // Forge seems to see the main command as a possible completion by default. Bypass that with a custom list.
+    // This is very clean -- we still show up on /help, and the hub command sends people to the specific subcommands.
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos)
     {
-        addSubcommand(new Reload());
-        addSubcommand(new Teleport());
-        addSubcommand(new Toggle());
-    }*/
+        List<String> stringList = new ArrayList<>();
+
+        stringList.add("toggle");
+        if (PlayerMethods.hasPermission(sender, "pixelmonbroadcasts.command.staff.teleport"))
+            stringList.add("teleport");
+        if (PlayerMethods.hasPermission(sender, "pixelmonbroadcasts.command.staff.reload"))
+            stringList.add("reload");
+
+        return stringList;
+    }
 
     @Override
     public String getName()
@@ -34,10 +47,11 @@ public class HubCommand extends CommandTreeBase
         return "pixelmonbroadcasts";
     }
 
+    // Used in /help and /help COMMANDNAME, so let's make this a proper thing.
     @Override
     public String getUsage(ICommandSender sender)
     {
-        return "/pixelmonbroadcasts <option>";
+        return "Shows a clickable list of event options.";
     }
 
     @Override
@@ -93,49 +107,22 @@ public class HubCommand extends CommandTreeBase
                 checkedAlias = "pixelmonbroadcasts";
             }
 
-            // Set up a flag to see where we're running from. Gets set to true if we weren't called by a player.
-            final boolean calledRemotely = !(sender instanceof EntityPlayer);
-
-            ITextComponent toggleComponent = new TextComponentString(PrintingMethods.getTranslation("hub.toggle_syntax", checkedAlias));
-            toggleComponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pixelmonbroadcasts toggle"));
-            sender.sendMessage(toggleComponent);
-
-            // Always show to everybody and everything. Show a custom info message if run from remote sources.
+            // Only show to actual players.
             if (sender instanceof EntityPlayer)
+            {
+                ITextComponent toggleComponent = new TextComponentString(PrintingMethods.getTranslation("hub.toggle_syntax", checkedAlias));
+                toggleComponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pixelmonbroadcasts toggle"));
+                sender.sendMessage(toggleComponent);
                 sender.sendMessage(new TextComponentString(PrintingMethods.getTranslation("hub.toggle_info")));
-            else
-            {
-                // Message locked in, as it's not visible in-game. Keeps the lang workload down, with minimal loss.
-                sender.sendMessage(new TextComponentString(
-                        "➡ §eAllows in-game players to toggle event messages by clicking them."));
-            }
-
-            // Only show to actual players, and only if they have the permission. Do not show if cheats are off.
-            if (!calledRemotely && sender.canUseCommand(4, "pixelmonbroadcasts.command.staff.teleport"))
-            {
-                ITextComponent teleportComponent = new TextComponentString(PrintingMethods.getTranslation("hub.teleport_syntax", checkedAlias));
-                teleportComponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pixelmonbroadcasts teleport"));
-                sender.sendMessage(teleportComponent);
-
-                sender.sendMessage(new TextComponentString(PrintingMethods.getTranslation("hub.teleport_info")));
-
             }
 
             // Show to players with the permission, or with cheats enabled if in SP. Add a note if run from console. Run last.
-            if (calledRemotely || PlayerMethods.hasPermission(sender, "pixelmonbroadcasts.command.staff.reload"))
+            if (!(sender instanceof EntityPlayer) || PlayerMethods.hasPermission(sender, "pixelmonbroadcasts.command.staff.reload"))
             {
                 ITextComponent reloadComponent = new TextComponentString(PrintingMethods.getTranslation("hub.reload_syntax", checkedAlias));
                 reloadComponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pixelmonbroadcasts reload"));
                 sender.sendMessage(reloadComponent);
-
                 sender.sendMessage(new TextComponentString(PrintingMethods.getTranslation("hub.reload_info")));
-
-                if (calledRemotely)
-                {
-                    // Messages locked in, as they're not visible in-game. Keeps the lang workload down, with minimal loss.
-                    sender.sendMessage(new TextComponentString(""));
-                    sender.sendMessage(new TextComponentString("§6Please note: §eThe \"toggle\" sub-command will only work when used in-game."));
-                }
             }
 
             // Cap things off with a nice lang file footer.

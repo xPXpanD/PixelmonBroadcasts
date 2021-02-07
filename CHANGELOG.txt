@@ -1,13 +1,15 @@
-0.6 for ???
-Released ???
+0.6 for 8.1.2
+Released February 8th, 2021.
 
     Additions:
-    * Moved everything to pure Forge! Broadcasts now runs on any server setup that supports Forge mods.
-    * Added experimental support for single player use! As always, let me know if stuff breaks.
+    * Moved everything to pure Forge! Broadcasts now runs anywhere that supports Forge mods.
+    * Added support for single player use! As always, let me know if stuff breaks.
     * When in single player, you get a lighter settings file by default with multiplayer fluff turned off.
 
-    Removals:
+    Changes:
     * (temporarily?) Removed integration with the Pixelmon Overlay plugin, as it requires Sponge.
+    * Removed the toggle helper when running /pixelmonbroadcasts from console. Can't use it there, anyways.
+    * Removed all "pixelmonbroadcasts.action" permissions. Naming was inconsistent, use ".command" instead.
 
     Message file additions and changes:
     * Combined all non-teleport "no_permissions" messages into "universal.no_permissions".
@@ -15,7 +17,7 @@ Released ???
     * Added a few new teleport command errors for the different failure modes.
 
     Broadcasts file additions and changes:
-    * Slightly changed the non-shiny Ultra Beast and Legendary egg hatch broadcasts to avoid "a"/"an" issues.
+    * Reworded the non-shiny Ultra Beast and Legendary egg hatch broadcasts to avoid "a"/"an" issues.
 
 0.5 for 8.1.2
 Released February 3rd, 2021.

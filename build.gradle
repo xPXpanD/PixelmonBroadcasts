@@ -15,10 +15,10 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 // Sets the version number shown in the file name.
-version = "1.12.2-0.6-universal-t1"
+version = "1.12.2-0.6-universal-test1"
 group = 'com.github.xpxpand.pixelmonbroadcasts' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'PixelmonBroadcasts'
 
+//noinspection GroovyUnusedAssignment
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {

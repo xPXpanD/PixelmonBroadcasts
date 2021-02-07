@@ -25,24 +25,6 @@ public class Toggle extends HubCommand
     List<TextComponentString> toggleMessageList = new ArrayList<>();
 
     @Override
-    public String getName()
-    {
-        return "toggle";
-    }
-
-    @Override
-    public String getUsage(ICommandSender sender)
-    {
-        return "/pixelmonbroadcasts toggle <event flag>";
-    }
-
-    @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender sender)
-    {
-        return true;
-    }
-
-    @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args)
     {
         // Were we called by a player? Let's not try toggling flags on things that can't have flags.
@@ -127,7 +109,7 @@ public class Toggle extends HubCommand
                 flags.add("showNormalBlackout");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showNormalBlackout"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showNormalBlackout"))
                     messages.add(PrintingMethods.getTranslation("toggle.normal.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.normal.off") + separator);
@@ -137,7 +119,7 @@ public class Toggle extends HubCommand
                 flags.add("showShinyBlackout");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showShinyBlackout"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showShinyBlackout"))
                     messages.add(PrintingMethods.getTranslation("toggle.shiny.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.shiny.off") + separator);
@@ -147,7 +129,7 @@ public class Toggle extends HubCommand
                 flags.add("showLegendaryBlackout");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showLegendaryBlackout"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showLegendaryBlackout"))
                     messages.add(PrintingMethods.getTranslation("toggle.legendary.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.legendary.off") + separator);
@@ -157,7 +139,7 @@ public class Toggle extends HubCommand
                 flags.add("showUltraBeastBlackout");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showUltraBeastBlackout"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showUltraBeastBlackout"))
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.off") + separator);
@@ -167,7 +149,7 @@ public class Toggle extends HubCommand
                 flags.add("showUncommonBossBlackout");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showUncommonBossBlackout"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showUncommonBossBlackout"))
                     messages.add(PrintingMethods.getTranslation("toggle.uncommon_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.uncommon_boss.off") + separator);
@@ -177,7 +159,7 @@ public class Toggle extends HubCommand
                 flags.add("showRareBossBlackout");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showRareBossBlackout"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showRareBossBlackout"))
                     messages.add(PrintingMethods.getTranslation("toggle.rare_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.rare_boss.off") + separator);
@@ -187,7 +169,7 @@ public class Toggle extends HubCommand
                 flags.add("showLegendaryBossBlackout");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showLegendaryBossBlackout"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showLegendaryBossBlackout"))
                     messages.add(PrintingMethods.getTranslation("toggle.legendary_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.legendary_boss.off") + separator);
@@ -197,7 +179,7 @@ public class Toggle extends HubCommand
                 flags.add("showUltimateBossBlackout");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showUltimateBossBlackout"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showUltimateBossBlackout"))
                     messages.add(PrintingMethods.getTranslation("toggle.ultimate_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.ultimate_boss.off") + separator);
@@ -207,7 +189,7 @@ public class Toggle extends HubCommand
                 flags.add("showTrainerBlackout");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showTrainerBlackout"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showTrainerBlackout"))
                     messages.add(PrintingMethods.getTranslation("toggle.trainer.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.trainer.off") + separator);
@@ -217,7 +199,7 @@ public class Toggle extends HubCommand
                 flags.add("showBossTrainerBlackout");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showBossTrainerBlackout"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showBossTrainerBlackout"))
                     messages.add(PrintingMethods.getTranslation("toggle.boss_trainer.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.boss_trainer.off") + separator);
@@ -246,7 +228,7 @@ public class Toggle extends HubCommand
                 flags.add("showNormalCatch");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showNormalCatch"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showNormalCatch"))
                     messages.add(PrintingMethods.getTranslation("toggle.normal.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.normal.off") + separator);
@@ -256,7 +238,7 @@ public class Toggle extends HubCommand
                 flags.add("showShinyCatch");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showShinyCatch"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showShinyCatch"))
                     messages.add(PrintingMethods.getTranslation("toggle.shiny.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.shiny.off") + separator);
@@ -266,7 +248,7 @@ public class Toggle extends HubCommand
                 flags.add("showLegendaryCatch");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showLegendaryCatch"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showLegendaryCatch"))
                     messages.add(PrintingMethods.getTranslation("toggle.legendary.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.legendary.off") + separator);
@@ -276,7 +258,7 @@ public class Toggle extends HubCommand
                 flags.add("showUltraBeastCatch");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showUltraBeastCatch"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showUltraBeastCatch"))
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.off") + separator);
@@ -305,7 +287,7 @@ public class Toggle extends HubCommand
                 flags.add("showShinyChallenge");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showShinyChallenge"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showShinyChallenge"))
                     messages.add(PrintingMethods.getTranslation("toggle.shiny.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.shiny.off") + separator);
@@ -315,7 +297,7 @@ public class Toggle extends HubCommand
                 flags.add("showLegendaryChallenge");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showLegendaryChallenge"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showLegendaryChallenge"))
                     messages.add(PrintingMethods.getTranslation("toggle.legendary.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.legendary.off") + separator);
@@ -325,7 +307,7 @@ public class Toggle extends HubCommand
                 flags.add("showUltraBeastChallenge");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showUltraBeastChallenge"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showUltraBeastChallenge"))
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.off") + separator);
@@ -335,7 +317,7 @@ public class Toggle extends HubCommand
                 flags.add("showUncommonBossChallenge");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showUncommonBossChallenge"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showUncommonBossChallenge"))
                     messages.add(PrintingMethods.getTranslation("toggle.uncommon_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.uncommon_boss.off") + separator);
@@ -345,7 +327,7 @@ public class Toggle extends HubCommand
                 flags.add("showRareBossChallenge");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showRareBossChallenge"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showRareBossChallenge"))
                     messages.add(PrintingMethods.getTranslation("toggle.rare_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.rare_boss.off") + separator);
@@ -355,7 +337,7 @@ public class Toggle extends HubCommand
                 flags.add("showLegendaryBossChallenge");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showLegendaryBossChallenge"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showLegendaryBossChallenge"))
                     messages.add(PrintingMethods.getTranslation("toggle.legendary_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.legendary_boss.off") + separator);
@@ -365,7 +347,7 @@ public class Toggle extends HubCommand
                 flags.add("showUltimateBossChallenge");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showUltimateBossChallenge"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showUltimateBossChallenge"))
                     messages.add(PrintingMethods.getTranslation("toggle.ultimate_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.ultimate_boss.off") + separator);
@@ -375,7 +357,7 @@ public class Toggle extends HubCommand
                 flags.add("showTrainerChallenge");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showTrainerChallenge"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showTrainerChallenge"))
                     messages.add(PrintingMethods.getTranslation("toggle.trainer.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.trainer.off") + separator);
@@ -385,7 +367,7 @@ public class Toggle extends HubCommand
                 flags.add("showBossTrainerChallenge");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showBossTrainerChallenge"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showBossTrainerChallenge"))
                     messages.add(PrintingMethods.getTranslation("toggle.boss_trainer.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.boss_trainer.off") + separator);
@@ -395,7 +377,7 @@ public class Toggle extends HubCommand
                 flags.add("showPVPChallenge");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showPVPChallenge"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showPVPChallenge"))
                     messages.add(PrintingMethods.getTranslation("toggle.pvp.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.pvp.off") + separator);
@@ -424,7 +406,7 @@ public class Toggle extends HubCommand
                 flags.add("showShinyForfeit");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showShinyForfeit"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showShinyForfeit"))
                     messages.add(PrintingMethods.getTranslation("toggle.shiny.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.shiny.off") + separator);
@@ -434,7 +416,7 @@ public class Toggle extends HubCommand
                 flags.add("showLegendaryForfeit");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showLegendaryForfeit"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showLegendaryForfeit"))
                     messages.add(PrintingMethods.getTranslation("toggle.legendary.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.legendary.off") + separator);
@@ -444,7 +426,7 @@ public class Toggle extends HubCommand
                 flags.add("showUltraBeastForfeit");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showUltraBeastForfeit"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showUltraBeastForfeit"))
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.off") + separator);
@@ -454,7 +436,7 @@ public class Toggle extends HubCommand
                 flags.add("showBossForfeit");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showBossForfeit"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showBossForfeit"))
                     messages.add(PrintingMethods.getTranslation("toggle.boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.boss.off") + separator);
@@ -464,7 +446,7 @@ public class Toggle extends HubCommand
                 flags.add("showTrainerForfeit");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showTrainerForfeit"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showTrainerForfeit"))
                     messages.add(PrintingMethods.getTranslation("toggle.trainer.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.trainer.off") + separator);
@@ -474,7 +456,7 @@ public class Toggle extends HubCommand
                 flags.add("showBossTrainerForfeit");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showBossTrainerForfeit"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showBossTrainerForfeit"))
                     messages.add(PrintingMethods.getTranslation("toggle.boss_trainer.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.boss_trainer.off") + separator);
@@ -503,7 +485,7 @@ public class Toggle extends HubCommand
                 flags.add("showShinySpawn");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showShinySpawn"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showShinySpawn"))
                     messages.add(PrintingMethods.getTranslation("toggle.shiny.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.shiny.off") + separator);
@@ -513,7 +495,7 @@ public class Toggle extends HubCommand
                 flags.add("showLegendarySpawn");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showLegendarySpawn"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showLegendarySpawn"))
                     messages.add(PrintingMethods.getTranslation("toggle.legendary.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.legendary.off") + separator);
@@ -523,7 +505,7 @@ public class Toggle extends HubCommand
                 flags.add("showUltraBeastSpawn");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showUltraBeastSpawn"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showUltraBeastSpawn"))
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.off") + separator);
@@ -533,7 +515,7 @@ public class Toggle extends HubCommand
                 flags.add("showWormholeSpawn");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showWormholeSpawn"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showWormholeSpawn"))
                     messages.add(PrintingMethods.getTranslation("toggle.wormhole.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.wormhole.off") + separator);
@@ -543,7 +525,7 @@ public class Toggle extends HubCommand
                 flags.add("showUncommonBossSpawn");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showUncommonBossSpawn"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showUncommonBossSpawn"))
                     messages.add(PrintingMethods.getTranslation("toggle.uncommon_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.uncommon_boss.off") + separator);
@@ -553,7 +535,7 @@ public class Toggle extends HubCommand
                 flags.add("showRareBossSpawn");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showRareBossSpawn"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showRareBossSpawn"))
                     messages.add(PrintingMethods.getTranslation("toggle.rare_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.rare_boss.off") + separator);
@@ -563,7 +545,7 @@ public class Toggle extends HubCommand
                 flags.add("showLegendaryBossSpawn");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showLegendaryBossSpawn"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showLegendaryBossSpawn"))
                     messages.add(PrintingMethods.getTranslation("toggle.legendary_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.legendary_boss.off") + separator);
@@ -573,7 +555,7 @@ public class Toggle extends HubCommand
                 flags.add("showUltimateBossSpawn");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showUltimateBossSpawn"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showUltimateBossSpawn"))
                     messages.add(PrintingMethods.getTranslation("toggle.ultimate_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.ultimate_boss.off") + separator);
@@ -631,7 +613,7 @@ public class Toggle extends HubCommand
                 flags.add("showShinyVictory");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showShinyVictory"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showShinyVictory"))
                     messages.add(PrintingMethods.getTranslation("toggle.shiny.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.shiny.off") + separator);
@@ -641,7 +623,7 @@ public class Toggle extends HubCommand
                 flags.add("showLegendaryVictory");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showLegendaryVictory"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showLegendaryVictory"))
                     messages.add(PrintingMethods.getTranslation("toggle.legendary.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.legendary.off") + separator);
@@ -651,7 +633,7 @@ public class Toggle extends HubCommand
                 flags.add("showUltraBeastVictory");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showUltraBeastVictory"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showUltraBeastVictory"))
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.off") + separator);
@@ -661,7 +643,7 @@ public class Toggle extends HubCommand
                 flags.add("showUncommonBossVictory");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showUncommonBossVictory"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showUncommonBossVictory"))
                     messages.add(PrintingMethods.getTranslation("toggle.uncommon_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.uncommon_boss.off") + separator);
@@ -671,7 +653,7 @@ public class Toggle extends HubCommand
                 flags.add("showRareBossVictory");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showRareBossVictory"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showRareBossVictory"))
                     messages.add(PrintingMethods.getTranslation("toggle.rare_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.rare_boss.off") + separator);
@@ -681,7 +663,7 @@ public class Toggle extends HubCommand
                 flags.add("showLegendaryBossVictory");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showLegendaryBossVictory"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showLegendaryBossVictory"))
                     messages.add(PrintingMethods.getTranslation("toggle.legendary_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.legendary_boss.off") + separator);
@@ -691,7 +673,7 @@ public class Toggle extends HubCommand
                 flags.add("showUltimateBossVictory");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showUltimateBossVictory"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showUltimateBossVictory"))
                     messages.add(PrintingMethods.getTranslation("toggle.ultimate_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.ultimate_boss.off") + separator);
@@ -701,7 +683,7 @@ public class Toggle extends HubCommand
                 flags.add("showTrainerVictory");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showTrainerVictory"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showTrainerVictory"))
                     messages.add(PrintingMethods.getTranslation("toggle.trainer.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.trainer.off") + separator);
@@ -711,7 +693,7 @@ public class Toggle extends HubCommand
                 flags.add("showBossTrainerVictory");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showBossTrainerVictory"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showBossTrainerVictory"))
                     messages.add(PrintingMethods.getTranslation("toggle.boss_trainer.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.boss_trainer.off") + separator);
@@ -721,7 +703,7 @@ public class Toggle extends HubCommand
                 flags.add("showPVPVictory");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showPVPVictory"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showPVPVictory"))
                     messages.add(PrintingMethods.getTranslation("toggle.pvp.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.pvp.off") + separator);
@@ -750,7 +732,7 @@ public class Toggle extends HubCommand
                 flags.add("showPVPDraw");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showPVPDraw"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showPVPDraw"))
                     messages.add(PrintingMethods.getTranslation("toggle.pvp.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.pvp.off") + separator);
@@ -779,7 +761,7 @@ public class Toggle extends HubCommand
                 flags.add("showNormalHatch");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showNormalHatch"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showNormalHatch"))
                     messages.add(PrintingMethods.getTranslation("toggle.normal.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.normal.off") + separator);
@@ -789,7 +771,7 @@ public class Toggle extends HubCommand
                 flags.add("showShinyHatch");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showShinyHatch"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showShinyHatch"))
                     messages.add(PrintingMethods.getTranslation("toggle.shiny.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.shiny.off") + separator);
@@ -799,7 +781,7 @@ public class Toggle extends HubCommand
                 flags.add("showLegendaryHatch");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showLegendaryHatch"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showLegendaryHatch"))
                     messages.add(PrintingMethods.getTranslation("toggle.legendary.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.legendary.off") + separator);
@@ -809,7 +791,7 @@ public class Toggle extends HubCommand
                 flags.add("showUltraBeastHatch");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showUltraBeastHatch"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showUltraBeastHatch"))
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.off") + separator);
@@ -838,7 +820,7 @@ public class Toggle extends HubCommand
                 flags.add("showEvolve");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showEvolve"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showEvolve"))
                     messages.add(PrintingMethods.getTranslation("toggle.evolve.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.evolve.off") + separator);
@@ -848,7 +830,7 @@ public class Toggle extends HubCommand
                 flags.add("showFaint");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showFaint"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showFaint"))
                     messages.add(PrintingMethods.getTranslation("toggle.faint.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.faint.off") + separator);
@@ -858,7 +840,7 @@ public class Toggle extends HubCommand
                 flags.add("showTrade");
 
                 // Only returns "false" if explicitly toggled off by the user.
-                if (PlaceholderMethods.checkToggleStatus(player, "showTrade"))
+                if (PlaceholderMethods.wantsBroadcast(player, "showTrade"))
                     messages.add(PrintingMethods.getTranslation("toggle.trade.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.trade.off") + separator);

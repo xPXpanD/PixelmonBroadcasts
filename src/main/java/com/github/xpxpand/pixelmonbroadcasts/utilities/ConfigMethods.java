@@ -21,7 +21,6 @@ public class ConfigMethods
     // Make a little converter for safely handling Strings that might have an integer value inside.
     private static Integer interpretInteger(final String input)
     {
-        // TODO: Check if this works.
         if (NumberUtils.isParsable(input))
             return Integer.parseInt(input);
         else

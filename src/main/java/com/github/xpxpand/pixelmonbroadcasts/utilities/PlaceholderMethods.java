@@ -16,7 +16,6 @@ import com.pixelmonmod.pixelmon.enums.forms.RegionalForms;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -25,7 +24,6 @@ import net.minecraft.util.text.event.HoverEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import com.github.xpxpand.pixelmonbroadcasts.enums.EventData;
-import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,28 +58,47 @@ public class PlaceholderMethods
 
                 // Set up some variables that we can access later, if we do end up sending a clickable broadcast.
                 BlockPos location = null;
+                Integer dimension = null;
 
                 // Grab coordinates for making our chat broadcast clickable for those who have access.
-                if (object1 != null || player1 != null)
+                if (object1 != null)
                 {
-                    if (object1 != null)
+                    if (object1 instanceof EntityPixelmon || object1 instanceof EntityWormhole)
                     {
-                        if (object1 instanceof EntityPixelmon || object1 instanceof EntityWormhole)
-                        {
-                            location = ((Entity) object1).getPosition();
+                        // Grab entity data.
+                        dimension = ((Entity) object1).dimension;
+                        location = ((Entity) object1).getPosition();
 
-                            // Do our coordinates make sense? If not, we may have breakage. Set back to null.
-                            if ((location.getX() == 0 && location.getZ() == 0))
-                                location = null;
-                        }
+                        // Do our coordinates make sense? If not, we may have breakage. Set back to null.
+                        if ((location.getX() == 0 && location.getZ() == 0))
+                            location = null;
                     }
+                }
+                if (player1 != null)
+                {
+                    // Did we get data yet? Prefer the generally more accurate Pokémon/wormhole data if available.
+                    if (location == null)
+                        location = player1.getPosition();
+                    if (dimension == null)
+                        dimension = player1.dimension;
+                }
 
-                    if (player1 != null)
-                    {
-                        // Did we get a location yet? Prefer the generally more accurate Pokémon/wormhole data if available.
-                        if (location == null)
-                            location = player1.getPosition();
-                    }
+                // Do we have a location? Add a click action.
+                if (location != null)
+                {
+                    // Prep the target position.
+                    final int x = location.getX();
+                    final int y = location.getY() + 1; // Increment Y by one so people don't get stuck in blocks.
+                    final int z = location.getZ();
+
+                    // Attach the on-click.
+                    simpleBroadcastText.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+                            "/pixelmonbroadcasts teleport " + dimension + ' ' + x + ' ' + y + ' ' + z));
+                }
+                else
+                {
+                    logger.error("Could not find a valid location to teleport people to for this event! Please report this.");
+                    logger.error("Event: \"" + event.toString() + "\", in the \"" + event.getClass().getSimpleName() + "\" category!");
                 }
 
                 // Sift through the online players.
@@ -90,26 +107,9 @@ public class PlaceholderMethods
                     // Does the iterated player have the needed notifier permission?
                     if (PlayerMethods.hasPermission(recipient, "pixelmonbroadcasts.notify." + event.key()))
                     {
-                        // Does the iterated player want our broadcast? Send it if we get "true" returned.
-                        if (checkToggleStatus(recipient, event.flags()))
-                        {
-                            // Set up some X/Y/Z variables.
-                            final int locX, locY, locZ;
-
-                            // Do we have a location? Add a click action.
-                            if (location != null)
-                            {
-                                locX = location.getX();
-                                locY = location.getY() + 1; // Increment Y by one so people don't get stuck in blocks.
-                                locZ = location.getZ();
-
-                                simpleBroadcastText.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-                                        "/pixelmonbroadcasts teleport " + recipient.getName() + ' ' + recipient.world.provider.getDimension() + ' ' + locX + ' ' + locY + ' ' + locZ));
-                            }
-
-                            // Send!
+                        // Does the iterated player want our broadcast? Send it if they do.
+                        if (wantsBroadcast(recipient, event.flags()))
                             recipient.sendMessage(simpleBroadcastText);
-                        }
                     }
                 }
             }
@@ -173,7 +173,7 @@ public class PlaceholderMethods
                         if (PlayerMethods.hasPermission(recipient, "pixelmonbroadcasts.notify." + event.key()))
                         {
                             // Does the iterated player want our broadcast? Send it if we get "true" returned.
-                            if (checkToggleStatus(recipient, event.flags()))
+                            if (wantsBroadcast(recipient, event.flags()))
                             {
                                 // Prints a message to Pixelmon's notice board. (cool box at the top)
                                 builder.sendTo((EntityPlayerMP) recipient);
@@ -188,9 +188,8 @@ public class PlaceholderMethods
         }
         else
         {
-            logger.error("Could not get settings for the \"" + event.toString().toLowerCase() +
-                    "\" event in the \"" + event.getClass().getSimpleName().toLowerCase() + "\" category!");
-            logger.error("Check settings.conf, and when fixed use §4/pixelmonbroadcasts reload§c.");
+            logger.error("Could not get settings for this event! Please check settings.conf and reload.");
+            logger.error("Event: \"" + event.toString() + "\", in the \"" + event.getClass().getSimpleName() + "\" category!");
         }
     }
 
@@ -514,7 +513,7 @@ public class PlaceholderMethods
     }
 
     // Checks whether the provided toggle flags are turned on. Only returns false if all toggles are set and turned off.
-    public static boolean checkToggleStatus(final EntityPlayer recipient, final String... flags)
+    public static boolean wantsBroadcast(final EntityPlayer recipient, final String... flags)
     {
         // Loop through the provided set of flags.
         for (String flag : flags)

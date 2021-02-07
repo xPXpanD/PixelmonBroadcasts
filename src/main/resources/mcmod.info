@@ -2,7 +2,7 @@
   "modid": "pixelmonbroadcasts",
   "name": "Pixelmon Broadcasts",
   "description": "Shows unique legendary-like messages for all sorts of different Pixelmon events, such as shiny spawns. Fully configurable.",
-  "version": "0.6 test 1",
+  "version": "0.6 test release 1",
   "mcversion": "1.12.2",
   "url": "https://github.com/xPXpanD/PixelmonBroadcasts/",
   "authorList": ["XpanD"]

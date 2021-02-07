@@ -3,65 +3,66 @@ package com.github.xpxpand.pixelmonbroadcasts.commands;
 
 import com.github.xpxpand.pixelmonbroadcasts.utilities.PlayerMethods;
 import com.github.xpxpand.pixelmonbroadcasts.utilities.PrintingMethods;
-import com.github.xpxpand.pixelmonbroadcasts.utilities.external.TeleportUtils;
+import com.pixelmonmod.pixelmon.util.helpers.DimensionHelper;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.DimensionManager;
-import org.apache.commons.lang3.StringUtils;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static com.github.xpxpand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
 
-// FIXME: Teleporting across dimensions is flaky in SP and sometimes in MP too.
-// FIXME: Teleporting sometimes fails even in the same dimension. Some sort of MC-built-in safety check?
 public class Teleport extends HubCommand
 {
-    @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender sender)
-    {
-        if (sender.canUseCommand(4, "pixelmonbroadcasts.action.staff.teleport"))
-            return true;
-        else
-        {
-            PrintingMethods.sendTranslation(sender, "teleport.no_permissions");
-            return false;
-        }
-    }
-
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args)
     {
         if (sender instanceof EntityPlayer)
         {
-            // Subcommand (teleport) option is the first arg.
-            if (args.length >= 6)
+            if (PlayerMethods.hasPermission(sender, "pixelmonbroadcasts.command.staff.teleport"))
             {
-                // Is the first argument a valid player?
-                if (isValidPlayer(args[1]) && getOptionalPlayerEntity(args[1]).isPresent())
+                // Subcommand (teleport) option is the first arg.
+                if (args.length >= 5)
                 {
+                    // Get all dimensions, loaded and unloaded.
+                    List<Integer> dimensions = Arrays.asList(DimensionManager.getStaticDimensionIDs());
+
                     // Is the second argument a valid dimension ID?
-                    if (args[2].matches("^-?\\d+$") && DimensionManager.isDimensionRegistered(Integer.parseInt(args[2])))
+                    if (args[1].matches("^-?\\d+$") && dimensions.contains(Integer.parseInt(args[1])))
                     {
                         // Are all provided coordinates valid?
-                        if (NumberUtils.isParsable(args[3]) && NumberUtils.isParsable(args[4]) && NumberUtils.isParsable(args[5]))
+                        if (NumberUtils.isParsable(args[2]) && NumberUtils.isParsable(args[3]) && NumberUtils.isParsable(args[4]))
                         {
-                            // Finally grab the player entity.
-                            EntityPlayer entity = getOptionalPlayerEntity(args[1]).get();
+                            final int dimension = Integer.parseInt(args[1]);
+                            double x = Double.parseDouble(args[2]);
+                            double y = Double.parseDouble(args[3]) + 1; // Increment vertical by one to avoid falling.
+                            double z = Double.parseDouble(args[4]);
 
-                            int dimension = Integer.parseInt(args[2]);
-                            BlockPos location = new BlockPos(Double.parseDouble(args[3]), Double.parseDouble(args[4]) + 1, Double.parseDouble(args[5]));
-                            /*double x = Double.parseDouble(args[3]);
-                            double y = Double.parseDouble(args[4] + 1);
-                            double z = Double.parseDouble(args[5]);
-                            attemptTeleport(entity, dimension, x, y, z, entity.rotationYaw, entity.rotationPitch);*/
+                            // TODO: Find a way to reliably get all Nether-type worlds. Probably not a huge deal.
+                            if (((EntityPlayer) sender).dimension == -1)
+                            {
+                                logger.info("Detected a teleport coming from the Nether, fixing coordinates...");
+                                x = x / 8;
+                                z = z / 8;
+                            }
 
-                            // Dismount the player, then teleport them.
-                            TeleportUtils.teleport(entity, dimension, location);
+                            // Get the current player from our player list. Needed so we can get the serverside entity.
+                            EntityPlayerMP serverPlayer = getServerEntity(sender.getName());
+                            if (serverPlayer != null)
+                                DimensionHelper.teleport(serverPlayer, dimension, x, y, z);
+
+/*                                // Dismount the player, then teleport them. If we're on the client side, use a safer but less reliable method.
+                            if (FMLCommonHandler.instance().getSide() == Side.CLIENT)
+                                //teleport(entity, dimension, new BlockPos(x, y, z));
+                                teleport2(entity, dimension, new BlockPos(x, y, z));
+                            else
+                                DimensionHelper.teleport((EntityPlayerMP) entity, dimension, x, y, z);*/
 
                             // Tell the player what we did.
                             PrintingMethods.sendTranslation(sender, "teleport.executed");
@@ -73,50 +74,18 @@ public class Teleport extends HubCommand
                         sendErrorWithUsage(sender, "teleport.invalid_dimension");
                 }
                 else
-                    sendErrorWithUsage(sender, "teleport.invalid_player");
+                    PrintingMethods.sendTranslation(sender, "teleport.usage");
             }
             else
-                PrintingMethods.sendTranslation(sender, "teleport.usage");
+            {
+                if (FMLCommonHandler.instance().getSide() == Side.CLIENT)
+                    PrintingMethods.sendTranslation(sender, "teleport.cheats_disabled");
+                else
+                    PrintingMethods.sendTranslation(sender, "teleport.no_permissions");
+            }
         }
         else
             logger.error("This command can only be run by players.");
-    }
-
-/*
-    public EntityPlayerMP tryGetServerEntity(EntityPlayer player)
-    {
-        if(!player.world.isRemote && player instanceof EntityPlayerMP)
-        {
-            logger.warn("Passed check!");
-            return (EntityPlayerMP) player;
-        }
-        else
-        {
-            logger.error("Failed check :(");
-            return null;
-        }
-    }
-
-    public void attemptTeleport(EntityPlayer player, int dimension, double x, double y, double z, float yaw, float pitch)
-    {
-        if (player.world.isRemote)
-            DimensionHelper.forceTeleport((EntityPlayerMP) player, dimension, x, y, z, yaw, pitch);
-    }
-*/
-
-
-            // Was the provided String a valid online player?
-    private boolean isValidPlayer(String playername)
-    {
-        List<EntityPlayer> playerList = PlayerMethods.getOnlinePlayers();
-        return playerList.stream().anyMatch(s -> StringUtils.containsIgnoreCase(s.getName(), playername));
-    }
-
-    // Get a player entity from their name.
-    private Optional<EntityPlayer> getOptionalPlayerEntity(String playername)
-    {
-        List<EntityPlayer> playerList = PlayerMethods.getOnlinePlayers();
-        return playerList.stream().filter(s -> s.getName().equals(playername)).findFirst();
     }
 
     // Send an error, and then show usage.
@@ -124,5 +93,16 @@ public class Teleport extends HubCommand
     {
         PrintingMethods.sendTranslation(sender, key);
         PrintingMethods.sendTranslation(sender, "teleport.usage");
+    }
+
+    private EntityPlayerMP getServerEntity(String name)
+    {
+        for (EntityPlayer player : PlayerMethods.getOnlinePlayers())
+        {
+            if (player.getName().equals(name))
+                return (EntityPlayerMP) player;
+        }
+
+        return null;
     }
 }

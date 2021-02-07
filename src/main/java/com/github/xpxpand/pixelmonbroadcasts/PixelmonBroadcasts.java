@@ -14,7 +14,6 @@ import com.pixelmonmod.pixelmon.config.PixelmonConfig;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import info.pixelmon.repack.ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -54,6 +53,7 @@ import java.util.concurrent.TimeUnit;
 // FIXME: Biome names are always English. Maybe add to the lang, and use English biome names as keys.
 // FIXME: Similarly, Pokémon names seem to be English as well.
 // FIXME: Challenges and forfeits can be used to spam servers. Add a persistent tag to avoid repeats?
+// FIXME: Formatting codes show up in the client logs. See if we can do this more cleanly.
 
 @Mod
         (
@@ -77,7 +77,7 @@ public class PixelmonBroadcasts
     // Set up base mod info.
     static final String MOD_ID = "pixelmonbroadcasts";
     static final String MOD_NAME = "PixelmonBroadcasts";
-    static final String VERSION = "0.6-universal-t1";
+    static final String VERSION = "0.6-universal-test1";
 
     // Set up an internal variable so we can see if we loaded correctly. Slightly dirty, but it works.
     private boolean loadedCorrectly = false;
@@ -118,7 +118,7 @@ public class PixelmonBroadcasts
     {
         // Load up all the configs and figure out the info alias. Start printing. Methods may insert errors as they go.
         logger.info("");
-        logger.info("§f================= P I X E L M O N  B R O A D C A S T S =================");
+        logger.info("§f================== P I X E L M O N  B R O A D C A S T S ==================");
 
         // Load up all configuration files. Creates new configs/folders if necessary. Commit settings to memory.
         // Store whether we actually loaded things up correctly in this bool, which we can check again later.
@@ -143,30 +143,26 @@ public class PixelmonBroadcasts
             logger.info("§f--> §aRegistering listeners with Forge...");
             MinecraftForge.EVENT_BUS.register(new DeathCloneListener());
 
-            // (re-)register the main command and alias. Use the result we get back to see if everything worked.
-            logger.info("§f--> §aPre-init completed. All systems nominal.");
+            // Register the main command and alias.
+            logger.info("§f--> §aPre-init completed.");
         }
         else
             logger.info("§f--> §cLoad aborted due to critical errors. Mod is not running!");
 
         // We're done, one way or another. Add a footer, and a space to avoid clutter with other marginal'd mods.
-        logger.info("§f========================================================================");
+        logger.info("§f==========================================================================");
         logger.info("");
     }
 
     @Mod.EventHandler
-    public void onFMLInitEvent(FMLInitializationEvent event)
+    public void onServerStartingEvent(FMLServerStartingEvent event)
     {
         if (loadedCorrectly)
         {
-/*            // Is PixelmonOverlay loaded? If so, do setup. If not, use our own fallback implementation.
-            if (Sponge.getPluginManager().isLoaded("pixelmonoverlay"))
-            {
-                logger.info("§aDetected Pixelmon Overlay, we'll use that for noticeboard messages.");
-                PixelmonOverlayBridge.setup(this);
-            }
-            else
-            {*/
+            logger.info("");
+            logger.info("§f================== P I X E L M O N  B R O A D C A S T S ==================");
+            logger.info("§f--> §aSetting up a timer for Pixelmon's noticeboard...");
+
             // Set up a repeating task. It checks if any players need their notices wiped. (happens every 10-12s)
             Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(() ->
             {
@@ -192,21 +188,30 @@ public class PixelmonBroadcasts
                 });
             }, 0, 2, TimeUnit.SECONDS);
 
+            // Register commands.
+            logger.info("§f--> §aRegistering commands with Forge...");
+            HubCommand hubCommand = new HubCommand();
+            hubCommand.addSubcommand(new Reload());
+            hubCommand.addSubcommand(new Teleport());
+            hubCommand.addSubcommand(new Toggle());
+            event.registerServerCommand(hubCommand);
+
+            // Show that we're ready to go!
+            logger.info("§f--> §aInit completed. All systems nominal.");
+
             // Check Pixelmon's config and get whether the legendary spawning message is enabled there.
             final String statusNode = PixelmonConfig.getConfig().getNode("Spawning", "displayLegendaryGlobalMessage").getString();
-            final Boolean configStatus = BooleanUtils.toBooleanObject(statusNode);
+            final Boolean configLoadedAndReady = BooleanUtils.toBooleanObject(statusNode);
 
-            // Is the config setting we're reading available, /and/ is the setting turned on? Complain!
-            if (configStatus != null && configStatus)
+            // Is the config setting we're reading available, /and/ is the setting turned on? Append complaints!
+            if (configLoadedAndReady != null && configLoadedAndReady)
             {
                 // Complaining, commence.
                 logger.info("");
-                logger.info("§f================= P I X E L M O N  B R O A D C A S T S =================");
+                logger.info("");
                 logger.info("§f--> §ePixelmon's \"§6displayLegendaryGlobalMessage§e\" setting is enabled.");
                 logger.info("§e    This setting conflicts with Broadcasts, and will now be turned off.");
-                logger.info("§e    If you remove this mod at any point, be sure to turn this back on!");
-                logger.info("§f========================================================================");
-                logger.info("");
+                logger.info("§e    If you remove the mod at any point, be sure to turn this back on!");
 
                 // Flip the setting in Pixelmon's config and save changes.
                 PixelmonConfig.doLegendaryEvent = false;
@@ -219,9 +224,8 @@ public class PixelmonBroadcasts
                 {
                     // More complaining, commence.
                     logger.info("");
-                    logger.info("§f================= P I X E L M O N  B R O A D C A S T S =================");
-                    logger.info("§f--> §eWelcome to the 0.5 update! There's some new stuff to configure.");
-                    logger.info("§f--> §eTo finish updating, do the following:");
+                    logger.info("");
+                    logger.info("§f--> §eWelcome to the 0.6 update! To finish updating, do the following:");
                     logger.info("§6    1. §eMove any customized PBR configs somewhere safe, if present.");
                     logger.info("§6    2. §eDelete the \"PixelmonBroadcasts\" config folder.");
                     logger.info("§6    3. §eUse \"/pixelmonbroadcasts reload\". This creates new files.");
@@ -230,27 +234,22 @@ public class PixelmonBroadcasts
                     logger.info("§6    4. §eCopy new boss lines into the old files, and move them back in.");
                     logger.info("§6    5. §eIf using an old settings file, set \"configVersion\" to \"50\".");
                     logger.info("");
-                    logger.info("§6    §eReport any bugs here: https://github.com/xPXpanD/PixelmonBroadcasts");
-                    logger.info("§f========================================================================");
-                    logger.info("");
+                    logger.info("§e    Report any bugs here: https://github.com/xPXpanD/PixelmonBroadcasts");
                 }
                 else if (configVersion < 60)
                 {
                     logger.info("");
-                    logger.info("§f================= P I X E L M O N  B R O A D C A S T S =================");
-                    logger.info("§f--> §eWelcome to the 0.6 update! There's some new stuff to configure.");
-                    logger.info("§f--> §eTo finish updating, do the following:");
+                    logger.info("");
+                    logger.info("§f--> §eWelcome to the 0.6 update! To finish updating, do the following:");
                     logger.info("§6    1. §eMove PBR's message config somewhere safe, if present.");
                     logger.info("§6    2. §eEnsure there's no longer a \"messages.conf\" in the config folder.");
                     logger.info("§6    3. §eUse \"/pixelmonbroadcasts reload\". This creates a new file.");
                     logger.info("§6    4. §eCopy back any old tweaks carefully.");
                     logger.info("§6       --- OR ---");
                     logger.info("§6    4. §eCopy new teleport lines into the old file, and move it back in.");
-                    logger.info("§f--> §eIf using an old settings file, set \"configVersion\" to \"60\"!");
+                    logger.info("§e    If using an old settings file, set \"configVersion\" to \"60\"!");
                     logger.info("");
-                    logger.info("§6    §eReport any bugs here: https://github.com/xPXpanD/PixelmonBroadcasts");
-                    logger.info("§f========================================================================");
-                    logger.info("");
+                    logger.info("§e    Report any bugs here: https://github.com/xPXpanD/PixelmonBroadcasts");
                 }
 
                 // TODO: Get this working without it squashing the whole config down.
@@ -266,23 +265,9 @@ public class PixelmonBroadcasts
                     F.printStackTrace();
                 }*/
             }
+
+            logger.info("§f==========================================================================");
+            logger.info("");
         }
-    }
-
-    @Mod.EventHandler
-    public void onServerStartedEvent(FMLServerStartingEvent event)
-    {
-        HubCommand hubCommand = new HubCommand();
-        hubCommand.addSubcommand(new Reload());
-        hubCommand.addSubcommand(new Teleport());
-        hubCommand.addSubcommand(new Toggle());
-        event.registerServerCommand(hubCommand);
-
-/*        event.registerServerCommand(new Reload());
-        event.registerServerCommand(new Teleport());
-        event.registerServerCommand(new Toggle());*/
-
-        /*PermissionAPI.registerNode("pixelmonbroadcasts.command.staff.reload", DefaultPermissionLevel.OP,
-                "Allows reloading Pixelmon Broadcasts' configs via /pixelmonbroadcasts reload.");*/
     }
 }
