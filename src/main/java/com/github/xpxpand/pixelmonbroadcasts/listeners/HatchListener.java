@@ -26,10 +26,10 @@ public class HatchListener
             final String baseName = event.pokemon.getSpecies().getPokemonName();
             final String localizedName = event.pokemon.getSpecies().getLocalizedName();
             final String worldName = player.getEntityWorld().getWorldInfo().getWorldName();
+            final String enumString = PrintingMethods.getEnumType(event.pokemon);
 
             // If we're in a localized setup, log both names.
-            final String nameString =
-                    baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
+            final String nameString = baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
 
             if (EnumSpecies.legendaries.contains(baseName))
             {
@@ -81,7 +81,7 @@ public class HatchListener
             {
                 // Send a log message if we're set up to do logging for this event.
                 PrintingMethods.logEvent(EventData.Hatches.SHINY,
-                        worldName, location, player.getName(), "shiny " + nameString + " egg");
+                        worldName, location, player.getName(), "shiny " + enumString + nameString + " egg");
 
                 // Send enabled broadcasts to people who should receive them.
                 PlaceholderMethods.iterateAndBroadcast(EventData.Hatches.SHINY,
@@ -91,7 +91,7 @@ public class HatchListener
             {
                 // Send a log message if we're set up to do logging for this event.
                 PrintingMethods.logEvent(EventData.Hatches.NORMAL,
-                        worldName, location, player.getName(), nameString + " egg");
+                        worldName, location, player.getName(), enumString + nameString + " egg");
 
                 // Send enabled broadcasts to people who should receive them.
                 PlaceholderMethods.iterateAndBroadcast(EventData.Hatches.NORMAL,

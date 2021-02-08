@@ -34,6 +34,7 @@ public class CatchListener
                 final String baseName = pokemonEntity.getSpecies().getPokemonName();
                 final String localizedName = pokemonEntity.getSpecies().getLocalizedName();
                 final String worldName = player.world.getWorldInfo().getWorldName();
+                final String enumString = PrintingMethods.getEnumType(pokemonEntity);
 
                 // Sets the position of the entity we created, as entity coordinates get real weird in this event. Dunno why.
                 pokemonEntity.setPosition(location.getX(), location.getY(), location.getZ());
@@ -91,7 +92,7 @@ public class CatchListener
                 {
                     // Send a log message if we're set up to do logging for this event.
                     PrintingMethods.logEvent(EventData.Catches.SHINY,
-                            worldName, location, player.getName(), "shiny " + nameString);
+                            worldName, location, player.getName(), "shiny " + enumString + nameString);
 
                     // Send enabled broadcasts to people who should receive them.
                     PlaceholderMethods.iterateAndBroadcast(EventData.Catches.SHINY,
@@ -101,7 +102,7 @@ public class CatchListener
                 {
                     // Send a log message if we're set up to do logging for this event.
                     PrintingMethods.logEvent(EventData.Catches.NORMAL,
-                            worldName, location, player.getName(), nameString);
+                            worldName, location, player.getName(), enumString + nameString);
 
                     // Send enabled broadcasts to people who should receive them.
                     PlaceholderMethods.iterateAndBroadcast(EventData.Catches.NORMAL,

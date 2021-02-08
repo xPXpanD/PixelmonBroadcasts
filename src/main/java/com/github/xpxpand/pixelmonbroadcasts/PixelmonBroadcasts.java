@@ -50,11 +50,11 @@ import java.util.concurrent.TimeUnit;
 // TODO: See what we can do with custom textures.
 // TODO: Cache calculated results instead of pulling and processing them from the cached config every time.
 // TODO: Possibly start gathering people's lang setups once 1.0 rolls around. Mostly for single player.
+// TODO: Move some of the repeat variables used in listeners over to a helper method with getters.
 // FIXME: Biome names are always English. Maybe add to the lang, and use English biome names as keys.
 // FIXME: Similarly, Pokémon names seem to be English as well.
 // FIXME: Challenges and forfeits can be used to spam servers. Add a persistent tag to avoid repeats?
 // FIXME: Formatting codes show up in the client logs. See if we can do this more cleanly.
-// FIXME: Legendaries can apparently show up Mega even if not a boss. Check. Latias/Lation at beaches may be easiest.
 
 @Mod
         (
@@ -78,7 +78,7 @@ public class PixelmonBroadcasts
     // Set up base mod info.
     static final String MOD_ID = "pixelmonbroadcasts";
     static final String MOD_NAME = "PixelmonBroadcasts";
-    static final String VERSION = "0.6-universal-test1";
+    static final String VERSION = "0.6-universal-test2";
 
     // Set up an internal variable so we can see if we loaded correctly. Slightly dirty, but it works.
     private boolean loadedCorrectly = false;

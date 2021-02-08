@@ -2,6 +2,7 @@
 package com.github.xpxpand.pixelmonbroadcasts.listeners;
 
 import com.github.xpxpand.pixelmonbroadcasts.utilities.PlaceholderMethods;
+import com.github.xpxpand.pixelmonbroadcasts.utilities.PrintingMethods;
 import com.pixelmonmod.pixelmon.api.events.spawning.SpawnEvent;
 import com.pixelmonmod.pixelmon.entities.EntityWormhole;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
@@ -54,6 +55,7 @@ public class SpawnListener
                     final String baseName = pokemonEntity.getPokemonName();
                     final String localizedName = pokemonEntity.getLocalizedName();
                     final BlockPos location = event.action.spawnLocation.location.pos;
+                    final String enumString = PrintingMethods.getEnumType(pokemonEntity);
 
                     // Sets the position of the entity we created, as it's 0 on all coordinates by default.
                     pokemonEntity.setPosition(location.getX(), location.getY(), location.getZ());
@@ -69,7 +71,7 @@ public class SpawnListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 logEvent(EventData.Spawns.ULTIMATE_BOSS,
-                                        worldName, location, "boss " + nameString + " (Ultimate)");
+                                        worldName, location, enumString + "boss " + nameString + " (Ultimate)");
 
                                 // Send enabled broadcasts to people who should receive them.
                                 PlaceholderMethods.iterateAndBroadcast(EventData.Spawns.ULTIMATE_BOSS,
@@ -81,7 +83,7 @@ public class SpawnListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 logEvent(EventData.Spawns.LEGENDARY_BOSS,
-                                        worldName, location, "boss " + nameString + " (Legendary)");
+                                        worldName, location, enumString + "boss " + nameString + " (Legendary)");
 
                                 // Send enabled broadcasts to people who should receive them.
                                 PlaceholderMethods.iterateAndBroadcast(EventData.Spawns.LEGENDARY_BOSS,
@@ -93,7 +95,7 @@ public class SpawnListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 logEvent(EventData.Spawns.RARE_BOSS,
-                                        worldName, location, "boss " + nameString + " (Rare)");
+                                        worldName, location, enumString + "boss " + nameString + " (Rare)");
 
                                 // Send enabled broadcasts to people who should receive them.
                                 PlaceholderMethods.iterateAndBroadcast(EventData.Spawns.RARE_BOSS,
@@ -105,7 +107,7 @@ public class SpawnListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 logEvent(EventData.Spawns.UNCOMMON_BOSS,
-                                        worldName, location, "generic boss " + nameString);
+                                        worldName, location, enumString + "boss " + nameString + " (Uncommon)");
 
                                 // Send enabled broadcasts to people who should receive them.
                                 PlaceholderMethods.iterateAndBroadcast(EventData.Spawns.UNCOMMON_BOSS,
@@ -164,7 +166,7 @@ public class SpawnListener
                     {
                         // Send a log message if we're set up to do logging for this event.
                         logEvent(EventData.Spawns.SHINY,
-                                worldName, location, "shiny " + nameString);
+                                worldName, location, "shiny " + enumString + nameString);
 
                         // Send enabled broadcasts to people who should receive them.
                         PlaceholderMethods.iterateAndBroadcast(EventData.Spawns.SHINY,

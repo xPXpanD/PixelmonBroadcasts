@@ -10,8 +10,8 @@ import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.IVStore;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.StatsType;
 import com.pixelmonmod.pixelmon.enums.EnumGrowth;
-import com.pixelmonmod.pixelmon.enums.EnumMegaPokemon;
 import com.pixelmonmod.pixelmon.enums.EnumNature;
+import com.pixelmonmod.pixelmon.enums.forms.EnumMega;
 import com.pixelmonmod.pixelmon.enums.forms.RegionalForms;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -313,7 +313,7 @@ public class PlaceholderMethods
             // Insert the Pokémon's name.
             if (broadcast.toLowerCase().contains("%pokemon%"))
             {
-                // First see if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
+                // Check what the Pokémon is. Be extra careful to not spoil stuff if it's an egg.
                 // FIXME: Could do with an option, or a cleaner way to make this all work.
                 final String pokemonName;
                 if (pokemon.isEgg())
@@ -322,22 +322,10 @@ public class PlaceholderMethods
                     pokemonName = PrintingMethods.getTranslation("insert.alolan") + pokemon.getSpecies().getLocalizedName();
                 else if (pokemon.getFormEnum() == RegionalForms.GALARIAN)
                     pokemonName = PrintingMethods.getTranslation("insert.galarian") + pokemon.getSpecies().getLocalizedName();
+                else if (pokemon.getFormEnum() instanceof EnumMega && pokemon.getFormEnum() != EnumMega.Normal)
+                    pokemonName = PrintingMethods.getTranslation("insert.mega") + pokemon.getSpecies().getLocalizedName();
                 else
-                {
-                    boolean isMega = false;
-                    try
-                    {
-                        // Is there a Mega form for this Pokémon?
-                        if (EnumMegaPokemon.getMega(pokemon.getSpecies()).numMegaForms > 0)
-                            isMega = true;
-                    }
-                    catch(Exception ignored){}
-
-                    if (isMega)
-                        pokemonName = PrintingMethods.getTranslation("insert.mega") + pokemon.getSpecies().getLocalizedName();
-                    else
-                        pokemonName = pokemon.getSpecies().getLocalizedName();
-                }
+                    pokemonName = pokemon.getSpecies().getLocalizedName();
 
                 // Proceed with insertion.
                 broadcast = broadcast.replaceAll("(?i)%pokemon%", pokemonName);
@@ -406,7 +394,7 @@ public class PlaceholderMethods
                 // Insert the Pokémon's name.
                 if (broadcast.toLowerCase().contains("%pokemon2%"))
                 {
-                    // First see if the Pokémon is an egg. If it is, be extra careful and don't spoil the name.
+                    // Check what the Pokémon is. Be extra careful to not spoil stuff if it's an egg.
                     // FIXME: Could do with an option, or a cleaner way to make this all work.
                     final String pokemon2Name;
                     if (pokemon2.isEgg())
@@ -415,23 +403,10 @@ public class PlaceholderMethods
                         pokemon2Name = PrintingMethods.getTranslation("insert.alolan") + pokemon2.getSpecies().getLocalizedName();
                     else if (pokemon2.getFormEnum() == RegionalForms.GALARIAN)
                         pokemon2Name = PrintingMethods.getTranslation("insert.galarian") + pokemon2.getSpecies().getLocalizedName();
+                    else if (pokemon2.getFormEnum() instanceof EnumMega && pokemon2.getFormEnum() != EnumMega.Normal)
+                        pokemon2Name = PrintingMethods.getTranslation("insert.mega") + pokemon2.getSpecies().getLocalizedName();
                     else
-                    {
-                        // Most Pokémon don't have Mega forms, so check in a try/catch block and store the result.
-                        boolean isMega = false;
-                        try
-                        {
-                            // Is there a Mega form for this Pokémon? Pixelmon seems to always spawn as Mega if available.
-                            if (EnumMegaPokemon.getMega(pokemon2.getSpecies()).numMegaForms > 0)
-                                isMega = true;
-                        }
-                        catch(Exception ignored){}
-
-                        if (isMega)
-                            pokemon2Name = PrintingMethods.getTranslation("insert.mega") + pokemon2.getSpecies().getLocalizedName();
-                        else
-                            pokemon2Name = pokemon2.getSpecies().getLocalizedName();
-                    }
+                        pokemon2Name = pokemon2.getSpecies().getLocalizedName();
 
                     // Proceed with insertion.
                     broadcast = broadcast.replaceAll("(?i)%pokemon2%", pokemon2Name);

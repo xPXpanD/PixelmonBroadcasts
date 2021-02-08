@@ -1,6 +1,10 @@
 package com.github.xpxpand.pixelmonbroadcasts.utilities;
 
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.StatsType;
+import com.pixelmonmod.pixelmon.enums.forms.EnumMega;
+import com.pixelmonmod.pixelmon.enums.forms.RegionalForms;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -210,5 +214,30 @@ public class PrintingMethods
             default:
                 return getTranslation("hover.status.none");
         }
+    }
+
+    // Gets a translated key to add in front of a log message if we have a regional or mega Pokémon.
+    // FIXME: "A Alolan". May not be worth fixing with localization in mind, can't hardcode something in.
+    public static String getEnumType(final EntityPixelmon entity)
+    {
+        if (entity.getFormEnum() == RegionalForms.ALOLAN)
+            return PrintingMethods.getTranslation("insert.alolan");
+        else if (entity.getFormEnum() == RegionalForms.GALARIAN)
+            return PrintingMethods.getTranslation("insert.galarian");
+        else if (entity.getFormEnum() instanceof EnumMega && entity.getFormEnum() != EnumMega.Normal)
+            return PrintingMethods.getTranslation("insert.mega");
+        else
+            return "";
+    }
+    public static String getEnumType(final Pokemon pokemon)
+    {
+        if (pokemon.getFormEnum() == RegionalForms.ALOLAN)
+            return PrintingMethods.getTranslation("insert.alolan");
+        else if (pokemon.getFormEnum() == RegionalForms.GALARIAN)
+            return PrintingMethods.getTranslation("insert.galarian");
+        else if (pokemon.getFormEnum() instanceof EnumMega && pokemon.getFormEnum() != EnumMega.Normal)
+            return PrintingMethods.getTranslation("insert.mega");
+        else
+            return "";
     }
 }

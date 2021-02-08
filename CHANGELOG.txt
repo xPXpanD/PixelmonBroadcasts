@@ -1,10 +1,11 @@
-0.6 for 8.1.2
+0.6 test 2 for 8.1.2
 Released February 8th, 2021.
 
     Additions:
     * Moved everything to pure Forge! Broadcasts now runs anywhere that supports Forge mods.
     * Added support for single player use! As always, let me know if stuff breaks.
     * When in single player, you get a lighter settings file by default with multiplayer fluff turned off.
+    * Logging now shows whether a Pokémon is/was Alolan, Galarian or mega-evolved.
 
     Changes:
     * (temporarily?) Removed integration with the Pixelmon Overlay plugin, as it requires Sponge.
@@ -13,11 +14,14 @@ Released February 8th, 2021.
 
     Message file additions and changes:
     * Combined all non-teleport "no_permissions" messages into "universal.no_permissions".
-    * Removed "action." from the teleport nodes as it's now a command. (no Sponge callbacks)
+    * Removed "action." from the teleport nodes as it's now a command. (no more Sponge callbacks)
     * Added a few new teleport command errors for the different failure modes.
 
     Broadcasts file additions and changes:
     * Reworded the non-shiny Ultra Beast and Legendary egg hatch broadcasts to avoid "a"/"an" issues.
+
+    Fixes:
+    * Fixed Pokémon that could be a mega form always showing up as such, even if they weren't.
 
 0.5 for 8.1.2
 Released February 3rd, 2021.
@@ -34,7 +38,7 @@ Released February 3rd, 2021.
 
     Message file additions and changes:
     * Added toggles for the different boss types.
-    * Added a new placeholder for showing Mega status in broadcasts: insert.mega = "Mega "
+    * Added a new placeholder for showing mega status in broadcasts: insert.mega = "Mega "
     * Added a new placeholder for showing Alolan forms in broadcasts: insert.alolan = "Alolan "
     * Added a new placeholder for showing Galarian forms in broadcasts: insert.galarian = "Galarian "
     * Changed the generic boss toggle's text from "boss" to "any boss". (forfeits use this)

@@ -1,6 +1,7 @@
 // Listens for successful Pokémon trades.
 package com.github.xpxpand.pixelmonbroadcasts.listeners;
 
+import com.github.xpxpand.pixelmonbroadcasts.utilities.PrintingMethods;
 import com.pixelmonmod.pixelmon.api.events.PixelmonTradeEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -27,11 +28,13 @@ public class TradeListener
                 final String pokemon1ShinyStatus = event.pokemon1.isShiny() ? "shiny " : "normal ";
                 final String pokemon2ShinyStatus = event.pokemon2.isShiny() ? "shiny " : "normal ";
 
-                // Set up variables for cleanly checking whether we're in a localized setup.
+                // Set up variables for handling localization.
                 final String baseName1 = event.pokemon1.getSpecies().getPokemonName();
                 final String baseName2 = event.pokemon2.getSpecies().getPokemonName();
                 final String localizedName1 = event.pokemon1.getSpecies().getLocalizedName();
                 final String localizedName2 = event.pokemon2.getSpecies().getLocalizedName();
+                final String enumString1 = PrintingMethods.getEnumType(event.pokemon1);
+                final String enumString2 = PrintingMethods.getEnumType(event.pokemon2);
 
                 // If we're in a localized setup, log both names.
                 final String name1String =
@@ -44,9 +47,9 @@ public class TradeListener
                 (
                         "§" + EventData.Others.TRADE.color() +
                         "Player " + event.player1.getName() +
-                        " has traded a " + pokemon1ShinyStatus + name1String +
+                        " has traded a " + pokemon1ShinyStatus + enumString1 + name1String +
                         " for " + event.player2.getName() +
-                        "'s " + pokemon2ShinyStatus + name2String
+                        "'s " + pokemon2ShinyStatus + enumString2 + name2String
                 );
             }
 

@@ -34,13 +34,14 @@ public class PokemonFaintListener
                         // Create more shorthand variables for convenience.
                         final String baseName = event.pokemon.getPokemonName();
                         final String localizedName = event.pokemon.getLocalizedName();
+                        final String enumString = PrintingMethods.getEnumType(event.pokemon);
 
                         // If we're in a localized setup, format a string for logging both names.
                         final String nameString = baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
 
                         // Send a log message if we're set up to do logging for this event.
                         PrintingMethods.logEvent(EventData.Others.FAINT, player.getEntityWorld().getWorldInfo().getWorldName(),
-                                player.getPosition(), player.getName(), nameString);
+                                player.getPosition(), player.getName(), enumString + nameString);
 
                         // Send enabled broadcasts to people who should receive them.
                         PlaceholderMethods.iterateAndBroadcast(EventData.Others.FAINT, event.pokemon, null, player, null);

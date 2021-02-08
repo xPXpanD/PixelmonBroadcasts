@@ -123,10 +123,10 @@ public class BattleStartListener
                         final String localizedName = pokemonEntity.getLocalizedName();
                         final String worldName = participant1.getWorld().getWorldInfo().getWorldName();
                         final BlockPos location = pokemon.getEntity().getPosition();
+                        final String enumString = PrintingMethods.getEnumType(pokemonEntity);
 
                         // If we're in a localized setup, log both names.
-                        final String nameString =
-                                baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
+                        final String nameString = baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
 
                         // Figure out what our Pokémon is, exactly.
                         if (pokemonEntity.isBossPokemon())
@@ -137,7 +137,7 @@ public class BattleStartListener
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     PrintingMethods.logEvent(EventData.Challenges.ULTIMATE_BOSS, worldName, location,
-                                            playerEntity.getName(), "boss " + nameString + " (Ultimate)");
+                                            playerEntity.getName(), enumString + "boss " + nameString + " (Ultimate)");
 
                                     // Send enabled broadcasts to people who should receive them.
                                     PlaceholderMethods.iterateAndBroadcast(EventData.Challenges.ULTIMATE_BOSS,
@@ -149,7 +149,7 @@ public class BattleStartListener
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     PrintingMethods.logEvent(EventData.Challenges.LEGENDARY_BOSS, worldName, location,
-                                            playerEntity.getName(), "boss " + nameString + " (Legendary)");
+                                            playerEntity.getName(), enumString + "boss " + nameString + " (Legendary)");
 
                                     // Send enabled broadcasts to people who should receive them.
                                     PlaceholderMethods.iterateAndBroadcast(EventData.Challenges.LEGENDARY_BOSS,
@@ -161,7 +161,7 @@ public class BattleStartListener
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     PrintingMethods.logEvent(EventData.Challenges.RARE_BOSS, worldName, location,
-                                            playerEntity.getName(), "boss " + nameString + " (Rare)");
+                                            playerEntity.getName(), enumString + "boss " + nameString + " (Rare)");
 
                                     // Send enabled broadcasts to people who should receive them.
                                     PlaceholderMethods.iterateAndBroadcast(EventData.Challenges.RARE_BOSS,
@@ -173,7 +173,7 @@ public class BattleStartListener
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     PrintingMethods.logEvent(EventData.Challenges.UNCOMMON_BOSS,worldName, location,
-                                            playerEntity.getName(), "generic boss " + nameString);
+                                            playerEntity.getName(), enumString + "boss " + nameString + " (Uncommon)");
 
                                     // Send enabled broadcasts to people who should receive them.
                                     PlaceholderMethods.iterateAndBroadcast(EventData.Challenges.UNCOMMON_BOSS,
@@ -231,7 +231,7 @@ public class BattleStartListener
                         {
                             // Send a log message if we're set up to do logging for this event.
                             PrintingMethods.logEvent(EventData.Challenges.SHINY,
-                                    worldName, location, playerEntity.getName(), "shiny " + nameString);
+                                    worldName, location, playerEntity.getName(), "shiny " + enumString + nameString);
 
                             // Send enabled broadcasts to people who should receive them.
                             PlaceholderMethods.iterateAndBroadcast(EventData.Challenges.SHINY,

@@ -177,10 +177,10 @@ public class BattleEndListener
                         final EntityPixelmon pokemonEntity = (EntityPixelmon) opponent.getEntity();
 
                         // Set up localization stuff for localized setups.
-                        final String baseName = pokemonEntity.getPokemonName();
-                        final String localizedName = pokemonEntity.getLocalizedName();
-                        final String nameString =
-                                baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
+                        final String baseName = pokemonEntity.getPokemonName(), localizedName = pokemonEntity.getLocalizedName();
+                        final String nameString = baseName.equals(localizedName) ? baseName : baseName + " (" + localizedName + ")";
+                        final String enumString = PrintingMethods.getEnumType(pokemonEntity);
+
 
                         // Did our player flee from the Pokémon?
                         if (event.cause == EnumBattleEndCause.FLEE)
@@ -190,7 +190,7 @@ public class BattleEndListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 PrintingMethods.logEvent(EventData.Forfeits.BOSS, worldName, playerEntity.getPosition(),
-                                        playerEntity.getName(), "boss " + nameString);
+                                        playerEntity.getName(), enumString + "boss " + nameString);
 
                                 // Send enabled broadcasts to people who should receive them.
                                 PlaceholderMethods.iterateAndBroadcast(EventData.Forfeits.BOSS,
@@ -246,7 +246,7 @@ public class BattleEndListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 PrintingMethods.logEvent(EventData.Forfeits.SHINY, worldName, playerEntity.getPosition(),
-                                        playerEntity.getName(), "shiny " + nameString);
+                                        playerEntity.getName(), "shiny " + enumString + nameString);
 
                                 // Send enabled broadcasts to people who should receive them.
                                 PlaceholderMethods.iterateAndBroadcast(EventData.Forfeits.SHINY,
@@ -264,7 +264,7 @@ public class BattleEndListener
                                     {
                                         // Send a log message if we're set up to do logging for this event.
                                         PrintingMethods.logEvent(EventData.Victories.ULTIMATE_BOSS, worldName, playerEntity.getPosition(),
-                                                playerEntity.getName(), "boss " + nameString + " (Ultimate)");
+                                                playerEntity.getName(), enumString + "boss " + nameString + " (Ultimate)");
 
                                         // Send enabled broadcasts to people who should receive them.
                                         PlaceholderMethods.iterateAndBroadcast(EventData.Victories.ULTIMATE_BOSS,
@@ -276,7 +276,7 @@ public class BattleEndListener
                                     {
                                         // Send a log message if we're set up to do logging for this event.
                                         PrintingMethods.logEvent(EventData.Victories.LEGENDARY_BOSS, worldName, playerEntity.getPosition(),
-                                                playerEntity.getName(), "boss " + nameString + " (Legendary)");
+                                                playerEntity.getName(), enumString + "boss " + nameString + " (Legendary)");
 
                                         // Send enabled broadcasts to people who should receive them.
                                         PlaceholderMethods.iterateAndBroadcast(EventData.Victories.LEGENDARY_BOSS,
@@ -288,7 +288,7 @@ public class BattleEndListener
                                     {
                                         // Send a log message if we're set up to do logging for this event.
                                         PrintingMethods.logEvent(EventData.Victories.RARE_BOSS, worldName, playerEntity.getPosition(),
-                                                playerEntity.getName(), "boss " + nameString + " (Rare)");
+                                                playerEntity.getName(), enumString + "boss " + nameString + " (Rare)");
 
                                         // Send enabled broadcasts to people who should receive them.
                                         PlaceholderMethods.iterateAndBroadcast(EventData.Victories.RARE_BOSS,
@@ -300,7 +300,7 @@ public class BattleEndListener
                                     {
                                         // Send a log message if we're set up to do logging for this event.
                                         PrintingMethods.logEvent(EventData.Victories.UNCOMMON_BOSS,worldName, playerEntity.getPosition(),
-                                                playerEntity.getName(), "generic boss " + nameString);
+                                                playerEntity.getName(), enumString + "boss " + nameString + " (Uncommon)");
 
                                         // Send enabled broadcasts to people who should receive them.
                                         PlaceholderMethods.iterateAndBroadcast(EventData.Victories.UNCOMMON_BOSS,
@@ -358,7 +358,7 @@ public class BattleEndListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 PrintingMethods.logEvent(EventData.Victories.SHINY, worldName, playerEntity.getPosition(),
-                                        playerEntity.getName(), "shiny " + nameString);
+                                        playerEntity.getName(), "shiny " + enumString + nameString);
 
                                 // Send enabled broadcasts to people who should receive them.
                                 PlaceholderMethods.iterateAndBroadcast(EventData.Victories.SHINY,
@@ -377,7 +377,7 @@ public class BattleEndListener
                                     {
                                         // Send a log message if we're set up to do logging for this event.
                                         PrintingMethods.logEvent(EventData.Blackouts.ULTIMATE_BOSS, worldName, playerEntity.getPosition(),
-                                                playerEntity.getName(), "boss " + nameString + " (Ultimate)");
+                                                playerEntity.getName(), enumString + "boss " + nameString + " (Ultimate)");
 
                                         // Send enabled broadcasts to people who should receive them.
                                         PlaceholderMethods.iterateAndBroadcast(EventData.Blackouts.ULTIMATE_BOSS,
@@ -389,7 +389,7 @@ public class BattleEndListener
                                     {
                                         // Send a log message if we're set up to do logging for this event.
                                         PrintingMethods.logEvent(EventData.Blackouts.LEGENDARY_BOSS, worldName, playerEntity.getPosition(),
-                                                playerEntity.getName(), "boss " + nameString + " (Legendary)");
+                                                playerEntity.getName(), enumString + "boss " + nameString + " (Legendary)");
 
                                         // Send enabled broadcasts to people who should receive them.
                                         PlaceholderMethods.iterateAndBroadcast(EventData.Blackouts.LEGENDARY_BOSS,
@@ -401,7 +401,7 @@ public class BattleEndListener
                                     {
                                         // Send a log message if we're set up to do logging for this event.
                                         PrintingMethods.logEvent(EventData.Blackouts.RARE_BOSS, worldName, playerEntity.getPosition(),
-                                                playerEntity.getName(), "boss " + nameString + " (Rare)");
+                                                playerEntity.getName(), enumString + "boss " + nameString + " (Rare)");
 
                                         // Send enabled broadcasts to people who should receive them.
                                         PlaceholderMethods.iterateAndBroadcast(EventData.Blackouts.RARE_BOSS,
@@ -413,7 +413,7 @@ public class BattleEndListener
                                     {
                                         // Send a log message if we're set up to do logging for this event.
                                         PrintingMethods.logEvent(EventData.Blackouts.UNCOMMON_BOSS,worldName, playerEntity.getPosition(),
-                                                playerEntity.getName(), "generic boss " + nameString);
+                                                playerEntity.getName(), enumString + "boss " + nameString + " (Uncommon)");
 
                                         // Send enabled broadcasts to people who should receive them.
                                         PlaceholderMethods.iterateAndBroadcast(EventData.Blackouts.UNCOMMON_BOSS,
@@ -471,7 +471,7 @@ public class BattleEndListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 PrintingMethods.logEvent(EventData.Blackouts.SHINY, worldName, playerEntity.getPosition(),
-                                        playerEntity.getName(), "shiny " + nameString);
+                                        playerEntity.getName(), "shiny " + enumString + nameString);
 
                                 // Send enabled broadcasts to people who should receive them.
                                 PlaceholderMethods.iterateAndBroadcast(EventData.Blackouts.SHINY,
@@ -481,7 +481,7 @@ public class BattleEndListener
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 PrintingMethods.logEvent(EventData.Blackouts.NORMAL, worldName, playerEntity.getPosition(),
-                                        playerEntity.getName(), nameString);
+                                        playerEntity.getName(), enumString + nameString);
 
                                 // Send enabled broadcasts to people who should receive them.
                                 PlaceholderMethods.iterateAndBroadcast(EventData.Blackouts.NORMAL,
