@@ -54,6 +54,7 @@ import java.util.concurrent.TimeUnit;
 // FIXME: Similarly, Pokémon names seem to be English as well.
 // FIXME: Challenges and forfeits can be used to spam servers. Add a persistent tag to avoid repeats?
 // FIXME: Formatting codes show up in the client logs. See if we can do this more cleanly.
+// FIXME: Legendaries can apparently show up Mega even if not a boss. Check. Latias/Lation at beaches may be easiest.
 
 @Mod
         (

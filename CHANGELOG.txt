@@ -13,7 +13,7 @@ Released February 8th, 2021.
 
     Message file additions and changes:
     * Combined all non-teleport "no_permissions" messages into "universal.no_permissions".
-    * Renamed "action.teleport" into just "teleport" as we now need to use a command. (no Sponge callbacks)
+    * Removed "action." from the teleport nodes as it's now a command. (no Sponge callbacks)
     * Added a few new teleport command errors for the different failure modes.
 
     Broadcasts file additions and changes:
