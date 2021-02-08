@@ -21,10 +21,10 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Versions**
- - Pixelmon Broadcasts version: [e.g. 0.2.1]
- - Pixelmon version: [e.g. Reforged 6.3.2]
- - Forge version: [e.g. 2705]
- - SpongeForge version: [e.g. 3206]
+ - Pixelmon Broadcasts version: [e.g. 0.6]
+ - Pixelmon version: [e.g. Reforged 8.1.2]
+ - Forge version: [e.g. 2854]
+ - Plugin platform name/version: [e.g. SpongeForge 7.3.0]
 
 **Additional context**
 Add any other context about the problem here.
