@@ -57,6 +57,7 @@ public class HubCommand extends CommandTreeBase
     @Override
     public List<String> getAliases() { return Collections.singletonList(commandAlias); }
 
+    // Ensures this command can always run. Except for on Magma/Mohist, they do weird things and need a perm anyways?
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) { return true; }
 

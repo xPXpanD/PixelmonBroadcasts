@@ -78,7 +78,7 @@ public class PixelmonBroadcasts
     // Set up base mod info.
     static final String MOD_ID = "pixelmonbroadcasts";
     static final String MOD_NAME = "PixelmonBroadcasts";
-    static final String VERSION = "0.6-universal-test2";
+    static final String VERSION = "0.6-universal";
 
     // Set up an internal variable so we can see if we loaded correctly. Slightly dirty, but it works.
     private boolean loadedCorrectly = false;

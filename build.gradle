@@ -15,7 +15,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 // Sets the version number shown in the file name.
-version = "1.12.2-0.6-universal-test2"
+version = "1.12.2-0.6-universal"
 group = 'com.github.xpxpand.pixelmonbroadcasts' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 
 //noinspection GroovyUnusedAssignment

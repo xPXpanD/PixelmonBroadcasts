@@ -1,5 +1,5 @@
-0.6 test 2 for 8.1.2
-Released February 8th, 2021.
+0.6 for 8.1.2
+Released February 10th, 2021.
 
     Additions:
     * Moved everything to pure Forge! Broadcasts now runs anywhere that supports Forge mods.
