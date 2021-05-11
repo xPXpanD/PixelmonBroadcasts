@@ -67,7 +67,7 @@ public class SpawnListener
                     {
                         switch (pokemonEntity.getBossMode())
                         {
-                            case Ultimate:
+                            case Ultimate: case Drowned:
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 logEvent(EventData.Spawns.ULTIMATE_BOSS,
@@ -91,6 +91,18 @@ public class SpawnListener
 
                                 break;
                             }
+                            case Epic:
+                            {
+                                // Send a log message if we're set up to do logging for this event.
+                                logEvent(EventData.Spawns.EPIC_BOSS,
+                                        worldName, location, enumString + "boss " + nameString + " (Epic)");
+
+                                // Send enabled broadcasts to people who should receive them.
+                                PlaceholderMethods.iterateAndBroadcast(EventData.Spawns.EPIC_BOSS,
+                                        pokemonEntity, null, null, null);
+
+                                break;
+                            }
                             case Rare:
                             {
                                 // Send a log message if we're set up to do logging for this event.
@@ -103,7 +115,7 @@ public class SpawnListener
 
                                 break;
                             }
-                            default: // Will be Equal or Uncommon, only the latter should spawn naturally.
+                            case Uncommon:
                             {
                                 // Send a log message if we're set up to do logging for this event.
                                 logEvent(EventData.Spawns.UNCOMMON_BOSS,
@@ -111,6 +123,16 @@ public class SpawnListener
 
                                 // Send enabled broadcasts to people who should receive them.
                                 PlaceholderMethods.iterateAndBroadcast(EventData.Spawns.UNCOMMON_BOSS,
+                                        pokemonEntity, null, null, null);
+                            }
+                            default: // Used for common spawns, and a fallback for anything we don't know how to handle.
+                            {
+                                // Send a log message if we're set up to do logging for this event.
+                                logEvent(EventData.Spawns.COMMON_BOSS,
+                                        worldName, location, enumString + "boss " + nameString + " (generic)");
+
+                                // Send enabled broadcasts to people who should receive them.
+                                PlaceholderMethods.iterateAndBroadcast(EventData.Spawns.COMMON_BOSS,
                                         pokemonEntity, null, null, null);
                             }
                         }

@@ -33,7 +33,7 @@ public class BattleEndListener
             // Was this a PvP battle? TODO: Check doubles.
             if (event.bc.getPlayers().size() == 2)
             {
-                if (event.abnormal || event.results.entrySet().iterator().next().getValue() == (BattleResults.DRAW))
+                if (event.abnormal || event.results.entrySet().iterator().next().getValue() == BattleResults.DRAW)
                 {
                     if (event.abnormal)
                         logger.warn("A player-versus-player battle ended abnormally! See draw logging for more info.");
@@ -260,7 +260,7 @@ public class BattleEndListener
                             {
                                 switch (pokemonEntity.getBossMode())
                                 {
-                                    case Ultimate:
+                                    case Ultimate: case Drowned:
                                     {
                                         // Send a log message if we're set up to do logging for this event.
                                         PrintingMethods.logEvent(EventData.Victories.ULTIMATE_BOSS, worldName, playerEntity.getPosition(),
@@ -284,6 +284,18 @@ public class BattleEndListener
 
                                         break;
                                     }
+                                    case Epic:
+                                    {
+                                        // Send a log message if we're set up to do logging for this event.
+                                        PrintingMethods.logEvent(EventData.Victories.EPIC_BOSS, worldName, playerEntity.getPosition(),
+                                                playerEntity.getName(), enumString + "boss " + nameString + " (Epic)");
+
+                                        // Send enabled broadcasts to people who should receive them.
+                                        PlaceholderMethods.iterateAndBroadcast(EventData.Victories.EPIC_BOSS,
+                                                pokemonEntity, null, playerEntity, null);
+
+                                        break;
+                                    }
                                     case Rare:
                                     {
                                         // Send a log message if we're set up to do logging for this event.
@@ -296,7 +308,7 @@ public class BattleEndListener
 
                                         break;
                                     }
-                                    default: // Will be Equal or Uncommon, only the latter should spawn naturally.
+                                    case Uncommon:
                                     {
                                         // Send a log message if we're set up to do logging for this event.
                                         PrintingMethods.logEvent(EventData.Victories.UNCOMMON_BOSS,worldName, playerEntity.getPosition(),
@@ -304,6 +316,16 @@ public class BattleEndListener
 
                                         // Send enabled broadcasts to people who should receive them.
                                         PlaceholderMethods.iterateAndBroadcast(EventData.Victories.UNCOMMON_BOSS,
+                                                pokemonEntity, null, playerEntity, null);
+                                    }
+                                    default: // Used for common spawns, and a fallback for anything we don't know how to handle.
+                                    {
+                                        // Send a log message if we're set up to do logging for this event.
+                                        PrintingMethods.logEvent(EventData.Victories.COMMON_BOSS,worldName, playerEntity.getPosition(),
+                                                playerEntity.getName(), enumString + "boss " + nameString + " (generic)");
+
+                                        // Send enabled broadcasts to people who should receive them.
+                                        PlaceholderMethods.iterateAndBroadcast(EventData.Victories.COMMON_BOSS,
                                                 pokemonEntity, null, playerEntity, null);
                                     }
                                 }
@@ -373,7 +395,7 @@ public class BattleEndListener
                             {
                                 switch (pokemonEntity.getBossMode())
                                 {
-                                    case Ultimate:
+                                    case Ultimate: case Drowned:
                                     {
                                         // Send a log message if we're set up to do logging for this event.
                                         PrintingMethods.logEvent(EventData.Blackouts.ULTIMATE_BOSS, worldName, playerEntity.getPosition(),
@@ -397,6 +419,18 @@ public class BattleEndListener
 
                                         break;
                                     }
+                                    case Epic:
+                                    {
+                                        // Send a log message if we're set up to do logging for this event.
+                                        PrintingMethods.logEvent(EventData.Blackouts.EPIC_BOSS, worldName, playerEntity.getPosition(),
+                                                playerEntity.getName(), enumString + "boss " + nameString + " (Epic)");
+
+                                        // Send enabled broadcasts to people who should receive them.
+                                        PlaceholderMethods.iterateAndBroadcast(EventData.Blackouts.EPIC_BOSS,
+                                                pokemonEntity, null, playerEntity, null);
+
+                                        break;
+                                    }
                                     case Rare:
                                     {
                                         // Send a log message if we're set up to do logging for this event.
@@ -409,7 +443,7 @@ public class BattleEndListener
 
                                         break;
                                     }
-                                    default: // Will be Equal or Uncommon, only the latter should spawn naturally.
+                                    case Uncommon:
                                     {
                                         // Send a log message if we're set up to do logging for this event.
                                         PrintingMethods.logEvent(EventData.Blackouts.UNCOMMON_BOSS,worldName, playerEntity.getPosition(),
@@ -417,6 +451,16 @@ public class BattleEndListener
 
                                         // Send enabled broadcasts to people who should receive them.
                                         PlaceholderMethods.iterateAndBroadcast(EventData.Blackouts.UNCOMMON_BOSS,
+                                                pokemonEntity, null, playerEntity, null);
+                                    }
+                                    default: // Used for common spawns, and a fallback for anything we don't know how to handle.
+                                    {
+                                        // Send a log message if we're set up to do logging for this event.
+                                        PrintingMethods.logEvent(EventData.Blackouts.COMMON_BOSS,worldName, playerEntity.getPosition(),
+                                                playerEntity.getName(), enumString + "boss " + nameString + " (generic)");
+
+                                        // Send enabled broadcasts to people who should receive them.
+                                        PlaceholderMethods.iterateAndBroadcast(EventData.Blackouts.COMMON_BOSS,
                                                 pokemonEntity, null, playerEntity, null);
                                     }
                                 }

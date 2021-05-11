@@ -15,10 +15,8 @@ import com.github.xpxpand.pixelmonbroadcasts.enums.EventData;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.xpxpand.pixelmonbroadcasts.PixelmonBroadcasts.commandAlias;
-import static com.github.xpxpand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
+import static com.github.xpxpand.pixelmonbroadcasts.PixelmonBroadcasts.*;
 
-// TODO: Maybe get paginated lists working.
 public class Toggle extends HubCommand
 {
     // Create a List of Texts that we can dump ready-to-print messages into. Goes down with the class instance.
@@ -61,11 +59,17 @@ public class Toggle extends HubCommand
                     // Wormholes.
                     case "showWormholeSpawn":
                     // Generic bosses and boss catch-alls.
+                    case "showCommonBossSpawn": case "showCommonBossChallenge": case "showCommonBossVictory":
+                    case "showCommonBossBlackout": case "showBossForfeit":
+                    // Uncommon bosses.
                     case "showUncommonBossSpawn": case "showUncommonBossChallenge": case "showUncommonBossVictory":
-                    case "showUncommonBossBlackout": case "showBossForfeit":
+                    case "showUncommonBossBlackout":
                     // Rare bosses.
                     case "showRareBossSpawn": case "showRareBossChallenge": case "showRareBossVictory":
                     case "showRareBossBlackout":
+                    // Epic bosses.
+                    case "showEpicBossSpawn": case "showEpicBossChallenge": case "showEpicBossVictory":
+                    case "showEpicBossBlackout":
                     // Legendary bosses.
                     case "showLegendaryBossSpawn": case "showLegendaryBossChallenge": case "showLegendaryBossVictory":
                     case "showLegendaryBossBlackout":
@@ -144,6 +148,16 @@ public class Toggle extends HubCommand
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.off") + separator);
             }
+            if (PlaceholderMethods.canReceiveBroadcast(player, EventData.Blackouts.COMMON_BOSS))
+            {
+                flags.add("showCommonBossBlackout");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (PlaceholderMethods.wantsBroadcast(player, "showCommonBossBlackout"))
+                    messages.add(PrintingMethods.getTranslation("toggle.common_boss.on") + separator);
+                else
+                    messages.add(PrintingMethods.getTranslation("toggle.common_boss.off") + separator);
+            }
             if (PlaceholderMethods.canReceiveBroadcast(player, EventData.Blackouts.UNCOMMON_BOSS))
             {
                 flags.add("showUncommonBossBlackout");
@@ -163,6 +177,16 @@ public class Toggle extends HubCommand
                     messages.add(PrintingMethods.getTranslation("toggle.rare_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.rare_boss.off") + separator);
+            }
+            if (PlaceholderMethods.canReceiveBroadcast(player, EventData.Blackouts.EPIC_BOSS))
+            {
+                flags.add("showEpicBossBlackout");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (PlaceholderMethods.wantsBroadcast(player, "showEpicBossBlackout"))
+                    messages.add(PrintingMethods.getTranslation("toggle.epic_boss.on") + separator);
+                else
+                    messages.add(PrintingMethods.getTranslation("toggle.epic_boss.off") + separator);
             }
             if (PlaceholderMethods.canReceiveBroadcast(player, EventData.Blackouts.LEGENDARY_BOSS))
             {
@@ -312,6 +336,16 @@ public class Toggle extends HubCommand
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.off") + separator);
             }
+            if (PlaceholderMethods.canReceiveBroadcast(player, EventData.Challenges.COMMON_BOSS))
+            {
+                flags.add("showCommonBossChallenge");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (PlaceholderMethods.wantsBroadcast(player, "showCommonBossChallenge"))
+                    messages.add(PrintingMethods.getTranslation("toggle.common_boss.on") + separator);
+                else
+                    messages.add(PrintingMethods.getTranslation("toggle.common_boss.off") + separator);
+            }
             if (PlaceholderMethods.canReceiveBroadcast(player, EventData.Challenges.UNCOMMON_BOSS))
             {
                 flags.add("showUncommonBossChallenge");
@@ -331,6 +365,16 @@ public class Toggle extends HubCommand
                     messages.add(PrintingMethods.getTranslation("toggle.rare_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.rare_boss.off") + separator);
+            }
+            if (PlaceholderMethods.canReceiveBroadcast(player, EventData.Challenges.EPIC_BOSS))
+            {
+                flags.add("showEpicBossChallenge");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (PlaceholderMethods.wantsBroadcast(player, "showEpicBossChallenge"))
+                    messages.add(PrintingMethods.getTranslation("toggle.epic_boss.on") + separator);
+                else
+                    messages.add(PrintingMethods.getTranslation("toggle.epic_boss.off") + separator);
             }
             if (PlaceholderMethods.canReceiveBroadcast(player, EventData.Challenges.LEGENDARY_BOSS))
             {
@@ -520,6 +564,16 @@ public class Toggle extends HubCommand
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.wormhole.off") + separator);
             }
+            if (PlaceholderMethods.canReceiveBroadcast(player, EventData.Spawns.COMMON_BOSS))
+            {
+                flags.add("showCommonBossSpawn");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (PlaceholderMethods.wantsBroadcast(player, "showCommonBossSpawn"))
+                    messages.add(PrintingMethods.getTranslation("toggle.common_boss.on") + separator);
+                else
+                    messages.add(PrintingMethods.getTranslation("toggle.common_boss.off") + separator);
+            }
             if (PlaceholderMethods.canReceiveBroadcast(player, EventData.Spawns.UNCOMMON_BOSS))
             {
                 flags.add("showUncommonBossSpawn");
@@ -539,6 +593,16 @@ public class Toggle extends HubCommand
                     messages.add(PrintingMethods.getTranslation("toggle.rare_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.rare_boss.off") + separator);
+            }
+            if (PlaceholderMethods.canReceiveBroadcast(player, EventData.Spawns.EPIC_BOSS))
+            {
+                flags.add("showEpicBossSpawn");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (PlaceholderMethods.wantsBroadcast(player, "showEpicBossSpawn"))
+                    messages.add(PrintingMethods.getTranslation("toggle.epic_boss.on") + separator);
+                else
+                    messages.add(PrintingMethods.getTranslation("toggle.epic_boss.off") + separator);
             }
             if (PlaceholderMethods.canReceiveBroadcast(player, EventData.Spawns.LEGENDARY_BOSS))
             {
@@ -638,6 +702,16 @@ public class Toggle extends HubCommand
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.ultra_beast.off") + separator);
             }
+            if (PlaceholderMethods.canReceiveBroadcast(player, EventData.Victories.COMMON_BOSS))
+            {
+                flags.add("showCommonBossVictory");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (PlaceholderMethods.wantsBroadcast(player, "showCommonBossVictory"))
+                    messages.add(PrintingMethods.getTranslation("toggle.common_boss.on") + separator);
+                else
+                    messages.add(PrintingMethods.getTranslation("toggle.common_boss.off") + separator);
+            }
             if (PlaceholderMethods.canReceiveBroadcast(player, EventData.Victories.UNCOMMON_BOSS))
             {
                 flags.add("showUncommonBossVictory");
@@ -657,6 +731,16 @@ public class Toggle extends HubCommand
                     messages.add(PrintingMethods.getTranslation("toggle.rare_boss.on") + separator);
                 else
                     messages.add(PrintingMethods.getTranslation("toggle.rare_boss.off") + separator);
+            }
+            if (PlaceholderMethods.canReceiveBroadcast(player, EventData.Victories.EPIC_BOSS))
+            {
+                flags.add("showEpicBossVictory");
+
+                // Only returns "false" if explicitly toggled off by the user.
+                if (PlaceholderMethods.wantsBroadcast(player, "showEpicBossVictory"))
+                    messages.add(PrintingMethods.getTranslation("toggle.epic_boss.on") + separator);
+                else
+                    messages.add(PrintingMethods.getTranslation("toggle.epic_boss.off") + separator);
             }
             if (PlaceholderMethods.canReceiveBroadcast(player, EventData.Victories.LEGENDARY_BOSS))
             {
@@ -895,42 +979,44 @@ public class Toggle extends HubCommand
         lastEntry = lastEntry.substring(0, lastEntry.length() - 2);
         messages.set(listSize - 1, lastEntry);
 
-        // Get a clickable line with all the toggles that we can squeeze onto it. Split lines at >5 toggles.
-        if (listSize > 5)
+        // Set up a basic Text with our line starter. Add the rest of the line's contents as we go.
+        TextComponentString returnText = new TextComponentString(PrintingMethods.getTranslation("toggle.line_start"));
+
+        // Iterate over the whole list of items. Accumulate a character total and act when it exceeds a config-set limit.
+        int accumulatedCount = 0;
+        for (int i = 0; i < listSize; i++)
         {
-            // Sublisting is stupid. Lower bound is inclusive, upper bound exclusive. 0-5 = 0, 1, 2, 3, 4. Angery. 3 hours!!
-            toggleMessageList.add(createClickablePair(messages.subList(0, 5), flags.subList(0, 5)));
-            toggleMessageList.add(createClickablePair(messages.subList(5, listSize), flags.subList(5, listSize)));
+            // Get the length of the current message, sans formatting characters. Add it to the total.
+            accumulatedCount = accumulatedCount + PrintingMethods.clearFormatting(messages.get(i)).length();
+
+            // Add the pair we hit on this iteration to the base state.
+            returnText.appendSibling(createClickablePair(messages.get(i), flags.get(i)));
+
+            // Are we at the last entry, or would the next item push us over our limit? Prep for print and clean up.
+            if (i == listSize - 1 || accumulatedCount + PrintingMethods.clearFormatting(messages.get(i + 1)).length() > maxToggleChars)
+            {
+                // Add the current line to the list of printables, it's good to go.
+                toggleMessageList.add(returnText);
+
+                // Return to the base state.
+                returnText = new TextComponentString(PrintingMethods.getTranslation("toggle.line_start"));
+                accumulatedCount = 0;
+            }
         }
-        else
-            toggleMessageList.add(createClickablePair(messages, flags));
     }
 
-    // Takes a list of messages and assigns a matching toggle from a list of flags. Allows people to toggle by clicking!
-    private TextComponentString createClickablePair(List<String> messages, List<String> flags)
+    // Takes a message-flag pair and assigns a toggle action. Allows people to toggle by clicking!
+    private ITextComponent createClickablePair(String message, String flag)
     {
-        // Set up temporary variables for putting stuff we're processing into. Append as we go.
-        TextComponentString returnText = new TextComponentString(PrintingMethods.getTranslation("toggle.line_start"));
-        ITextComponent messageComponent;
+        // Get the message.
+        ITextComponent messageComponent = new TextComponentString(message);
 
-        // Set up a basic Text with our line starter. Add the rest of the line's contents as we go.
+        // Add our click action.
+        messageComponent.getStyle().setClickEvent(
+                new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pixelmonbroadcasts toggle " + flag));
 
-        // Grab the size of one of our Lists, as they should be matched. Add clickable elements as we go.
-        for (int i = 0; i < messages.size(); i++)
-        {
-            // Get the message.
-            messageComponent = new TextComponentString(messages.get(i));
-
-            // Add our click action.
-            messageComponent.getStyle().setClickEvent(
-                    new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pixelmonbroadcasts toggle " + flags.get(i)));
-
-            // Iteratively build up our returnable text String.
-            returnText.appendSibling(messageComponent);
-        }
-
-        // Return the built text String.
-        return returnText;
+        // Return the message component, now with a fancy click action.
+        return messageComponent;
     }
 
     // Toggle a message-showing flag if it exists already, or create one if it does not.

@@ -11,6 +11,7 @@ import net.minecraft.util.text.TextComponentString;
 import com.github.xpxpand.pixelmonbroadcasts.enums.EventData;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.github.xpxpand.pixelmonbroadcasts.PixelmonBroadcasts.logger;
 import static com.github.xpxpand.pixelmonbroadcasts.PixelmonBroadcasts.messagesConfig;
@@ -86,9 +87,9 @@ public class PrintingMethods
         // Split our incoming String into an array of characters. Set up some needed variables.
         char[] charSet = message.toCharArray();
         char currentChar, nextChar;
-        int messageLength = charSet.length;
+        int charTotal = charSet.length;
 
-        for (int i = 0; i < messageLength; i++)
+        for (int i = 0; i < charTotal; i++)
         {
             currentChar = charSet[i];
 
@@ -96,7 +97,7 @@ public class PrintingMethods
             if (currentChar == '&')
             {
                 // Can we look ahead safely?
-                if (i + 1 <= messageLength)
+                if (i + 1 <= charTotal)
                 {
                     // Get the next character in line.
                     nextChar = charSet[i+1];
@@ -112,7 +113,7 @@ public class PrintingMethods
                         // Reset.
                         case 'r':
                         {
-                            // Do we have a number? Replace the ampersand with a proper formatting character.
+                            // Do we have a valid tag? Replace the ampersand with a proper formatting character.
                             currentChar = '§';
                         }
                     }
@@ -121,11 +122,60 @@ public class PrintingMethods
                     output.append(currentChar);
                 }
             }
+
             else
                 output.append(currentChar);
         }
 
         return output.toString();
+    }
+
+    // Cleans any formatting tags on the given String. Returns the cleaned reconstituted String.
+    public static String clearFormatting(String message)
+    {
+        // Split our incoming String into a List of Characters. Set up some needed variables.
+        List<Character> characters = message.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
+        char currentChar, nextChar;
+        int charTotal = characters.size();
+
+        for (int i = 0; i < charTotal; i++)
+        {
+            currentChar = characters.get(i);
+
+            // Do we have a potential formatting character? Don't just replace all ampersands, people may want those.
+            if (currentChar == '&' || currentChar == '§')
+            {
+                // Can we look ahead safely?
+                if (i + 1 <= charTotal)
+                {
+                    // Get the next character in line.
+                    nextChar = characters.get(i + 1);
+
+                    // Is our next character a formatting character? Ignore uppercase, lowercase is standard for formatting.
+                    switch (nextChar)
+                    {
+                        // Colors.
+                        case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8':
+                        case '9': case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
+                        // Formatting.
+                        case 'k': case 'l': case 'm': case 'n': case 'o':
+                        // Reset.
+                        case 'r':
+                        {
+                            // Do we have a valid tag? Remove it. (both characters please)
+                            characters.remove(i);
+                            characters.remove(i);
+
+                            // Decrement the iterator (by one, we never skipped ahead) and the total message length.
+                            i--;
+                            charTotal = charTotal - 2;
+                        }
+                    }
+                }
+            }
+        }
+
+        return characters.stream().map(String::valueOf).collect(Collectors.joining());
     }
 
     // Gets a value matching the given messages key, formats it (ampersands to section characters), and then sends it.

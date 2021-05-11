@@ -133,7 +133,7 @@ public class BattleStartListener
                         {
                             switch (pokemonEntity.getBossMode())
                             {
-                                case Ultimate:
+                                case Ultimate: case Drowned:
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     PrintingMethods.logEvent(EventData.Challenges.ULTIMATE_BOSS, worldName, location,
@@ -157,6 +157,18 @@ public class BattleStartListener
 
                                     break;
                                 }
+                                case Epic:
+                                {
+                                    // Send a log message if we're set up to do logging for this event.
+                                    PrintingMethods.logEvent(EventData.Challenges.EPIC_BOSS, worldName, location,
+                                            playerEntity.getName(), enumString + "boss " + nameString + " (Epic)");
+
+                                    // Send enabled broadcasts to people who should receive them.
+                                    PlaceholderMethods.iterateAndBroadcast(EventData.Challenges.EPIC_BOSS,
+                                            pokemonEntity, null, playerEntity, null);
+
+                                    break;
+                                }
                                 case Rare:
                                 {
                                     // Send a log message if we're set up to do logging for this event.
@@ -169,7 +181,7 @@ public class BattleStartListener
 
                                     break;
                                 }
-                                default: // Will be Equal or Uncommon, only the latter should spawn naturally.
+                                case Uncommon:
                                 {
                                     // Send a log message if we're set up to do logging for this event.
                                     PrintingMethods.logEvent(EventData.Challenges.UNCOMMON_BOSS,worldName, location,
@@ -177,6 +189,16 @@ public class BattleStartListener
 
                                     // Send enabled broadcasts to people who should receive them.
                                     PlaceholderMethods.iterateAndBroadcast(EventData.Challenges.UNCOMMON_BOSS,
+                                            pokemonEntity, null, playerEntity, null);
+                                }
+                                default: // Used for common spawns, and a fallback for anything we don't know how to handle.
+                                {
+                                    // Send a log message if we're set up to do logging for this event.
+                                    PrintingMethods.logEvent(EventData.Challenges.COMMON_BOSS,worldName, location,
+                                            playerEntity.getName(), enumString + "boss " + nameString + " (generic)");
+
+                                    // Send enabled broadcasts to people who should receive them.
+                                    PlaceholderMethods.iterateAndBroadcast(EventData.Challenges.COMMON_BOSS,
                                             pokemonEntity, null, playerEntity, null);
                                 }
                             }

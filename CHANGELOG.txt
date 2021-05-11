@@ -1,3 +1,28 @@
+0.6.1 for 8.2.0
+Released May 11th, 2021.
+
+    Additions:
+    * Full support for the new Common and Mega boss tiers.
+    * Preliminary (?) support for special boss types such as Spooky bosses from boss towers. (counted as Common)
+    * An experimental %nearest% placeholder for showing the closest player to an event, as suggested by zPr3d.
+    * Toggle lines are now much smarter, taking into account individual toggle lengths. Character limit is configurable.
+    * A hidden testing mode, enabled by setting "configVersion" to 1337. Enables all events and shows all placeholders.
+
+    Fixes:
+    * Fixed a nasty crash when loading up with a broken Pixelmon config.
+    * Fixed a weird but seemingly harmless resource warning caused by the single player settings file.
+
+    Settings file changes:
+    * Added settings for the new Common and Mega boss tiers.
+    * Added a "maxToggleChars" setting for determining how many characters can be shown on a given line of toggles.
+    * Fixed an oversight where legendary hatches were not set to be shown in the single player settings.
+
+    Message file changes:
+    * Added messages for the new Common and Mega boss tiers.
+
+    Broadcasts file changes:
+    * Added broadcasts for the new Common and Mega boss tiers.
+
 0.6 for 8.1.2
 Released February 10th, 2021.
 
@@ -7,21 +32,21 @@ Released February 10th, 2021.
     * When in single player, you get a lighter settings file by default with multiplayer fluff turned off.
     * Logging now shows whether a Pokémon is/was Alolan, Galarian or mega-evolved.
 
-    Changes:
+    Fixes:
+    * Fixed Pokémon that could be a mega form always showing up as such, even if they weren't.
+
+    Tweaks:
     * (temporarily?) Removed integration with the Pixelmon Overlay plugin, as it requires Sponge.
     * Removed the toggle helper when running /pixelmonbroadcasts from console. Can't use it there, anyways.
     * Removed all "pixelmonbroadcasts.action" permissions. Naming was inconsistent, use ".command" instead.
 
-    Message file additions and changes:
+    Message file changes:
     * Combined all non-teleport "no_permissions" messages into "universal.no_permissions".
     * Removed "action." from the teleport nodes as it's now a command. (no more Sponge callbacks)
     * Added a few new teleport command errors for the different failure modes.
 
-    Broadcasts file additions and changes:
+    Broadcasts file changes:
     * Reworded the non-shiny Ultra Beast and Legendary egg hatch broadcasts to avoid "a"/"an" issues.
-
-    Fixes:
-    * Fixed Pokémon that could be a mega form always showing up as such, even if they weren't.
 
 0.5 for 8.1.2
 Released February 3rd, 2021.
@@ -29,29 +54,29 @@ Released February 3rd, 2021.
     Additions:
     * Split off boss events into the different tiers. Thanks for the proof-of-concept fork, ElectronicManuel!
 
+    Fixes:
+    * Fixed colors on event log entries showing up as a series of numbers on some consoles.
+    * Ultra Beast and Legendary hatch toggles now work.
+    * Toggles are now split onto separate lines if more than 5 are available. Should help with custom text.
+    * Toggles are now preserved when a player dies. Some plugins/mods may interfere with this, let me know!
+
     Tweaks:
     * Shortened the info text on console messages from "Pixelmon Broadcasts" to just "Broadcasts".
 
-    Settings file additions and changes:
+    Settings file changes:
     * Added settings for the different boss types.
     * Disabled some unpopular/spammy settings by default.
 
-    Message file additions and changes:
+    Message file changes:
     * Added toggles for the different boss types.
     * Added a new placeholder for showing mega status in broadcasts: insert.mega = "Mega "
     * Added a new placeholder for showing Alolan forms in broadcasts: insert.alolan = "Alolan "
     * Added a new placeholder for showing Galarian forms in broadcasts: insert.galarian = "Galarian "
     * Changed the generic boss toggle's text from "boss" to "any boss". (forfeits use this)
 
-    Broadcasts file additions and changes:
+    Broadcasts file changes:
     * Added broadcasts for the different boss types.
     * Flattened down the layout to use single lines, as it was getting unwieldy and caused some confusion.
-
-    Fixes:
-    * Fixed colors on event log entries showing up as a series of numbers on some consoles.
-    * Ultra Beast and Legendary hatch toggles now work.
-    * Toggles are now split onto separate lines if more than 5 are available. Should help with custom text.
-    * Toggles are now preserved when a player dies. Some plugins/mods may interfere with this, let me know!
 
 0.4.2 for 8.0.0
 Released June 19th, 2020.
@@ -59,13 +84,13 @@ Released June 19th, 2020.
     Additions:
     * Added support for showing Galarians in broadcasts.
 
-    Tweaks:
-    * Removed the "PBR //" fluff from console messages as the sidemod name is already shown.
-    * Removed the config helper that automatically turns off Pixelmon's legendary message. Mod update broke it.
-
     Fixes:
     * Fixed the horrible spam/crashing from Alolans being moved to a different enum in Pixelmon.
     * Worked around Bide causing a NullPointerException on the Faint event listener. (likely a Pixelmon bug)
+
+    Tweaks:
+    * Removed the "PBR //" fluff from console messages as the sidemod name is already shown.
+    * Removed the config helper that automatically turns off Pixelmon's legendary message. Mod update broke it.
 
 0.4.1 for 7.0.5
 Released May 15th, 2019.
@@ -73,18 +98,18 @@ Released May 15th, 2019.
     Additions:
     * Added support for happyzlife's Pixelmon Overlay, allowing noticeboard sharing with other plugins.
 
-    Tweaks:
-    * Removed the Toggle command permission check due to it being unnecessary. We'll use individual perms.
-
-    Message file additions and changes:
-    * Removed "hub.no_permissions" and "hub.contact_staff".
-    * Added "toggle.no_permissions".
-    * Re-worded "action.teleport.no_permissions" to fall in line with other no-perm messages.
-
     Fixes:
     * Added debug and a workaround for a weird issue that potentially breaks battles. Thanks, I9hdkill!
     * Added some listener safeguards to hopefully avoid issues when other plugins kill the event.
     * Fixed the Toggle command showing only a header and footer to people with no event permissions.
+
+    Tweaks:
+    * Removed the Toggle command permission check due to it being unnecessary. We'll use individual perms.
+
+    Message file changes:
+    * Removed "hub.no_permissions" and "hub.contact_staff".
+    * Added "toggle.no_permissions".
+    * Re-worded "action.teleport.no_permissions" to fall in line with other no-perm messages.
 
 0.4 for 7.0.3
 Released March 9th, 2019.
@@ -98,28 +123,6 @@ Released March 9th, 2019.
     * Added legendary/Ultra Beast hatch broadcasts.
     * Added a fainting broadcast for the Nuzlocke crowd.
 
-    Settings file additions and changes:
-    * Added new event settings. Config will need a regen, sorry!
-    * Renamed the "show" toggle to "chat" to avoid confusion with the new "notice".
-
-    Message file additions and changes:
-    * Added new event messages, as well as on-click teleport ones. Config will need a regen, sorry!
-    * Removed shiny legendary messages due to them being rolled in with the shiny/legendary checks.
-
-    Broadcasts file additions and changes:
-    * Added new event broadcasts. Config will need a regen, sorry!
-    * Split "broadcast.EVENT.TYPE" broadcasts into both "chat.EVENT.TYPE" and "notice.EVENT.TYPE".
-    * Changed the default hatch and trade colors from pink to gray. Pink is now used for UBs.
-
-    Permission changes:
-    * "pixelmonbroadcasts.notify.trade.normal" is now "pixelmonbroadcasts.notify.trade", for consistency.
-    * "pixelmonbroadcasts.notify.pvp.draw" is now "pixelmonbroadcasts.notify.draw.pvp", same idea.
-
-    Tweaks:
-    * Simplified shiny legendary settings to work with either event's toggles enabled. UBs work similarly.
-    * Simplified logging. Messages are now single colors, depending on the event type.
-    * Renamed several internal listeners to make more sense in errors/debug output.
-
     Fixes:
     * Hopefully fixed several BattleEndListener-related log errors.
     * Fixed a missing space in the default trade broadcast.
@@ -132,11 +135,43 @@ Released March 9th, 2019.
     * Probably fixed player-versus-player battles occasionally getting the winner/loser wrong.
     * Probably fixed us causing Pixelmon battle errors (double kills!) in double battles.
 
+    Tweaks:
+    * Simplified shiny legendary settings to work with either event's toggles enabled. UBs work similarly.
+    * Simplified logging. Messages are now single colors, depending on the event type.
+    * Renamed several internal listeners to make more sense in errors/debug output.
+
+    Settings file changes:
+    * Added new event settings. Config will need a regen, sorry!
+    * Renamed the "show" toggle to "chat" to avoid confusion with the new "notice".
+
+    Message file changes:
+    * Added new event messages, as well as on-click teleport ones. Config will need a regen, sorry!
+    * Removed shiny legendary messages due to them being rolled in with the shiny/legendary checks.
+
+    Broadcasts file changes:
+    * Added new event broadcasts. Config will need a regen, sorry!
+    * Split "broadcast.EVENT.TYPE" broadcasts into both "chat.EVENT.TYPE" and "notice.EVENT.TYPE".
+    * Changed the default hatch and trade colors from pink to gray. Pink is now used for UBs.
+
+    Permission changes:
+    * "pixelmonbroadcasts.notify.trade.normal" is now "pixelmonbroadcasts.notify.trade", for consistency.
+    * "pixelmonbroadcasts.notify.pvp.draw" is now "pixelmonbroadcasts.notify.draw.pvp", same idea.
+
 0.3 for 7.0
 Released February 2nd, 2019.
 
     Additions:
     * Added the showing of abilities to the hover stats! (hidden abilities get extra fancy formatting)
+
+    Fixes:
+    * Fixed /pixelmonbroadcasts not showing commands if something happened to the main command alias.
+    * Fixed forfeit messages occasionally reporting bad biomes/coordinates. How'd this even work before?
+    * Hopefully fixed legendary-related messages breaking on non-English names. Sorry for the delay!
+
+    Tweaks:
+    * Brought a few console messages in line with Even More Pixelmon Commands.
+    * Hopefully made it so localized setups end up logging both the localized and English Pokémon names.
+    * Updated Forge version to build against, from 2705 to 2768. Might fix some issues with flaky toggles.
 
     Settings file additions:
     * Added "showAbilities" option for the new ability-showing feature. Add: "showAbilities = true"
@@ -152,18 +187,18 @@ Released February 2nd, 2019.
     * Fixed the trade broadcast rarely showing incorrect shiny status for one of the Pokémon.
     * Reworded many broadcasts to preserve consistency even when precursor events aren't announced.
 
-    Tweaks:
-    * Brought a few console messages in line with Even More Pixelmon Commands.
-    * Hopefully made it so localized setups end up logging both the localized and English Pokémon names.
-    * Updated Forge version to build against, from 2705 to 2768. Might fix some issues with flaky toggles.
-
-    Fixes:
-    * Fixed /pixelmonbroadcasts not showing commands if something happened to the main command alias.
-    * Fixed forfeit messages occasionally reporting bad biomes/coordinates. How'd this even work before?
-    * Hopefully fixed legendary-related messages breaking on non-English names. Sorry for the delay!
-
 0.2.2 for 6.3.4
 Released August 18th, 2018.
+
+    Fixes:
+    * Fixed hovers on certain challenge messages always being enabled.
+    * Fixed the Pixelmon legendary message check not reloading the config immediately after editing it.
+    * Hopefully worked around a rare error with battle participants going null when a battle ends.
+
+    Tweaks:
+    * Clarified toggles only applying to the person setting them, to avoid further confusion. See changes.
+    * Moved the "shiny legend" toggle so it shows after "shiny" and "legend" if enabled. Bit cleaner.
+    * Split the mod's start-up messages into two blocks, with one only showing up if something's wrong.
 
     Message file changes:
     * Changed "toggle.header" to "&5--------- &dPersonal event toggles (click to change) &5--------".
@@ -172,16 +207,6 @@ Released August 18th, 2018.
 
     Broadcast file changes:
     * Changed all default mentions of "boss trainer" to "leader" to mirror the above.
-
-    Tweaks:
-    * Clarified toggles only applying to the person setting them, to avoid further confusion. See changes.
-    * Moved the "shiny legend" toggle so it shows after "shiny" and "legend" if enabled. Bit cleaner.
-    * Split the mod's start-up messages into two blocks, with one only showing up if something's wrong.
-
-    Fixes:
-    * Fixed hovers on certain challenge messages always being enabled.
-    * Fixed the Pixelmon legendary message check not reloading the config immediately after editing it.
-    * Hopefully worked around a rare error with battle participants going null when a battle ends.
 
 0.2.1 for 6.3
 Released June 10th, 2018.
@@ -199,16 +224,6 @@ Released June 10th, 2018.
 0.2.0 for 6.3
 Released June 9th, 2018.
 
-    Permission changes:
-    * All "defeat"-type permissions are now "victory"-type permissions to avoid confusion.
-    * PvP "start"/"end" permissions have been merged into the old "challenge"/"victory" groups.
-
-    Fixes:
-    * Fixed an issue where old options would occasionally get stuck when reloading with changes made.
-    * Fixed some potential bugs with players with edited names. There may be more, please report.
-    * Removed a few leftover debug messages when players blacked out to wild Pokémon. Oops.
-    * Updated CHANGELOG.txt with missed changes in 0.1.1, and corrected versions.
-
     Additions:
     * Added a lang option for showing neutral stats in hovers, instead of just "ERROR".
     * Added support for showing catches and blackouts for Pokémon that aren't special.
@@ -217,6 +232,16 @@ Released June 9th, 2018.
     * Split up the old detailed "hover" into a more basic "hover" (safe info) and a new "reveal". (IVs)
     * The %world% and %biome% placeholders should now work properly on trainer/PvP broadcasts.
     * Trades now support the showing of shiny Pokémon, using the new %shiny% placeholder.
+
+    Fixes:
+    * Fixed an issue where old options would occasionally get stuck when reloading with changes made.
+    * Fixed some potential bugs with players with edited names. There may be more, please report.
+    * Removed a few leftover debug messages when players blacked out to wild Pokémon. Oops.
+    * Updated CHANGELOG.txt with missed changes in 0.1.1, and corrected versions.
+
+    Permission changes:
+    * All "defeat"-type permissions are now "victory"-type permissions to avoid confusion.
+    * PvP "start"/"end" permissions have been merged into the old "challenge"/"victory" groups.
 
 0.1.1 for 6.3
 Released June 6th, 2018.

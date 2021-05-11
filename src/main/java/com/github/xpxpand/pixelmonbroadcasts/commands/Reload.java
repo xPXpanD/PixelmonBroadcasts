@@ -25,7 +25,7 @@ public class Reload extends HubCommand
 
             // Load up all the configs and figure out the info alias. Start printing. Methods may insert errors as they go.
             logger.info("");
-            logger.info("§f================== P I X E L M O N  B R O A D C A S T S ==================");
+            logger.info("§f================= P I X E L M O N  B R O A D C A S T S =================");
 
             // Load up all configuration files. Creates new configs/folders if necessary. Commit settings to memory.
             boolean loadedCorrectly = ConfigMethods.tryCreateAndLoadConfigs();
@@ -40,7 +40,7 @@ public class Reload extends HubCommand
                 logger.info("§f--> §cLoad aborted due to critical errors. Check your configs and logs.");
 
             // We're done, one way or another. Add a footer, and a space to stay consistent.
-            logger.info("§f==========================================================================");
+            logger.info("§f========================================================================");
             logger.info("");
 
             // Print a message to chat.

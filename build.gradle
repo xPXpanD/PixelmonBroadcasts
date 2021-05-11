@@ -15,7 +15,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 // Sets the version number shown in the file name.
-version = "1.12.2-0.6-universal"
+version = "1.12.2-0.6.1-universal"
 group = 'com.github.xpxpand.pixelmonbroadcasts' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 
 //noinspection GroovyUnusedAssignment
@@ -70,25 +70,6 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
-
-    // You may put jars on which you depend on in ./libs or you may define them like so..
-    // compile "some.group:artifact:version:classifier"
-    // compile "some.group:artifact:version"
-
-    // Real examples
-    // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-
-    // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // These dependencies get remapped to your current MCP mappings
-    // deobf 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
 	
 	// Automatically grabs libraries from the libs folder and adds them to the project. Thanks, CraftSteamG!
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
@@ -112,23 +93,6 @@ jar {
 // Taken from the internet, with some slight edits. vvv
 processResources
 {
-/*    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-
-        // replace version and mc version
-        expand 'version': project.version, 'mcversion': project.minecraft.version
-    }
-
-    // copy everything else, that's not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }*/
-
     // Moves the access transformer config to the right folder in the compiled .jar.
     rename '(.+_at.cfg)', 'META-INF/$1'
 }

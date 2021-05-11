@@ -39,7 +39,8 @@ public class PlaceholderMethods
         // Make sure options aren't null. If they are, error!!
         if (event.options() != null)
         {
-            if (event.options().toLowerCase().contains("chat"))
+            // Do we have chat showing enabled, or is debug mode on?
+            if (event.options().toLowerCase().contains("chat") || configVersion == 1337)
             {
                 // Combine the passed broadcast type's prefix with the broadcast/permission key to make a full key.
                 final String broadcast = getBroadcast("chat." + event.key(), object1, object2, player1, player2);
@@ -98,7 +99,7 @@ public class PlaceholderMethods
                 else
                 {
                     logger.error("Could not find a valid location to teleport people to for this event! Please report this.");
-                    logger.error("Event: \"" + event.toString() + "\", in the \"" + event.getClass().getSimpleName() + "\" category!");
+                    logger.error("Event: \"" + event + "\", in the \"" + event.getClass().getSimpleName() + "\" category!");
                 }
 
                 // Sift through the online players.
@@ -114,7 +115,8 @@ public class PlaceholderMethods
                 }
             }
 
-            if (event.options().toLowerCase().contains("notice"))
+            // Do we have noticeboard showing enabled, or is debug mode on?
+            if (event.options().toLowerCase().contains("notice") || configVersion == 1337)
             {
                 if (object1 != null)
                 {
@@ -189,7 +191,7 @@ public class PlaceholderMethods
         else
         {
             logger.error("Could not get settings for this event! Please check settings.conf and reload.");
-            logger.error("Event: \"" + event.toString() + "\", in the \"" + event.getClass().getSimpleName() + "\" category!");
+            logger.error("Event: \"" + event + "\", in the \"" + event.getClass().getSimpleName() + "\" category!");
         }
     }
 
@@ -198,8 +200,10 @@ public class PlaceholderMethods
     {
         if (event.options() != null)
         {
-            // Does the player have the correct permission, or are they in single player?
-            if (PlayerMethods.hasPermission(player, "pixelmonbroadcasts.notify." + event.key()))
+            // Does the player have the correct permission, or are they in single player? If debug mode, everything goes!
+            if (configVersion == 1337)
+                return true;
+            else if (PlayerMethods.hasPermission(player, "pixelmonbroadcasts.notify." + event.key()))
                 return event.options().contains("chat") || event.options().contains("notice");
         }
 
@@ -228,19 +232,20 @@ public class PlaceholderMethods
         }
     }
 
-    // Checks whether a given flag is set for the given event. Has some hardcoded values on stuff that's off-limits.
+    // Checks whether a given flag is set for the given event. Has some hardcoded values on stuff that's dangerous/broken.
     private static boolean getFlagStatus(final EventData event, final String flag)
     {
+        // Run our checks. These reveals show the wrong stats (Pixelmon's end), and the hover causes a crash.
         if (event instanceof EventData.Challenges && flag.equals("reveal"))
             return false;
         else if (event instanceof EventData.Spawns && flag.equals("reveal"))
             return false;
         else if (event == EventData.Spawns.WORMHOLE && flag.equals("hover"))
             return false;
-        else if (event == EventData.Others.TRADE && (flag.equals("hover") || flag.equals("reveal")))
-            return false;
-
-        return event.options().toLowerCase().contains(flag);
+        else if (configVersion == 1337) // If debug mode, everything else is fair game.
+            return true;
+        else // Is the option set in the config?
+            return event.options().toLowerCase().contains(flag);
     }
 
     // Replaces all placeholders in a provided message.
@@ -257,10 +262,32 @@ public class PlaceholderMethods
 
         // Did we get a broadcast?
         if (broadcast != null)
+        {
+            // Secret debug mode get!
+            if (configVersion == 1337)
+            {
+                broadcast = "&d" + key + ": " +
+                        "&bShiny: &r%shiny% &r| " +
+                        "&6Pokémon: &r%pokemon% &r| " +
+                        "&aPlayer: &r%player% &r| " +
+                        "&2Nearest: &r%nearest% &r| " +
+                        "&cIV%: &r%ivpercent% &r| " +
+                        "&7Location: &rX%xpos% &rY%ypos% &rZ%zpos%&r, %world%&r, %biome%";
+
+                // Is there a player 2? Add the second player tags as well.
+                if (player2 != null)
+                {
+                    broadcast = broadcast + "&r | &3Player 2: &r%shiny2% &r%pokemon2% &r%player2% &r%ivpercent2% " +
+                            "&rX%xpos2% &rY%ypos2% &rZ%zpos2%&r &r%world2%&r &r%biome2%";
+                }
+            }
+
+            // Convert the friendlier & formatting tags to section characters for internal use.
             broadcast = PrintingMethods.convertSectionColors(broadcast);
-        // We did not get a broadcast, return the provided key and make sure it's unformatted.
+        }
         else
         {
+            // We did not get a broadcast, return the provided key and make sure it's unformatted.
             logger.error("The following broadcast could not be found: §4" + key);
             return key;
         }
@@ -269,7 +296,7 @@ public class PlaceholderMethods
         BlockPos location;
         Pokemon pokemon;
 
-        // Do we have a Pokémon object? Replace Pokémon-specific placeholders.
+        // Do we have an object? If it's a Pokémon, replace Pokémon-specific placeholders.
         if (object1 != null)
         {
             // Figure out what our received object is, exactly.
@@ -283,22 +310,37 @@ public class PlaceholderMethods
                 location = entity.getPosition();
                 if (!(location.getX() == 0 && location.getZ() == 0))
                 {
+                    // Set up a world.
+                    World world = entity.getEntityWorld();
+
                     // Get the Pokémon's biome, nicely formatted (spaces!) and all. Replace placeholder.
                     final String biome = getFormattedBiome(entity.getEntityWorld(), location);
                     broadcast = broadcast.replaceAll("(?i)%biome%", biome);
 
                     // Insert a world name.
-                    broadcast = broadcast.replaceAll("(?i)%world%", entity.getEntityWorld().getWorldInfo().getWorldName());
+                    broadcast = broadcast.replaceAll("(?i)%world%", world.getWorldInfo().getWorldName());
 
                     // Insert coordinates.
                     broadcast = broadcast.replaceAll("(?i)%xpos%", String.valueOf(location.getX()));
                     broadcast = broadcast.replaceAll("(?i)%ypos%", String.valueOf(location.getY()));
                     broadcast = broadcast.replaceAll("(?i)%zpos%", String.valueOf(location.getZ()));
+
+                    // Insert the nearest player's name, if we can find it. Cut it if not, though this should not happen.
+                    EntityPlayer player = world.getClosestPlayerToEntity(entity, -1);
+                    if (player != null)
+                        broadcast = broadcast.replaceAll("(?i)%nearest%", player.getName());
+                    else
+                    {
+                        logger.warn("We could not find the nearest player for the current event!");
+                        logger.warn("This may be harmless (event it doesn't apply to?), but it should not happen.");
+                        logger.warn("Please report this to the tracker. Include any details you may have.");
+                    }
                 }
                 else
                 {
-                    logger.warn("The event's Pokémon entity was removed from the world early!");
-                    logger.warn("We'll try to get missing info from the player. World info may look weird.");
+                    logger.warn("Something removed the event's Pokémon entity from the world early!");
+                    logger.warn("We'll try to get our info from the player. World info/placeholders may break.");
+                    logger.warn("If this keeps happening, please post a detailed bug report to the tracker.");
                 }
 
                 // Extract a Pokemon object for later use, if possible.
@@ -572,61 +614,6 @@ public class PlaceholderMethods
         final EnumGrowth growth = pokemon.getGrowth();
         final String sizeString = PrintingMethods.getTensedTranslation(isPresentTense, "hover.size." + growth.name().toLowerCase());
 
-        // Get an IV composite StringBuilder.
-        final StringBuilder ivsLine = new StringBuilder();
-        String statString = "";
-        int statValue = 0;
-        for (int i = 0; i <= 5; i++)
-        {
-            switch (i)
-            {
-                case 0:
-                {
-                    statString = PrintingMethods.getTranslation("hover.status.hp");
-                    statValue = HPIV;
-                    break;
-                }
-                case 1:
-                {
-                    statString = PrintingMethods.getTranslation("hover.status.attack");
-                    statValue = attackIV;
-                    break;
-                }
-                case 2:
-                {
-                    statString = PrintingMethods.getTranslation("hover.status.defense");
-                    statValue = defenseIV;
-                    break;
-                }
-                case 3:
-                {
-                    statString = PrintingMethods.getTranslation("hover.status.special_attack");
-                    statValue = spAttIV;
-                    break;
-                }
-                case 4:
-                {
-                    statString = PrintingMethods.getTranslation("hover.status.special_defense");
-                    statValue = spDefIV;
-                    break;
-                }
-                case 5:
-                {
-                    statString = PrintingMethods.getTranslation("hover.status.speed");
-                    statValue = speedIV;
-                    break;
-                }
-            }
-
-            if (statValue < 31)
-                ivsLine.append(PrintingMethods.getTranslation("hover.status.below_max", statValue, statString));
-            else
-                ivsLine.append(PrintingMethods.getTranslation("hover.status.maxed_out", statValue, statString));
-
-            if (i < 5)
-                ivsLine.append(PrintingMethods.getTranslation("hover.status.separator"));
-        }
-
         // Grab a gender string.
         final String genderString;
         switch (pokemon.getGender())
@@ -664,9 +651,64 @@ public class PlaceholderMethods
         // NOTE: Not shown on spawn/challenge. Shows bogus values on these events, Pixelmon issue, retest at some point.
         if (showIVs)
         {
+            // Get an IV composite StringBuilder.
+            final StringBuilder ivsLine = new StringBuilder();
+            String statString = "";
+            int statValue = 0;
+            for (int i = 0; i <= 5; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                    {
+                        statString = PrintingMethods.getTranslation("hover.status.hp");
+                        statValue = HPIV;
+                        break;
+                    }
+                    case 1:
+                    {
+                        statString = PrintingMethods.getTranslation("hover.status.attack");
+                        statValue = attackIV;
+                        break;
+                    }
+                    case 2:
+                    {
+                        statString = PrintingMethods.getTranslation("hover.status.defense");
+                        statValue = defenseIV;
+                        break;
+                    }
+                    case 3:
+                    {
+                        statString = PrintingMethods.getTranslation("hover.status.special_attack");
+                        statValue = spAttIV;
+                        break;
+                    }
+                    case 4:
+                    {
+                        statString = PrintingMethods.getTranslation("hover.status.special_defense");
+                        statValue = spDefIV;
+                        break;
+                    }
+                    case 5:
+                    {
+                        statString = PrintingMethods.getTranslation("hover.status.speed");
+                        statValue = speedIV;
+                        break;
+                    }
+                }
+
+                if (statValue < 31)
+                    ivsLine.append(PrintingMethods.getTranslation("hover.status.below_max", statValue, statString));
+                else
+                    ivsLine.append(PrintingMethods.getTranslation("hover.status.maxed_out", statValue, statString));
+
+                if (i < 5)
+                    ivsLine.append(PrintingMethods.getTranslation("hover.status.separator"));
+            }
+
             hovers.add(PrintingMethods.getTranslation("hover.current_ivs"));
             hovers.add(PrintingMethods.getTranslation("hover.total_ivs", totalIVs, percentIVs));
-            hovers.add(PrintingMethods.getTranslation("hover.status.line_start") + ivsLine.toString());
+            hovers.add(PrintingMethods.getTranslation("hover.status.line_start") + ivsLine);
         }
 
         // Print a header, as well as fancy broadcasts for the size, the gender and the nature.
